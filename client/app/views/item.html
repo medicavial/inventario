@@ -1,0 +1,97 @@
+<md-dialog aria-label="Nuevo Item" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nuevo Item</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="itemForm" ng-submit="guardar()">
+
+  <md-dialog-content>
+
+      <md-input-container>
+        <label>Nombre</label>
+        <input required name="nombre" ng-model="datos.nombre">
+        <div ng-messages="itemForm.nombre.$dirty && itemForm.nombre.$error">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div>
+      </md-input-container>
+
+      
+      <div layout="row" layout-sm="column">
+        
+        <md-input-container flex>
+          <label>Cantidad</label>
+          <input type="numeric" name="cantidad" ng-model="datos.cantidad">
+          <div ng-messages="itemForm.cantidad.$dirty && itemForm.cantidad.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex>
+          <label>Precio Venta</label>
+          <input  name="precio" ng-model="datos.precio" required> 
+          <div ng-messages="itemForm.precio.$dirty && itemForm.precio.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+        
+      </div>
+
+      <div layout="row" layout-sm="column" layout-fill>
+        <md-input-container flex>
+          <md-select placeholder="Tipo de Item" ng-model="datos.tipo" name="tipo" required >
+            <md-option ng-repeat="tipoitem in tipoitems" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
+          </md-select>
+          <div ng-messages="itemForm.tipo.$dirty && itemForm.cantidad.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex>
+          <md-select placeholder="Sub Tipo de Item" name="subtipo" ng-model="datos.subtipo" required flex>
+            <md-option ng-repeat="subtipoitem in subtipoitems" value="{{subtipoitem.STI_clave}}">{{subtipoitem.STI_nombre}}</md-option>
+          </md-select>
+          <div ng-messages="itemForm.subtipo.$dirty && itemForm.cantidad.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        
+        
+      </div>
+      
+
+      <md-switch ng-model="datos.activo" aria-label="Item Activo">
+              <span ng-show="datos.activo">Item Activo</span>
+              <span ng-hide="datos.activo">Item Inactivo</span>
+      </md-switch>
+  
+      <!-- <md-button class="md-primary">Agregar Precio por Proveedor</md-button> -->
+      
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="guardando">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

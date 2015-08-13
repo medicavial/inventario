@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es-MX" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>Sistema de Inventario MV Ver. 0.1</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+	<!-- bower:css -->
+	<link rel="stylesheet" href="lib/angular-material/angular-material.css" />
+	<link rel="stylesheet" href="lib/material-design-lite/material.min.css" />
+	<link rel="stylesheet" href="lib/angular-material-data-table/dist/md-data-table.min.css" />
+	<!-- endbower -->  
+	
+	<!-- inject:css -->    
+	<link rel="stylesheet" href="/stylesheets/colores.css">    
+	<link rel="stylesheet" href="/stylesheets/main.css">    
+	<link rel="stylesheet" href="/stylesheets/minicharts.css">    
+	<link rel="stylesheet" href="/stylesheets/wishitems.css">    
+	<!-- endinject --> 
+	<base href="/">
+</head>
+<body>
+
+	<ui-view class="base" layout="column" md-theme="{{ tema }}" md-theme-watch></ui-view>
+		
+	<!-- bower:js -->
+	<script src="lib/angular/angular.js"></script>
+	<script src="lib/angular-animate/angular-animate.js"></script>
+	<script src="lib/angular-aria/angular-aria.js"></script>
+	<script src="lib/angular-material/angular-material.js"></script>
+	<script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="lib/angular-material-icons/angular-material-icons.min.js"></script>
+	<script src="lib/svg-morpheus/compile/minified/svg-morpheus.js"></script>
+	<script src="lib/angular-webstorage/angular-webstorage.js"></script>
+	<script src="lib/angular-resource/angular-resource.js"></script>
+	<script src="lib/material-design-lite/material.min.js"></script>
+	<script src="lib/angular-material-data-table/dist/md-data-table.min.js"></script>
+	<!-- endbower --> 
+	
+	<!-- inject:js -->    
+	<script src="/scripts/app.js"></script>    
+	<script src="/scripts/controllers/almacenesCtrl.js"></script>    
+	<script src="/scripts/controllers/homeCtrl.js"></script>    
+	<script src="/scripts/controllers/itemproCtrl.js"></script>    
+	<script src="/scripts/controllers/itemsCtrl.js"></script>    
+	<script src="/scripts/controllers/loginCtrl.js"></script>    
+	<script src="/scripts/controllers/perfilesCtrl.js"></script>    
+	<script src="/scripts/controllers/proveedoresCtrl.js"></script>    
+	<script src="/scripts/controllers/subtipoItemCtrl.js"></script>    
+	<script src="/scripts/controllers/tipoAlmacenCtrl.js"></script>    
+	<script src="/scripts/controllers/tipoItemCtrl.js"></script>    
+	<script src="/scripts/controllers/usualmCtrl.js"></script>    
+	<script src="/scripts/controllers/usuariosCtrl.js"></script>    
+	<script src="/scripts/services/almacenService.js"></script>    
+	<script src="/scripts/services/authService.js"></script>    
+	<script src="/scripts/services/busquedaService.js"></script>    
+	<script src="/scripts/services/itemService.js"></script>    
+	<script src="/scripts/services/mensajeService.js"></script>    
+	<script src="/scripts/services/permisoService.js"></script>    
+	<script src="/scripts/services/proveedorService.js"></script>    
+	<script src="/scripts/services/subtipositemService.js"></script>    
+	<script src="/scripts/services/tiposalmacenService.js"></script>    
+	<script src="/scripts/services/tipositemService.js"></script>    
+	<script src="/scripts/services/usuarioService.js"></script>    
+	<!-- endinject -->
+	
+</body>
+</html>
+</html>

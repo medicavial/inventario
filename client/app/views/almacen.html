@@ -1,0 +1,75 @@
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nuevo Almacen</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="almacenForm" ng-submit="guardar()">
+
+  <md-dialog-content>
+
+      <md-input-container>
+        <label>Nombre</label>
+        <input required name="nombre" ng-model="datos.nombre">
+        <div ng-messages="almacenForm.nombre.$dirty && almacenForm.nombre.$error">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div>
+      </md-input-container>
+
+      <md-input-container>
+        <label>Observaciones</label>
+        <input required name="observaciones" ng-model="datos.observaciones">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Ubicación</label>
+        <input required name="ubicacion" ng-model="datos.ubicacion">
+      </md-input-container>
+
+      <div layout="row" layout-sm="column" layout-fill flex>
+
+        <md-select ng-model="datos.unidad" placeholder="Selecciona Unidad" flex>
+          <md-option ng-repeat="unidad in unidades" ng-value="{{unidad.UNI_clave}}" required>{{unidad.UNI_nombre}}</md-option>
+        </md-select>
+
+        <md-select ng-model="datos.tipo" placeholder="Selecciona Tipo de Almacen" flex>
+          <md-option ng-repeat="tipoalmacen in tiposalmacen" ng-value="{{tipoalmacen.TAL_clave}}" required>{{tipoalmacen.TAL_nombre}}</md-option>
+        </md-select>
+
+      </div>
+      
+
+      <md-switch ng-model="datos.activo" aria-label="Almacen Activo">
+              <span ng-show="datos.activo">Almacen Activo</span>
+              <span ng-hide="datos.activo">Almacen Inactivo</span>
+      </md-switch>
+  
+      <!-- <md-button class="md-primary">Agregar Precio por Proveedor</md-button> -->
+      
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="guardando">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

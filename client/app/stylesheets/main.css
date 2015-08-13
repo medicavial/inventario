@@ -1,0 +1,216 @@
+body {
+  font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-style: normal;
+  font-weight: 300!important;
+  line-height: 1.42857143;
+  letter-spacing: 0.01rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  
+}
+
+h1,h2,h3,h4{
+  font-weight: 300;
+}
+
+md-input-container label, md-input-container .md-placeholder {
+  /*color: rgba(0, 0, 0, 1);*/
+  color:#ABABAB !important;
+}
+
+md-select .md-select-value.md-select-placeholder{
+  color:#ABABAB !important;
+}
+
+md-sidenav.md-locked-open {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+md-toolbar{
+   -webkit-transition: background-color 0.5s ease-out;
+  -moz-transition: background-color 0.5s ease-out;
+  -o-transition: background-color 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+}
+
+md-grid-list {margin: 8px; }
+
+md-grid-list .gray {
+  background: #f5f5f5; }
+md-grid-list .green {
+  background: #b9f6ca; }
+md-grid-list .yellow {
+  background: #ffff8d; }
+md-grid-list .blue {
+  background: #84ffff; }
+md-grid-list .purple {
+  background: #b388ff; }
+md-grid-list .red {
+  background: #ff8a80; }
+  
+md-grid-list md-grid-tile {
+  transition: all 400ms ease-out 50ms; 
+}
+
+.md-button.md-fab,.md-button.md-icon-button {
+  line-height: 0; 
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    position: absolute;
+}
+
+.base{
+	height: 100%;
+  background-color: #f5f5f5 !important;
+}
+
+.gris{
+  background-color: #EBEFF2 !important;
+}
+
+.fondo{
+	background-image: url("../img/materialbg3.jpg");
+	background-size: 100% 100%;
+  background-repeat: no-repeat;
+	width: 100%;
+	height: 100%;
+}
+
+.white{
+	background: white;
+}
+
+.padding{
+  padding: 2em;
+}
+
+.text-center{
+  text-align: center !important;
+}
+
+.margin-center{
+  margin: 0 auto;
+}
+
+.md-toolbar-tools md-input-container.md-icon-float{
+  margin-top:0;
+}
+
+.md-toolbar-tools md-input-container md-input {
+  color:white !important;
+}
+
+.error{
+  background-color: #ef5350 !important;
+  color:rgba(255,255,255,0.87);
+}
+
+.success{
+  background-color: #66BB6A !important;
+  color:rgba(255,255,255,0.87);
+}
+
+.warning{
+  background-color: #FF9800 !important;
+  color:rgba(255,255,255,1);
+}
+
+
+.center-dialog{
+  margin-left: auto;
+  margin-right: auto;
+  left: 0; right: 0;
+}
+
+.right{
+  float: right;
+}
+
+.option-table{
+  padding: 0!important;
+  margin: 0 !important;
+}
+
+.mdl-data-table th,.mdl-data-table td{
+  text-align: center;
+}
+
+ #centro {
+   width: 150px;
+   height: 150px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   margin-top: -75px;
+   margin-left: -75px;
+} 
+
+.no-padding{
+  padding: 0;
+}
+
+.veggie-option {
+  box-sizing: border-box;
+  margin-bottom: 5px;
+  padding: 0; 
+  width: 100%;
+}
+.veggie-option .md-item-text {
+  padding: 0 5px;
+  background: #f0f0f0;
+  border-radius: 8px; 
+}
+.veggie-option .md-item-text h3, .chipsdemoCustomInputs .veggie-option .md-item-text p {
+  font-size: 16px;
+  padding: 0;
+  margin: 0; 
+}
+
+.md-title{
+  padding: 0;
+  margin: 0;
+}
+
+/*.md-chip {
+  position: relative;
+  padding-right: 45px; 
+}
+.md-chip .md-chip-remove-container {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    margin-right: 0;
+    height: 30px; 
+}*/
+
+.md-chip .md-chip-remove-container button.vegetablechip {
+  position: relative;
+  height: 25px;
+  width: 25px;
+  line-height: 25px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  transition: background 0.15s linear;
+  display: block; 
+}
+/*.md-chip .md-chip-remove-container button.vegetablechip ng-md-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0) scale(0.7);
+  color: white;
+  fill: white; 
+}*/
+

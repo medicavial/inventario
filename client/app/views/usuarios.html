@@ -1,0 +1,54 @@
+<div layout="row" layout-align="center" >
+    
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Nombre</th>
+          <th>Fecha Alta</th>
+          <th>Activo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="usuario in usuarios.info">
+          <td>{{usuario.USU_clave}}</td>
+          <td>{{usuario.USU_login}}</td>
+          <td>{{usuario.USU_nombrecompleto}}</td>
+          <td>{{usuario.created_at}}</td>
+          <td>
+            <div ng-show="usuario.USU_activo">SI</div>
+            <div ng-hide="usuario.USU_activo">NO</div>
+          </td>
+          <td class="option-table">
+              <md-menu md-position-mode="target-right target" >
+                <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
+                  <md-icon md-menu-origin>
+                    <ng-md-icon icon="more_vert" style="fill:#3F51B5"></ng-md-icon> 
+                  </md-icon>
+                </md-button>
+                <md-menu-content width="2">
+                  <md-menu-item>
+                    <md-button ng-click="usuarios.editaUsuario($event,$index)">
+                      <p>Modificar</p>
+                    </md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-button ng-click="usuarios.confirmacion($event,$index)">
+                      <p ng-show="usuario.USU_activo" >Desactivar</p>
+                      <p ng-hide="usuario.USU_activo" >Activar</p>
+                    </md-button>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+</div>
+
+<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="usuarios.nuevoUsuario($event)" aria-label="Nuevo Estado">
+    <ng-md-icon icon="add" style="fill:white"></ng-md-icon> 
+</md-button>

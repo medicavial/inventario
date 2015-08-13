@@ -1,0 +1,135 @@
+<md-toolbar layout="row" layout-align="center center" md-scroll-shrink>
+  <div class="md-toolbar-tools">
+    <md-button ng-click="toggleSidenav('left')" hide-gt-md class="md-icon-button">
+      <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+    </md-button>
+    <h1>{{titulo}}</h1>
+    <span flex></span>
+    <md-button class="md-icon-button" aria-label="Notificaciones">
+        <ng-md-icon icon="notifications" style="fill:white"></ng-md-icon> 
+    </md-button>
+    <md-button class="md-icon-button" aria-label="Opciones" ng-click="showGridBottomSheet($event)">
+        <ng-md-icon icon="more_vert" style="fill:white"></ng-md-icon> 
+    </md-button>
+  </div>
+</md-toolbar>
+
+<div layout="row" flex>
+    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+      <md-list>
+        
+        <md-subheader class="md-no-sticky">MENU</md-subheader>
+
+        <md-divider></md-divider>
+
+
+        <md-list-item ng-click="ir('index.home')">
+          <p> Inicio </p>
+          <ng-md-icon icon="home" style="fill:#3F51B5"></ng-md-icon>
+        </md-list-item>
+
+        <md-divider></md-divider>
+        <md-subheader class="md-no-sticky">Administrador</md-subheader>
+        <div>
+          <md-list-item ng-click="ir('index.perfiles')">
+            <p> Perfiles </p>
+            <ng-md-icon icon="label" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          
+          <md-list-item ng-click="ir('index.usuarios')">
+            <p> Usuarios </p>
+            <ng-md-icon icon="group" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+
+          <md-list-item ng-click="ir('index.conexiones')">
+            <p> Conexiones </p>
+            <ng-md-icon icon="settings_ethernet" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+
+        </div>
+
+        <md-divider></md-divider>
+        <md-subheader class="md-no-sticky">Catalogos</md-subheader>
+        <div>
+          <md-list-item ng-click="ir('index.items')">
+            <p> Items </p>
+            <ng-md-icon icon="shopping_basket" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.tipositem')">
+            <p> Tipos item </p>
+            <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.subtipositem')">
+            <p> SubTipos item </p>
+            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.almacenes')">
+            <p> Almacenes </p>
+            <ng-md-icon icon="layers" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.tiposalmacen')">
+            <p> Tipos de Almacen </p>
+            <ng-md-icon icon="class" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.proveedores')">
+            <p> Proveedores </p>
+            <ng-md-icon icon="store" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          
+        </div>
+
+        <md-divider></md-divider>
+        <md-subheader class="md-no-sticky">Almacen</md-subheader>
+        <div>
+          <md-list-item ng-click="ir('index.existencias')">
+            <p> Existencias </p>
+
+              <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.ingresausu')">
+            <p> Ingresa Usuarios </p>
+
+              <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.ordencompra')">
+            <p> Orden de Compra </p>
+
+              <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.lotes')">
+            <p> Lotes </p>
+
+              <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.facturas')">
+            <p> Traspasos </p>
+
+              <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.facturas')">
+            <p> Facturas </p>
+
+              <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+        </div>
+
+        <md-divider></md-divider>
+        <md-subheader class="md-no-sticky">Reportes</md-subheader>
+        <div>
+          
+        </div>
+            
+
+      </md-list>
+    </md-sidenav>
+    <div layout="column" flex id="content">
+        <md-content layout="column" flex class="md-padding gris">
+          <ui-view ng-hide="cargando"></ui-view>
+          <div id="centro" ng-show="cargando">
+              <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
+        </md-content>
+
+        
+    </div>
+</div>

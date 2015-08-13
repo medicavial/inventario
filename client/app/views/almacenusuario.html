@@ -1,0 +1,65 @@
+<md-dialog aria-label="Nueva Conexion" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nueva Conexion</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+      <section>
+        <md-chips ng-model="almacenesseleccionados" readonly="false"  md-autocomplete-snap md-require-match>
+          <md-autocomplete
+              md-selected-item="seleccionado"
+              md-search-text="busqueda"
+              md-items="alm in consultado(busqueda)"
+              md-item-text="alm.ALM_nombre"
+              placeholder="Escribe el Almacen">
+            <span md-highlight-text="busqueda">{{alm.ALM_nombre}} :: {{alm.TAL_nombre}} :: {{alm.UNI_nombre}}</span>
+          </md-autocomplete>
+          <md-chip-template>
+            <strong>{{$chip.ALM_nombre}}</strong>
+          </md-chip-template>
+
+        </md-chips>
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <br />
+        <!-- <h2 class="md-title">Almacenes Disponibles</h2>
+        <md-list>
+          <md-list-item class="md-2-line veggie-option" ng-repeat="almacen in almacenes" layout="row"
+              layout-wrap>
+            <div class="md-item-text md-whiteframe-z1" flex>
+              <h3>{{almacen.ALM_nombre}}</h3>
+              <h3>{{almacen.UNI_nombre}}</h3>
+              <p>{{almacen.TAL_nombre}}</p>
+            </div>
+          </md-list-item>
+        </md-list> -->
+      </section>
+
+      
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="button" ng-disabled="guardando" ng-click="guardar()">
+        Guardar
+    </md-button>
+  </div>
+
+
+</md-dialog>
