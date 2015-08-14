@@ -56,8 +56,9 @@ Route::group(array('prefix' => 'api'), function()
 
     Route::group(array('prefix' => 'operacion'), function()
     {
-        Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('elimina/almacen/{almacen}/{usuario}', 'OperacionController@eliminaUsuarioAlmacen');
+        Route::post('item/proveedor', 'OperacionController@itemProveedor');
+        Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
     });
 

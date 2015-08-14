@@ -2,6 +2,27 @@
 
 class OperacionController extends BaseController {
 
+	public function eliminaUsuarioAlmacen($almacen,$usuario){
+		UsuarioAlmacen::where('USU_clave',$usuario)->where('ALM_clave',$almacen)->delete();
+		return Response::json(array('respuesta' => 'Almacen removido Correctamente'));
+	}
+
+	public function itemProveedor(){
+
+		$itemprovedor = new ItemProveedor;
+		$item = Input::get('item');
+
+		$itemprovedor->ITE_clave = $item['ITE_clave'];
+		$itemprovedor->PRO_clave = Input::get('proveedor');
+		$itemprovedor->IPR_ultimoCosto = Input::get('cantidad');
+		$itemprovedor->IPR_ultimaFecha = date('Y-m-d H:i:s');
+
+		$itemprovedor->save();
+
+		return Response::json(array('respuesta' => 'Item asignado Correctamente'));
+
+	}
+
 	public function usuarioAlmacen(){
 
 		$usuario = Input::get('usuario');
@@ -56,9 +77,5 @@ class OperacionController extends BaseController {
 		return $respuesta;
 	}
 
-	public function eliminaUsuarioAlmacen($almacen,$usuario){
-		UsuarioAlmacen::where('USU_clave',$usuario)->where('ALM_clave',$almacen)->delete();
-		return Response::json(array('respuesta' => 'Almacen removido Correctamente'));
-	}
 
 }

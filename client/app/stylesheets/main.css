@@ -57,6 +57,10 @@ md-grid-list md-grid-tile {
   transition: all 400ms ease-out 50ms; 
 }
 
+md-tooltip{
+  font-size: 16px;
+}
+
 .md-button.md-fab,.md-button.md-icon-button {
   line-height: 0; 
 }

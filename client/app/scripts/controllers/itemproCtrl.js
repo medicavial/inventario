@@ -7,33 +7,31 @@ function itemproCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 	$rootScope.titulo = 'Conexiones';
 	$rootScope.cargando = false;
 	$rootScope.tema = 'theme1';
+	scope.items = datos.data;
 
 	scope.inicio = function(){
 
 		scope.total = 0;
 		scope.limit = 10;
 		scope.page = 1;
-		scope.usuarios = datos[0].data;
 
 	}
 
 	
-	scope.nuevo = function(ev,index) {
-
-		var usuario = scope.usuarios[index];
+	scope.nuevo = function(ev) {
 
 	    $mdDialog.show({
-	      controller: nuevoUsualmCtrl,
-	      templateUrl: 'views/almacenusuario.html',
+	      controller: nuevoItemproCtrl,
+	      templateUrl: 'views/altaitempro.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      clickOutsideToClose:false,
-	      locals: {informacion: usuario }
+	      clickOutsideToClose:false
 	    }).then(function(){
-	    	busqueda.usuariosAlmacen().success(function (data){
-	    		scope.usuarios = data;
+	    	busqueda.itemsProveedor().success(function (data){
+	    		scope.items = data;
 	    	});
 	    });
+
 	};
 
 	scope.confirma = function(ev,index,almacen) {
@@ -57,7 +55,7 @@ function itemproCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 		    },
 		    function() {
 		    	busqueda.usuariosAlmacen().success(function(data){
-		    		scope.usuarios = data;
+		    		scope.items = data;
 		    	});
 		    }
 	    );
@@ -65,23 +63,25 @@ function itemproCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 
 }
 
-function nuevoItemproCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,informacion,operacion,$rootScope){
+function nuevoItemproCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,operacion,$rootScope){
 
+	busqueda.proveedores().then(function (info){
+		$scope.proveedores = info.data;
+	});
 
-	console.log(informacion);
-	busqueda.almacenUsuario(informacion.clave).then(function (info){
-		$scope.almacenes = info.data;
+	busqueda.items().then(function (info){
+		$scope.items = info.data;
 	});
 
 	$scope.inicio = function(){
 		$scope.seleccionado = null;
 	    $scope.busqueda = null;
 	    $scope.consultado = consultado;
-	    $scope.almacenesseleccionados = [];
 	    $scope.datos = {
-	    	usuario:informacion.clave,
 	    	usuarioasigno:$rootScope.id,
-	    	almacenes:$scope.almacenesseleccionados
+	    	item:'',
+	    	proveedor:'',
+	    	cantidad:''
 	    }
 
 		$scope.guardando = false;
@@ -91,7 +91,7 @@ function nuevoItemproCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,informac
 
 		var q = $q.defer();
 
-		findValues( query, $scope.almacenes ).then( function ( res ) {
+		findValues( query, $scope.items ).then( function ( res ) {
 			q.resolve( res );
 		} );
 		return q.promise;
@@ -109,7 +109,7 @@ function nuevoItemproCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,informac
 			console.log($scope.datos);
 			$scope.guardando = true;
 
-			operacion.altaAlmacenes($scope.datos).success(function (data){
+			operacion.altaItempro($scope.datos).success(function (data){
 
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;

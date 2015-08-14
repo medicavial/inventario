@@ -1,0 +1,69 @@
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="99" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nueva Relación</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="relacionForm" novalidate ng-submit="guardar()">
+
+  <md-dialog-content>
+
+      <md-autocomplete
+          md-selected-item="datos.item"
+          md-search-text="busqueda"
+          md-items="item in consultado(busqueda)"
+          md-item-text="item.ITE_nombre"
+          md-min-length="0"
+          placeholder="Escribe item a buscar">
+        <md-item-template>
+          <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
+        </md-item-template>
+        <md-not-found>
+          No se encontro "{{busqueda}}".
+        </md-not-found>
+      </md-autocomplete>
+      <br/>
+      
+      <md-select placeholder="Proveedor" ng-model="datos.proveedor" name="tipo" required >
+        <md-option ng-repeat="proveedor in proveedores" value="{{proveedor.PRO_clave}}">{{proveedor.PRO_nombre}}</md-option>
+      </md-select>
+
+      <div layout="row" layout-sm="column">
+        
+        <md-input-container flex-gt-sm="50">
+          <label>Costo</label>
+          <input type="text" name="cantidad" ng-model="datos.cantidad" dinero required>
+          <div ng-messages="relacionForm.cantidad.$dirty && relacionForm.cantidad.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+        
+      </div>
+
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="relacionForm.$invalid">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

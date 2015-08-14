@@ -31,8 +31,8 @@
           <tr ng-repeat="item in itempro.items |filter:query | orderBy: order | limitTo: itempro.limit: (itempro.page - 1) * itempro.limit">
             <td>{{item.ITE_nombre}}</td>
             <td>{{item.PRO_nombre}}</td>
-            <td>{{item.IPR_ultimoCosto}}</td>
-            <td>{{item.IPR_ultimaFecha}}</td>
+            <td>{{item.IPR_ultimoCosto |currency}}</td>
+            <td>{{item.IPR_ultimaFecha |date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
           </tr>
         </tbody>
       </table>
@@ -40,5 +40,12 @@
     <br>
     <md-data-table-pagination md-limit="itempro.limit" md-page="itempro.page" md-total="10"></md-data-table-pagination>
 
+    
+    <md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="itempro.nuevo($event)" aria-label="Nuevo Registro">
+        <md-tooltip md-direction="top">
+          Nuevo
+        </md-tooltip>
+        <ng-md-icon icon="add" style="fill:white"></ng-md-icon> 
+    </md-button>
 
 </div>
