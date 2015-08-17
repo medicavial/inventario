@@ -10,7 +10,7 @@ var app = angular.module('app', [
 ]);
 app.config(config);
 app.run(run);
-app.constant('api', 'http://localhost/inventario/server/public/api/');
+app.constant('api', 'http://api.medicavial.mx/api/');
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
 
@@ -155,6 +155,55 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		resolve:{
             datos:function(busqueda){
                 return busqueda.itemsProveedor();
+            }
+        }
+	})
+
+	.state('index.tiposmovimiento',{
+		url:'tiposmovimiento',
+		templateUrl :'views/tiposmovimiento.html',
+		controller:'tiposmovimientoCtrl',
+		controllerAs: "tiposmovimiento",
+		resolve:{
+            datos:function(tiposmovimiento){
+                return tiposmovimiento.query().$promise;
+            }
+        }
+	})
+
+	.state('index.tiposajuste',{
+		url:'tiposajuste',
+		templateUrl :'views/tiposajuste.html',
+		controller:'tiposajusteCtrl',
+		controllerAs: "tiposajuste",
+		resolve:{
+            datos:function(tiposajuste){
+                return tiposajuste.query().$promise;
+            }
+        }
+	})
+
+	.state('index.movimientos',{
+		url:'movimientos',
+		templateUrl :'views/movimientos.html',
+		controller:'movimientosCtrl',
+		controllerAs: "movimientos",
+		resolve:{
+            datos:function(busqueda){
+                return busqueda.movimientos();
+            }
+        }
+	})
+
+
+	.state('index.existencias',{
+		url:'existencias',
+		templateUrl :'views/existencias.html',
+		controller:'existenciasCtrl',
+		controllerAs: "existencias",
+		resolve:{
+            datos:function(busqueda,$rootScope){
+                return busqueda.existencias($rootScope.id);
             }
         }
 	})

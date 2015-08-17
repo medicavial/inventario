@@ -17,7 +17,7 @@ function tiposAlmacenCtrl($rootScope,$mdDialog,datos,tiposalmacen,mensajes){
 	      templateUrl: 'views/tipoalmacen.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      clickOutsideToClose:true
+	      clickOutsideToClose:false
 	    }).then(
 	    function(){
 	    	scope.info = tiposalmacen.query();

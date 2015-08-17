@@ -10,6 +10,13 @@ class Almacen extends Eloquent {
         return $query->where('ALM_activo',true)->get();
     }
 
+    public function scopeTodos($query)
+    {
+        return $query->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+                     ->join('tiposAlmacen', 'almacenes.TAL_clave', '=', 'tiposAlmacen.TAL_clave')
+                     ->select('almacenes.*','unidades.UNI_nombre','TAL_nombre')
+                     ->get();
+    }
 
     public function scopeUnidades($query)
     {

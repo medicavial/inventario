@@ -67,4 +67,26 @@ gulp.task('watch', function() {
 	watch('./app').pipe(connect.reload());
 });
 
+
+
+gulp.task('compress', function() {  
+	gulp.src('./app/index.html')    
+	.pipe(useref.assets())    
+	.pipe(gulpif('*.css', minifyCss()))    
+	.pipe(gulpif('*.js', uglify({mangle: false })))    
+	.pipe(gulp.dest('./dist')); 
+});
+
+gulp.task('copy', function() {  
+	gulp.src('./app/index.html')    
+	.pipe(useref())    
+	.pipe(gulp.dest('./dist'));   
+	gulp.src('./app/views/*.html')        
+	.pipe(gulp.dest('./dist/views')); 
+	gulp.src('./app/img/**')        
+	.pipe(gulp.dest('./dist/img'));
+});
+
+gulp.task('produccion', ['compress','copy']);
+
 gulp.task('default', ['server','inject','wiredep', 'watch']);

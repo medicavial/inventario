@@ -95,7 +95,6 @@ function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 
 }
 
-
 function almacenCtrl($scope,$mdDialog,busqueda,almacenes,mensajes){
 
 	busqueda.unidades().then(function (info){

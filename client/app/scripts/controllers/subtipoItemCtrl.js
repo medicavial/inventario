@@ -17,7 +17,7 @@ function subTiposItemCtrl($rootScope,$mdDialog,datos,subtipositem,mensajes){
 	      templateUrl: 'views/subtipoitem.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      clickOutsideToClose:true
+	      clickOutsideToClose:false
 	    }).then(
 	    function(){
 	    	scope.info = subtipositem.query();

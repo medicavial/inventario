@@ -26,21 +26,21 @@
       
       <div layout="row" layout-sm="column">
         
-        <md-input-container flex flex-gt-sm="40">
+        <md-input-container flex>
+          <label>Cantidad</label>
+          <input type="numeric" name="cantidad" ng-model="datos.cantidad">
+          <div ng-messages="itemForm.cantidad.$dirty && itemForm.cantidad.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex>
           <label>Precio Venta</label>
           <input  name="precio" ng-model="datos.precio" required> 
           <div ng-messages="itemForm.precio.$dirty && itemForm.precio.$error">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
         </md-input-container>
-        <!-- <md-input-container flex>
-          <label>Cantidad</label>
-          <input type="numeric" name="cantidad" ng-model="datos.cantidad">
-          <div ng-messages="itemForm.cantidad.$dirty && itemForm.cantidad.$error">
-            <div ng-message="required">Campo obligatorio.</div>
-          </div>
-        </md-input-container> -->
-
         
       </div>
 

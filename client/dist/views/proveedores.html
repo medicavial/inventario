@@ -6,18 +6,20 @@
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+          <th>Razon Social</th>
           <th>Fecha Alta</th>
           <th>Activo</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tipo in tipositem.info">
-          <td>{{tipo.TIT_clave}}</td>
-          <td>{{tipo.TIT_nombre}}</td>
-          <td>{{tipo.created_at}}</td>
+        <tr ng-repeat="proveedor in proveedores.info">
+          <td>{{proveedor.PRO_clave}}</td>
+          <td>{{proveedor.PRO_nombrecorto}}</td>
+          <td>{{proveedor.PRO_razonSocial}}</td>
+          <td>{{proveedor.created_at}}</td>
           <td>
-            <div ng-show="tipo.TIT_activo">SI</div>
-            <div ng-hide="tipo.TIT_activo">NO</div>
+            <div ng-show="proveedor.PRO_activo">SI</div>
+            <div ng-hide="proveedor.PRO_activo">NO</div>
           </td>
           <td class="option-table">
               <md-menu md-position-mode="target-right target" >
@@ -28,14 +30,14 @@
                 </md-button>
                 <md-menu-content width="2">
                   <md-menu-item>
-                    <md-button ng-click="tipositem.editaTipo($event,$index)">
+                    <md-button ng-click="proveedores.edita($event,$index)">
                       <p>Modificar</p>
                     </md-button>
                   </md-menu-item>
                   <md-menu-item>
-                    <md-button ng-click="tipositem.confirmacion($event,$index)">
-                      <p ng-show="tipo.TIT_activo" >Desactivar</p>
-                      <p ng-hide="tipo.TIT_activo" >Activar</p>
+                    <md-button ng-click="proveedores.confirmacion($event,$index)">
+                      <p ng-show="proveedor.PRO_activo" >Desactivar</p>
+                      <p ng-hide="proveedor.PRO_activo" >Activar</p>
                     </md-button>
                   </md-menu-item>
                 </md-menu-content>
@@ -47,7 +49,7 @@
 
 </div>
 
-<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="tipositem.nuevoTipo($event)" aria-label="Nuevo Estado">
+<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="proveedores.nuevo($event)" aria-label="Nuevo Estado">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>

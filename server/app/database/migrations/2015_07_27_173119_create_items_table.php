@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration {
 			$table->increments('ITE_clave');
 			$table->string('ITE_nombre');
 			$table->decimal('ITE_precioventa',5,2);
-			$table->integer('ITE_cantidadtotal');
+			$table->integer('ITE_cantidadtotal')->default(0);
 
 			$table->integer('TIT_clave')->unsigned();
 			$table->foreign('TIT_clave')->references('TIT_clave')->on('tiposItem');

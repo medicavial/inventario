@@ -9,7 +9,7 @@ class AlmacenesController extends \BaseController {
 	 */
 	public function index()
 	{
-		return Almacen::all();
+		return Almacen::todos();
 	}
 
 

@@ -11,13 +11,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tipo in tipositem.info">
-          <td>{{tipo.TIT_clave}}</td>
-          <td>{{tipo.TIT_nombre}}</td>
+        <tr ng-repeat="tipo in tiposalmacen.info">
+          <td>{{tipo.TAL_clave}}</td>
+          <td>{{tipo.TAL_nombre}}</td>
           <td>{{tipo.created_at}}</td>
           <td>
-            <div ng-show="tipo.TIT_activo">SI</div>
-            <div ng-hide="tipo.TIT_activo">NO</div>
+            <div ng-show="tipo.TAL_activo">SI</div>
+            <div ng-hide="tipo.TAL_activo">NO</div>
           </td>
           <td class="option-table">
               <md-menu md-position-mode="target-right target" >
@@ -28,14 +28,14 @@
                 </md-button>
                 <md-menu-content width="2">
                   <md-menu-item>
-                    <md-button ng-click="tipositem.editaTipo($event,$index)">
+                    <md-button ng-click="tiposalmacen.edita($event,$index)">
                       <p>Modificar</p>
                     </md-button>
                   </md-menu-item>
                   <md-menu-item>
-                    <md-button ng-click="tipositem.confirmacion($event,$index)">
-                      <p ng-show="tipo.TIT_activo" >Desactivar</p>
-                      <p ng-hide="tipo.TIT_activo" >Activar</p>
+                    <md-button ng-click="tiposalmacen.confirmacion($event,$index)">
+                      <p ng-show="tipo.TAL_activo" >Desactivar</p>
+                      <p ng-hide="tipo.TAL_activo" >Activar</p>
                     </md-button>
                   </md-menu-item>
                 </md-menu-content>
@@ -47,7 +47,7 @@
 
 </div>
 
-<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="tipositem.nuevoTipo($event)" aria-label="Nuevo Estado">
+<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="tiposalmacen.nuevo($event)" aria-label="Nuevo Estado">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>

@@ -21,8 +21,8 @@ Route::group(array('prefix' => 'api'), function()
 
 	Route::get('/', function()
 	{
-		// return View::make('hello');
-        return Unidad::activos();
+		return View::make('hello');
+        // return Unidad::activos();
 	});
 
     Route::post('login', array('uses' => 'AuthController@login'));

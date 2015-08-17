@@ -5,24 +5,29 @@
 	<title>Sistema de Inventario MV Ver. 0.1</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+	<!-- build:css css/style.min.css -->
+
 	<!-- bower:css -->
 	<link rel="stylesheet" href="lib/angular-material/angular-material.css" />
 	<link rel="stylesheet" href="lib/material-design-lite/material.min.css" />
 	<link rel="stylesheet" href="lib/angular-material-data-table/dist/md-data-table.min.css" />
 	<!-- endbower -->  
-	
+
 	<!-- inject:css -->    
 	<link rel="stylesheet" href="/stylesheets/colores.css">    
 	<link rel="stylesheet" href="/stylesheets/main.css">    
 	<link rel="stylesheet" href="/stylesheets/minicharts.css">    
 	<link rel="stylesheet" href="/stylesheets/wishitems.css">    
 	<!-- endinject --> 
+
+	<!-- endbuild -->
 	<base href="/">
 </head>
 <body>
 
 	<ui-view class="base" layout="column" md-theme="{{ tema }}" md-theme-watch></ui-view>
-		
+	
+	<!-- build:js js/vendor.min.js -->
 	<!-- bower:js -->
 	<script src="lib/angular/angular.js"></script>
 	<script src="lib/angular-animate/angular-animate.js"></script>
@@ -36,7 +41,9 @@
 	<script src="lib/material-design-lite/material.min.js"></script>
 	<script src="lib/angular-material-data-table/dist/md-data-table.min.js"></script>
 	<!-- endbower --> 
+	<!-- endbuild -->
 	
+	<!-- build:js js/app.min.js --> 
 	<!-- inject:js -->    
 	<script src="/scripts/app.js"></script>    
 	<script src="/scripts/controllers/almacenesCtrl.js"></script>    
@@ -44,6 +51,7 @@
 	<script src="/scripts/controllers/itemproCtrl.js"></script>    
 	<script src="/scripts/controllers/itemsCtrl.js"></script>    
 	<script src="/scripts/controllers/loginCtrl.js"></script>    
+	<script src="/scripts/controllers/movimientosCtrl.js"></script>    
 	<script src="/scripts/controllers/perfilesCtrl.js"></script>    
 	<script src="/scripts/controllers/proveedoresCtrl.js"></script>    
 	<script src="/scripts/controllers/subtipoItemCtrl.js"></script>    
@@ -65,7 +73,7 @@
 	<script src="/scripts/services/tipositemService.js"></script>    
 	<script src="/scripts/services/usuarioService.js"></script>    
 	<!-- endinject -->
-	
+	<!-- endbuild -->
 </body>
 </html>
 </html>

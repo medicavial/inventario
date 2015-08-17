@@ -1,0 +1,107 @@
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nuevo Perfil</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="perfilForm" novalidate ng-submit="guardar()">
+
+  <md-dialog-content>
+
+      <md-input-container>
+        <label>Nombre</label>
+        <input required name="nombre" ng-model="datos.nombre">
+        <div ng-messages="perfilForm.nombre.$dirty && perfilForm.nombre.$error">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div>
+      </md-input-container>
+      <br>
+      <fieldset>
+        <legend>Detalle de perfil</legend>
+      </fieldset>
+      <md-divider></md-divider>
+      <div layout="row" layout-sm="column" layout-padding>
+          
+          <div layout="column" flex>
+              <md-checkbox ng-model="datos.entradas" aria-label="Entrdas">
+                Entradas
+              </md-checkbox>
+              <md-checkbox ng-model="datos.salidas" aria-label="Salidas">
+                Salidas
+              </md-checkbox>
+              <md-checkbox ng-model="datos.traspasos" aria-label="Traspasos">
+                Traspasos
+              </md-checkbox>
+              <md-checkbox ng-model="datos.editaItem" aria-label="Consultar y Modificar items">
+                Consultar y Modificar items
+              </md-checkbox>
+              <md-checkbox ng-model="datos.desactivaItem" aria-label="Desactivar items">
+                Desactivar items
+              </md-checkbox>
+              <md-checkbox ng-model="datos.editaCatalogos" aria-label="Consultar y Modificar Catalogos">
+                Consultar y Modificar Catalogos
+              </md-checkbox>
+              <md-checkbox ng-model="datos.desactivaCatalogos" aria-label="Desactivar Catalogos">
+                Desactivar Catalogos
+              </md-checkbox>
+          </div>
+          <div layout="column" flex>
+              <md-checkbox ng-model="datos.autorizaorden" aria-label="Autoriza orden">
+                Autorizar Orden de compra
+              </md-checkbox>
+              <md-checkbox ng-model="datos.cerrarorden" aria-label="Cerrar orden">
+                Cerrar Orden de compra
+              </md-checkbox>
+              <md-checkbox ng-model="datos.modificaorden" aria-label="Modificar orden de compra">
+                Modificar orden de compra
+              </md-checkbox>
+              <md-checkbox ng-model="datos.surtir" aria-label="Surtir">
+                Surtir
+              </md-checkbox>
+              <md-checkbox ng-model="datos.facturas" aria-label="Subir Factura">
+                Subir Factura
+              </md-checkbox>
+              <md-checkbox ng-model="datos.asociar" aria-label="Asociar usuarios a almacen">
+                Asociar usuarios a almacen
+              </md-checkbox>
+          </div>
+
+        
+      </div>
+
+      <div layout="row" layout-sm="column" layout-fill>
+
+        <md-switch ng-model="datos.activo" aria-label="Usuario Activo" flex>
+              <span ng-show="datos.activo">Perfil Activo</span>
+              <span ng-hide="datos.activo">Perfil Inactivo</span>
+        </md-switch>
+        
+      </div>
+
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="guardando">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>
