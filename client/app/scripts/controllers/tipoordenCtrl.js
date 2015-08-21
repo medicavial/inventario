@@ -106,13 +106,13 @@ function tipoOrdenCtrl($scope,$mdDialog,tiposorden,mensajes){
 
 	$scope.guardar = function(){
 
-		if ($scope.perfilForm.$valid) {
+		if ($scope.tipoOrdenForm.$valid) {
 
 			$scope.guardando = true;
 			tiposorden.save($scope.datos,function (data){
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
-				$scope.perfilForm.$setPristine();
+				$scope.tipoOrdenForm.$setPristine();
 				$scope.inicio();
 			});
 
@@ -141,13 +141,13 @@ function tipoOrdenEditCtrl($scope,$mdDialog,tiposorden,mensajes,informacion){
 	$scope.guardar = function(){
 
 
-		if ($scope.perfilForm.$valid) {
+		if ($scope.tipoOrdenForm.$valid) {
 
 			$scope.guardando = true;
 			tiposorden.update({tipoorden:informacion.TOR_clave},$scope.datos,function (data){
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
-				$scope.perfilForm.$setPristine();
+				$scope.tipoOrdenForm.$setPristine();
 			});
 
 		};
