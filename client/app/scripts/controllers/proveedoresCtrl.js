@@ -4,12 +4,24 @@ app.controller('proveedorCtrl',proveedorCtrl)
 app.controller('proveedoresCtrl',proveedoresCtrl)
 app.controller('proveedorEditCtrl',proveedorEditCtrl)
 
+proveedoresCtrl.$inject = ['$rootScope','$mdDialog','datos','proveedores','mensajes'];
+proveedorCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes'];
+proveedorEditCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes','informacion'];
+
 function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'Proveedores Registrados';
 	scope.info = datos;
+	scope.total = 0;
+	scope.limit = 10;
+	scope.page = 1;
+	scope.texto = {
+      text: 'Proveedores por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.nuevo = function(ev) {
 	    $mdDialog.show({

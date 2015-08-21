@@ -16,7 +16,7 @@ Specification for Material Design data tables can be found [here](http://www.goo
 
 http://danielnagy.me/md-data-table
 
-Here is a fork-able [Codepen](http://codepen.io/anon/pen/EjOobZ?editors=101) of the demo application. Please use this to reproduce any issues you may be experiencing.
+Here is a fork-able [Codepen](http://codepen.io/anon/pen/zGXWWp?editors=101) of the demo application. Please use this to reproduce any issues you may be experiencing.
 
 ## License
 
@@ -128,58 +128,30 @@ angular.module('nutritionApp').controller('nutritionController', ['$nutrition', 
 
 ## Change Log
 
-**Version 0.8.2** August 9, 2015
+#### Version 0.8.8
+###### August 14, 2015
 
-* Support for [inline menus](#inline-menus)
+* Tables with multi-row headers can now specify a significant row that will be used to append the checkbox to and set the text alignment for numeric columns. The default is to use the last row. See [Numeric Columns](#numeric-columns) and [Row Selection](#row-selection).
 
-#### Notes
+#### Version 0.8.7
+###### August 14, 2015
 
-I targeted the latest version of Angular Material which is currently v0.10.0. There have been changes to the template for the select element since this release, so if you are using a version of Angular Material greater than v0.10.0 you will notice inconsistencies in the styling of the element. I will fix this as soon as v0.10.1 is released.
+* I no longer replace the `th` element, instead I build the template and append it to the original `th` element. This should fix issues with `ng-repeat`.
 
-**Version 0.8.1** August 9, 2015
+#### Version 0.8.6
+###### August 13, 2015
 
-* I am now using the `$interpolate` service to get the start and stop symbols
+* Temporary patch to prevent tables that use `ng-repeat` on header columns from not working. Changes will need to be made to the `mdColumnHeader` directive to insure that no other directives, that transform the template, will conflict with it in the future.
 
-**Version 0.8.0**
+#### Version 0.8.5
+###### August 12, 2015
 
-#### Syntax Changes
+* Fixing bug where developer defined attributes on `<th>` elements were not preserved.
 
-* The name of a column is now placed in a `name` attribute. This decision was made do to the difficulty of transforming the template with interpolate strings and `ng-repeat`.
-* The `unit` and `show-unit` attributes can be used regardless of weather or not the column in numeric (if you want).
-* `md-trim-column-names` has been renamed to just `trim` and is now enabled individually for each column.
-* The `md-auto-select` and `md-disable-select` attributes have been moved to the `tr` element within the `tbody` element.
+#### Version 0.8.4
+###### August 12, 2015
 
-#### Improvements
-
-* You may now (properly) use `ng-repeat` and `ng-attr-*` on column headers.
-* This version fixes issue #41.
-* This version fixes issue #57.
-* Trimming long column names is achieved cleanly with CSS and no longer uses `table-layout: fixed` or Javascript.
-
-#### Issues
-
-I have discovered an issue in Chrome's (and Opera's) web browser. This issue has existed for sometime and either no one has noticed it or no one has really cared. It appears Chrome has issues with properly rendering the table when the container is small enough to allow the table to scroll horizontally and the viewport is short enough that it can be scrolled vertically. This results in an undesirable laggy/rubber-band-ish effect when scrolling vertically for cells that meet one of the following criteria:
-
-* The cell is positioned relative.
-* The cell contains an `md-checkbox` element.
-* The cell contains an `md-icon` element.
-
-I have tested Safari, FireFox, Mobile Safari, and even IE 10 and was not able to reproduce this issue. I will open an issue for this momentarily. Please leave a comment if you have any ideas on how to fix this. If you know anyone who works for Google, make them fix it :stuck_out_tongue_closed_eyes:.
-
-**Update**
-
-~~It appears the latest version of Chrome (v44.0.2403.130) for OS X has resolved this issue, yay!~~
-
-I spoke too soon. On my work machine, an older non-retina display Macbook Pro, this is not experienced; however, on my personal machine, a retina display Macbook Pro, this is still experienced. It is clear that not all OS X Chrome users are effected by this bug. This bug seems to be related to hardware in some way? My personal machine has an Intel Iris Pro GPU with 1536 MB of VRAM. Hardware is not really my thing. Maybe someone else with a retina display Macbook Pro can reproduce this issue?
-
-**Version 0.7.6**
-
-* **Important:** Pagination is now its own toolbar and should not be wrapped in a `md-data-table-toolbar` element.
-* The pagination toolbar will now collapse into two separate toolbars on screens less than or equal to `600px` wide.
-
-**Version 0.7.5**
-
-* First and last page navigation links courtesy of [@vcastello](https://github.com/vcastello).
+* Fixing bug where the arrow icon, while hovering an inactive column name with the `descend-first` attribute, would not point in the appropriate direction.
 
 View the [archives](ARCHIVE.md) for a complete version history.
 
@@ -260,7 +232,7 @@ When `trim` is place on a column header, the width of the column will be determi
 I believe it is wise to restrict the minimum width of a column. By default column headers will enforce a minimum width of `60px`. This is a just a CSS property; however, you may overwrite it in your style sheet.
 
 ```css
-table[md-data-table] > thead > tr > th > div.trim {
+table[md-data-table] > thead > tr > th > div[trim] {
   min-width: 100px;
 }
 ```
@@ -271,10 +243,11 @@ Numeric columns align to the right of table cells. Column headers support the fo
 
 ##### Header Cells
 
-| Attribute    | Target  | Type     | Description |
-| :----------- | :------ | :------- | :---------- |
-| `numeric`    | `<th>`  | `NULL`   | Informs the directive the column is numeric in nature. |
-| `unit`       | `<th>`  | `String` | Specifies the unit. Providing a unit will automatically add the unit, wrapped in parenthesis, to the header cell. |
+| Attribute    | Target    | Type      | Description |
+| :----------- | :-------- | :-------  | :---------- |
+| `sig-row`    | `<thead>` | `Integer` | The index of the row to use to determine the column type. The default is the last row |
+| `numeric`    | `<th>`    | `NULL`    | Informs the directive the column is numeric in nature. |
+| `unit`       | `<th>`    | `String`  | Specifies the unit. Providing a unit will automatically add the unit, wrapped in parenthesis, to the header cell. |
 
 ##### Body Cells
 
@@ -290,8 +263,6 @@ You may use Angular's [number](https://docs.angularjs.org/api/ng/filter/number) 
 ```
 
 ### Pagination
-
-To use pagination add a `md-data-table-pagination` element to the `md-data-table-toolbar`.
 
 | Attribute       | Type       | Description |
 | :---------------| :--------- | :---------- |
@@ -314,7 +285,10 @@ If the function assigned to the `md-triger` attribute returns a promise, a loadi
 **Example: Client Side pagination using ngRepeat.**
 
 ```html
-<tr ng-repeat="item in array | orderBy: myOrder | limitTo: myLimit: (page - 1) * myLimit">
+<tr ng-repeat="item in array | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit">
+
+<!-- and your pagination element will look something like... -->
+<md-data-table-pagination md-limit="myLimit" md-page="myPage" md-total="{{array.length}}"></md-data-table-pagination>
 ```
 
 ### Row Selection
@@ -323,8 +297,9 @@ If the function assigned to the `md-triger` attribute returns a promise, a loadi
 
 | Attribute           | Target    | Type    | Description |
 | :------------------ | :-------- | :------ | :---------- |
-| `md-row-select`     | `<table>` | `Array` | Two-way data binding of selected items |
-| `md-auto-select`    | `<tr>`    | `NULL`  | allow row selection by clicking anywhere inside the row. |
+| `md-row-select`     | `<table>` | `Array`   | Two-way data binding of selected items |
+| `sig-row`           | `<thead>` | `Integer` | The index of the row to append the master toggle to in the column header. The default is the last row |
+| `md-auto-select`    | `<tr>`    | `NULL`    | allow row selection by clicking anywhere inside the row. |
 | `md-disable-select` | `<tr>`    | `expression | function` | Conditionally disable row selection |
 
 **Example: Disable all desserts with more than 400 calories.**

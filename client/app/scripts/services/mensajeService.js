@@ -1,7 +1,20 @@
-function mensajes($mdToast){
+function mensajes($mdToast,$mdDialog){
     return{
         confirmacion:function(titulo,mensaje){
          
+        },
+        notifica:function(mensaje,descripcion,ev){
+
+            $mdDialog.show(
+              $mdDialog.alert()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title(mensaje)
+                .content(descripcion)
+                .ariaLabel(mensaje)
+                .ok('OK')
+                .targetEvent(ev)
+            );
         },
         alerta:function(mensaje,tipo,posicion,icono){
             $mdToast.show({

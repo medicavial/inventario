@@ -4,12 +4,24 @@ app.controller('subTipoItemCtrl',subTipoItemCtrl)
 app.controller('subTiposItemCtrl',subTiposItemCtrl)
 app.controller('subTipoItemEditCtrl',subTipoItemEditCtrl)
 
+subTiposItemCtrl.$inject = ['$rootScope','$mdDialog','datos','subtipositem','mensajes'];
+subTipoItemCtrl.$inject = ['$scope','$mdDialog','busqueda','subtipositem','mensajes'];
+subTipoItemEditCtrl.$inject = ['$scope','$mdDialog','subtipositem','mensajes','informacion','busqueda'];
+
 function subTiposItemCtrl($rootScope,$mdDialog,datos,subtipositem,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'SubTipos de Item Registrados';
 	scope.info = datos;
+	scope.total = 0;
+	scope.limit = 10;
+	scope.page = 1;
+	scope.texto = {
+      text: 'Tipos por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.nuevoTipo = function(ev) {
 	    $mdDialog.show({
@@ -114,7 +126,7 @@ function subTipoItemCtrl($scope,$mdDialog,subtipositem,mensajes){
 
 }
 
-function subTipoItemEditCtrl($scope,$mdDialog,subtipositem,mensajes,informacion){
+function subTipoItemEditCtrl($scope,$mdDialog,subtipositem,mensajes,informacion,busqueda){
 
 	console.log(informacion)
 	$scope.inicio = function(){

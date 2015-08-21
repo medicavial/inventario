@@ -32,6 +32,7 @@ class CreateMovimientosTable extends Migration {
 			$table->integer('USU_clave')->unsigned();
 			$table->foreign('USU_clave')->references('USU_clave')->on('usuarios');
 
+			$table->integer('MOV_cantidad');
 			$table->string('MOV_observaciones');
 
 			$table->timestamps();

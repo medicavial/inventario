@@ -1,4 +1,8 @@
 app.controller('usualmCtrl',usualmCtrl)
+app.controller('nuevoUsualmCtrl',nuevoUsualmCtrl)
+
+usualmCtrl.$inject = ['$rootScope','datos','$mdDialog','busqueda','operacion'];
+nuevoUsualmCtrl.$inject = ['$scope','$mdDialog','busqueda','mensajes','$q','$filter','informacion','operacion','$rootScope'];
 
 function usualmCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 

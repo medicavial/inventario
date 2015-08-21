@@ -4,6 +4,11 @@ app.controller('itemCtrl',itemCtrl)
 app.controller('itemsCtrl',itemsCtrl)
 app.controller('itemEditCtrl',itemEditCtrl)
 
+itemsCtrl.$inject = ['$rootScope','$mdDialog','datos','items','mensajes'];
+itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes'];
+itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes','informacion'];
+
+
 function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
 	var scope = this;

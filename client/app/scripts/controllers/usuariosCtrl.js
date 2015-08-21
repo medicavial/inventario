@@ -4,12 +4,26 @@ app.controller('usuarioCtrl',usuarioCtrl)
 app.controller('usuariosCtrl',usuariosCtrl)
 app.controller('usuarioEditCtrl',usuarioEditCtrl)
 
+
+usuariosCtrl.$inject = ['$rootScope','$mdDialog','datos','usuarios','mensajes'];
+usuarioCtrl.$inject = ['$scope','$mdDialog','permisos','usuarios','mensajes'];
+usuarioEditCtrl.$inject = ['$scope','$mdDialog','usuarios','mensajes','informacion','permisos'];
+
 function usuariosCtrl($rootScope,$mdDialog,datos,usuarios,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'Usuarios Registrados';
 	scope.info = datos;
+	scope.info = datos;
+	scope.total = 0;
+	scope.limit = 10;
+	scope.page = 1;
+	scope.texto = {
+      text: 'Usuarios por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.nuevoUsuario = function(ev) {
 	    $mdDialog.show({
@@ -121,7 +135,7 @@ function usuarioCtrl($scope,$mdDialog,permisos,usuarios,mensajes){
 
 }
 
-function usuarioEditCtrl($scope,$mdDialog,permisos,usuarios,mensajes,informacion){
+function usuarioEditCtrl($scope,$mdDialog,usuarios,mensajes,informacion,permisos){
 
 	$scope.permisos = permisos.query();
 

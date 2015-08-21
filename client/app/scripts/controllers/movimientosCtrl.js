@@ -1,18 +1,26 @@
 "use strict"
 
-app.controller('itemCtrl',itemCtrl)
-app.controller('itemsCtrl',itemsCtrl)
-app.controller('itemEditCtrl',itemEditCtrl)
+app.controller('movimientoCtrl',movimientoCtrl)
+app.controller('movimientosCtrl',movimientosCtrl)
 
-function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
+movimientosCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
+movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','$q','$filter'];
+
+
+function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
-	$rootScope.titulo = 'Items Registrados';
-	scope.info = datos;
+	$rootScope.titulo = 'Movimientos Registrados';
+	scope.info = datos.data;
 	scope.total = 0;
 	scope.limit = 10;
 	scope.page = 1;
+	scope.texto = {
+      text: 'Movimientos por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.onPaginationChange = function (page, limit) {
 	    console.log(page);
@@ -26,93 +34,53 @@ function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
 	scope.nuevo = function(ev) {
 	    $mdDialog.show({
-	      controller: itemCtrl,
-	      templateUrl: 'views/item.html',
+	      controller: movimientoCtrl,
+	      templateUrl: 'views/movimiento.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
 	      clickOutsideToClose:false
 	    }).then(function(){
-	    	scope.info = items.query();
-	    });
-	};
-
-	scope.edita = function(ev,index) {
-
-		var usuario = scope.info[index];
-
-	    $mdDialog.show({
-	      controller: itemEditCtrl,
-	      templateUrl: 'views/item.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      locals: {informacion: usuario }
-	    }).then(function(){
-	    	scope.info = items.query();
-	    });
-	};
-
-	scope.confirmacion = function(ev,index) {
-	    // Abre ventana de confirmacion
-
-	    // console.log(index);
-	    var item = scope.info[index];
-
-	    var confirm = $mdDialog.confirm()
-	          .title('¿Desactivar el item?')
-	          .content('Puedes activarlo cuando lo necesites nuevamente')
-	          .ariaLabel('Desactivar item')
-	          .ok('Si')
-	          .cancel('No')
-	          .targetEvent(ev);
-
-	    $mdDialog.show(confirm).then(function() {
-
-	    	//en caso de decir SI
-	    	if (item.ITE_activo) {
-	      		item.ITE_activo = 0;
-	    	}else{
-	    		item.ITE_activo = 1;
-	    	}
-
-	      	var datos = {
-				nombre:item.ITE_nombre,
-				precio:item.ITE_precioventa,
-				cantidad:item.ITE_cantidadtotal,
-				tipo:item.TIT_clave,
-				subtipo:item.STI_clave,
-				activo:item.ITE_activo
-			}
-
-	      	items.update({item:item.ITE_clave},datos,
-	      		function (data){
-	      			mensajes.alerta(data.respuesta,'success','top right','done_all');
-	      		}
-	      	);
-
+	    	busqueda.movimientos().success(function (data){
+	    		scope.info = data;
+	    	});
 	    });
 	};
 
 }
 
 
-function itemCtrl($scope,$mdDialog,busqueda,items,mensajes){
+function movimientoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,$q,$filter){
 
-	busqueda.tiposItem().then(function (info){
-		$scope.tipoitems = info.data;
+	busqueda.items().then(function (info){
+		$scope.items = info.data;
 	});
 
-	busqueda.SubTiposItem().then(function (info){
-		$scope.subtipoitems = info.data;
+	busqueda.almacenes().then(function (info){
+		$scope.almacenes = info.data;
+	});
+
+	busqueda.tiposMovimiento().then(function (info){
+		$scope.tiposmovimiento = info.data;
+	});
+
+	busqueda.tiposAjuste().then(function (info){
+		$scope.tiposajuste = info.data;
 	});
 
 	$scope.inicio = function(){
+
+		$scope.busqueda = null;
+	    $scope.consultado = consultado;
+	    $scope.item = '';
+
 		$scope.datos = {
-			nombre:'',
-			precio:'',
+			item:'',
 			cantidad:'',
-			tipo:'',
-			subtipo:'',
-			activo:true
+			tipomov:'',
+			tipoa:'',
+			orden:'',
+			usuario:$rootScope.id,
+			observaciones:''
 		}
 
 		$scope.guardando = false;
@@ -120,18 +88,51 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes){
 
 	$scope.guardar = function(){
 
-		if ($scope.itemForm.$valid) {
+		if ($scope.movimientoForm.$valid && $scope.item) {
+		
+			$scope.datos.item = $scope.item.ITE_clave;
 
+			console.log($scope.datos);
 			$scope.guardando = true;
-			items.save($scope.datos,function (data){
+			operacion.altaMovimiento($scope.datos).success(function (data){
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
-				$scope.itemForm.$setPristine();
-				$scope.inicio();
+				$scope.movimientoForm.$setPristine();
 			});
 
 		};
 		
+	}
+
+	$scope.verificaForm = function(){
+
+		if ($scope.datos.tipomov == 1 && $scope.datos.tipoa == '') {
+			return true;
+		}else if($scope.movimientoForm.$invalid){
+			return true;
+		}else if ($scope.guardando) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function consultado(query) {
+
+		var q = $q.defer();
+
+		findValues( query, $scope.items ).then( function ( res ) {
+			q.resolve( res );
+		} );
+		return q.promise;
+    }
+
+    function findValues ( query, obj ) {
+
+		var deferred = $q.defer();
+		deferred.resolve( $filter( 'filter' )( obj, query ) );
+		return deferred.promise;
+
 	}
 
 	$scope.cancel = function() {
@@ -140,48 +141,3 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes){
 
 }
 
-function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes,informacion){
-
-	busqueda.tiposItem().then(function (info){
-		$scope.tipoitems = info.data;
-	});
-
-	busqueda.SubTiposItem().then(function (info){
-		$scope.subtipoitems = info.data;
-	});
-
-	$scope.inicio = function(){
-
-		$scope.datos = {
-			nombre:informacion.ITE_nombre,
-			precio:informacion.ITE_precioventa,
-			cantidad:informacion.ITE_cantidadtotal,
-			tipo:informacion.TIT_clave,
-			subtipo:informacion.STI_clave,
-			activo:informacion.ITE_activo ? true:false
-		}
-
-		$scope.guardando = false;
-	}
-
-	$scope.guardar = function(){
-
-
-		if ($scope.itemForm.$valid) {
-
-			$scope.guardando = true;
-			items.update({item:informacion.ITE_clave},$scope.datos,function (data){
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				$scope.guardando = false;
-				$scope.itemForm.$setPristine();
-			});
-
-		};
-		
-	}
-
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
-
-}

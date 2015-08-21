@@ -1,5 +1,7 @@
 app.controller('loginCtrl',loginCtrl)
 
+loginCtrl.$inject = ['auth','$rootScope'];
+
 function loginCtrl(auth, $rootScope){
 
 	var sesion = this;

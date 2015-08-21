@@ -4,12 +4,24 @@ app.controller('tipoItemCtrl',tipoItemCtrl)
 app.controller('tiposItemCtrl',tiposItemCtrl)
 app.controller('tipoItemEditCtrl',tipoItemEditCtrl)
 
+tiposItemCtrl.$inject = ['$rootScope','$mdDialog','datos','tipositem','mensajes'];
+tipoItemCtrl.$inject = ['$scope','$mdDialog','tipositem','mensajes'];
+tipoItemEditCtrl.$inject = ['$scope','$mdDialog','tipositem','mensajes','informacion'];
+
 function tiposItemCtrl($rootScope,$mdDialog,datos,tipositem,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'Tipos de Item Registrados';
 	scope.info = datos;
+	scope.total = 0;
+	scope.limit = 10;
+	scope.page = 1;
+	scope.texto = {
+      text: 'Tipos por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.nuevoTipo = function(ev) {
 	    $mdDialog.show({

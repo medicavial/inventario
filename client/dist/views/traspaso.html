@@ -1,0 +1,83 @@
+<md-dialog aria-label="Nuevo Traspaso" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nuevo Traspaso</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="traspasoForm" novalidate ng-submit="guardar()">
+
+  <md-dialog-content>
+  
+      <md-subheader class="md-no-sticky">Dastos Origen</md-subheader>
+      <md-divider></md-divider>
+      <md-select placeholder="Almacen Destino" ng-model="datos.almacenOrigen" name="origen" disabled >
+        <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+      </md-select>
+
+      <md-select placeholder="Item" ng-model="datos.item" disabled>
+        <md-option ng-repeat="item in items" value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
+      </md-select>
+
+      <div layout="row" layout-sm="column">
+        
+        <md-input-container flex flex-gt-sm="40">
+          <label>Cantidad Disponible</label>
+          <input type="number"  name="disponible" ng-model="disponible" disabled> 
+        </md-input-container>
+
+        
+      </div>
+      <md-subheader class="md-no-sticky">Dastos Destino</md-subheader>
+      <md-divider></md-divider>
+      <br>
+      <md-input-container>
+        <md-select placeholder="Almacen Destino" ng-model="datos.almacenDestino" name="almacenDestino" required md-on-close="verificaAlmacen($event)">
+          <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+        </md-select>
+        <div ng-messages="traspasoForm.almacenDestino.$error" ng-if="traspasoForm.$submitted">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div>
+      </md-input-container>
+
+      <div layout="row" layout-sm="column">
+        
+        <md-input-container flex flex-gt-sm="50">
+          <label>Cantidad a Traspasar</label>
+          <input required type="number" step="1" name="cantidad" ng-model="datos.cantidad" min="1" max="{{disponible}}">
+          <div ng-messages="traspasoForm.cantidad.$error" ng-if="traspasoForm.$submitted">
+            <div ng-message="required">Cantidad obligatoria</div>
+            <div ng-message="min">La cantidad no puede ser 0</div>
+            <div ng-message="max">La cantidad no debe ser mayor a la disponible</div>
+          </div>
+        </md-input-container>
+
+        
+      </div>
+
+      
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="guardando">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

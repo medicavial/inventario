@@ -1,49 +1,64 @@
-<div layout="row" layout-align="center" >
+<div layout="column">
     
-    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Fecha Alta</th>
-          <th>Activo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="perfil in perfiles.info">
-          <td>{{perfil.PER_clave}}</td>
-          <td>{{perfil.PER_nombre}}</td>
-          <td>{{perfil.created_at}}</td>
-          <td>
-            <div ng-show="perfil.PER_activo">SI</div>
-            <div ng-hide="perfil.PER_activo">NO</div>
-          </td>
-          <td class="option-table">
-              <md-menu md-position-mode="target-right target" >
-                <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
-                  <md-icon md-menu-origin>
-                    <ng-md-icon icon="more_vert" style="fill:#3F51B5"></ng-md-icon> 
-                  </md-icon>
-                </md-button>
-                <md-menu-content width="2">
-                  <md-menu-item>
-                    <md-button ng-click="perfiles.editaPerfil($event,$index)">
-                      <p>Modificar</p>
-                    </md-button>
-                  </md-menu-item>
-                  <md-menu-item>
-                    <md-button ng-click="perfiles.confirmacion($event,$index)">
-                      <p ng-show="perfil.PER_activo" >Desactivar</p>
-                      <p ng-hide="perfil.PER_activo" >Activar</p>
-                    </md-button>
-                  </md-menu-item>
-                </md-menu-content>
-              </md-menu>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <md-data-table-toolbar class="md-whiteframe-z1">
+      <md-input-container md-no-float flex class="no-padding">
+        <md-icon>
+          <ng-md-icon icon="search" style="fill:#3F51B5"></ng-md-icon> 
+        </md-icon>
+        <input ng-model="query" type="text" placeholder="Buscar Perfil" flex>
+      </md-input-container>
+      <md-button class="md-icon-button" aria-label="limpiar" ng-show="query" ng-click="query = ''">
+        <ng-md-icon icon="close" style="fill:#3F51B5"></ng-md-icon> 
+      </md-button>
+    </md-data-table-toolbar>
+    <br>
+    <md-data-table-container class="md-whiteframe-z1">
+      <table md-data-table>
+        <thead md-order="order">
+          <tr>
+            <th name="ID"  order-by="PER_clave"></th>
+            <th name="Nombre" order-by="PER_nombre"></th>
+            <th name="Fecha Alta"  order-by="created_at"></th>
+            <th name="Activo"  order-by="PER_activo"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="perfil in perfiles.info |filter:query | orderBy: order | limitTo: perfiles.limit: (perfiles.page - 1) * perfiles.limit">
+            <td>{{perfil.PER_clave}}</td>
+            <td>{{perfil.PER_nombre}}</td>
+            <td>{{perfil.created_at}}</td>
+            <td>
+              <div ng-show="perfil.PER_activo">SI</div>
+              <div ng-hide="perfil.PER_activo">NO</div>
+            </td>
+            <td class="option-table">
+                <md-menu md-position-mode="target-right target" >
+                  <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
+                    <md-icon md-menu-origin>
+                      <ng-md-icon icon="more_vert" style="fill:#3F51B5"></ng-md-icon> 
+                    </md-icon>
+                  </md-button>
+                  <md-menu-content width="2">
+                    <md-menu-item>
+                      <md-button ng-click="perfiles.editaPerfil($event,$index)">
+                        <p>Modificar</p>
+                      </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="perfiles.confirmacion($event,$index)">
+                        <p ng-show="perfil.PER_activo" >Desactivar</p>
+                        <p ng-hide="perfil.PER_activo" >Activar</p>
+                      </md-button>
+                    </md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+    <br>
+    <md-data-table-pagination md-label="perfiles.texto" md-row-select="perfiles.paginacion" md-limit="perfiles.limit" md-page="perfiles.page" md-total="{{perfiles.info.length}}"></md-data-table-pagination>
 
 </div>
 

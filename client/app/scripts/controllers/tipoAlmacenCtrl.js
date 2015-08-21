@@ -4,12 +4,24 @@ app.controller('tipoAlmacenCtrl',tipoAlmacenCtrl)
 app.controller('tiposAlmacenCtrl',tiposAlmacenCtrl)
 app.controller('tipoAlmacenEditCtrl',tipoAlmacenEditCtrl)
 
+tiposAlmacenCtrl.$inject = ['$rootScope','$mdDialog','datos','tiposalmacen','mensajes'];
+tipoAlmacenCtrl.$inject = ['$scope','$mdDialog','tiposalmacen','mensajes'];
+tipoAlmacenEditCtrl.$inject = ['$scope','$mdDialog','tiposalmacen','mensajes','informacion'];
+
 function tiposAlmacenCtrl($rootScope,$mdDialog,datos,tiposalmacen,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'Tipos de Almacen Registrados';
 	scope.info = datos;
+	scope.total = 0;
+	scope.limit = 10;
+	scope.page = 1;
+	scope.texto = {
+      text: 'Tipos por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.nuevo = function(ev) {
 	    $mdDialog.show({

@@ -36,4 +36,13 @@ class Almacen extends Eloquent {
                      ->get();
     }
 
+
+    public function scopeExistencia($query,$usuario)
+    {   
+        return $query->join('usuarioAlmacen', 'almacenes.ALM_clave', '=', 'usuarioAlmacen.ALM_clave')
+                     ->select('almacenes.*')
+                     ->where( array('ALM_activo' => true , 'USU_clave' => $usuario) )
+                     ->get();
+    }
+
 }		

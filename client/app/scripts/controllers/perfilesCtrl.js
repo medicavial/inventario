@@ -4,12 +4,24 @@ app.controller('perfilCtrl',perfilCtrl)
 app.controller('perfilesCtrl',perfilesCtrl)
 app.controller('perfilEditCtrl',perfilEditCtrl)
 
+perfilesCtrl.$inject = ['$rootScope','$mdDialog','datos','permisos','mensajes'];
+perfilCtrl.$inject = ['$scope','$mdDialog','permisos','mensajes'];
+perfilEditCtrl.$inject = ['$scope','$mdDialog','permisos','mensajes','informacion'];
+
 function perfilesCtrl($rootScope,$mdDialog,datos,permisos,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'Perfiles Registrados';
 	scope.info = datos;
+	scope.total = 0;
+	scope.limit = 10;
+	scope.page = 1;
+	scope.texto = {
+      text: 'Perfiles por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.nuevoPerfil = function(ev) {
 	    $mdDialog.show({

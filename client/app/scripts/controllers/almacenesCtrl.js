@@ -4,6 +4,10 @@ app.controller('almacenCtrl',almacenCtrl)
 app.controller('almacenesCtrl',almacenesCtrl)
 app.controller('almacenEditCtrl',almacenEditCtrl)
 
+almacenesCtrl.$inject = ['$rootScope','$mdDialog','datos','almacenes','mensajes'];
+almacenCtrl.$inject = ['$scope','$mdDialog','busqueda','almacenes','mensajes'];
+almacenEditCtrl.$inject = ['$scope','$mdDialog','almacenes','mensajes','informacion','busqueda'];
+
 function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 
 	var scope = this;
@@ -11,9 +15,13 @@ function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 	$rootScope.titulo = 'Almacenes Registrados';
 	scope.info = datos;
 	scope.total = 0;
-
 	scope.limit = 10;
 	scope.page = 1;
+	scope.texto = {
+      text: 'Almacenes por pagina:',
+      of: 'de'
+    };
+	scope.paginacion = [10,20,30,40];
 
 	scope.onPaginationChange = function (page, limit) {
 	    console.log(page);
@@ -140,7 +148,7 @@ function almacenCtrl($scope,$mdDialog,busqueda,almacenes,mensajes){
 
 }
 
-function almacenEditCtrl($scope,$mdDialog,busqueda,almacenes,mensajes,informacion){
+function almacenEditCtrl($scope,$mdDialog,almacenes,mensajes,informacion,busqueda){
 
 	busqueda.unidades().then(function (info){
 		$scope.unidades = info.data;

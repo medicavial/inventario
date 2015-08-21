@@ -1,6 +1,10 @@
 app.controller('itemproCtrl',itemproCtrl)
+app.controller('nuevoItemproCtrl',nuevoItemproCtrl)
 
-function itemproCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
+itemproCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','operacion'];
+nuevoItemproCtrl.$inject = ['$scope','$mdDialog','busqueda','mensajes','$q','$filter','operacion','$rootScope'];
+
+function itemproCtrl($rootScope,$mdDialog,datos,busqueda,operacion){
 
 	var scope = this;
 

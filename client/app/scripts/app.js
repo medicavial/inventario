@@ -5,12 +5,15 @@ var app = angular.module('app', [
 	'ngMaterial',
 	'ngMdIcons',
 	'webStorageModule',
+	'ngMessages',
 	'ngResource',
 	'md.data.table'
 ]);
+
 app.config(config);
 app.run(run);
-app.constant('api', 'http://api.medicavial.mx/api/');
+app.constant('api', 'http://localhost/inventario/server/public/api/');
+// app.constant('api', 'http://api.medicavial.mx/api/');
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
 
@@ -162,7 +165,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 	.state('index.tiposmovimiento',{
 		url:'tiposmovimiento',
 		templateUrl :'views/tiposmovimiento.html',
-		controller:'tiposmovimientoCtrl',
+		controller:'tiposMovimientoCtrl',
 		controllerAs: "tiposmovimiento",
 		resolve:{
             datos:function(tiposmovimiento){
@@ -174,7 +177,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 	.state('index.tiposajuste',{
 		url:'tiposajuste',
 		templateUrl :'views/tiposajuste.html',
-		controller:'tiposajusteCtrl',
+		controller:'tiposAjusteCtrl',
 		controllerAs: "tiposajuste",
 		resolve:{
             datos:function(tiposajuste){
@@ -204,6 +207,30 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		resolve:{
             datos:function(busqueda,$rootScope){
                 return busqueda.existencias($rootScope.id);
+            }
+        }
+	})
+
+	.state('index.tiposorden',{
+		url:'tiposorden',
+		templateUrl :'views/tiposorden.html',
+		controller:'tiposOrdenCtrl',
+		controllerAs: "tiposorden",
+		resolve:{
+            datos:function(tiposorden){
+                return tiposorden.query().$promise;
+            }
+        }
+	})
+
+	.state('index.ordencompra',{
+		url:'ordencompra',
+		templateUrl :'views/ordencompra.html',
+		controller:'ordencompraCtrl',
+		controllerAs: "ordencompra",
+		resolve:{
+            datos:function(busqueda,$rootScope){
+                return busqueda.ordencompra($rootScope.id);
             }
         }
 	})
@@ -269,8 +296,8 @@ function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage) {
 		$mdSidenav(menuId).toggle();
 	};
 
-	$rootScope.listItemClick = function() {
-	    
+	$rootScope.muestra = function(ruta) {
+	    $state.go(ruta);
 	};
 
 	$rootScope.showGridBottomSheet = function($event) {
@@ -315,7 +342,6 @@ function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage) {
 	$rootScope.username = webStorage.session.get('username');
 	$rootScope.nombre = webStorage.session.get('nombre');
 	$rootScope.id = webStorage.session.get('id');
-
 
 };
 
