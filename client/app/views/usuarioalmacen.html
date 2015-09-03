@@ -19,7 +19,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="usualm.order"  md-trigger="usualm.onOrderChange">
           <tr>
             <th name="ID"  order-by="clave"></th>
             <th name="Usuario" order-by="usuario"></th>
@@ -28,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="usuario in usualm.usuarios |filter:query | orderBy: order | limitTo: usualm.limit: (usualm.page - 1) * usualm.limit">
+          <tr ng-repeat="usuario in usualm.usuarios |filter:query | orderBy: usualm.order | limitTo: usualm.limit: (usualm.page - 1) * usualm.limit">
             <td>{{usuario.clave}}</td>
             <td>{{usuario.usuario}}</td>
             <td>{{usuario.nombre}}</td>

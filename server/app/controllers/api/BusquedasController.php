@@ -64,7 +64,7 @@ class BusquedasController extends BaseController {
 	}
 
 	public function ordenescompra(){
-		return OrdenCompra::all();
+		return OrdenCompra::todos();
 	}
 
 	public function permisos(){

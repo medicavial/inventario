@@ -1,6 +1,6 @@
 {
   "name": "angular-material-data-table",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Material Design data table.",
   "main": [
     "dist/md-data-table.min.js",
@@ -28,14 +28,14 @@
     "Gruntfile.js"
   ],
   "dependencies": {
-    "angular": "~1.4.1",
+    "angular": "~1.4.4",
     "angular-material": "~0.10.1"
   },
-  "_release": "0.8.8",
+  "_release": "0.8.9",
   "_resolution": {
     "type": "version",
-    "tag": "v0.8.8",
-    "commit": "f3fe82df68574f157018c7e8bc300f7afb63ebfc"
+    "tag": "v0.8.9",
+    "commit": "6d6f05bd9498e36d547e0e184d45aed6ef141097"
   },
   "_source": "git://github.com/daniel-nagy/md-data-table.git",
   "_target": "~0.8.0",

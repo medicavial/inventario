@@ -154,14 +154,18 @@ md-tooltip{
   text-align: center;
 }
 
+.md-button.md-fab.md-fab-bottom-right {
+    position: fixed;
+}
+
  #centro {
-   width: 150px;
-   height: 150px;
+   width: 30%;
+   height: 30%;
    position: absolute;
    top: 50%;
    left: 50%;
-   margin-top: -75px;
-   margin-left: -75px;
+   margin-top: -15%;
+   margin-left: -15%;
 } 
 
 .no-padding{
@@ -226,3 +230,16 @@ md-tooltip{
   fill: white; 
 }*/
 
+
+
+.muestras.ng-hide-add {
+
+    animation: fadeOutDown 0.4s;
+
+}
+
+.muestras.ng-hide-remove{
+    
+    animation: fadeInUp 0.4s;
+
+}

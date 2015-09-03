@@ -16,6 +16,7 @@
     "material-design-lite": "~1.0.2",
     "angular-material-data-table": "~0.8.0",
     "mdPickers": "~0.3.0",
-    "angular-messages": "~1.4.4"
+    "angular-messages": "~1.4.4",
+    "animate.css": "~3.4.0"
   }
 }

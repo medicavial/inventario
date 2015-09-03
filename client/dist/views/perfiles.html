@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="perfiles.order" md-trigger="perfiles.onOrderChange">
           <tr>
             <th name="ID"  order-by="PER_clave"></th>
             <th name="Nombre" order-by="PER_nombre"></th>
@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="perfil in perfiles.info |filter:query | orderBy: order | limitTo: perfiles.limit: (perfiles.page - 1) * perfiles.limit">
+          <tr ng-repeat="perfil in perfiles.info |filter:query | orderBy: perfiles.order | limitTo: perfiles.limit: (perfiles.page - 1) * perfiles.limit">
             <td>{{perfil.PER_clave}}</td>
             <td>{{perfil.PER_nombre}}</td>
             <td>{{perfil.created_at}}</td>

@@ -4,6 +4,7 @@ This module is an effort to implement Material Design data tables in [Angular Ma
 
 Specification for Material Design data tables can be found [here](http://www.google.com/design/spec/components/data-tables.html).
 
+* [Voting](#voting)
 * [Demo](#demo)
 * [License](#license)
 * [Installation](#installation)
@@ -11,6 +12,14 @@ Specification for Material Design data tables can be found [here](http://www.goo
 * [Change Log](#change-log)
 * [API Documentation](#api-documentation)
 * [Contributing] (#contributing)
+
+## Voting
+
+Voting is my attempt to receive more organized feedback from the community on how new features should work or how existing features should be changed. This was inspired by the different request for how row selection should work. This may be the only time I do this but it may be useful again in the future.
+
+I ask that you visit any issues below and follow the instructions for voting for or against it.
+
+[Row Selection Logic, #98](https://github.com/daniel-nagy/md-data-table/issues/98)
 
 ## Demo
 
@@ -128,8 +137,16 @@ angular.module('nutritionApp').controller('nutritionController', ['$nutrition', 
 
 ## Change Log
 
+#### Version 0.8.9
+###### August 23, 2015
+
+* Fix for issue #84
+* Fix for issue #93
+
+Thanks [@pavelhoral](https://github.com/pavelhoral)!
+
 #### Version 0.8.8
-###### August 14, 2015
+###### August 16, 2015
 
 * Tables with multi-row headers can now specify a significant row that will be used to append the checkbox to and set the text alignment for numeric columns. The default is to use the last row. See [Numeric Columns](#numeric-columns) and [Row Selection](#row-selection).
 
@@ -147,11 +164,6 @@ angular.module('nutritionApp').controller('nutritionController', ['$nutrition', 
 ###### August 12, 2015
 
 * Fixing bug where developer defined attributes on `<th>` elements were not preserved.
-
-#### Version 0.8.4
-###### August 12, 2015
-
-* Fixing bug where the arrow icon, while hovering an inactive column name with the `descend-first` attribute, would not point in the appropriate direction.
 
 View the [archives](ARCHIVE.md) for a complete version history.
 

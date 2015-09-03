@@ -29,54 +29,53 @@
         <md-divider></md-divider>
         <md-subheader class="md-no-sticky">Administrador</md-subheader>
         <div>
+
           <md-list-item ng-click="ir('index.usuarios')">
             <p> Usuarios </p>
             <ng-md-icon icon="group" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-
           <md-list-item ng-click="ir('index.perfiles')">
             <p> Perfiles </p>
             <ng-md-icon icon="label" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          
-          <md-list-item ng-click="ir('index.tipositem')">
-            <p> Tipos item </p>
-            <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
-          <md-list-item ng-click="ir('index.subtipositem')">
-            <p> SubTipos item </p>
-            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
-          <md-list-item ng-click="ir('index.tiposalmacen')">
-            <p> Tipos de Almacen </p>
-            <ng-md-icon icon="class" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
           <md-list-item ng-click="ir('index.tiposmovimiento')">
             <p> Tipos Movimiento </p>
             <ng-md-icon icon="album" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          
           <md-list-item ng-click="ir('index.tiposajuste')">
             <p> Tipos Ajuste </p>
             <ng-md-icon icon="shuffle" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          
           <md-list-item ng-click="ir('index.tiposorden')">
             <p> Tipos Orden </p>
             <ng-md-icon icon="description" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-
+        
         </div>
 
         <md-divider></md-divider>
         <md-subheader class="md-no-sticky">Catalogos</md-subheader>
         <div>
+
+          <md-list-item ng-click="ir('index.perfiles')">
+            <p> Unidades </p>
+            <ng-md-icon icon="business" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.tipositem')">
+            <p> Tipos item </p>
+            <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.subtipositem')">
+            <p> SubTipos item </p>
+            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
           <md-list-item ng-click="ir('index.items')">
             <p> Items </p>
             <ng-md-icon icon="shopping_basket" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+           <md-list-item ng-click="ir('index.tiposalmacen')">
+            <p> Tipos de Almacen </p>
+            <ng-md-icon icon="class" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.almacenes')">
             <p> Almacenes </p>
@@ -111,8 +110,8 @@
             <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item> -->
 
-          <md-list-item ng-click="ir('index.ordencompra')">
-            <p> Orden de Compra </p>
+          <md-list-item ng-click="ir('index.ordenescompra')">
+            <p> Ordenes de Compra </p>
             <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
@@ -139,8 +138,8 @@
       </md-list>
     </md-sidenav>
     <div layout="column" flex id="content">
-        <md-content layout="column" flex class="md-padding gris">
-          <ui-view ng-hide="cargando"></ui-view>
+        <md-content layout="column" flex class="md-padding gris ui-view-container">
+          <ui-view ng-hide="cargando" class="muestras"></ui-view>
           <div id="centro" ng-show="cargando">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>

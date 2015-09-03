@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="tiposajuste.order" md-trigger="tiposajuste.onOrderChange">
           <tr>
             <th name="ID"  order-by="TIA_clave"></th>
             <th name="Nombre" order-by="TIA_nombre"></th>
@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="tipo in tiposajuste.info |filter:query | orderBy: order | limitTo: tiposajuste.limit: (tiposajuste.page - 1) * tiposajuste.limit">
+          <tr ng-repeat="tipo in tiposajuste.info |filter:query | orderBy: tiposajuste.order | limitTo: tiposajuste.limit: (tiposajuste.page - 1) * tiposajuste.limit">
             <td>{{tipo.TIA_clave}}</td>
             <td>{{tipo.TIA_nombre}}</td>
             <td>{{tipo.created_at}}</td>

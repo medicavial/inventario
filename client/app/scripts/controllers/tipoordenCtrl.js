@@ -15,6 +15,7 @@ function tiposOrdenCtrl($rootScope,$mdDialog,datos,tiposorden,mensajes){
 	$rootScope.titulo = 'Tipos de Orden Registrados';
 	scope.info = datos;
 	scope.total = 0;
+	scope.order = 'TOR_clave';
 	scope.limit = 10;
 	scope.page = 1;
 	scope.texto = {
@@ -22,6 +23,10 @@ function tiposOrdenCtrl($rootScope,$mdDialog,datos,tiposorden,mensajes){
       of: 'de'
     };
 	scope.paginacion = [10,20,30,40];
+
+	scope.onOrderChange = function (order) {
+		
+	};
 
 	scope.nuevo = function(ev) {
 	    $mdDialog.show({

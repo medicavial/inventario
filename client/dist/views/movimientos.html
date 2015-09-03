@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="movimientos.order" md-trigger="movimientos.onOrderChange">
           <tr>
             <th name="ID"  order-by="ITE_clave"></th>
             <th name="Item" order-by="ITE_nombre"></th>
@@ -27,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="movimiento in movimientos.info |filter:query | orderBy: order | limitTo: movimientos.limit: (movimientos.page - 1) * movimientos.limit">
+          <tr ng-repeat="movimiento in movimientos.info |filter:query | orderBy: movimientos.order | limitTo: movimientos.limit: (movimientos.page - 1) * movimientos.limit">
             <td>{{movimiento.MOV_clave}}</td>
             <td>{{movimiento.ITE_nombre}}</td>
             <td>{{movimiento.ALM_nombre}}</td>

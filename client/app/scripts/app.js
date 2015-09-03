@@ -7,13 +7,14 @@ var app = angular.module('app', [
 	'webStorageModule',
 	'ngMessages',
 	'ngResource',
+	'ngAnimate',
 	'md.data.table'
 ]);
 
-app.config(config);
-app.run(run);
-app.constant('api', 'http://localhost/inventario/server/public/api/');
-// app.constant('api', 'http://api.medicavial.mx/api/');
+app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
+app.run(['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage', run]);
+// app.constant('api', 'http://localhost/inventario/server/public/api/');
+app.constant('api', 'http://api.medicavial.mx/api/');
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
 
@@ -223,14 +224,14 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-	.state('index.ordencompra',{
-		url:'ordencompra',
-		templateUrl :'views/ordencompra.html',
-		controller:'ordencompraCtrl',
-		controllerAs: "ordencompra",
+	.state('index.ordenescompra',{
+		url:'ordenescompra',
+		templateUrl :'views/ordenescompra.html',
+		controller:'ordenesCompraCtrl',
+		controllerAs: "ordenescompra",
 		resolve:{
             datos:function(busqueda,$rootScope){
-                return busqueda.ordencompra($rootScope.id);
+                return busqueda.ordenescompra();
             }
         }
 	})

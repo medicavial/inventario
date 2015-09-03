@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="tiposmovimiento.order" md-trigger="tiposmovimiento.onOrderChange">
           <tr>
             <th name="ID"  order-by="TIM_clave"></th>
             <th name="Nombre" order-by="TIM_nombre"></th>
@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="tipo in tiposmovimiento.info |filter:query | orderBy: order | limitTo: tiposmovimiento.limit: (tiposmovimiento.page - 1) * tiposmovimiento.limit">
+          <tr ng-repeat="tipo in tiposmovimiento.info |filter:query | orderBy: tiposmovimiento.order | limitTo: tiposmovimiento.limit: (tiposmovimiento.page - 1) * tiposmovimiento.limit">
             <td>{{tipo.TIM_clave}}</td>
             <td>{{tipo.TIM_nombre}}</td>
             <td>{{tipo.created_at}}</td>

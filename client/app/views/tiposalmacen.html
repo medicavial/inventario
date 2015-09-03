@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="tiposalmacen.order" md-trigger="tiposalmacen.onOrderChange">
           <tr>
             <th name="ID"  order-by="TAL_clave"></th>
             <th name="Nombre" order-by="TAL_nombre"></th>
@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="tipo in tiposalmacen.info |filter:query | orderBy: order | limitTo: tiposalmacen.limit: (tiposalmacen.page - 1) * tiposalmacen.limit">
+          <tr ng-repeat="tipo in tiposalmacen.info |filter:query | orderBy: tiposalmacen.order | limitTo: tiposalmacen.limit: (tiposalmacen.page - 1) * tiposalmacen.limit">
             <td>{{tipo.TAL_clave}}</td>
             <td>{{tipo.TAL_nombre}}</td>
             <td>{{tipo.created_at}}</td>

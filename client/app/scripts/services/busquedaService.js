@@ -29,7 +29,7 @@ function busqueda($http, api){
         {
             return $http.get(api + 'busquedas/movimientos');
         },
-        ordencompra : function()
+        ordenescompra : function()
         {
             return $http.get(api + 'busquedas/ordenescompra');
         },

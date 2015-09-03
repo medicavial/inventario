@@ -162,7 +162,7 @@ function mdDataTable() {
     }
     
     if($attrs.mdProgress) {
-      $scope.$watch('tableCtrl.progress', function () {
+      $scope.$watch('$mdDataTableCtrl.progress', function () {
         var deferred = self.defer();
         $q.when(self.progress)['finally'](deferred.resolve);
       });
@@ -229,6 +229,7 @@ function mdDataTable() {
     scope: {}
   };
 }
+
 
 angular.module('md.data.table').directive('mdTableCell', mdTableCell);
 
@@ -647,7 +648,8 @@ function mdSelectAll() {
     
     checkbox.attr('aria-label', 'Select All');
     checkbox.attr('ng-click', 'toggleAll()');
-    checkbox.attr('ng-class', '[mdClasses, {\'md-checked\': allSelected()}]');
+    checkbox.attr('ng-class', 'mdClasses');
+    checkbox.attr('ng-checked', 'allSelected()');
     checkbox.attr('ng-disabled', '!getCount()');
     
     tElement.append(checkbox);
@@ -697,6 +699,7 @@ function mdSelectAll() {
   };
 }
 
+
 angular.module('md.data.table').directive('mdSelectRow', mdSelectRow);
 
 function mdSelectRow($mdTable) {
@@ -708,7 +711,8 @@ function mdSelectRow($mdTable) {
     
     checkbox.attr('aria-label', 'Select Row');
     checkbox.attr('ng-click', 'toggleRow(' + ngRepeat.item + ', $event)');
-    checkbox.attr('ng-class', '[mdClasses, {\'md-checked\': isSelected(' + ngRepeat.item + ')}]');
+    checkbox.attr('ng-class', 'mdClasses');
+    checkbox.attr('ng-checked', 'isSelected(' + ngRepeat.item + ')');
     
     if(tAttrs.mdDisableSelect) {
       checkbox.attr('ng-disabled', 'isDisabled()');
@@ -749,6 +753,7 @@ function mdSelectRow($mdTable) {
 }
 
 mdSelectRow.$inject = ['$mdTable'];
+
 
 angular.module('md.table.templates', ['templates.arrow.html', 'templates.navigate-before.html', 'templates.navigate-first.html', 'templates.navigate-last.html', 'templates.navigate-next.html', 'templates.md-data-table-pagination.html', 'templates.md-data-table-progress.html']);
 

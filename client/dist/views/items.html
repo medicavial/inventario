@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="order">
+        <thead md-order="items.order" md-trigger="items.onOrderChange">
           <tr>
             <th name="ID"  order-by="ITE_clave"></th>
             <th name="Nombre" order-by="ITE_nombre"></th>
@@ -26,7 +26,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in items.info |filter:query | orderBy: order | limitTo: items.limit: (items.page - 1) * items.limit">
+          <tr ng-repeat="item in items.info |filter:query | orderBy: items.order | limitTo: items.limit: (items.page - 1) * items.limit">
             <td>{{item.ITE_clave}}</td>
             <td>{{item.ITE_nombre}}</td>
             <td>{{item.TIT_nombre}}</td>
