@@ -5,7 +5,7 @@ app.controller('proveedoresCtrl',proveedoresCtrl)
 app.controller('proveedorEditCtrl',proveedorEditCtrl)
 
 proveedoresCtrl.$inject = ['$rootScope','$mdDialog','datos','proveedores','mensajes'];
-proveedorCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes'];
+proveedorCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes', 'datos', 'Upload', '$rootScope'];
 proveedorEditCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes','informacion'];
 
 function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
@@ -93,9 +93,11 @@ function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 }
 
 
-function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes){
+function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes, datos, Upload, $rootScope){
 
-	$scope.permisos = permisos.query();
+	$rootScope.titulo = 'Nuevo Proveedor';
+
+	$scope.permisos = datos;
 
 	$scope.inicio = function(){
 		$scope.datos = {
@@ -105,7 +107,7 @@ function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes){
 			razon:'',
 			activo:true
 		}
-
+		$scope.imagenes = [];
 		$scope.guardando = false;
 	}
 
@@ -123,6 +125,18 @@ function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes){
 
 		};
 		
+	}
+
+	$scope.upload = function(files,file,event){
+		if (files && files.length) {
+			for (var i = 0; i < files.length; i++) {
+	        	$scope.imagenes.push(files[i]);
+	        }
+	    }
+	}
+
+	$scope.eliminaImagen = function(index){
+		$scope.imagenes.splice(index,1);
 	}
 
 	$scope.cancel = function() {

@@ -21,6 +21,10 @@ function busqueda($http, api){
         {
             return $http.get(api + 'busquedas/items');
         },
+        itemsAlmacen : function(almacen)
+        {
+            return $http.get(api + 'busquedas/items/' + almacen);
+        },
         itemsProveedor : function()
         {
             return $http.get(api + 'busquedas/items/proveedor');

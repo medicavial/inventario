@@ -5,7 +5,7 @@ app.controller('itemsCtrl',itemsCtrl)
 app.controller('itemEditCtrl',itemEditCtrl)
 
 itemsCtrl.$inject = ['$rootScope','$mdDialog','datos','items','mensajes'];
-itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes'];
+itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','Upload'];
 itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes','informacion'];
 
 
@@ -99,16 +99,11 @@ function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
 }
 
+function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,Upload){
 
-function itemCtrl($scope,$mdDialog,busqueda,items,mensajes){
-
-	busqueda.tiposItem().then(function (info){
-		$scope.tipoitems = info.data;
-	});
-
-	busqueda.SubTiposItem().then(function (info){
-		$scope.subtipoitems = info.data;
-	});
+	$rootScope.titulo = 'Nuevo Item';
+	$scope.tipoitems = datos[0].data;
+	$scope.subtipoitems = datos[1].data;
 
 	$scope.inicio = function(){
 		$scope.datos = {
@@ -117,27 +112,54 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes){
 			cantidad:'',
 			tipo:'',
 			subtipo:'',
+			sustancia:'',
+			posologia:'',
 			activo:true
 		}
 
+		$scope.imagenes = [];
 		$scope.guardando = false;
 	}
 
 	$scope.guardar = function(){
 
-		if ($scope.itemForm.$valid) {
-
-			$scope.guardando = true;
-			items.save($scope.datos,function (data){
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				$scope.guardando = false;
-				$scope.itemForm.$setPristine();
-				$scope.inicio();
-			});
-
-		};
-		
+		$scope.guardando = true;
+		items.save($scope.datos,function (data){
+			mensajes.alerta(data.respuesta,'success','top right','done_all');
+			$scope.guardando = false;
+			$scope.itemForm.$setPristine();
+			$scope.inicio();
+		});
 	}
+
+
+	$scope.verificador = function(){
+
+		if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
+			return true;
+		}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
+			if ($scope.datos.sustancia && $scope.datos.posologia) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+
+	$scope.upload = function(files,file,event){
+		if (files && files.length) {
+			for (var i = 0; i < files.length; i++) {
+	        	$scope.imagenes.push(files[i]);
+	        }
+	    }
+	}
+
+	$scope.eliminaImagen = function(index){
+		$scope.imagenes.splice(index,1);
+	}
+
 
 	$scope.cancel = function() {
 		$mdDialog.hide();

@@ -39,6 +39,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::resource('proveedores', 'ProveedoresController');
     Route::resource('permisos', 'PermisosController');
     Route::resource('subtipositem', 'SubTipoItemController');
+    Route::resource('unidades', 'UnidadesController');
     Route::resource('usuarios', 'UsuariosController');
 
     
@@ -49,6 +50,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('almacen/{usuario}', 'BusquedasController@almacenUsuario');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
         Route::get('items', 'BusquedasController@items');
+        Route::get('items/{almacen}', 'BusquedasController@itemsAlmacen');
         Route::get('items/proveedor', 'BusquedasController@itemsProveedor');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');

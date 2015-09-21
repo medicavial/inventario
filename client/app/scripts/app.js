@@ -8,112 +8,34 @@ var app = angular.module('app', [
 	'ngMessages',
 	'ngResource',
 	'ngAnimate',
-	'md.data.table'
+	'md.data.table',
+	'ngFileUpload'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
 app.run(['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage', run]);
-// app.constant('api', 'http://localhost/inventario/server/public/api/');
-app.constant('api', 'http://api.medicavial.mx/api/');
+app.constant('api', 'http://localhost/inventario/server/public/api/');
+// app.constant('api', 'http://api.medicavial.mx/api/');
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
 
 	$urlRouterProvider.otherwise("/home");
 
 	$stateProvider
+
 	.state('login', {
 		url: "/login",
 		templateUrl: "views/login.html",
 		controller: "loginCtrl",
 		controllerAs: "sesion"
 	})
+
 	.state('index', {
 		url: '/',
 		abstract:true,
 		templateUrl: 'views/base.html'
 	})
-	.state('index.home',{
-		url:'home',
-		templateUrl :'views/home.html',
-		controller:'homeCtrl'
-	})
-	.state('index.usuarios',{
-		url:'usuarios',
-		templateUrl :'views/usuarios.html',
-		controller:'usuariosCtrl',
-		controllerAs: "usuarios",
-		resolve:{
-            datos:function(usuarios){
-                return usuarios.query().$promise;
-            }
-        }
-	})
-	.state('index.perfiles',{
-		url:'perfiles',
-		templateUrl :'views/perfiles.html',
-		controller:'perfilesCtrl',
-		controllerAs: "perfiles",
-		resolve:{
-            datos:function(permisos){
-                return permisos.query().$promise;
-            }
-        }
-	})
-	.state('index.tipositem',{
-		url:'tipositem',
-		templateUrl :'views/tipositem.html',
-		controller:'tiposItemCtrl',
-		controllerAs: "tipositem",
-		resolve:{
-            datos:function(tipositem){
-                return tipositem.query().$promise;
-            }
-        }
-	})
-	.state('index.subtipositem',{
-		url:'subtipositem',
-		templateUrl :'views/subtipositem.html',
-		controller:'subTiposItemCtrl',
-		controllerAs: "subtipositem",
-		resolve:{
-            datos:function(subtipositem){
-                return subtipositem.query().$promise;
-            }
-        }
-	})
-	.state('index.proveedores',{
-		url:'proveedores',
-		templateUrl :'views/proveedores.html',
-		controller:'proveedoresCtrl',
-		controllerAs: "proveedores",
-		resolve:{
-            datos:function(proveedores){
-                return proveedores.query().$promise;
-            }
-        }
-	})
-	.state('index.items',{
-		url:'items',
-		templateUrl :'views/items.html',
-		controller:'itemsCtrl',
-		controllerAs: "items",
-		resolve:{
-            datos:function(items){
-                return items.query().$promise;
-            }
-        }
-	})
-	.state('index.tiposalmacen',{
-		url:'tiposalmacen',
-		templateUrl :'views/tiposalmacen.html',
-		controller:'tiposAlmacenCtrl',
-		controllerAs: "tiposalmacen",
-		resolve:{
-            datos:function(tiposalmacen){
-                return tiposalmacen.query().$promise;
-            }
-        }
-	})
+
 	.state('index.almacenes',{
 		url:'almacenes',
 		templateUrl :'views/almacenes.html',
@@ -125,6 +47,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             }
         }
 	})
+
 	.state('index.conexiones',{
 		url:'conexiones',
 		templateUrl :'views/conexiones.html',
@@ -132,17 +55,49 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 			$rootScope.titulo = 'Conexiones';
 		}
 	})
-	.state('index.usualm',{
-		url:'usualm',
-		templateUrl :'views/usuarioalmacen.html',
-		controller:'usualmCtrl',
-		controllerAs: "usualm",
+
+	.state('index.existencias',{
+		url:'existencias',
+		templateUrl :'views/existencias.html',
+		controller:'existenciasCtrl',
+		controllerAs: "existencias",
+		resolve:{
+            datos:function(busqueda,$rootScope){
+                return busqueda.existencias($rootScope.id);
+            }
+        }
+	})
+
+	.state('index.home',{
+		url:'home',
+		templateUrl :'views/home.html',
+		controller:'homeCtrl'
+	})
+
+	.state('index.items',{
+		url:'items',
+		templateUrl :'views/items.html',
+		controller:'itemsCtrl',
+		controllerAs: "items",
+		resolve:{
+            datos:function(items){
+                return items.query().$promise;
+            }
+        }
+	})
+
+	.state('index.item',{
+		url:'item',
+		templateUrl :'views/item.html',
+		controller:'itemCtrl',
+		// controllerAs: "item",
 		resolve:{
             datos:function(busqueda,$q){
-            	var promesa = $q.defer(),
-            		usuarios = busqueda.usuariosAlmacen();
+                var promesa = $q.defer(),
+            		tipoitems = busqueda.tiposItem(),
+            		subtipoitems = busqueda.SubTiposItem();
 
-            	$q.all([usuarios]).then(function (data){
+            	$q.all([tipoitems,subtipoitems]).then(function (data){
             		promesa.resolve(data);
             	});
 
@@ -151,6 +106,27 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
+	.state('index.detalleItem',{
+		url:'item/:id',
+		templateUrl :'views/item.html',
+		controller:'itemCtrl',
+		// controllerAs: "item",
+		resolve:{
+            datos:function(busqueda,$q,$stateParams){
+                var promesa = $q.defer(),
+            		tipoitems = busqueda.tiposItem(),
+            		subtipoitems = busqueda.SubTiposItem(),
+            		item = busqueda.item($stateParams.id);
+
+            	$q.all([tipoitems,subtipoitems,item]).then(function (data){
+            		promesa.resolve(data);
+            	});
+
+                return promesa.promise;
+            }
+        }
+	})
+	
 	.state('index.itempro',{
 		url:'itempro',
 		templateUrl :'views/itempro.html',
@@ -159,6 +135,103 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		resolve:{
             datos:function(busqueda){
                 return busqueda.itemsProveedor();
+            }
+        }
+	})
+
+	.state('index.movimientos',{
+		url:'movimientos',
+		templateUrl :'views/movimientos.html',
+		controller:'movimientosCtrl',
+		controllerAs: "movimientos",
+		resolve:{
+            datos:function(busqueda){
+                return busqueda.movimientos();
+            }
+        }
+	})
+
+	.state('index.ordenescompra',{
+		url:'ordenescompra',
+		templateUrl :'views/ordenescompra.html',
+		controller:'ordenesCompraCtrl',
+		controllerAs: "ordenescompra",
+		resolve:{
+            datos:function(busqueda,$rootScope){
+                return busqueda.ordenescompra();
+            }
+        }
+	})
+
+	.state('index.perfiles',{
+		url:'perfiles',
+		templateUrl :'views/perfiles.html',
+		controller:'perfilesCtrl',
+		controllerAs: "perfiles",
+		resolve:{
+            datos:function(permisos){
+                return permisos.query().$promise;
+            }
+        }
+	})
+
+	.state('index.proveedores',{
+		url:'proveedores',
+		templateUrl :'views/proveedores.html',
+		controller:'proveedoresCtrl',
+		controllerAs: "proveedores",
+		resolve:{
+            datos:function(proveedores){
+                return proveedores.query().$promise;
+            }
+        }
+	})
+
+	.state('index.proveedor',{
+		url:'proveedor',
+		templateUrl :'views/proveedor.html',
+		controller:'proveedorCtrl',
+		// controllerAs: "item",
+		resolve:{
+            datos:function(permisos){
+                return permisos.query();
+            }
+        }
+	})
+
+	.state('index.subtipositem',{
+		url:'subtipositem',
+		templateUrl :'views/subtipositem.html',
+		controller:'subTiposItemCtrl',
+		controllerAs: "subtipositem",
+		resolve:{
+            datos:function(subtipositem){
+                return subtipositem.query().$promise;
+            }
+        }
+	})
+
+	
+	.state('index.tipositem',{
+		url:'tipositem',
+		templateUrl :'views/tipositem.html',
+		controller:'tiposItemCtrl',
+		controllerAs: "tipositem",
+		resolve:{
+            datos:function(tipositem){
+                return tipositem.query().$promise;
+            }
+        }
+	})
+	
+	.state('index.tiposalmacen',{
+		url:'tiposalmacen',
+		templateUrl :'views/tiposalmacen.html',
+		controller:'tiposAlmacenCtrl',
+		controllerAs: "tiposalmacen",
+		resolve:{
+            datos:function(tiposalmacen){
+                return tiposalmacen.query().$promise;
             }
         }
 	})
@@ -187,31 +260,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-	.state('index.movimientos',{
-		url:'movimientos',
-		templateUrl :'views/movimientos.html',
-		controller:'movimientosCtrl',
-		controllerAs: "movimientos",
-		resolve:{
-            datos:function(busqueda){
-                return busqueda.movimientos();
-            }
-        }
-	})
-
-
-	.state('index.existencias',{
-		url:'existencias',
-		templateUrl :'views/existencias.html',
-		controller:'existenciasCtrl',
-		controllerAs: "existencias",
-		resolve:{
-            datos:function(busqueda,$rootScope){
-                return busqueda.existencias($rootScope.id);
-            }
-        }
-	})
-
 	.state('index.tiposorden',{
 		url:'tiposorden',
 		templateUrl :'views/tiposorden.html',
@@ -224,17 +272,77 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-	.state('index.ordenescompra',{
-		url:'ordenescompra',
-		templateUrl :'views/ordenescompra.html',
-		controller:'ordenesCompraCtrl',
-		controllerAs: "ordenescompra",
+	.state('index.usuarios',{
+		url:'usuarios',
+		templateUrl :'views/usuarios.html',
+		controller:'usuariosCtrl',
+		controllerAs: "usuarios",
 		resolve:{
-            datos:function(busqueda,$rootScope){
-                return busqueda.ordenescompra();
+            datos:function(usuarios){
+                return usuarios.query().$promise;
             }
         }
 	})
+
+
+	.state('index.unidades',{
+		url:'unidades',
+		templateUrl :'views/unidades.html',
+		controller:'unidadesCtrl',
+		controllerAs: "unidades",
+		resolve:{
+            datos:function(unidades){
+                return unidades.query().$promise;
+            }
+        }
+	})
+
+	.state('index.usualm',{
+		url:'usualm',
+		templateUrl :'views/usuarioalmacen.html',
+		controller:'usualmCtrl',
+		controllerAs: "usualm",
+		resolve:{
+            datos:function(busqueda,$q){
+            	var promesa = $q.defer(),
+            		usuarios = busqueda.usuariosAlmacen();
+
+            	$q.all([usuarios]).then(function (data){
+            		promesa.resolve(data);
+            	});
+
+                return promesa.promise;
+            }
+        }
+	})
+
+
+	.state('index.traspaso',{
+		url:'traspaso',
+		templateUrl :'views/traspaso.html',
+		controller:'traspasoCtrl',
+		resolve:{
+            datos:function($rootScope,busqueda,$q){
+                var promesa = $q.defer(),
+            		almacenes = busqueda.almacenesUsuario($rootScope.id);
+
+            	$q.all([almacenes]).then(function (data){
+            		promesa.resolve(data);
+            	});
+
+                return promesa.promise;
+            }
+        }
+	})
+
+
+	.state('index.configuracion',{
+		url:'configuracion',
+		templateUrl :'views/configuracion.html',
+		controller:'configuracionCtrl',
+		controllerAs: "configuracion"
+	})
+
 
 
 	$locationProvider.html5Mode(true);

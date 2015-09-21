@@ -33,12 +33,12 @@
             <td>{{usuario.usuario}}</td>
             <td>{{usuario.nombre}}</td>
             <td layout="row">
-                <md-chips ng-model="usuario.almacenes" readonly="true">
+                <md-chips ng-model="usuario.almacenes" readonly="false">
                   <md-chip-template>
                     <strong>{{$chip.ALM_nombre}}</strong>
                   </md-chip-template>
                   <button md-chip-remove class="md-primary vegetablechip" ng-click="usualm.confirma($event,$index,$chip)">
-                    <ng-md-icon icon="close" style="fill:#3F51B5"></ng-md-icon> 
+                    <ng-md-icon icon="close" style="fill:#3F51B5"></ng-md-icon>
                   </button>
                 </md-chips>
                 <md-button ng-click="usualm.nuevo($event,$index)">Agregar</md-button>

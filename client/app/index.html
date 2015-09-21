@@ -4,24 +4,24 @@
 	<meta charset="UTF-8">
 	<title>Sistema de Inventario MV Ver. 0.1</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic"/>
 	<!-- build:css css/style.min.css -->
 
 	<!-- bower:css -->
 	<link rel="stylesheet" href="lib/angular-material/angular-material.css" />
-	<link rel="stylesheet" href="lib/material-design-lite/material.min.css" />
 	<link rel="stylesheet" href="lib/angular-material-data-table/dist/md-data-table.min.css" />
-	<link rel="stylesheet" href="lib/mdPickers/dist/mdPickers.min.css" />
 	<link rel="stylesheet" href="lib/animate.css/animate.css" />
+	<link rel="stylesheet" href="lib/material-design-lite/material.min.css" />
+	<link rel="stylesheet" href="lib/mdPickers/dist/mdPickers.min.css" />
 	<!-- endbower -->  
-
+	
 	<!-- inject:css -->    
 	<link rel="stylesheet" href="/stylesheets/colores.css">    
 	<link rel="stylesheet" href="/stylesheets/main.css">    
 	<link rel="stylesheet" href="/stylesheets/minicharts.css">    
 	<link rel="stylesheet" href="/stylesheets/wishitems.css">    
 	<!-- endinject --> 
-
+	
 	<!-- endbuild -->
 	<base href="/">
 </head>
@@ -32,20 +32,20 @@
 	<!-- build:js js/vendor.min.js -->
 	<!-- bower:js -->
 	<script src="lib/angular/angular.js"></script>
-	<script src="lib/angularjs/angular.js"></script>
 	<script src="lib/angular-animate/angular-animate.js"></script>
 	<script src="lib/angular-aria/angular-aria.js"></script>
 	<script src="lib/angular-material/angular-material.js"></script>
-	<script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
-	<script src="lib/angular-material-icons/angular-material-icons.min.js"></script>
-	<script src="lib/svg-morpheus/compile/minified/svg-morpheus.js"></script>
-	<script src="lib/angular-webstorage/angular-webstorage.js"></script>
-	<script src="lib/angular-resource/angular-resource.js"></script>
-	<script src="lib/material-design-lite/material.min.js"></script>
 	<script src="lib/angular-material-data-table/dist/md-data-table.min.js"></script>
+	<script src="lib/angular-material-icons/angular-material-icons.min.js"></script>
+	<script src="lib/angular-messages/angular-messages.js"></script>
+	<script src="lib/angular-resource/angular-resource.js"></script>
+	<script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="lib/angular-webstorage/angular-webstorage.js"></script>
+	<script src="lib/material-design-lite/material.min.js"></script>
 	<script src="lib/moment/moment.js"></script>
 	<script src="lib/mdPickers/dist/mdPickers.min.js"></script>
-	<script src="lib/angular-messages/angular-messages.js"></script>
+	<script src="lib/ng-file-upload/ng-file-upload.js"></script>
+	<script src="lib/svg-morpheus/compile/minified/svg-morpheus.js"></script>
 	<!-- endbower --> 
 	<!-- endbuild -->
 	
@@ -53,6 +53,7 @@
 	<!-- inject:js -->    
 	<script src="/scripts/app.js"></script>    
 	<script src="/scripts/controllers/almacenesCtrl.js"></script>    
+	<script src="/scripts/controllers/configuracionCtrl.js"></script>    
 	<script src="/scripts/controllers/existenciaCtrl.js"></script>    
 	<script src="/scripts/controllers/homeCtrl.js"></script>    
 	<script src="/scripts/controllers/itemproCtrl.js"></script>    
@@ -68,8 +69,10 @@
 	<script src="/scripts/controllers/tipoajusteCtrl.js"></script>    
 	<script src="/scripts/controllers/tipomovimientoCtrl.js"></script>    
 	<script src="/scripts/controllers/tipoordenCtrl.js"></script>    
+	<script src="/scripts/controllers/unidadesCtrl.js"></script>    
 	<script src="/scripts/controllers/usualmCtrl.js"></script>    
 	<script src="/scripts/controllers/usuariosCtrl.js"></script>    
+	<script src="/scripts/directives/mayuscula.js"></script>    
 	<script src="/scripts/directives/money.js"></script>    
 	<script src="/scripts/services/almacenService.js"></script>    
 	<script src="/scripts/services/authService.js"></script>    
@@ -85,6 +88,7 @@
 	<script src="/scripts/services/tipositemService.js"></script>    
 	<script src="/scripts/services/tiposmovimientoService.js"></script>    
 	<script src="/scripts/services/tiposordenService.js"></script>    
+	<script src="/scripts/services/unidadService.js"></script>    
 	<script src="/scripts/services/usuarioService.js"></script>    
 	<!-- endinject -->
 	<!-- endbuild -->

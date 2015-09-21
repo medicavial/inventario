@@ -20,4 +20,16 @@ class Existencia extends Eloquent {
 
     }
 
+    public function scopeUsuario($query,$usuario)
+    {
+        return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+                     ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+                     ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+                     ->join('usuarioAlmacen', 'almacenes.ALM_clave', '=', 'usuarioAlmacen.ALM_clave')
+                     ->select('ITE_nombre','EXI_cantidad','EXI_ultimoMovimiento', 'UNI_nombrecorto','ALM_nombre')
+                     ->where('USU_clave',$usuario)
+                     ->get();
+
+    }
+
 }		

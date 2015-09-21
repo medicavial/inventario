@@ -1,44 +1,107 @@
-<md-whiteframe class="md-whiteframe-z2 white" layout="column" layout-padding>
-
-    <md-container layout-margin layout="row">
-      <md-input-container md-no-float flex class="no-padding">
-        <md-icon>
-          <ng-md-icon icon="search" style="fill:#3F51B5"></ng-md-icon> 
-        </md-icon>
-        <input ng-model="query" type="text" placeholder="Buscar Item" flex>
-      </md-input-container>
-      <md-button class="md-icon-button" aria-label="limpiar" ng-show="query" ng-click="query = ''">
-        <ng-md-icon icon="close" style="fill:#3F51B5"></ng-md-icon> 
-      </md-button>
-    </md-container>
+<md-content layout="row" layout-sm="column" layout-margin class="transparent">
     
-    <section ng-repeat="almacen in existencias.info">
-      <md-subheader class="md-primary md-no-sticky">{{almacen.almacen}}</md-subheader>
-      <md-list layout-padding>
+    <div class="md-whiteframe-z1 white" flex="20" flex-sm="100" layout-padding>
+        <md-subheader class="c-bluegray">Ordenar por</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+        <md-radio-group ng-model="existencias.order">
+          <md-radio-button value="ITE_nombre">X Item</md-radio-button>
+          <md-radio-button value="UNI_nombrecorto">X Unidad </md-radio-button>
+          <md-radio-button value="ALM_nombre">X Almacen</md-radio-button>
+        </md-radio-group>
 
-        <md-list-item class="md-3-line" ng-if="almacen.existencias.length == 0">
-            Sin Items registrados
-        </md-list-item>
+        <div>
+          <md-subheader class="c-bluegray">Criterio especifico</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-input-container>
+            <label>Busqueda</label>
+            <input  name="query" ng-model="query.$"> 
+          </md-input-container>
+        </div>
 
-        <md-list-item class="md-3-line" ng-repeat="item in almacen.existencias |filter:query" ng-if="almacen.existencias.length > 0">
-            <md-icon>
-              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
-            </md-icon>
-            <div class="md-list-item-text">
-              <h3>{{item.ITE_nombre}}</h3>
-              <h4>Existentes : {{item.EXI_cantidad}}</h4>
-              <p>
-                Ultima Modificacion:{{item.updated_at}}
-              </p>  
-            </div>
-            <md-icon class="md-primary" ng-click="existencias.traspasar($event,almacen.clave,item)" aria-label="Traspasar Item">
-              <md-tooltip md-direction="top">
-                Traspasar
-              </md-tooltip>
-              <ng-md-icon icon="cached" style="fill:#3F51B5"></ng-md-icon> 
-            </md-icon>
-        </md-list-item>
-      </md-list>
-    </section>
-    
-</md-whiteframe class="md-whiteframe-z2">
+        <div>
+          <md-subheader class="c-bluegray">Item especifico</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-input-container>
+            <label>Busqueda</label>
+            <input  name="query" ng-model="query.ITE_nombre"> 
+          </md-input-container>
+        </div>
+
+        <div>
+          <md-subheader class="c-bluegray">Unidad Especifica</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-input-container>
+            <label>Busqueda</label>
+            <input  name="query" ng-model="query.UNI_nombrecorto"> 
+          </md-input-container>
+        </div>
+        
+        <div>
+          <md-subheader class="c-bluegray">Almacen Especifico</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-input-container>
+            <label>Busqueda</label>
+            <input  name="query" ng-model="query.ALM_nombre"> 
+          </md-input-container>
+        </div>
+
+
+    </div>
+
+    <!-- <div class="md-whiteframe-z2 white" flex ng-if="almacen">
+        
+        <section ng-repeat="almacen in existencias.info">
+          <md-subheader class="md-primary md-no-sticky">{{almacen.almacen}}</md-subheader>
+          <md-list layout-padding>
+
+            <md-list-item class="md-3-line" ng-if="almacen.existencias.length == 0">
+                Sin Items registrados
+            </md-list-item>
+
+            <md-list-item class="md-3-line" ng-repeat="item in almacen.existencias |filter:query" ng-if="almacen.existencias.length > 0">
+                <md-icon>
+                  <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+                </md-icon>
+                <div class="md-list-item-text">
+                  <h3>{{item.ITE_nombre}}</h3>
+                  <h4>Existentes : {{item.EXI_cantidad}}</h4>
+                  <p>
+                    Ultima Modificacion:{{item.updated_at}}
+                  </p>  
+                </div>
+            </md-list-item>
+          </md-list>
+        </section>
+        
+    </div> -->
+
+    <div flex>
+      <md-data-table-container class="md-whiteframe-z1">
+        <table md-data-table>
+          <thead md-order="existencias.order" md-trigger="existencias.onOrderChange">
+            <tr>
+              <th name="Item"  order-by="ITE_nombre"></th>
+              <th name="Almacen" order-by="ALM_nombre"></th>
+              <th name="Cantidad" order-by="EXI_cantidad"></th>
+              <th name="Unidad"  order-by="UNI_nombrecorto"></th>
+              <th name="Ultimo Movimiento"  order-by="EXI_ultimoMovimiento"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="existencia in existencias.info |filter:query | orderBy: existencias.order | limitTo: existencias.limit: (existencias.page - 1) * existencias.limit">
+              <td>{{existencia.ITE_nombre}}</td>
+              <td>{{existencia.ALM_nombre}}</td>
+              <td>{{existencia.EXI_cantidad}}</td>
+              <td>{{existencia.UNI_nombrecorto}}</td>
+              <td>{{existencia.EXI_ultimoMovimiento}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </md-data-table-container>
+      <br>
+      <md-data-table-pagination md-label="existencias.texto" md-row-select="existencias.paginacion" md-limit="existencias.limit" md-page="existencias.page" md-total="{{existencias.info.length}}"></md-data-table-pagination>
+      
+    </div>
+    <br>
+
+</md-content>

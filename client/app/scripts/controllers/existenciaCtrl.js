@@ -5,7 +5,7 @@ app.controller('existenciasCtrl',existenciasCtrl)
 app.controller('traspasoCtrl',traspasoCtrl)
 
 existenciasCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
-traspasoCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','informacion'];
+traspasoCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','datos','$filter','$q'];
 
 
 
@@ -13,7 +13,7 @@ function existenciasCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
-	$rootScope.titulo = 'Existencias en almacen(es)';
+	$rootScope.titulo = 'Existencias';
 	scope.info = datos.data;
 	scope.total = 0;
 
@@ -50,36 +50,35 @@ function existenciasCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 
 }
 
-function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,informacion){
+function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,datos,$filter,$q){
 
-	busqueda.items().then(function (info){
-		$scope.items = info.data;
-	});
+	$rootScope.tema = 'theme1';
+	$rootScope.titulo = 'Nuevo traspaso';
 
-
-	busqueda.almacenesUsuario($rootScope.id).then(function (info){
-		$scope.almacenes = info.data;
-	});
-
-	console.log(informacion);
+	$scope.almacenes = datos[0].data;
 
 	$scope.inicio = function(){
 
-		$scope.disponible = informacion.item.EXI_cantidad;
+		$scope.seleccionado = null;
+	    $scope.busqueda = null;
+	    $scope.consultado = consultado;
+	    $scope.item = '';
 
 		$scope.datos = {
-			almacenOrigen:informacion.almacen,
+			almacenOrigen:'',
 			almacenDestino:'',
-			item:informacion.item.ITE_clave,
+			item:'',
 			cantidad:'',
 			usuario:$rootScope.id
 		}
 
 		$scope.guardando = false;
+
 	}
 
 	$scope.guardar = function(){
 
+		// console.log($scope.datos);
 		if ($scope.traspasoForm.$valid) {
 
 			console.log($scope.datos);
@@ -95,6 +94,19 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,in
 		
 	}
 
+	$scope.itemsxalmacen = function(clave){
+		busqueda.itemsAlmacen(clave).success(function (data){
+			$scope.itemsAlmacen = data;
+		})
+	}
+
+	$scope.seleccionaItem = function(item){
+		// $scope.disponible = '';
+		console.log(item);
+		$scope.datos.item = item.ITE_clave;
+		$scope.disponible = item.EXI_cantidad;
+	}
+
 	$scope.verificaAlmacen = function(ev){
 		if ($scope.datos.almacenDestino == $scope.datos.almacenOrigen) {
 			alert('No puedes seleccionar el mismo almacen');
@@ -102,8 +114,24 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,in
 		};
 	}
 
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
+
+	function consultado(query) {
+
+		var q = $q.defer();
+
+		findValues( query, $scope.itemsAlmacen ).then( function ( res ) {
+			q.resolve( res );
+		} );
+		return q.promise;
+    }
+
+    function findValues ( query, obj ) {
+
+		var deferred = $q.defer();
+		deferred.resolve( $filter( 'filter' )( obj, query ) );
+		return deferred.promise;
+
+	}
+
 
 }

@@ -8,9 +8,35 @@
     <md-button class="md-icon-button" aria-label="Notificaciones">
         <ng-md-icon icon="notifications" style="fill:white"></ng-md-icon> 
     </md-button>
-    <md-button class="md-icon-button" aria-label="Opciones" ng-click="showGridBottomSheet($event)">
+    <md-menu md-position-mode="target-right target">
+      <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <ng-md-icon md-menu-origin icon="more_vert" style="fill:white"></ng-md-icon> 
+      </md-button>
+      <md-menu-content width="3" >
+        <md-menu-item>
+          <md-button ng-click="">
+              <ng-md-icon md-menu-align-target icon="assignment_ind" style="fill:gray"></ng-md-icon>
+              <span flex></span>
+              Perfil
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="">
+              <ng-md-icon icon="lock" style="fill:gray"></ng-md-icon>
+              Bloquear
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="logout()">
+              <ng-md-icon icon="logout" style="fill:gray"></ng-md-icon>
+              Salir
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+<!--     <md-button class="md-icon-button" aria-label="Opciones" ng-click="showGridBottomSheet($event)">
         <ng-md-icon icon="more_vert" style="fill:white"></ng-md-icon> 
-    </md-button>
+    </md-button> -->
   </div>
 </md-toolbar>
 
@@ -29,54 +55,53 @@
         <md-divider></md-divider>
         <md-subheader class="md-no-sticky">Administrador</md-subheader>
         <div>
+
           <md-list-item ng-click="ir('index.usuarios')">
             <p> Usuarios </p>
             <ng-md-icon icon="group" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-
           <md-list-item ng-click="ir('index.perfiles')">
             <p> Perfiles </p>
             <ng-md-icon icon="label" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          
-          <md-list-item ng-click="ir('index.tipositem')">
-            <p> Tipos item </p>
-            <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
-          <md-list-item ng-click="ir('index.subtipositem')">
-            <p> SubTipos item </p>
-            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
-          <md-list-item ng-click="ir('index.tiposalmacen')">
-            <p> Tipos de Almacen </p>
-            <ng-md-icon icon="class" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
           <md-list-item ng-click="ir('index.tiposmovimiento')">
             <p> Tipos Movimiento </p>
             <ng-md-icon icon="album" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          
-          <md-list-item ng-click="ir('index.tiposajuste')">
+          <!-- <md-list-item ng-click="ir('index.tiposajuste')">
             <p> Tipos Ajuste </p>
             <ng-md-icon icon="shuffle" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          
+          </md-list-item> -->
           <md-list-item ng-click="ir('index.tiposorden')">
             <p> Tipos Orden </p>
             <ng-md-icon icon="description" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-
+        
         </div>
 
         <md-divider></md-divider>
         <md-subheader class="md-no-sticky">Catalogos</md-subheader>
         <div>
+
+          <md-list-item ng-click="ir('index.unidades')">
+            <p> Unidades </p>
+            <ng-md-icon icon="business" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.tipositem')">
+            <p> Tipos item </p>
+            <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.subtipositem')">
+            <p> SubTipos item </p>
+            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
           <md-list-item ng-click="ir('index.items')">
             <p> Items </p>
             <ng-md-icon icon="shopping_basket" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+           <md-list-item ng-click="ir('index.tiposalmacen')">
+            <p> Tipos de Almacen </p>
+            <ng-md-icon icon="class" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.almacenes')">
             <p> Almacenes </p>
@@ -91,11 +116,17 @@
 
         <md-divider></md-divider>
         <md-subheader class="md-no-sticky">Almacen</md-subheader>
+        <div>
+          <md-list-item ng-click="ir('index.configuracion')">
+            <p> Configuraciones </p>
+            <ng-md-icon icon="settings" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+
           <md-list-item ng-click="ir('index.conexiones')">
             <p> Conexiones </p>
             <ng-md-icon icon="settings_ethernet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-        <div>
+
           <md-list-item ng-click="ir('index.movimientos')">
             <p> Movimientos </p>
             <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
@@ -106,10 +137,11 @@
             <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           
-          <!-- <md-list-item ng-click="ir('index.facturas')">
+          <md-list-item ng-click="ir('index.traspaso')">
             <p> Traspasos </p>
-            <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item> -->
+            <ng-md-icon icon="repeat" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+
 
           <md-list-item ng-click="ir('index.ordenescompra')">
             <p> Ordenes de Compra </p>
@@ -127,6 +159,7 @@
             <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
+
         </div>
 
         <md-divider></md-divider>
@@ -139,8 +172,8 @@
       </md-list>
     </md-sidenav>
     <div layout="column" flex id="content">
-        <md-content layout="column" flex class="md-padding gris">
-          <ui-view ng-hide="cargando"></ui-view>
+        <md-content layout="column" flex class="md-padding gris ui-view-container">
+          <ui-view ng-hide="cargando" class="muestras"></ui-view>
           <div id="centro" ng-show="cargando">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>

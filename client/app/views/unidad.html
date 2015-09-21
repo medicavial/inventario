@@ -1,0 +1,66 @@
+<md-dialog aria-label="Nueva Unidad" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nueva Unidad</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="usuarioForm" novalidate ng-submit="guardar()">
+
+  <md-dialog-content>
+
+      <md-input-container>
+        <label>Nombre</label>
+        <input required name="nombre" ng-model="datos.nombre">
+        <div ng-messages="usuarioForm.nombre.$dirty && usuarioForm.nombre.$error">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div>
+      </md-input-container>
+
+      
+      <div layout="row" layout-sm="column">
+        
+        <md-input-container flex>
+          <label>Nombre corto</label>
+          <input  name="usuario" ng-model="datos.usuario" required> 
+          <div ng-messages="usuarioForm.usuario.$dirty && usuarioForm.usuario.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex>
+          <label>Correo</label>
+          <input  name="psw" ng-model="datos.psw" required>
+          <div ng-messages="usuarioForm.psw.$dirty && usuarioForm.psw.$error">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div> 
+        </md-input-container>
+        
+      </div>
+
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="guardando">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

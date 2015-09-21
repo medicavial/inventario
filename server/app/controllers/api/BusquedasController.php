@@ -34,28 +34,18 @@ class BusquedasController extends BaseController {
 		return Item::activos();
 	}
 
+	public function itemsAlmacen($almacen){
+		return Existencia::items($almacen);
+	}
+
 	public function itemsProveedor(){
 		return Item::proveedor();
 	}
 
 	public function existencias($usuario){
 		
-		$almacenes = Almacen::existencia($usuario);
-		$respuesta = array();
-
-		foreach ($almacenes as $almacen) {
-
-			$claveAlmacen = $almacen->ALM_clave;
-			$items = Existencia::items($claveAlmacen);
-			$respuesta[] = array(
-				"almacen" => $almacen->ALM_nombre,
-				"clave" => $almacen->ALM_clave,
-				"existencias" => $items
-		    );
-
-		}
-
-		return $respuesta;
+		return Existencia::usuario($usuario);
+		
 	}
 
 	public function movimientos(){
