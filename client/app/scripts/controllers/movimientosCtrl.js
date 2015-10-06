@@ -98,6 +98,7 @@ function movimientoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
 				$scope.movimientoForm.$setPristine();
+				$scope.inicio();
 			});
 
 		};

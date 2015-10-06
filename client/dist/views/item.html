@@ -1,109 +1,127 @@
 <div class="md-whiteframe-z1" ng-init="inicio()">
   
-  <md-toolbar class="md-warn">
-    <div class="md-toolbar-tools">
-      <md-button class="md-icon-button" aria-label="Settings" ng-click="ir('index.items')">
-          <ng-md-icon icon="arrow_back" style="fill:white" aria-label="regresar"></ng-md-icon> 
-      </md-button>
-      <h2>Datos</h2>
-      <span flex></span>
-      <md-button  class="md-icon-button" ng-click="inicio()">
-        <ng-md-icon icon="refresh" style="fill:white" aria-label="Limpiar"></ng-md-icon> 
-      </md-button>
-    </div>
-  </md-toolbar>
 
   <md-content>
-
-      <form name="itemForm" ng-submit="guardar()" layout-padding>
-
-        <div layout="row" layout-sm="column" >
-
-          <md-input-container flex flex-gt-sm="20">
-            <label>Clave</label>
-            <input  name="clave" ng-model="datos.clave" required mayusculas> 
-            <div ng-messages="itemForm.clave.$error" ng-if="itemForm.$submitted">
-              <div ng-message="required">Campo obligatorio.</div>
-            </div>
-          </md-input-container>
-
-          <md-input-container flex>
-            <label>Nombre</label>
-            <input required name="nombre" ng-model="datos.nombre">
-            <div ng-messages="itemForm.nombre.$error" ng-if="itemForm.$submitted">
-              <div ng-message="required">Campo obligatorio.</div>
-            </div>
-          </md-input-container>
-        
+      <md-toolbar class="bgm-blue">
+        <div class="md-toolbar-tools">
+          <md-button class="md-icon-button" aria-label="Settings" ng-click="ir('index.items')">
+              <ng-md-icon icon="arrow_back" style="fill:white" aria-label="regresar"></ng-md-icon> 
+          </md-button>
+          <h2>Datos</h2>
+          <span flex></span>
+          <md-button  class="md-icon-button" ng-click="inicio()">
+            <ng-md-icon icon="refresh" style="fill:white" aria-label="Limpiar"></ng-md-icon> 
+          </md-button>
         </div>
+      </md-toolbar>
+
+      <form name="itemForm" ng-submit="guardar()">
         
-        <div layout="row" layout-sm="column" >
+        <section layout-padding>
+
+          <div layout="row" layout-sm="column">
+
+            <md-input-container flex flex-gt-sm="20">
+              <label>Codigo</label>
+              <input  name="clave" ng-model="datos.codigo" required mayusculas> 
+              <div ng-messages="itemForm.clave.$error" ng-if="itemForm.$submitted">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+
+            <md-input-container flex>
+              <label>Nombre</label>
+              <input required name="nombre" ng-model="datos.nombre">
+              <div ng-messages="itemForm.nombre.$error" ng-if="itemForm.$submitted">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
           
-          <md-input-container flex>
-            <label>Precio Venta</label>
-            <input  name="precio" ng-model="datos.precio" required dinero> 
-            <div ng-messages="itemForm.precio.$error" ng-if="itemForm.$submitted">
-              <div ng-message="required">Campo obligatorio.</div>
-            </div>
-          </md-input-container>
-
-          <md-input-container flex>
-            <md-select placeholder="Tipo de Item" ng-model="datos.tipo" name="tipo" required >
-              <md-option ng-repeat="tipoitem in tipoitems" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
-            </md-select>
-            <div ng-messages="itemForm.cantidad.$error" ng-if="itemForm.$submitted">
-              <div ng-message="required">Campo obligatorio.</div>
-            </div>
-          </md-input-container>
-
-          <md-input-container flex>
-            <md-select placeholder="Sub Tipo de Item" name="subtipo" ng-model="datos.subtipo" required>
-              <md-option ng-repeat="subtipoitem in subtipoitems" value="{{subtipoitem.STI_clave}}">{{subtipoitem.STI_nombre}}</md-option>
-            </md-select>
-            <div ng-messages="itemForm.cantidad.$error" ng-if="itemForm.$submitted">
-              <div ng-message="required">Campo obligatorio.</div>
-            </div>
-          </md-input-container>
-
-        </div>
-        
-        <md-input-container flex>
-            <label>Presentación</label>
-            <input required name="presentacion" ng-model="datos.presentacion">
-            <div ng-messages="itemForm.presentacion.$error" ng-if="itemForm.$submitted">
-              <div ng-message="required">Campo obligatorio.</div>
-            </div>
-        </md-input-container>
-
-        
-        <section ng-if="datos.tipo == 1">
-
-          <md-subheader class="c-bluegray">Datos de Medicamento</md-subheader>  
-          <md-divider class="bgm-bluegray"></md-divider>
-
-          <md-input-container flex>
-            <label>Sustancia Activa</label>
-            <input  name="clave" ng-model="datos.sustancia"> 
-          </md-input-container>
+          </div>
           
-          <md-input-container flex>
-            <label>Posologia</label>
-            <textarea ng-model="datos.posologia" name="posologia" columns="1"></textarea>
-          </md-input-container>
+          <div layout="row" layout-sm="column" >
+            
+            <md-input-container flex>
+              <label>Precio Venta</label>
+              <input  name="precio" ng-model="datos.precio" required dinero> 
+              <div ng-messages="itemForm.precio.$error" ng-if="itemForm.$submitted">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
 
+            <md-input-container flex>
+              <md-select placeholder="Tipo de Item" ng-model="datos.tipo" name="tipo" required >
+                <md-option ng-repeat="tipoitem in tipoitems" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="itemForm.cantidad.$error" ng-if="itemForm.$submitted">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
 
+            <md-input-container flex>
+              <md-select placeholder="Sub Tipo de Item" name="subtipo" ng-model="datos.subtipo" required>
+                <md-option ng-repeat="subtipoitem in subtipoitems" value="{{subtipoitem.STI_clave}}">{{subtipoitem.STI_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="itemForm.cantidad.$error" ng-if="itemForm.$submitted">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+            
+            <md-input-container flex>
+              <md-select placeholder="Presentación" name="presentacion" ng-model="datos.presentacion" required>
+                <md-option ng-repeat="presentacion in presentaciones" value="{{presentacion.PRE_clave}}">{{presentacion.PRE_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="itemForm.presentacion.$error" ng-if="itemForm.$submitted">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+
+          </div>
+          
         </section>
-
-        <md-subheader class="c-bluegray">Archivos</md-subheader>  
-        <md-divider class="bgm-bluegray"></md-divider>
         
-        <div layout="row" layout-sm="column">
+        <div ng-if="datos.tipo == 1">
+
+          <md-toolbar class="bgm-blue">
+            <div class="md-toolbar-tools">
+                <h2>Datos de Medicamento</h2>
+              </div>
+          </md-toolbar>
+          
+          <section layout-padding>
+
+            <md-chips ng-model="sustancias"  
+                placeholder="Ingresa Otra Sustancias"
+                delete-button-label="Remove Tag"
+                delete-hint="Press delete to remove tag"
+                secondary-placeholder="Agrega Sustancia" 
+                readonly="false" flex>
+            </md-chips>
+            
+            <md-input-container flex>
+              <label>Posologia</label>
+              <textarea ng-model="datos.posologia" name="posologia" columns="1"></textarea>
+            </md-input-container>
+          </section>
+
+
+        </div>
+
+        <md-toolbar class="bgm-blue">
+          <div class="md-toolbar-tools">
+              <h2>Archivos</h2>
+            </div>
+        </md-toolbar>
+
+        
+        <div layout="row" layout-sm="column" layout-padding>
           <div class="drop-box"  ngf-drop accept="image/*" ngf-drag-over-class="dragover" ngf-multiple="true" ngf-pattern="'image/*" ngf-change="upload($files, $file, $event)" flex>
-              <md-button type="button" class="md-raised" accept="image/*" ngf-change="upload($files, $file, $event)" multiple="multiple" ngf-pattern="'image/*">Subir Imagenes</md-button><br>
+              <md-button type="button" class="md-raised" accept="image/*" ngf-select="upload($files)" ngf-change="upload($files, $file, $event)" multiple="multiple" ngf-pattern="'image/*">Subir Imagenes</md-button><br>
               Arrastra tus archivos aqui
           </div>
 
           <md-list flex>
+          
             <md-list-item class="md-3-line relative" ng-repeat="file in imagenes">
               <img ngf-src="file" class="face"  ng-mouseover="ver = true" ng-mouseleave="ver = false">
               <md-button type="button" class="md-fab boton abajo-derecho" ng-click="eliminaImagen($index)" ng-mouseover="ver = true" ng-show="ver" aria-label="Eliminar Imagen">
@@ -111,6 +129,16 @@
               </md-button>
               <md-divider md-inset ng-if="!$last"></md-divider>
             </md-list-item>
+
+            <md-list-item class="md-3-line relative" ng-repeat="file in imagenesguardadas">
+              <img ng-src="{{file}}" class="face"  ng-mouseover="ver = true" ng-mouseleave="ver = false">
+              <md-button type="button" class="md-fab boton abajo-derecho" ng-click="eliminaImagenGuardada($index)" ng-mouseover="ver = true" ng-show="ver" aria-label="Eliminar Imagen">
+                  <ng-md-icon icon="delete" style="fill:white"></ng-md-icon> 
+              </md-button>
+              <md-divider md-inset ng-if="!$last"></md-divider>
+            </md-list-item>
+
+
           </md-list>
           
         </div>
@@ -126,7 +154,7 @@
         
         <div layout="row" layout-align="center center">
           <md-progress-circular md-mode="indeterminate" ng-show="guardando"></md-progress-circular>
-          <md-button id="nuevo" class="md-fab boton" ng-click="" aria-label="Guardar" type="submit" ng-hide="guardando" ng-if="verificador()">
+          <md-button id="nuevo" class="md-fab boton" ng-click="" aria-label="Guardar" type="submit" ng-hide="guardando" ng-disabled="verificador()">
               <md-tooltip md-direction="top">
                 Guardar
               </md-tooltip>
@@ -134,16 +162,17 @@
           </md-button>
         </div>
 
-        <div class="md-actions" layout="row">
+        <!-- <div layout="row" layout-align="center center">
+          
+          <md-button id="nuevo" class="md-fab boton" ng-click="guardar()" aria-label="Guardar" type="button" ng-hide="guardando">
+              <md-tooltip md-direction="top">
+                Guardar
+              </md-tooltip>
+              <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
+          </md-button>
+        </div> -->
 
-          <span flex></span>
-          <!-- <md-button type="button" ng-click="inicio()">
-              Limpiar
-          </md-button> -->
-          <!-- <md-button type="submit" ng-disabled="guardando">
-              Guardar
-          </md-button> -->
-        </div>
+        <br>
 
       </form>
   

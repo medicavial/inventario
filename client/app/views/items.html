@@ -16,7 +16,7 @@
       <table md-data-table>
         <thead md-order="items.order" md-trigger="items.onOrderChange">
           <tr>
-            <th name="ID"  order-by="ITE_clave"></th>
+            <th name="Codigo"  order-by="ITE_codigo"></th>
             <th name="Nombre" order-by="ITE_nombre"></th>
             <th name="Tipo"  order-by="TIT_nombre"></th>
             <th name="Sub Tipo"  order-by="STI_nombre"></th>
@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in items.info |filter:query | orderBy: items.order | limitTo: items.limit: (items.page - 1) * items.limit">
-            <td>{{item.ITE_clave}}</td>
+            <td>{{item.ITE_codigo}}</td>
             <td>{{item.ITE_nombre}}</td>
             <td>{{item.TIT_nombre}}</td>
             <td>{{item.STI_nombre}}</td>
@@ -46,9 +46,9 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="items.edita($event,$index)">
-                        <p>Modificar</p>
-                      </md-button>
+                        <md-button ui-sref="index.detalleItem({itemId:item.ITE_clave})">
+                          <p>Modificar</p>
+                        </md-button>
                     </md-menu-item>
                     <md-menu-item>
                       <md-button ng-click="items.confirmacion($event,$index)">

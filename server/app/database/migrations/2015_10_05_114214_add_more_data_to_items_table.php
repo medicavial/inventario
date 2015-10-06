@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddOthersToItemsTable extends Migration {
+class AddMoreDataToItemsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -14,10 +14,9 @@ class AddOthersToItemsTable extends Migration {
 	{
 		Schema::table('items', function(Blueprint $table)
 		{
-			$table->string('ITE_codigo')->after('ITE_clave');
-			$table->string('ITE_sustancia')->after('STI_clave');
-			$table->string('ITE_presentacion')->after('STI_clave');
-			$table->string('ITE_posologia')->after('STI_clave');
+			$table->integer('ITE_clasificacion')->after('ITE_sustancia');
+			$table->integer('ITE_codigoean')->after('ITE_sustancia');
+			$table->integer('ITE_marca')->after('ITE_sustancia');
 		});
 	}
 
@@ -30,7 +29,9 @@ class AddOthersToItemsTable extends Migration {
 	{
 		Schema::table('items', function(Blueprint $table)
 		{
-			//
+			$table->dropColumn('ITE_clasificacion');
+			$table->dropColumn('ITE_codigoean');
+			$table->dropColumn('ITE_marca');
 		});
 	}
 

@@ -13,7 +13,7 @@ class Movimiento extends Eloquent {
                      ->join('tiposMovimiento', 'movimientos.TIM_clave', '=', 'tiposMovimiento.TIM_clave')
                      ->leftJoin('tiposAjuste', 'movimientos.TIA_clave', '=', 'tiposAjuste.TIA_clave')
                      ->leftJoin('ordenCompra', 'movimientos.OCM_clave', '=', 'ordenCompra.OCM_clave')
-                     ->select('movimientos.*','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre')
+                     ->select('movimientos.*','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre','ITE_codigo')
                      ->get();
     }
 

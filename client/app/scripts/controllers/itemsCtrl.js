@@ -5,8 +5,8 @@ app.controller('itemsCtrl',itemsCtrl)
 app.controller('itemEditCtrl',itemEditCtrl)
 
 itemsCtrl.$inject = ['$rootScope','$mdDialog','datos','items','mensajes'];
-itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','Upload'];
-itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes','informacion'];
+itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos'];
+itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos'];
 
 
 function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
@@ -99,52 +99,76 @@ function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
 }
 
-function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,Upload){
+function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos){
 
 	$rootScope.titulo = 'Nuevo Item';
 	$scope.tipoitems = datos[0].data;
 	$scope.subtipoitems = datos[1].data;
+	$scope.presentaciones = datos[2].data;
 
 	$scope.inicio = function(){
+		
+		$scope.sustancias = [];
+		$scope.imagenes = [];
+		$scope.guardando = false;
+
 		$scope.datos = {
 			nombre:'',
 			precio:'',
 			cantidad:'',
+			codigo:'',
+			codigoean:'',
 			tipo:'',
 			subtipo:'',
-			sustancia:'',
+			presentacion:'',
+			clasificacion:'',
+			sustancia:$scope.sustancias,
 			posologia:'',
 			activo:true
 		}
 
-		$scope.imagenes = [];
-		$scope.guardando = false;
 	}
 
 	$scope.guardar = function(){
 
 		$scope.guardando = true;
+
 		items.save($scope.datos,function (data){
-			mensajes.alerta(data.respuesta,'success','top right','done_all');
-			$scope.guardando = false;
-			$scope.itemForm.$setPristine();
-			$scope.inicio();
+			var respuesta = data.respuesta;
+
+			archivos.items($scope.imagenes,data.clave).then(
+				function(data){
+					console.log('Imagenes: ' + data)
+					mensajes.alerta(respuesta,'success','top right','done_all');
+					$scope.guardando = false;
+					$scope.itemForm.$setPristine();
+					$scope.inicio();
+				},
+				function(data){
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','done_all');
+				},
+				function(data){
+					console.log('Estatus: ' + data);
+				}
+			);
 		});
+		// console.log($scope.datos);
+		// console.log($scope.imagenes);
 	}
 
 
 	$scope.verificador = function(){
 
 		if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
-			return true;
+			return false;
 		}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
-			if ($scope.datos.sustancia && $scope.datos.posologia) {
-				return true;
-			}else{
+			if ($scope.sustancias && $scope.datos.posologia) {
 				return false;
+			}else{
+				return true;
 			}
 		}else{
-			return false;
+			return true;
 		}
 	}
 
@@ -167,28 +191,72 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,Upl
 
 }
 
-function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes,informacion){
+function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos){
 
-	busqueda.tiposItem().then(function (info){
-		$scope.tipoitems = info.data;
-	});
+	$rootScope.titulo = 'Detalle de Item';
 
-	busqueda.SubTiposItem().then(function (info){
-		$scope.subtipoitems = info.data;
-	});
+	$scope.tipoitems = datos[0].data;
+	$scope.subtipoitems = datos[1].data;
+	$scope.presentaciones = datos[2].data;
+
+	$scope.sustancias = datos[3].datos.ITE_sustancia ? datos[3].datos.ITE_sustancia.split(","):'';
+	$scope.clave = datos[3].datos.ITE_clave;
+	$scope.datos = {
+		nombre:datos[3].datos.ITE_nombre,
+		codigo:datos[3].datos.ITE_codigo,
+		precio:datos[3].datos.ITE_precioventa,
+		cantidad:datos[3].datos.ITE_cantidadtotal,
+		tipo:datos[3].datos.TIT_clave,
+		subtipo:datos[3].datos.STI_clave,
+		sustancia: $scope.sustancias,
+		posologia:datos[3].datos.ITE_posologia,
+		presentacion:datos[3].datos.PRE_clave,
+		activo:datos[3].datos.ITE_activo ? true:false
+	}
 
 	$scope.inicio = function(){
 
-		$scope.datos = {
-			nombre:informacion.ITE_nombre,
-			precio:informacion.ITE_precioventa,
-			cantidad:informacion.ITE_cantidadtotal,
-			tipo:informacion.TIT_clave,
-			subtipo:informacion.STI_clave,
-			activo:informacion.ITE_activo ? true:false
-		}
-
+		$scope.imagenesguardadas = datos[3].archivos;
+		$scope.imagenes = [];
 		$scope.guardando = false;
+	}
+
+
+	$scope.verificador = function(){
+
+		if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
+			return false;
+		}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
+			if ($scope.sustancias && $scope.datos.posologia) {
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
+	}
+
+	$scope.upload = function(files,file,event){
+		if (files && files.length) {
+			for (var i = 0; i < files.length; i++) {
+	        	$scope.imagenes.push(files[i]);
+	        }
+	    }
+	}
+
+	$scope.eliminaImagen = function(index){
+		$scope.imagenes.splice(index,1);
+	}
+
+	$scope.eliminaImagenGuardad = function(index){
+
+		mensajes.alerta('Eliminando imagen','','top right','');
+
+		var imagen = $scope.imagenesguardadas[index];
+		archivos.eliminaItem(imagen,$scope.clave).success(function (data){
+			$scope.imagenesguardadas.splice(index,1);
+		});
 	}
 
 	$scope.guardar = function(){
@@ -197,18 +265,28 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes,informacion){
 		if ($scope.itemForm.$valid) {
 
 			$scope.guardando = true;
-			items.update({item:informacion.ITE_clave},$scope.datos,function (data){
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				$scope.guardando = false;
-				$scope.itemForm.$setPristine();
+			items.update({item:$scope.clave},$scope.datos,function (data){
+				var respuesta = data.respuesta;
+
+				archivos.items($scope.imagenes,$scope.clave).then(
+					function(data){
+						console.log('Imagenes: ' + data)
+						mensajes.alerta(respuesta,'success','top right','done_all');
+						$scope.guardando = false;
+						$scope.itemForm.$setPristine();
+						$scope.inicio();
+					},
+					function(data){
+						mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','done_all');
+					},
+					function(data){
+						console.log('Estatus: ' + data);
+					}
+				);
 			});
 
 		};
 		
 	}
-
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
 
 }

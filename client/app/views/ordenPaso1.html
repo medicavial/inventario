@@ -1,0 +1,78 @@
+<md-content layout-padding>
+  
+
+  <div layout="row" layout-sm="column">
+      
+      <div flex flex-gt-sm="30">
+          <md-select ng-model="unidad" placeholder="Selecciona Unidad" md-on-close="info(unidad)" flex required>
+            <md-option ng-repeat="unidad in unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+          </md-select>
+      </div>
+
+  </div>
+
+  <div flex>
+      
+      <div layout="row" layout-wrap>
+        <div flex="20" ng-repeat="almacen in almacenes">
+          <md-checkbox aria-label="Checkbox 1" ng-checked="exists(almacen, selected)" ng-click="toggle(almacen, selected)">
+           {{almacen.ALM_nombre}}
+          </md-checkbox>
+        </div>
+      </div>
+      
+  </div>
+  
+  <md-data-table-container class="md-whiteframe-z1">
+    <table md-data-table md-row-select="seleccionItems" >
+      <thead md-order="existencias.order" md-trigger="existencias.onOrderChange">
+        <tr>
+          <th name="Item"  order-by="ITE_nombre"></th>
+          <th name="Existencia" order-by="EXI_cantidad"></th>
+          <th name="Num. Minimo" order-by="CON_nivelMinimo"></th>
+          <th name="Num. Maximo"  order-by="CON_nivelMaximo"></th>
+          <th name="Num. Compra"  order-by="CON_nivelCompra"></th>
+          <th name="Semaforo"></th>
+          <th name="Compra"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order">
+          <td>{{existencia.ITE_nombre}}</td>
+          <td>{{existencia.EXI_cantidad}}</td>
+          <td>{{existencia.CON_nivelMinimo}}</td>
+          <td>{{existencia.CON_nivelMaximo}}</td>
+          <td>{{existencia.CON_nivelCompra}}</td>
+          <td>
+              <div class="md-whiteframe-z2"  ng-class="muestraSemaforo(existencia.EXI_cantidad,existencia.CON_nivelMinimo,existencia.CON_nivelCompra)" layout layout-align="center center">
+                <span>----</span>
+              </div>
+          </td>
+          <td>
+            {{existencia.CON_nivelMaximo - existencia.EXI_cantidad}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </md-data-table-container>
+  
+  <br>
+  <br>
+  
+<!--   <div layout="row" layout-sm="column">
+    <span>Aplicar todos al</span>
+    <input type="number" ng-model="porcentaje">
+    <span>Del nivel Maximo</span>
+  </div>
+
+  <br>
+  <br> -->
+  
+  <div layout="row" layout-align="center center">
+    <md-button ng-disabled="seleccionItems.length == 0" class="md-raised md-primary" ng-click="ir2(seleccionItems)" type="submit">Ir a la Orden</md-button>
+  </div>
+
+  <br>
+  <br>
+
+</md-content>

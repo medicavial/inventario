@@ -4,7 +4,7 @@ app.controller('ordenCompraCtrl',ordenCompraCtrl)
 app.controller('ordenesCompraCtrl',ordenesCompraCtrl)
 
 ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
-ordenCompraCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','$q','$filter'];
+ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos'];
 
 
 function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
@@ -49,94 +49,104 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 }
 
 
-function ordenCompraCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,$q,$filter){
+function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos){
 
-	busqueda.items().then(function (info){
-		$scope.items = info.data;
-	});
+	$scope.paso1 = 'views/ordenPaso1.html';
+	$scope.paso2 = 'views/ordenPaso2.html';
 
-	busqueda.almacenes().then(function (info){
-		$scope.almacenes = info.data;
-	});
+	$scope.step2block = true;
+	$scope.step3block = true;
 
-	busqueda.tiposMovimiento().then(function (info){
-		$scope.tiposmovimiento = info.data;
-	});
+	$scope.selectedIndex = 0;
+	$scope.unidades = datos.data;
+	$scope.unidad = '';
+	// $scope.selected = [];
 
-	busqueda.tiposAjuste().then(function (info){
-		$scope.tiposajuste = info.data;
-	});
+	$scope.seleccionItems = [];
+	// $scope.seleccionOrden = [];
 
-	$scope.inicio = function(){
+	$scope.info = function(unidad){
 
-		$scope.busqueda = null;
-	    $scope.consultado = consultado;
-	    $scope.item = '';
+		$scope.selected = [];
+		$scope.items = [];
+		$scope.almacenes = '';
+		$scope.unidad = unidad;
 
-		$scope.datos = {
-			item:'',
-			cantidad:'',
-			tipomov:'',
-			tipoa:'',
-			orden:'',
-			usuario:$rootScope.id,
-			observaciones:''
+		operacion.infoUnidad(unidad).then(
+			function (data){
+
+				$scope.almacenes = data[0].data;
+				$scope.items = data[1].data;
+
+				angular.forEach(data[0].data, function(value, key) {
+					$scope.selected.push(value);
+				});
+			},
+			function (error){
+				alert(error);
+			}
+		);
+	};
+
+
+	$scope.muestraItems = function(datos){
+		operacion.itemsAlmacenes($scope.unidad,datos).success(function (data){
+			$scope.items = data;
+		});
+	};
+
+	$scope.toggle = function (item, list) {
+		var idx = list.indexOf(item);
+        if (idx > -1) list.splice(idx, 1);
+        else list.push(item);
+        $scope.muestraItems(list);
+	};
+
+	$scope.exists = function (item, list) {
+		return list.indexOf(item) > -1;
+	};
+
+
+	$scope.muestraSemaforo = function(existencia,nivelMinimo,nimvelCompra){
+		if (existencia == nivelMinimo || existencia < nivelMinimo) {
+			return 'bgm-red';
+		}else if(existencia > nivelMinimo && existencia < nimvelCompra || existencia == nimvelCompra){
+			return 'bgm-yellow';
+		}else if(existencia > nimvelCompra){
+			return 'bgm-green';
 		}
+	}	
 
-		$scope.guardando = false;
-	}
-
-	$scope.guardar = function(){
-
-		if ($scope.movimientoForm.$valid && $scope.item) {
+	$scope.ir2 = function(selecciones){
 		
-			$scope.datos.item = $scope.item.ITE_clave;
+		$scope.seleccionOrden = [];
 
-			console.log($scope.datos);
-			$scope.guardando = true;
-			operacion.altaMovimiento($scope.datos).success(function (data){
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				$scope.guardando = false;
-				$scope.movimientoForm.$setPristine();
+		operacion.proveedoresItems(selecciones).success(function (data){
+			$scope.ordenItems = data;
+			$scope.selectedIndex = 1;
+			$scope.step2block = false;
+			angular.forEach(data, function(value, key) {
+				angular.forEach(value.proveedores, function(value, key) {
+					if (key == 0) {
+						$scope.seleccionOrden.push(value);
+					};
+				});
 			});
-
-		};
-		
+		});
 	}
 
-	$scope.verificaForm = function(){
 
-		if ($scope.datos.tipomov == 1 && $scope.datos.tipoa == '') {
-			return true;
-		}else if($scope.movimientoForm.$invalid){
-			return true;
-		}else if ($scope.guardando) {
-			return true;
-		}else{
-			return false;
-		}
-	}
+	$scope.cambio = function (item, list) {
+		var id2x = list.indexOf(item);
+        if (id2x > -1){
+        	list.splice(id2x, 1);
+        } else{
+        	list.push(item);
+        }
+	};
 
-	function consultado(query) {
-
-		var q = $q.defer();
-
-		findValues( query, $scope.items ).then( function ( res ) {
-			q.resolve( res );
-		} );
-		return q.promise;
-    }
-
-    function findValues ( query, obj ) {
-
-		var deferred = $q.defer();
-		deferred.resolve( $filter( 'filter' )( obj, query ) );
-		return deferred.promise;
-
-	}
-
-	$scope.cancel = function() {
-		$mdDialog.hide();
+	$scope.existeEnOrden = function (item, list) {
+		return list.indexOf(item) > -1;
 	};
 
 }

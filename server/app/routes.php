@@ -24,6 +24,34 @@ Route::group(array('prefix' => 'api'), function()
 		return View::make('hello');
 	});
 
+    Route::post('/upload', function(){
+        
+        $ruta = "resource/items/" . Input::get('clave');
+
+        if(Input::hasFile('file')) {
+            
+            $file = Input::file('file');
+            $file->move($ruta,$file->getClientOriginalName());
+
+        }
+         
+        return Response::json(array('respuesta' => 'Imagenes subidas Correctamente','archivos' => $file));
+            
+    });
+
+    Route::delete('delete',function(){
+
+        $archivo = Input::get('imagen');
+        // $item = Input::get('item');
+
+        // $ruta = public_path() . "/resource/items/" . $item . '/' . $archivo;
+
+        File::delete($archivo);
+
+        return Response::json(array('respuesta' => 'Imagen eliminada Correctamente','archivo' => $archivo));
+
+    });
+
     Route::post('login', array('uses' => 'AuthController@login'));
     Route::get('logout', array('uses' => 'AuthController@logout'));
 
@@ -45,12 +73,14 @@ Route::group(array('prefix' => 'api'), function()
     
     Route::group(array('prefix' => 'busquedas'), function()
     {
+        Route::get('almacen/{usuario}', 'BusquedasController@almacenUsuario');
         Route::get('almacenes', 'BusquedasController@almacenes');
         Route::get('almacenes/{usuario}', 'BusquedasController@almacenesUsuario');
-        Route::get('almacen/{usuario}', 'BusquedasController@almacenUsuario');
+        Route::get('almacenes/unidad/{unidad}', 'BusquedasController@almacenesUnidad');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
+        Route::get('item/unidad/{item}/{unidad}', 'BusquedasController@itemUnidad');
         Route::get('items', 'BusquedasController@items');
-        Route::get('items/{almacen}', 'BusquedasController@itemsAlmacen');
+        Route::get('items/existencias/{almacen}', 'BusquedasController@itemsAlmacen');
         Route::get('items/proveedor', 'BusquedasController@itemsProveedor');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');
@@ -59,6 +89,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('tipositem', 'BusquedasController@tipositem');
         Route::get('tiposmovimiento', 'BusquedasController@tiposMovimiento');
         Route::get('permisos', 'BusquedasController@permisos');
+        Route::get('presentaciones', 'BusquedasController@presentaciones');
         Route::get('proveedores', 'BusquedasController@proveedores');
         Route::get('subtipositem', 'BusquedasController@subtipositem');
         Route::get('unidades', 'BusquedasController@unidades');
@@ -67,8 +98,13 @@ Route::group(array('prefix' => 'api'), function()
 
     Route::group(array('prefix' => 'operacion'), function()
     {
+        Route::get('configuracion/unidad/{unidad}', 'OperacionController@configuracionUnidad');
+        Route::post('configuraciones', 'OperacionController@configuraciones');
         Route::get('elimina/almacen/{almacen}/{usuario}', 'OperacionController@eliminaUsuarioAlmacen');
         Route::post('item/proveedor', 'OperacionController@itemProveedor');
+        Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');
+        Route::post('items/almacenes/{unidad}', 'OperacionController@itemsAlmacenes');
+        Route::post('proveedores/items', 'OperacionController@proveedoresItems');
         Route::post('movimiento', 'OperacionController@movimiento');
         Route::post('traspaso', 'OperacionController@traspaso');
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');

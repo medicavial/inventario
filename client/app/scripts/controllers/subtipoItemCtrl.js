@@ -91,7 +91,7 @@ function subTiposItemCtrl($rootScope,$mdDialog,datos,subtipositem,mensajes){
 
 }
 
-function subTipoItemCtrl($scope,$mdDialog,subtipositem,mensajes){
+function subTipoItemCtrl($scope,$mdDialog,busqueda,subtipositem,mensajes){
 
 	$scope.subtipositem = subtipositem.query();
 

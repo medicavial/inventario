@@ -1,82 +1,117 @@
-<div class="md-whiteframe-z1 white" layout="column" layout-padding>
+<div class="md-whiteframe-z1 white" layout="column" layout-padding ng-init="configuracion.inicio()">
     
-    <md-subheader class="c-bluegray">Configuracion de Alertas según el stock por Unidad</md-subheader>  
-    <md-divider class="bgm-bluegray"></md-divider>
-    <br>
-    <div layout>
-      <div flex="20" layout layout-align="center center">
-        <span class="md-body-1">Nivel Critico (%)</span>
-      </div>
-      <md-slider flex ng-model="configuracion.critico" min="0" max="100" aria-label="critico" id="critico-slider" class="md-warn">
-      </md-slider>
-      <div flex="20" layout layout-align="center center">
-        <input flex type="number" ng-model="configuracion.critico" aria-label="critico" aria-controls="critico-slider">
-      </div>
-    </div>
+    <form name="configuracion.configForm" novalidate>
 
-    <div layout="row">
-      <div flex="20" layout layout-align="center center">
-        <span class="md-body-1">Nivel de compra (%)</span>
-      </div>
-      <md-slider flex ng-model="configuracion.compra" min="0" max="100" aria-label="compra" id="compra-slider" class="md-primary">
-      </md-slider>
-      <div flex="20" layout layout-align="center center">
-        <input flex type="number" ng-model="configuracion.compra" aria-label="compra" aria-controls="compra-slider">
-      </div>
-    </div>
-
-
-    <div layout="row">
-      <div flex="20" layout layout-align="center center">
-        <span class="md-body-1">Nivel Maxima (%)</span>
-      </div>
-      <md-slider flex ng-model="configuracion.maxima" min="0" max="100" aria-label="maxima" id="maxima-slider" class="md-accent">
-      </md-slider>
-      <div flex="20" layout layout-align="center center">
-        <input flex type="number" ng-model="configuracion.maxima" aria-label="maxima" aria-controls="maxima-slider">
-      </div>
-    </div>
-    
-
-    <md-subheader class="c-bluegray">Notificaciones</md-subheader>  
-    <md-divider class="bgm-bluegray"></md-divider>
-    
-
-    <div layout="row">
-      <md-chips ng-model="configuracion.correos"  
-                placeholder="Ingresa Otro correo"
-                delete-button-label="Remove Tag"
-                delete-hint="Press delete to remove tag"
-                secondary-placeholder="Agrega correos" 
-                readonly="false" flex>
-      </md-chips>
+      <md-subheader class="c-bluegray">Selecciona la Unidad</md-subheader>  
+      <md-divider class="bgm-bluegray"></md-divider>
       
-      <div layout="column" flex>
-        <md-subheader class="md-no-sticky">Correos registrados</md-subheader>
-        <md-list-item class="md-2-line" ng-repeat="correo in configuracion.correos" >
-          <md-icon ng-if="$index === 0">
-            <ng-md-icon icon="email" style="fill:black" ng-if="$index === 0"></ng-md-icon> 
-          </md-icon>
-          <div class="md-list-item-text" ng-class="{'md-offset': $index != 0 }">
-            <h3> {{ correo }} </h3>
+      <md-select ng-model="configuracion.datos.unidad" placeholder="Selecciona Unidad" md-on-close="configuracion.verificaUnidad(configuracion.datos.unidad)" flex required>
+        <md-option ng-repeat="unidad in configuracion.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+      </md-select>
+
+      <md-subheader class="c-bluegray">Configuracion de Alertas según el stock</md-subheader>  
+      <md-divider class="bgm-bluegray"></md-divider>
+      <br>
+
+      <div layout="row" layout-sm="column">
+        <div flex>
+            <md-list>
+                <md-list-item ng-click="configuracion.verDetalle($index)" ng-repeat="item in configuracion.items">
+                  <p>{{item.ITE_nombre}}</p>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div flex>
+
+          <div layout="row">
+
+            <div flex="20" layout layout-align="center center">
+              <span class="md-body-1">Nivel Maximo (#)</span>
+            </div>
+            <div flex="20" layout layout-align="center center">
+              <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.maxima" aria-label="maxima" aria-controls="maxima-slider">
+            </div>
+            
           </div>
-        </md-list-item>
-        
+
+          <div layout>
+            <div flex="20" layout layout-align="center center">
+              <span class="md-body-1">Nivel Minimo (%)</span>
+            </div>
+
+
+            <md-slider ng-model="configuracion.minimo" ng-click="configuracion.verificaMinimo()" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-warn" flex></md-slider>
+
+            <div flex="20" layout layout-align="center center">
+              <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.minimo" aria-label="minimo" aria-controls="minimo-slider">
+            </div>
+          </div>
+
+          <div layout="row">
+            <div flex="20" layout layout-align="center center">
+              <span class="md-body-1">Nivel Compra (%)</span>
+            </div>
+
+            <md-slider ng-model="configuracion.compra" ng-click="configuracion.verificaCompra()" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-primary" flex></md-slider>
+
+
+            <div flex="20" layout layout-align="center center">
+              <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.compra" aria-label="compra" aria-controls="compra-slider">
+            </div>
+          </div>
+
+
+          <div layout="row" layout-align="center center">
+            <md-progress-circular md-mode="indeterminate" ng-show="configuracion.guardando"></md-progress-circular>
+            <md-button id="nuevo" class="md-fab boton"  ng-hide="configuracion.guardando" ng-click="configuracion.guardar()" aria-label="Guardar" type="submit" ng-disabled="configuracion.valida()">
+                <md-tooltip md-direction="top">
+                  Guardar
+                </md-tooltip>
+                <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
+            </md-button>
+          </div>
+
+          
+        </div>
       </div>
+      
 
-    </div>
+      <!-- <md-subheader class="c-bluegray">Notificaciones</md-subheader>  
+      <md-divider class="bgm-bluegray"></md-divider>
+      
+
+      <div layout="row">
+
+        <md-chips ng-model="configuracion.correos"  
+            placeholder="Ingresa Otro correo"
+            delete-button-label="Remove Tag"
+            delete-hint="Press delete to remove tag"
+            secondary-placeholder="Agrega correos" 
+            readonly="false" flex>
+        </md-chips>
+        
+        <div layout="column" flex>
+          <md-subheader class="md-no-sticky">Correos registrados</md-subheader>
+          <md-list-item class="md-2-line" ng-repeat="correo in configuracion.correos" >
+            <md-icon ng-if="$index === 0">
+              <ng-md-icon icon="email" style="fill:black" ng-if="$index === 0"></ng-md-icon> 
+            </md-icon>
+            <div class="md-list-item-text" ng-class="{'md-offset': $index != 0 }">
+              <h3> {{ correo }} </h3>
+            </div>
+          </md-list-item>
+          
+        </div>
+
+      </div>
+      
+      <br><br> -->
+
+      
+      
+      <br><br>
     
-    <br><br>
+    </form>
 
-    <div layout="row" layout-align="center center">
-      <md-button id="nuevo" class="md-fab boton" ng-click="" aria-label="Guardar" type="submit">
-          <md-tooltip md-direction="top">
-            Guardar
-          </md-tooltip>
-          <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
-      </md-button>
-    </div>
-
-    <br><br>
 
 </div>

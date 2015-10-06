@@ -53,8 +53,8 @@
         </md-list-item>
 
         <md-divider></md-divider>
-        <md-subheader class="md-no-sticky">Administrador</md-subheader>
-        <div>
+        <md-subheader ng-click="admin = !admin" class="categoria md-no-sticky" md-ink-ripple>Administrador</md-subheader>
+        <div ng-show="admin">
 
           <md-list-item ng-click="ir('index.usuarios')">
             <p> Usuarios </p>
@@ -68,10 +68,10 @@
             <p> Tipos Movimiento </p>
             <ng-md-icon icon="album" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          <!-- <md-list-item ng-click="ir('index.tiposajuste')">
+          <md-list-item ng-click="ir('index.tiposajuste')">
             <p> Tipos Ajuste </p>
             <ng-md-icon icon="shuffle" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item> -->
+          </md-list-item>
           <md-list-item ng-click="ir('index.tiposorden')">
             <p> Tipos Orden </p>
             <ng-md-icon icon="description" style="fill:#3F51B5"></ng-md-icon> 
@@ -80,8 +80,8 @@
         </div>
 
         <md-divider></md-divider>
-        <md-subheader class="md-no-sticky">Catalogos</md-subheader>
-        <div>
+        <md-subheader ng-click="catalogos = !catalogos" class="categoria md-no-sticky" md-ink-ripple>Catalogos</md-subheader>
+        <div ng-show="catalogos">
 
           <md-list-item ng-click="ir('index.unidades')">
             <p> Unidades </p>
@@ -115,8 +115,8 @@
         </div>
 
         <md-divider></md-divider>
-        <md-subheader class="md-no-sticky">Almacen</md-subheader>
-        <div>
+        <md-subheader ng-click="almacen = !almacen" class="categoria md-no-sticky" md-ink-ripple>Almacen</md-subheader>
+        <div ng-show="almacen">
           <md-list-item ng-click="ir('index.configuracion')">
             <p> Configuraciones </p>
             <ng-md-icon icon="settings" style="fill:#3F51B5"></ng-md-icon> 

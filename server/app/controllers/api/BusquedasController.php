@@ -7,11 +7,7 @@ class BusquedasController extends BaseController {
 	}
 
 	public function almacenesUsuario($usuario){
-
-
 		return Almacen::existencia($usuario);
-
-		
 	}
 
 	public function almacenUsuario($usuario){
@@ -28,6 +24,17 @@ class BusquedasController extends BaseController {
                      ->whereNotIn('ALM_clave', $almacenes)
                      ->where('ALM_activo',true)
                      ->get();
+	}
+
+
+	public function almacenesUnidad($unidad){
+
+		return Almacen::unidad($unidad);
+		
+	}
+
+	public function itemUnidad($item,$unidad){
+		return Item::unidad($item,$unidad);
 	}
 
 	public function items(){
@@ -59,6 +66,10 @@ class BusquedasController extends BaseController {
 
 	public function permisos(){
 		return Permiso::activos();
+	}
+
+	public function presentaciones(){
+		return Presentacion::activos();
 	}
 
 	public function proveedores(){

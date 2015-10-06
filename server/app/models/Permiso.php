@@ -4,6 +4,7 @@ class Permiso extends Eloquent {
 
 	protected $primaryKey ='PER_clave';
     protected $table = 'permisos';
+    protected $guarded = []; 
 
     public function scopeActivos($query)
     {

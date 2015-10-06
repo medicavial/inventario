@@ -38,14 +38,14 @@ function unidadesCtrl($rootScope,$mdDialog,datos,unidades,mensajes){
 
 	scope.edita = function(ev,index) {
 
-		var tipoalmacen = scope.info[index];
+		var unidad = scope.info[index];
 
 	    $mdDialog.show({
 	      controller: unidadEditCtrl,
-	      templateUrl: 'views/tipoalmacen.html',
+	      templateUrl: 'views/unidad.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: tipoalmacen }
+	      locals: {informacion: unidad }
 	    }).then(
 	    function(){
 	    	scope.info = unidades.query();
@@ -56,12 +56,12 @@ function unidadesCtrl($rootScope,$mdDialog,datos,unidades,mensajes){
 	    // Abre ventana de confirmacion
 
 	    // console.log(index);
-	    var tipoalmacen = scope.info[index];
+	    var unidad = scope.info[index];
 
 	    var confirm = $mdDialog.confirm()
-	          .title('¿Desactivar el Tipo de almacen?')
+	          .title('¿Desactivar la Unidad?')
 	          .content('Puedes activarlo cuando lo necesites nuevamente')
-	          .ariaLabel('Desactivar permiso')
+	          .ariaLabel('Desactivar unidad')
 	          .ok('Si')
 	          .cancel('No')
 	          .targetEvent(ev);
@@ -69,18 +69,20 @@ function unidadesCtrl($rootScope,$mdDialog,datos,unidades,mensajes){
 	    $mdDialog.show(confirm).then(function() {
 
 	    	//en caso de decir SI
-	    	if (tipoalmacen.TAL_activo) {
-	      		tipoalmacen.TAL_activo = 0;
+	    	if (unidad.UNI_activo) {
+	      		unidad.UNI_activo = 0;
 	    	}else{
-	    		tipoalmacen.TAL_activo = 1;
+	    		unidad.UNI_activo = 1;
 	    	}
 
 	      	var datos = {
-	      		nombre : tipoalmacen.TAL_nombre,
-				activo : tipoalmacen.TAL_activo
+	      		nombre : unidad.UNI_nombre,
+	      		nombrecorto:unidad.UNI_nombrecorto,
+				correo:unidad.UNI_correo,
+				activo : unidad.UNI_activo
 			}
 
-	      	unidades.update({tipoalmacen:tipoalmacen.TAL_clave},datos,
+	      	unidades.update({unidad:unidad.UNI_clave},datos,
 	      		function (data){
 	      			mensajes.alerta(data.respuesta,'success','top right','done_all');
 	      		}
@@ -98,6 +100,8 @@ function unidadCtrl($scope,$mdDialog,unidades,mensajes){
 	$scope.inicio = function(){
 		$scope.datos = {
 			nombre:'',
+			nombrecorto:'',
+			correo:'',
 			activo:true
 		}
 
@@ -106,13 +110,13 @@ function unidadCtrl($scope,$mdDialog,unidades,mensajes){
 
 	$scope.guardar = function(){
 
-		if ($scope.tipoAlmacenForm.$valid) {
+		if ($scope.unidadForm.$valid) {
 
 			$scope.guardando = true;
 			unidades.save($scope.datos,function (data){
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
-				$scope.tipoAlmacenForm.$setPristine();
+				$scope.unidadForm.$setPristine();
 				$scope.inicio();
 			});
 
@@ -131,8 +135,10 @@ function unidadEditCtrl($scope,$mdDialog,unidades,mensajes,informacion){
 	$scope.inicio = function(){
 
 		$scope.datos = {
-			nombre : informacion.TAL_nombre,
-			activo : informacion.TAL_activo ? true:false
+			nombre : informacion.UNI_nombre,
+			nombrecorto:informacion.UNI_nombrecorto,
+			correo:informacion.UNI_correo,
+			activo : informacion.UNI_activo ? true:false
 		}
 
 		$scope.guardando = false;
@@ -141,14 +147,14 @@ function unidadEditCtrl($scope,$mdDialog,unidades,mensajes,informacion){
 	$scope.guardar = function(){
 
 
-		if ($scope.tipoAlmacenForm.$valid) {
+		if ($scope.unidadForm.$valid) {
 
-			// $scope.guardando = true;
-			// unidades.update({tipoalmacen:informacion.TAL_clave},$scope.datos,function (data){
-			// 	mensajes.alerta(data.respuesta,'success','top right','done_all');
-			// 	$scope.guardando = false;
-			// 	$scope.tipoAlmacenForm.$setPristine();
-			// });
+			$scope.guardando = true;
+			unidades.update({unidad:informacion.UNI_clave},$scope.datos,function (data){
+				mensajes.alerta(data.respuesta,'success','top right','done_all');
+				$scope.guardando = false;
+				$scope.unidadForm.$setPristine();
+			});
 
 		};
 		

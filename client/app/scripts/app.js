@@ -90,14 +90,14 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		url:'item',
 		templateUrl :'views/item.html',
 		controller:'itemCtrl',
-		// controllerAs: "item",
 		resolve:{
             datos:function(busqueda,$q){
                 var promesa = $q.defer(),
             		tipoitems = busqueda.tiposItem(),
-            		subtipoitems = busqueda.SubTiposItem();
+            		subtipoitems = busqueda.SubTiposItem(),
+            		presentaciones = busqueda.presentaciones();
 
-            	$q.all([tipoitems,subtipoitems]).then(function (data){
+            	$q.all([tipoitems,subtipoitems,presentaciones]).then(function (data){
             		promesa.resolve(data);
             	});
 
@@ -107,18 +107,17 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 	})
 
 	.state('index.detalleItem',{
-		url:'item/:id',
+		url:'detalleItem?itemId',
 		templateUrl :'views/item.html',
-		controller:'itemCtrl',
-		// controllerAs: "item",
+		controller:'itemEditCtrl',
 		resolve:{
-            datos:function(busqueda,$q,$stateParams){
+            datos:function(busqueda,$q,$stateParams,items){
                 var promesa = $q.defer(),
             		tipoitems = busqueda.tiposItem(),
             		subtipoitems = busqueda.SubTiposItem(),
-            		item = busqueda.item($stateParams.id);
-
-            	$q.all([tipoitems,subtipoitems,item]).then(function (data){
+            		presentaciones = busqueda.presentaciones(),
+            		item =  items.get({item:$stateParams.itemId}).$promise;
+            	$q.all([tipoitems,subtipoitems,presentaciones,item]).then(function (data){
             		promesa.resolve(data);
             	});
 
@@ -159,6 +158,17 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		resolve:{
             datos:function(busqueda,$rootScope){
                 return busqueda.ordenescompra();
+            }
+        }
+	})
+
+	.state('index.nuevaorden',{
+		url:'nuevaorden',
+		templateUrl :'views/ordencompra.html',
+		controller:'ordenCompraCtrl',
+		resolve:{
+            datos:function(busqueda,$rootScope){
+                return busqueda.unidades();
             }
         }
 	})
@@ -325,7 +335,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             datos:function($rootScope,busqueda,$q){
                 var promesa = $q.defer(),
             		almacenes = busqueda.almacenesUsuario($rootScope.id);
-
             	$q.all([almacenes]).then(function (data){
             		promesa.resolve(data);
             	});
@@ -340,7 +349,12 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		url:'configuracion',
 		templateUrl :'views/configuracion.html',
 		controller:'configuracionCtrl',
-		controllerAs: "configuracion"
+		controllerAs: "configuracion",
+		resolve:{
+            datos:function(busqueda){
+                return busqueda.unidades();
+            }
+        }
 	})
 
 

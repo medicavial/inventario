@@ -11,14 +11,14 @@
     </div>
   </md-toolbar>
 
-  <form name="usuarioForm" novalidate ng-submit="guardar()">
+  <form name="unidadForm" novalidate ng-submit="guardar()">
 
   <md-dialog-content>
 
       <md-input-container>
         <label>Nombre</label>
         <input required name="nombre" ng-model="datos.nombre">
-        <div ng-messages="usuarioForm.nombre.$dirty && usuarioForm.nombre.$error">
+        <div ng-messages="unidadForm.nombre.$dirty && unidadForm.nombre.$error">
           <div ng-message="required">Campo obligatorio.</div>
         </div>
       </md-input-container>
@@ -28,16 +28,16 @@
         
         <md-input-container flex>
           <label>Nombre corto</label>
-          <input  name="usuario" ng-model="datos.usuario" required> 
-          <div ng-messages="usuarioForm.usuario.$dirty && usuarioForm.usuario.$error">
+          <input  name="nombrecorto" ng-model="datos.nombrecorto" required> 
+          <div ng-messages="unidadForm.nombrecorto.$dirty && unidadForm.nombrecorto.$error">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
         </md-input-container>
 
         <md-input-container flex>
           <label>Correo</label>
-          <input  name="psw" ng-model="datos.psw" required>
-          <div ng-messages="usuarioForm.psw.$dirty && usuarioForm.psw.$error">
+          <input  name="correo" ng-model="datos.correo" required>
+          <div ng-messages="unidadForm.correo.$dirty && unidadForm.correo.$error">
             <div ng-message="required">Campo obligatorio.</div>
           </div> 
         </md-input-container>

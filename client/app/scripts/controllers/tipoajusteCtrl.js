@@ -97,7 +97,7 @@ function tiposAjusteCtrl($rootScope,$mdDialog,datos,tiposajuste,mensajes){
 }
 
 
-function tipoAjusteCtrl($scope,$mdDialog,tiposajuste,mensajes){
+function tipoAjusteCtrl($scope,$mdDialog,busqueda,tiposajuste,mensajes){
 
 
 	$scope.inicio = function(){

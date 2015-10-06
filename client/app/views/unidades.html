@@ -18,15 +18,15 @@
           <tr>
             <th name="ID"  order-by="UNI_clave"></th>
             <th name="Nombre" order-by="UNI_nombre"></th>
-            <th name="Nombre MV" order-by="UNI_nombreMV"></th>
+            <th name="Correo" order-by="UNI_correo"></th>
             <th name="Activo"  order-by="UNI_activo"></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="unidad in unidades.info |filter:query | orderBy: unidades.order | limitTo: unidades.limit: (unidades.page - 1) * unidades.limit">
             <td>{{unidad.UNI_clave}}</td>
-            <td>{{unidad.UNI_nombre}}</td>
-            <td>{{unidad.UNI_nombreMV}}</td>
+            <td>{{unidad.UNI_nombrecorto}}</td>
+            <td>{{unidad.UNI_correo}}</td>
             <td>
               <div ng-show="unidad.UNI_activo">SI</div>
               <div ng-hide="unidad.UNI_activo">NO</div>

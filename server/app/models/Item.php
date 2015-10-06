@@ -25,6 +25,14 @@ class Item extends Eloquent {
                      ->get();
     }
 
+    public function scopeUnidad($query,$item,$unidad)
+    {
+        return $query->Join('configuraciones','items.ITE_clave', '=' ,'configuraciones.ITE_clave')
+                     ->where('configuraciones.UNI_clave',$unidad)
+                     ->where('configuraciones.ITE_clave',$item)
+                     ->get();
+    }
+
 
     public function tipoItem()
     {

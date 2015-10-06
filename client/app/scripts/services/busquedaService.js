@@ -13,6 +13,14 @@ function busqueda($http, api){
         {
             return $http.get(api + 'busquedas/almacen/'+usuario);
         },
+        almacenesUnidad : function(unidad)
+        {
+            return $http.get(api + 'busquedas/almacenes/unidad/'+unidad);
+        },
+        configuracion : function(unidad)
+        {
+            return $http.get(api + 'operacion/configuracion/unidad/'+unidad);
+        },
         existencias : function(usuario)
         {
             return $http.get(api + 'busquedas/existencias/'+ usuario);
@@ -23,11 +31,19 @@ function busqueda($http, api){
         },
         itemsAlmacen : function(almacen)
         {
-            return $http.get(api + 'busquedas/items/' + almacen);
+            return $http.get(api + 'busquedas/items/existencias/' + almacen);
         },
         itemsProveedor : function()
         {
             return $http.get(api + 'busquedas/items/proveedor');
+        },
+        itemsUnidad : function(unidad)
+        {
+            return $http.get(api + 'operacion/items/unidad/' + unidad);
+        },
+        itemUnidad : function(item,unidad)
+        {
+            return $http.get(api + 'busquedas/item/unidad/' + item + '/' + unidad);
         },
         movimientos : function()
         {
@@ -61,9 +77,17 @@ function busqueda($http, api){
         {
             return $http.get(api + 'busquedas/permisos');
         },
+        presentaciones : function()
+        {
+            return $http.get(api + 'busquedas/presentaciones');
+        },
         proveedores : function()
         {
             return $http.get(api + 'busquedas/proveedores');
+        },
+        proveedoresItems : function(items)
+        {
+            return $http.post(api + 'operacion/proveedores/items',items);
         },
         unidades : function()
         {

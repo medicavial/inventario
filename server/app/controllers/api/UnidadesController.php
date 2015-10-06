@@ -20,15 +20,7 @@ class UnidadesController extends \BaseController {
 	 */
 	public function create()
 	{
-			// $unidad = new Unidad;
-
-			// $unidad->UNI_nombre
-			// $unidad->UNI_nombrecorto
-			// $unidad->UNI_nombreMV
-			// $unidad->UNI_claveMV
-			// $unidad->UNI_activo
-
-			// $unidad->save();
+			
 	}
 
 
@@ -39,7 +31,16 @@ class UnidadesController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$unidad = new Unidad;
+
+		$unidad->UNI_nombre = Input::get('nombre');
+		$unidad->UNI_nombrecorto = Input::get('nombrecorto');
+		$unidad->UNI_correo = Input::get('correo');
+		$unidad->UNI_activo = Input::get('activo');
+
+		$unidad->save();
+
+		return Response::json(array('respuesta' => 'Unidad Registrada Correctamente'));
 	}
 
 
@@ -75,7 +76,16 @@ class UnidadesController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$unidad = Unidad::find($id);
+
+		$unidad->UNI_nombre = Input::get('nombre');
+		$unidad->UNI_nombrecorto = Input::get('nombrecorto');
+		$unidad->UNI_correo = Input::get('correo');
+		$unidad->UNI_activo = Input::get('activo');
+
+		$unidad->save();
+
+		return Response::json(array('respuesta' => 'Unidad Actualizada Correctamente'));
 	}
 
 

@@ -4,6 +4,7 @@ class Unidad extends Eloquent {
 
 	protected $primaryKey ='UNI_clave';
     protected $table = 'unidades';
+    protected $guarded = []; 
 
     public function scopeActivos($query)
     {

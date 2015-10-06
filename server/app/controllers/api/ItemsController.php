@@ -34,15 +34,24 @@ class ItemsController extends \BaseController {
 		$item = new Item;
 
 		$item->ITE_nombre = Input::get('nombre');
+		$item->ITE_codigo = Input::get('codigo');
 		$item->ITE_precioventa = Input::get('precio');
 		$item->ITE_cantidadtotal = Input::get('cantidad');
 		$item->TIT_clave = Input::get('tipo');
 		$item->STI_clave = Input::get('subtipo');
-		// $item->ITE_activo = Input::get('activo')	;
+		if (Input::has('sustancia')) {
+			$item->ITE_sustancia = implode("," , Input::get('sustancia'));			
+		}
+		$item->ITE_posologia = Input::get('posologia');
+		$item->PRE_clave = Input::get('presentacion');
+		$item->ITE_clasificacion = Input::get('clasificacion');
+		$item->ITE_codigoean = Input::get('codigoean');
 
 		$item->save();
 
-		return Response::json(array('respuesta' => 'Item Guardado Correctamente'));
+		$registro = $item->ITE_clave;
+
+		return Response::json(array('respuesta' => 'Item Guardado Correctamente','clave' => $registro));
 	}
 
 
@@ -53,8 +62,14 @@ class ItemsController extends \BaseController {
 	 * @return Response
 	 */
 	public function show($id)
-	{
-		return Item::find($id);
+	{	
+		$respuesta = array();
+		$ruta = public_path() . "/resource/items/" . $id;
+		$archivos = (File::exists($ruta) ? File::files($ruta) : '');
+		$datos = Item::find($id);
+
+		return Response::json(array('archivos' => $archivos,'datos' => $datos));
+		
 	}
 
 
@@ -83,12 +98,19 @@ class ItemsController extends \BaseController {
 		$item = Item::find($id);
 
 		$item->ITE_nombre = Input::get('nombre');
+		$item->ITE_codigo = Input::get('codigo');
 		$item->ITE_precioventa = Input::get('precio');
 		$item->ITE_cantidadtotal = Input::get('cantidad');
 		$item->TIT_clave = Input::get('tipo');
 		$item->STI_clave = Input::get('subtipo');
-		$item->ITE_activo = Input::get('activo');
-
+		if (Input::has('sustancia')) {
+			$item->ITE_sustancia = implode("," , Input::get('sustancia'));			
+		}
+		$item->ITE_posologia = Input::get('posologia');
+		$item->PRE_clave = Input::get('presentacion');
+		$item->ITE_clasificacion = Input::get('clasificacion');
+		$item->ITE_codigoean = Input::get('codigoean');
+		
 		$item->save();
 
 		return Response::json(array('respuesta' => 'Item Actualizado Correctamente'));

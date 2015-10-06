@@ -2,11 +2,49 @@
 
 class OperacionController extends BaseController {
 
+	public function configuraciones(){
 
+		$configuracion = new Configuracion;
+
+		$configuracion->UNI_clave = Input::get('unidad');
+		$configuracion->ITE_clave = Input::get('item');
+		$configuracion->CON_nivelMinimo = Input::get('minimo');
+		$configuracion->CON_nivelMaximo = Input::get('maxima');
+		$configuracion->CON_nivelCompra = Input::get('compra');
+
+		// if (Input::has('correos')) {
+		// 	$configuracion->CON_correos = implode("," , Input::get('correos'));			
+		// }
+
+		$configuracion->save();
+
+		return Response::json(array('respuesta' => 'Configuración Registrada Correctamente'));
+
+	}
+
+
+	public function configuracionUnidad($unidad){
+		return Existencia::unidad($unidad);
+	}
 
 	public function eliminaUsuarioAlmacen($almacen,$usuario){
 		UsuarioAlmacen::where('USU_clave',$usuario)->where('ALM_clave',$almacen)->delete();
 		return Response::json(array('respuesta' => 'Almacen removido Correctamente'));
+	}
+
+	public function itemsAlmacenes($unidad){
+		$datos = Input::all();
+		$almacenes = array();
+
+		foreach ($datos as $dato) {
+			array_push($almacenes, $dato['ALM_clave']);
+		}
+
+		return Existencia::almacenes($unidad,$almacenes);
+	}
+
+	public function itemsUnidad($unidad){
+		return Existencia::configuracion($unidad);
 	}
 
 	public function itemProveedor(){
@@ -125,6 +163,30 @@ class OperacionController extends BaseController {
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
 
+	}
+
+	public function proveedoresItems(){
+
+		$datos = array();
+		$items = Input::all();
+
+		foreach ($items as $item) {
+
+			$datos[] = array(
+				'ITE_clave' => $item['ITE_clave'],
+				'ITE_nombre' => $item['ITE_nombre'],
+				'CON_nivelCompra' => $item['CON_nivelCompra'],
+				'CON_nivelMaximo' => $item['CON_nivelMaximo'],
+				'CON_nivelMinimo' => $item['CON_nivelMinimo'],
+				'EXI_cantidad' => $item['EXI_cantidad'],
+				'Cantidad' => $item['CON_nivelMaximo'] - $item['EXI_cantidad'],
+				'proveedores' => ItemProveedor::todo($item['ITE_clave'])
+		    );
+		    
+		}
+		
+		return $datos;
+		
 	}
 
 
