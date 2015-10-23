@@ -2,6 +2,28 @@
 
 class OperacionController extends BaseController {
 
+
+	public function actualizaConfiguracion($id){
+
+		$configuracion = Configuracion::find($id);
+
+		$configuracion->UNI_clave = Input::get('unidad');
+		$configuracion->ITE_clave = Input::get('item');
+		$configuracion->CON_nivelMinimo = Input::get('minimo');
+		$configuracion->CON_nivelMaximo = Input::get('maxima');
+		$configuracion->CON_nivelCompra = Input::get('compra');
+
+		// if (Input::has('correos')) {
+		// 	$configuracion->CON_correos = implode("," , Input::get('correos'));			
+		// }
+
+		$configuracion->save();
+
+		return Response::json(array('respuesta' => 'Configuración Actualizada Correctamente'));
+
+	}
+
+
 	public function configuraciones(){
 
 		$configuracion = new Configuracion;
@@ -44,7 +66,34 @@ class OperacionController extends BaseController {
 	}
 
 	public function itemsUnidad($unidad){
-		return Existencia::configuracion($unidad);
+		$datos =  Existencia::configuracion($unidad);
+		$respuesta = array();
+
+		foreach ($datos as $dato) {
+
+			$claveItem = $dato['ITE_clave'];
+			$consulta = OrdenCompra::porSurtir($claveItem,$unidad);
+
+			if ($consulta->count() > 0) {
+				$cantidad = $consulta->PorSurtir;
+			}else{
+				$cantidad = 0;
+			}
+
+			$respuesta[] = array(
+				'ITE_clave' => $dato['ITE_clave'],
+				'ITE_nombre' => $dato['ITE_nombre'],
+				'UNI_clave' => $dato['UNI_clave'],
+				'EXI_cantidad' => $dato['EXI_cantidad'],
+				'POR_surtir' => $cantidad,
+				'CON_nivelCompra' => $dato['CON_nivelCompra'],
+				'CON_nivelMinimo' => $dato['CON_nivelMinimo'],
+				'CON_nivelMaximo' => $dato['CON_nivelMaximo'],
+				'ITE_codigo' => $dato['ITE_codigo']
+			);
+		}
+
+		return $respuesta;
 	}
 
 	public function itemProveedor(){
@@ -162,6 +211,55 @@ class OperacionController extends BaseController {
 		}
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
+
+	}
+
+	public function ordencompra(){
+
+
+		$datos = Input::all();
+		$ordenes = array();
+
+		foreach ($datos as $valor) {
+
+			$items = $valor['items'];
+
+			$almacenes = array();
+			foreach ($valor['almacenes'] as $almacen) {
+				array_push($almacenes, $almacen['ALM_clave']);
+			}
+
+			$orden = new OrdenCompra;
+			
+			$orden->OCM_fechaReg = date('Y-m-d H:i:s');
+			$orden->TOR_clave = $valor['tipo'];
+			$orden->USU_creo = $valor['usuario'];
+			$orden->PRO_clave = $valor['proveedor'];
+			$orden->OCM_importeEsperado = $valor['total'];
+			$orden->OCM_almacenes = implode("," , $almacenes); 
+			$orden->UNI_clave = $valor['unidad'];
+
+			$orden->save();
+
+			$claveOrden = $orden->OCM_clave;
+
+			foreach ($items as $item) {
+				
+				$ordenItem = new OrdenItem;
+
+				$ordenItem->ITE_clave = $item['ITE_clave'];
+				$ordenItem->OCM_clave = $claveOrden;
+				$ordenItem->OIT_cantidadPedida = $item['cantidad'];
+				$ordenItem->OIT_precioEsperado = $item['IPR_ultimoCosto'];
+				$ordenItem->save();
+
+			}
+
+			array_push($ordenes, $claveOrden);
+
+		}
+
+		return Response::json(array('respuesta' => 'Orden Generada Correctamente','ordenes' => $ordenes));
 
 	}
 

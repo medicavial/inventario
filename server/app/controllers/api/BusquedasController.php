@@ -64,6 +64,39 @@ class BusquedasController extends BaseController {
 		return OrdenCompra::todos();
 	}
 
+	public function ordencompra($id){
+
+		$orden = array();
+		$dato = OrdenCompra::busca($id);
+
+		// foreach ($datos as $dato) {
+
+		$items = OrdenItem::orden($id);
+
+		$orden = array(
+			'PRO_nombrecorto' => $dato->PRO_nombrecorto,
+			'TOR_nombre' => $dato->TOR_nombre,
+			'USU_nombrecompleto' => $dato->USU_nombrecompleto,
+			'OCM_fechaReg' => $dato->OCM_fechaReg,
+			'OCM_almacenes' => explode(',', $dato->OCM_almacenes),
+			'UNI_nombre' => $dato->UNI_nombre,
+			'OCM_cerrada' => $dato->OCM_cerrada,
+			'OCM_fechaCerrada' => $dato->OCM_fechaCerrada,
+			'OCM_cancelada' => $dato->OCM_cancelada,
+			'OCM_fechaCancelacion' => $dato->OCM_fechaCancelacion,
+			'OCM_motivo' => $dato->OCM_motivo,
+			'OCM_importeEsperado' => $dato->OCM_importeEsperado,
+			'OCM_importeFinal' => $dato->OCM_importeFinal,
+			'OCM_pagada' => $dato->OCM_pagada,
+			'OCM_fechaPagada' => $dato->OCM_fechapagado,
+			'items' => $items
+	    );
+		    
+		// }
+
+		return $orden;
+	}
+
 	public function permisos(){
 		return Permiso::activos();
 	}

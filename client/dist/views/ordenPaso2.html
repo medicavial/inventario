@@ -1,123 +1,43 @@
 <md-content layout-padding>
   
 
-  <div layout="row" layout-sm="column">
+  <div layout="row" layout-sm="column" layout-margin>
       
       <div flex>
         
-        <div ng-repeat="item in seleccionItems">
+        <div ng-repeat="(item, value) in ordenItems | groupBy: 'ITE_nombre'">
+
           <md-subheader class="md-no-sticky" >
-            {{item.ITE_nombre}}
-            <span flex></span>
-            <div ng-hide="porcentaje > 0">
-              {{item.CON_nivelMaximo - item.EXI_cantidad}}
-            </div>
-            <div ng-show="porcentaje > 0">
-              {{ ( (porcentaje * item.CON_nivelMaximo)/100)  - item.EXI_cantidad | number:0}}
-            </div>
+            {{item}}
           </md-subheader>
+          <md-divider></md-divider>
           <md-list>
-            <md-list-item >
-              <p>Proveedor</p>
-              <p>Costo: $500</p>
-              <p></p>
+            <md-list-item ng-repeat="proveedor in value" >
+              <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
+              <p>{{proveedor.PRO_nombrecorto}}</p>
+              <p class="right">Costo: {{proveedor.IPR_ultimoCosto | currency}}</p>
+              <p>
+                <md-input-container md-no-float class="lista">
+                  <input type="number" ng-model="proveedor.cantidad" placeholder="Cantidad">
+                </md-input-container>
+              </p>
             </md-list-item>
           </md-list>
-          
+          <md-divider ng-hide="$last"></md-divider>
+
         </div>
-            
-        <!-- <md-data-table-container class="md-whiteframe-z1">
-          <table md-data-table md-row-select="seleccionItems">
-            <thead md-auto-select md-order="existencias.order" md-trigger="existencias.onOrderChange">
-              <tr>
-                <th name="Item"  order-by="ITE_nombre"></th>
-                <th name="Proveedor" order-by="EXI_cantidad"></th>
-                <th name="Costo" order-by="CON_nivelMinimo"></th>
-                <th name="Cantidad"  order-by="CON_nivelMaximo"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Itemx</td>
-                <td>Proveedor1</td>
-                <td>$500</td>
-                <td layout="row" layout-align="center center">
-                  <md-button class="groupX left">-</md-button>
-                  <div class="groupX middle" style="text-align: center;">25</div>
-                  <md-button class="groupX right">+</md-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </md-data-table-container> -->
-
-        
-        <md-divider></md-divider>
-
-        <md-subheader class="md-no-sticky">Items con mismo proveedor</md-subheader>
-
-
-        <md-data-table-container class="md-whiteframe-z1">
-          <table md-data-table md-row-select="seleccionItems">
-            <thead md-auto-select md-order="existencias.order" md-trigger="existencias.onOrderChange">
-              <tr>
-                <th name="Item"  order-by="ITE_nombre"></th>
-                <th name="Proveedor" order-by="EXI_cantidad"></th>
-                <th name="Costo" order-by="CON_nivelMinimo"></th>
-                <th name="Cantidad"  order-by="CON_nivelMaximo"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Itemx</td>
-                <td>Proveedor1</td>
-                <td>$500</td>
-                <td layout="row" layout-align="center center">
-                  <md-button class="groupX left">-</md-button>
-                  <div class="groupX middle" style="text-align: center;">25</div>
-                  <md-button class="groupX right">+</md-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </md-data-table-container>
-
-<!--         <md-list-item>
-          <md-checkbox></md-checkbox>
-          <p>Item X</p>
-          <p>Proveedor1</p>
-          <span flex></span>
-          <p>Costo:$500</p>
-          <md-button class="groupX left">-</md-button>
-          <p>Cantidad:25</p>
-          <md-button class="groupX right">+</md-button>
-        </md-list-item>
-        
-        <md-list-item>
-          <md-checkbox></md-checkbox>
-          <p>Item X</p>
-          <p>Proveedor2</p>
-          <span flex></span>
-          <p>Costo:$500</p>
-          <p>Cantidad:25</p>
-        </md-list-item> -->
+    
           
       </div>
 
-      <div flex>
-          <md-subheader class="md-no-sticky">Detalle de orden</md-subheader>
-          <md-divider></md-divider>
-          <md-list>
-              <md-list-item>
-                <p>Items</p>
-                <p>3</p>
-              </md-list-item>
-
-              <md-list-item>
-                <p>Total</p>
-                <p>$500</p>
-              </md-list-item>
-          </md-list>
+      <div flex layout="row" layout-sm="column" layout-align="center center">
+          
+          <div layout="column">
+            <md-button class="md-raised" ng-click="generaCantidades()">Aplicar cantidad proporcional</md-button>
+            <md-button class="md-raised" ng-click="generaMasBarato()">Aplicar al mas económico</md-button>
+            <br>
+            <md-button class="md-raised" ng-disabled="ordenItems.length == 0" ng-click="generaOrden()">Genera Orden</md-button>
+          </div>
       </div>
       
   </div>

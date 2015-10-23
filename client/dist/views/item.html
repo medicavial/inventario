@@ -21,12 +21,17 @@
 
           <div layout="row" layout-sm="column">
 
-            <md-input-container flex flex-gt-sm="20">
+            <md-input-container flex flex-gt-sm="15">
               <label>Codigo</label>
               <input  name="clave" ng-model="datos.codigo" required mayusculas> 
               <div ng-messages="itemForm.clave.$error" ng-if="itemForm.$submitted">
                 <div ng-message="required">Campo obligatorio.</div>
               </div>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-sm="15">
+              <label>Codigo EAN</label>
+              <input  name="clave" ng-model="datos.codigoean" mayusculas> 
             </md-input-container>
 
             <md-input-container flex>
@@ -102,9 +107,14 @@
               <label>Posologia</label>
               <textarea ng-model="datos.posologia" name="posologia" columns="1"></textarea>
             </md-input-container>
+
+            <md-input-container flex>
+              <label>Clasificacion</label>
+              <input  name="nombre" ng-model="datos.clasificacion">
+            </md-input-container>
+
           </section>
-
-
+          
         </div>
 
         <md-toolbar class="bgm-blue">

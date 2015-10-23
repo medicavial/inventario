@@ -14,7 +14,7 @@
   <div flex>
       
       <div layout="row" layout-wrap>
-        <div flex="20" ng-repeat="almacen in almacenes">
+        <div flex flex-gt-sm="20" ng-repeat="almacen in almacenes">
           <md-checkbox aria-label="Checkbox 1" ng-checked="exists(almacen, selected)" ng-click="toggle(almacen, selected)">
            {{almacen.ALM_nombre}}
           </md-checkbox>
@@ -27,19 +27,23 @@
     <table md-data-table md-row-select="seleccionItems" >
       <thead md-order="existencias.order" md-trigger="existencias.onOrderChange">
         <tr>
+          <th name="Codigo"  order-by="ITE_codigo"></th>
           <th name="Item"  order-by="ITE_nombre"></th>
           <th name="Existencia" order-by="EXI_cantidad"></th>
-          <th name="Num. Minimo" order-by="CON_nivelMinimo"></th>
-          <th name="Num. Maximo"  order-by="CON_nivelMaximo"></th>
-          <th name="Num. Compra"  order-by="CON_nivelCompra"></th>
+          <th name="Por Surtir"  order-by="ITE_nombre"></th>
+          <th name="Minimo" order-by="CON_nivelMinimo"></th>
+          <th name="Maximo"  order-by="CON_nivelMaximo"></th>
+          <th name="Nivel. Compra"  order-by="CON_nivelCompra"></th>
           <th name="Semaforo"></th>
           <th name="Compra"></th>
         </tr>
       </thead>
       <tbody>
         <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order">
+          <td>{{existencia.ITE_codigo}}</td>
           <td>{{existencia.ITE_nombre}}</td>
           <td>{{existencia.EXI_cantidad}}</td>
+          <td>{{existencia.POR_surtir}}</td>
           <td>{{existencia.CON_nivelMinimo}}</td>
           <td>{{existencia.CON_nivelMaximo}}</td>
           <td>{{existencia.CON_nivelCompra}}</td>

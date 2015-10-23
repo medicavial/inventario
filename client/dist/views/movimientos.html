@@ -17,6 +17,7 @@
         <thead md-order="movimientos.order" md-trigger="movimientos.onOrderChange">
           <tr>
             <th name="ID"  order-by="ITE_clave"></th>
+            <th name="Codigo" order-by="ITE_codigo"></th>
             <th name="Item" order-by="ITE_nombre"></th>
             <th name="Almacen"  order-by="ALM_nombre"></th>
             <th name="Tipo"  order-by="TIM_nombre"></th>
@@ -29,6 +30,7 @@
         <tbody>
           <tr ng-repeat="movimiento in movimientos.info |filter:query | orderBy: movimientos.order | limitTo: movimientos.limit: (movimientos.page - 1) * movimientos.limit">
             <td>{{movimiento.MOV_clave}}</td>
+            <td>{{movimiento.ITE_codigo}}</td>
             <td>{{movimiento.ITE_nombre}}</td>
             <td>{{movimiento.ALM_nombre}}</td>
             <td>{{movimiento.TIM_nombre}}</td>

@@ -53,6 +53,10 @@ function busqueda($http, api){
         {
             return $http.get(api + 'busquedas/ordenescompra');
         },
+        detalleOrdenCompra : function(id)
+        {
+            return $http.get(api + 'busquedas/ordencompra/'+id);
+        },
         tiposAjuste : function()
         {   
             return $http.get(api + 'busquedas/tiposajuste');

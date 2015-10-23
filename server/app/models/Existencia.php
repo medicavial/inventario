@@ -69,7 +69,8 @@ class Existencia extends Eloquent {
                             $join->on('configuraciones.ITE_clave','=', 'existencias.ITE_clave');
                             $join->on('configuraciones.UNI_clave','=', 'almacenes.UNI_clave');
                         })
-                     ->select(DB::raw('existencias.ITE_clave,ITE_nombre,almacenes.UNI_clave,sum(EXI_cantidad) as EXI_cantidad,CON_nivelCompra,CON_nivelMinimo,CON_nivelMaximo'))
+                     
+                     ->select(DB::raw('existencias.ITE_clave,ITE_nombre,almacenes.UNI_clave,sum(EXI_cantidad) as EXI_cantidad,CON_nivelCompra,CON_nivelMinimo,CON_nivelMaximo,ITE_codigo'))
                      ->groupBy('ITE_clave')
                      ->where('almacenes.UNI_clave', $unidad)
                      ->get();

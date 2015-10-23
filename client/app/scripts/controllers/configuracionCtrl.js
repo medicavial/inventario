@@ -33,6 +33,7 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 		scope.datos.compra = 0;
 		scope.datos.minimo = 0;
 		scope.datos.maxima = 0;
+		scope.id = '';
 		scope.minimo = 0;
 		scope.compra = 0;
 		scope.existe = false;
@@ -58,9 +59,10 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 			console.log(data);
 
 			if (data.length > 0) {
-				scope.datos.compra = data[0].CON_nivelCompra;
-				scope.datos.minimo = data[0].CON_nivelMinimo;
-				scope.datos.maxima = data[0].CON_nivelMaximo; 
+				scope.datos.compra = Number(data[0].CON_nivelCompra);
+				scope.datos.minimo = Number(data[0].CON_nivelMinimo);
+				scope.datos.maxima = Number(data[0].CON_nivelMaximo);
+				scope.id = data[0].id;
 				scope.existe = true;
 			}
 
@@ -110,7 +112,7 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 
 	scope.actualizar = function(){
 		scope.guardando = true;
-		operacion.actualizaConfiguracion(scope.datos).success(function (data){
+		operacion.actualizaConfiguracion(scope.id,scope.datos).success(function (data){
 			scope.guardando = false;
 			mensajes.alerta(data.respuesta,'success','top right','done_all');
 			scope.inicio();

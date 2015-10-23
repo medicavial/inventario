@@ -9,7 +9,8 @@ var app = angular.module('app', [
 	'ngResource',
 	'ngAnimate',
 	'md.data.table',
-	'ngFileUpload'
+	'ngFileUpload',
+	'angular.filter'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
@@ -364,7 +365,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
     $mdThemingProvider.theme('theme1')
 	.primaryPalette('indigo')
     .accentPalette('red')
-    .warnPalette('deep-orange');
+    .warnPalette('red');
 
     $mdThemingProvider.theme('theme2')
 	.primaryPalette('red')

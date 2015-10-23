@@ -279,43 +279,6 @@ md-tooltip{
   border: 5px dashed red;
 }
 
-.muestras.ng-hide-add {
-
-    animation: fadeOutDown 0.9s;
-
-}
-
-.muestras.ng-hide-remove{
-    
-    animation: fadeInUp 0.9s;
-
-}
-
-
-.boton.ng-hide-add {
-
-    animation: fadeOutDown 0.5s;
-
-}
-
-.boton.ng-hide-remove{
-    
-    animation: fadeIn 0.5s;
-
-}
-
-.boton.ng-enter{
-
-    animation: fadeInUp 0.5s;
-
-}
-
-.boton.ng-leave{
-    
-    animation: fadeOutDown 0.5s;
-
-}
-
 
 .abajo-derecho{
   position: absolute;
@@ -362,4 +325,14 @@ md-tooltip{
   outline: 0;
   border: 0; 
   cursor: pointer;
+}
+
+.lista{
+  padding-bottom: 0;
+}
+
+.iconmenu{
+    position: absolute;
+    top: -6px;
+    right: 0;
 }

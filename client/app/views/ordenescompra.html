@@ -17,11 +17,11 @@
         <thead md-order="ordenescompra.order" md-trigger="ordenescompra.onOrderChange">
           <tr>
             <th name="No."  order-by="OCM_clave"></th>
-            <th name="Fecha Alta"  order-by="created_at"></th>
-            <th name="Fecha Ultimo Movimiento"  order-by="updated_at"></th>
+            <th name="Alta Orden"  order-by="created_at"></th>
+            <th name="Ultimo Movimiento"  order-by="updated_at"></th>
             <th name="Proveedor" order-by="PRO_nombre"></th>
             <th name="Tipo Orden" order-by="TOR_nombre"></th>
-            <th name="Usuario Alta"  order-by="USU_nombre"></th>
+            <th name="Usuario Alta"  order-by="USU_nombrecompleto"></th>
             <th name="Importe Esperado" order-by="OCM_importeEsperado"></th>
             <th name="Importe Final" order-by="OCM_importeFinal"></th>
             <th name="Status"></th>
@@ -32,12 +32,22 @@
             <td>{{orden.OCM_clave}}</td>
             <td>{{orden.created_at}}</td>
             <td>{{orden.updated_at}}</td>
-            <td>{{orden.PRO_nombre}}</td>
+            <td>{{orden.PRO_nombrecorto}}</td>
             <td>{{orden.TOR_nombre}}</td>
-            <td>{{orden.USU_nombre}}</td>
-            <td>{{orden.OCM_importeEsperado}}</td>
-            <td>{{orden.OCM_importeFinal}}</td>
-            <td>Surtida</td>
+            <td>{{orden.USU_nombrecompleto}}</td>
+            <td>{{orden.OCM_importeEsperado | currency}}</td>
+            <td>{{orden.OCM_importeFinal | currency}}</td>
+            <td>
+              <div ng-if="orden.OCM_cerrada == '1'">
+                  Surtida
+              </div>
+              <div ng-if="orden.OCM_cancelada == '1'">
+                Cancelada
+              </div>
+              <div ng-if="orden.OCM_cancelada == '0' && orden.OCM_cerrada == '0'">
+                Abierta
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

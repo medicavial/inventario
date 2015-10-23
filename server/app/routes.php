@@ -84,6 +84,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items/proveedor', 'BusquedasController@itemsProveedor');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');
+        Route::get('ordencompra/{id}', 'BusquedasController@ordencompra');
         Route::get('tiposajuste', 'BusquedasController@tiposAjuste');
         Route::get('tiposalmacen', 'BusquedasController@tiposalmacen');
         Route::get('tipositem', 'BusquedasController@tipositem');
@@ -100,10 +101,12 @@ Route::group(array('prefix' => 'api'), function()
     {
         Route::get('configuracion/unidad/{unidad}', 'OperacionController@configuracionUnidad');
         Route::post('configuraciones', 'OperacionController@configuraciones');
+        Route::put('configuraciones/{id}', 'OperacionController@actualizaConfiguracion');
         Route::get('elimina/almacen/{almacen}/{usuario}', 'OperacionController@eliminaUsuarioAlmacen');
         Route::post('item/proveedor', 'OperacionController@itemProveedor');
         Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');
         Route::post('items/almacenes/{unidad}', 'OperacionController@itemsAlmacenes');
+        Route::post('ordencompra', 'OperacionController@ordencompra');
         Route::post('proveedores/items', 'OperacionController@proveedoresItems');
         Route::post('movimiento', 'OperacionController@movimiento');
         Route::post('traspaso', 'OperacionController@traspaso');

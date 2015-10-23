@@ -1,0 +1,59 @@
+<md-content layout-padding>
+
+	<div layout="column" layout-margin layout-align="center center">
+        <h3>Se Generó la Orden Correctamente</h3>  
+        
+        <div layout="row" layout-sm="column">
+          <!-- <md-button class="md-raised" ng-click="muestraOrdenes()">Enviar Correo</md-button> -->
+          <md-button class="md-raised" ng-click="inicio()">Nueva Orden</md-button>
+          <!-- <md-button class="md-raised" ng-click="muestraOrdenes()">Generar PDFs</md-button> -->
+        </div>
+  </div>
+  
+  <div ng-repeat="dato in ordenesListas">
+
+    <md-toolbar class="md-warn md-hue-1">
+      <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Settings">
+          <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+        </md-button>
+        <h2>
+          <span>{{ dato.data.PRO_nombrecorto }}</span>
+        </h2>
+        <span flex></span>
+        <span style="padding-right:5px;">Items: {{ dato.data.items.length }}</span>
+        <span>Total: {{ dato.data.OCM_importeEsperado |currency }}</span>
+        <md-button class="md-icon-button" aria-label="PDF">
+            <md-tooltip md-direction="top">
+              PDF
+            </md-tooltip>
+            <ng-md-icon icon="insert_drive_file" style="fill:black"></ng-md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Correo">
+            <md-tooltip md-direction="top">
+              Correo
+            </md-tooltip>
+            <ng-md-icon icon="email" style="fill:black"></ng-md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Detalle">
+            <md-tooltip md-direction="top">
+              Detalles
+            </md-tooltip>
+            <ng-md-icon icon="keyboard_arrow_right" style="fill:black" ng-click="dato.visible = !dato.visible"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-list ng-show="dato.visible">
+      <md-list-item ng-repeat="item in dato.data.items" class="animaitem">
+        <p>{{item.ITE_nombre}}</p>
+        <p class="right">Costo: {{item.OIT_precioEsperado | currency}}</p>
+        <p class="right">Cantidad: {{item.OIT_cantidadPedida}}</p>
+        <p class="right">Total: {{item.OIT_cantidadPedida * item.OIT_precioEsperado | currency}} </p>
+      </md-list-item>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-list>
+
+    <br>
+  </div>
+
+</md-content>

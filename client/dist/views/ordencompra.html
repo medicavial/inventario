@@ -1,4 +1,4 @@
-<md-content class="md-whiteframe-z1 white" layout="column">
+<md-content class="md-whiteframe-z1 white" layout="column" ng-init="inicio()">
 
      <md-tabs class="md-accent" md-selected="selectedIndex" md-align-tabs="'top'" md-dynamic-height md-border-bottom>
       <md-tab id="tab1">
@@ -8,15 +8,21 @@
         </md-tab-body>
       </md-tab>
       <md-tab id="tab2" ng-disabled="step2block">
-        <md-tab-label>Generar Orden</md-tab-label>
+        <md-tab-label>Selecciona Proveedores</md-tab-label>
         <md-tab-body> 
           <div ng-include="paso2"></div>
         </md-tab-body>
       </md-tab>
       <md-tab id="tab3" ng-disabled="step3block">
-        <md-tab-label>Confirmar Orden</md-tab-label>
+        <md-tab-label>Genera Orden</md-tab-label>
         <md-tab-body>
           <div ng-include="paso3"></div>
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab3" ng-disabled="step4block">
+        <md-tab-label>Acciones</md-tab-label>
+        <md-tab-body>
+          <div ng-include="paso4"></div>
         </md-tab-body>
       </md-tab>
     </md-tabs>

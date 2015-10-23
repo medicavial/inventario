@@ -4,7 +4,7 @@
   <div layout="row" layout-sm="column">
       
       <div flex flex-gt-sm="30">
-          <md-select ng-model="unidad" placeholder="Selecciona Unidad" md-on-close="almacenes(unidad)" flex required>
+          <md-select ng-model="unidad" placeholder="Selecciona Unidad" md-on-close="info(unidad)" flex required>
             <md-option ng-repeat="unidad in unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
           </md-select>
       </div>
@@ -27,6 +27,7 @@
     <table md-data-table md-row-select="seleccionItems" >
       <thead md-order="existencias.order" md-trigger="existencias.onOrderChange">
         <tr>
+          <th name="Codigo"  order-by="ITE_codigo"></th>
           <th name="Item"  order-by="ITE_nombre"></th>
           <th name="Existencia" order-by="EXI_cantidad"></th>
           <th name="Num. Minimo" order-by="CON_nivelMinimo"></th>
@@ -38,6 +39,7 @@
       </thead>
       <tbody>
         <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order">
+          <td>{{existencia.ITE_codigo}}</td>
           <td>{{existencia.ITE_nombre}}</td>
           <td>{{existencia.EXI_cantidad}}</td>
           <td>{{existencia.CON_nivelMinimo}}</td>
@@ -49,12 +51,7 @@
               </div>
           </td>
           <td>
-              <div ng-hide="porcentaje > 0">
-                {{existencia.CON_nivelMaximo - existencia.EXI_cantidad}}
-              </div>
-              <div ng-show="porcentaje > 0">
-                {{ ( (porcentaje * existencia.CON_nivelMaximo)/100)  - existencia.EXI_cantidad | number:0}}
-              </div>
+            {{existencia.CON_nivelMaximo - existencia.EXI_cantidad}}
           </td>
         </tr>
       </tbody>
@@ -64,17 +61,17 @@
   <br>
   <br>
   
-  <div layout="row" layout-sm="column">
+<!--   <div layout="row" layout-sm="column">
     <span>Aplicar todos al</span>
     <input type="number" ng-model="porcentaje">
     <span>Del nivel Maximo</span>
   </div>
 
   <br>
-  <br>
+  <br> -->
   
   <div layout="row" layout-align="center center">
-    <md-button ng-disabled="seleccionItems.length == 0" class="md-raised md-primary" ng-click="ir2()" type="submit">Ir a la Orden</md-button>
+    <md-button ng-disabled="seleccionItems.length == 0" class="md-raised md-primary" ng-click="ir2(seleccionItems)" type="submit">Ir a la Orden</md-button>
   </div>
 
   <br>

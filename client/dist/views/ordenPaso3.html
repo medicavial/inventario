@@ -1,0 +1,38 @@
+<md-content layout-padding>
+
+  <div layout="column" layout-margin>
+        <h3>Verifica Orden(es) de compra Total: {{ total() | currency }} </h3>  
+
+        <md-button class="md-raised md-primary" ng-click="confirmaOrden()">Confirmar Orden(es)</md-button>
+        <br>
+
+        <div ng-repeat="(proveedor, value) in seleccionOrden | groupBy: 'PRO_nombrecorto'">
+
+          <md-subheader class="md-no-sticky" >
+          Proveedor:{{proveedor}}
+          </md-subheader>
+          <md-divider></md-divider>
+          <md-list>
+            <md-list-item ng-repeat="item in value">
+              <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
+              <p>{{item.ITE_nombre}}</p>
+              <p class="right">Costo: {{item.IPR_ultimoCosto | currency}}</p>
+              <p class="right">Cantidad: {{item.cantidad}}</p>
+              <p class="right">Total: {{item.cantidad * item.IPR_ultimoCosto | currency}} </p>
+
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item>
+              <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
+              <p></p>
+              <span class="right">Total: {{ muestraTotal(proveedor) | currency}} </span>
+              
+            </md-list-item>
+          </md-list>
+
+        </div>
+
+
+  </div>
+  
+</md-content>

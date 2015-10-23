@@ -1,6 +1,6 @@
-<div class="md-whiteframe-z1 white" layout="column" layout-padding>
+<div class="md-whiteframe-z1 white" layout="column" layout-padding ng-init="configuracion.inicio()">
     
-    <form name="configuracion.configForm" ng-submit="configuracion.guardar()" novalidate>
+    <form name="configuracion.configForm" novalidate>
 
       <md-subheader class="c-bluegray">Selecciona la Unidad</md-subheader>  
       <md-divider class="bgm-bluegray"></md-divider>
@@ -12,42 +12,82 @@
       <md-subheader class="c-bluegray">Configuracion de Alertas según el stock</md-subheader>  
       <md-divider class="bgm-bluegray"></md-divider>
       <br>
-      <div layout>
-        <div flex="20" layout layout-align="center center">
-          <span class="md-body-1">Nivel Minimo (%)</span>
-        </div>
-        <md-slider ng-disabled="configuracion.edicion" flex ng-model="configuracion.datos.minimo" min="0" max="100" aria-label="minimo" id="minimo-slider" class="md-warn">
-        </md-slider>
-        <div flex="20" layout layout-align="center center">
-          <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.minimo" aria-label="minimo" aria-controls="minimo-slider">
-        </div>
-      </div>
 
-      <div layout="row">
-        <div flex="20" layout layout-align="center center">
-          <span class="md-body-1">Nivel de compra (%)</span>
+      <div layout="row" layout-sm="column">
+        <div flex>
+            <md-list>
+                <md-list-item ng-click="configuracion.verDetalle($index)" ng-repeat="item in configuracion.items">
+                  <p>{{item.ITE_nombre}}</p>
+                </md-list-item>
+            </md-list>
         </div>
-        <md-slider ng-disabled="configuracion.edicion" flex ng-model="configuracion.datos.compra" min="0" max="100" aria-label="compra" id="compra-slider" class="md-primary">
-        </md-slider>
-        <div flex="20" layout layout-align="center center">
-          <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.compra" aria-label="compra" aria-controls="compra-slider">
-        </div>
-      </div>
+        <div flex>
+
+          <div layout="row">
+
+            <div flex="20" layout layout-align="center center">
+              <span class="md-body-1">Nivel Maximo (#)</span>
+            </div>
+            <div flex="20" layout layout-align="center center">
+              <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.maxima" aria-label="maxima" aria-controls="maxima-slider">
+            </div>
+            
+          </div>
+
+          <div layout>
+            <div flex="20" layout layout-align="center center">
+              <span class="md-body-1">Nivel Minimo (%)</span>
+            </div>
 
 
-      <div layout="row">
-        <div flex="20" layout layout-align="center center">
-          <span class="md-body-1">Nivel Maximo (%)</span>
-        </div>
-        <md-slider ng-disabled="configuracion.edicion" flex ng-model="configuracion.datos.maxima" min="0" max="100" aria-label="maxima" id="maxima-slider" class="md-accent">
-        </md-slider>
-        <div flex="20" layout layout-align="center center">
-          <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.maxima" aria-label="maxima" aria-controls="maxima-slider">
+            <md-slider ng-model="configuracion.minimo" ng-click="configuracion.verificaMinimo()" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-warn" flex></md-slider>
+
+            <div flex="20" layout layout-align="center center">
+              <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.minimo" aria-label="minimo" aria-controls="minimo-slider">
+            </div>
+          </div>
+
+          <div layout="row">
+            <div flex="20" layout layout-align="center center">
+              <span class="md-body-1">Nivel Compra (%)</span>
+            </div>
+
+            <md-slider ng-model="configuracion.compra" ng-click="configuracion.verificaCompra()" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-primary" flex></md-slider>
+
+
+            <div flex="20" layout layout-align="center center">
+              <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.compra" aria-label="compra" aria-controls="compra-slider">
+            </div>
+          </div>
+
+
+          <div layout="row" layout-align="center center" ng-hide="configuracion.guardando">
+            
+            <md-progress-circular md-mode="indeterminate" ng-show="configuracion.guardando"></md-progress-circular>
+
+            <md-button id="nuevo" class="md-fab boton" ng-click="configuracion.guardar()" aria-label="Guardar" type="button" ng-disabled="configuracion.valida()" ng-hide="configuracion.existe">
+                <md-tooltip md-direction="top">
+                  Guardar
+                </md-tooltip>
+                <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
+            </md-button>
+            
+            <md-button id="nuevo" class="md-fab boton" ng-click="configuracion.actualizar()" aria-label="Actualizar" type="button" ng-disabled="configuracion.valida()" ng-show="configuracion.existe">
+                <md-tooltip md-direction="top">
+                  Actualiza
+                </md-tooltip>
+                <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
+            </md-button>
+          </div>
+
+          
+
+          
         </div>
       </div>
       
 
-      <md-subheader class="c-bluegray">Notificaciones</md-subheader>  
+      <!-- <md-subheader class="c-bluegray">Notificaciones</md-subheader>  
       <md-divider class="bgm-bluegray"></md-divider>
       
 
@@ -76,17 +116,9 @@
 
       </div>
       
-      <br><br>
+      <br><br> -->
 
-      <div layout="row" layout-align="center center">
-        <md-progress-circular md-mode="indeterminate" ng-show="configuracion.guardando"></md-progress-circular>
-        <md-button id="nuevo" class="md-fab boton"  ng-hide="configuracion.guardando" ng-click="" aria-label="Guardar" type="submit" ng-disabled="configuracion.configForm.$invalid || configuracion.correos.length == 0">
-            <md-tooltip md-direction="top">
-              Guardar
-            </md-tooltip>
-            <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
-        </md-button>
-      </div>
+      
       
       <br><br>
     
