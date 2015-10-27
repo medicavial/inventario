@@ -74,7 +74,12 @@ class BusquedasController extends BaseController {
 		$items = OrdenItem::orden($id);
 
 		$orden = array(
+			'OCM_clave' => $dato->OCM_clave,
 			'PRO_nombrecorto' => $dato->PRO_nombrecorto,
+			'PRO_nombre' => $dato->PRO_nombre,
+			'PRO_rfc' => $dato->PRO_rfc,
+			'PRO_razonSocial' => $dato->PRO_razonSocial,
+			'PRO_correo' => $dato->PRO_correo,
 			'TOR_nombre' => $dato->TOR_nombre,
 			'USU_nombrecompleto' => $dato->USU_nombrecompleto,
 			'OCM_fechaReg' => $dato->OCM_fechaReg,

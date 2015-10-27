@@ -1,0 +1,58 @@
+<md-dialog aria-label="Enviar correo" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Correo</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="perfilForm" novalidate ng-submit="guardar()">
+
+  <md-dialog-content>
+
+      <md-input-container>
+        <label>Correo</label>
+        <input required type="mail" name="correo" ng-model="datos.correo">
+        <!-- <div ng-messages="perfilForm.nombre.$dirty && perfilForm.nombre.$error">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div> -->
+      </md-input-container>
+      <br>
+      <md-chips
+        ng-model="datos.copias"
+        placeholder="CC"
+        delete-hint="Presiona para eliminar"
+        secondary-placeholder="CC"></md-chips>
+
+      <br>
+
+      <md-input-container flex>
+        <label>Comentarios</label>
+        <textarea ng-model="datos.comentario"  columns="1" md-maxlength="150"></textarea>
+      </md-input-container>
+
+      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+      <br>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Cancelar
+    </md-button>
+    <md-button type="submit" ng-disabled="guardando">
+        Enviar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

@@ -21,7 +21,7 @@ class OrdenCompra extends Eloquent {
                      ->join('proveedores', 'ordenCompra.PRO_clave', '=', 'proveedores.PRO_clave')
                      ->join('usuarios', 'ordenCompra.USU_creo', '=', 'usuarios.USU_clave')
                      ->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
-                     ->select('ordenCompra.*','PRO_nombrecorto','TOR_nombre','USU_nombrecompleto','UNI_nombre')
+                     ->select('ordenCompra.*','proveedores.*','TOR_nombre','USU_nombrecompleto','UNI_nombre')
                      ->where('OCM_clave',$id)
                      ->first();
     }

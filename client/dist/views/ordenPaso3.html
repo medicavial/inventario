@@ -3,17 +3,24 @@
   <div layout="column" layout-margin>
         <h3>Verifica Orden(es) de compra Total: {{ total() | currency }} </h3>  
 
-        <md-button class="md-raised md-primary" ng-click="confirmaOrden()">Confirmar Orden(es)</md-button>
+        <md-button class="md-raised md-primary" ng-if="todos" ng-click="confirmaOrden()">Confirmar Orden(es)</md-button>
         <br>
 
         <div ng-repeat="(proveedor, value) in seleccionOrden | groupBy: 'PRO_nombrecorto'">
 
-          <md-subheader class="md-no-sticky" >
-          Proveedor:{{proveedor}}
-          </md-subheader>
+          <md-toolbar class="md-warn">
+            <div class="md-toolbar-tools">
+              <samll class="md-flex">Proveedor:{{proveedor}}</samll>
+              <span flex></span>
+              <span class="right">Total: {{ muestraTotal(proveedor) | currency}} </span>
+              <md-button class="md-raised c-black" ng-click="confirmaOrdenProveedor(proveedor)">
+                Confirmar Orden
+              </md-button>
+            </div>
+          </md-toolbar>
           <md-divider></md-divider>
           <md-list>
-            <md-list-item ng-repeat="item in value">
+            <md-list-item ng-repeat="item in value" class="animaitem">
               <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
               <p>{{item.ITE_nombre}}</p>
               <p class="right">Costo: {{item.IPR_ultimoCosto | currency}}</p>
@@ -21,13 +28,13 @@
               <p class="right">Total: {{item.cantidad * item.IPR_ultimoCosto | currency}} </p>
 
             </md-list-item>
-            <md-divider></md-divider>
-            <md-list-item>
-              <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
+            <md-divider ng-if="!$last"></md-divider>
+            <!-- <md-list-item>
               <p></p>
+              <md-button class="md-raised md-primary" ng-click="confirmaOrdenProveedor(proveedor)">Confirmar Orden</md-button>
               <span class="right">Total: {{ muestraTotal(proveedor) | currency}} </span>
               
-            </md-list-item>
+            </md-list-item> -->
           </md-list>
 
         </div>

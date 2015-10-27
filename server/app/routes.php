@@ -54,6 +54,7 @@ Route::group(array('prefix' => 'api'), function()
 
     Route::post('login', array('uses' => 'AuthController@login'));
     Route::get('logout', array('uses' => 'AuthController@logout'));
+    Route::get('inicio/{usuario}', array('uses' => 'AuthController@inicio'));
 
     //con esto tenemos listo todos las posibles combinaciones rest full asociados al controlador
     //relacionadas a las bajas */ altas y actualizaciones de los catalogos
@@ -116,10 +117,9 @@ Route::group(array('prefix' => 'api'), function()
     });
 
 
-    Route::group(array('prefix' => 'estadisticas'), function()
+    Route::group(array('prefix' => 'reportes'), function()
     {
-        Route::get('items/{almacen}', 'EstadisticasController@itemsAlmacen');
-        
+        Route::post('existencias', 'ReportesController@existencias');
 
     });
 

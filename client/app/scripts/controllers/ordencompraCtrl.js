@@ -2,9 +2,11 @@
 
 app.controller('ordenCompraCtrl',ordenCompraCtrl)
 app.controller('ordenesCompraCtrl',ordenesCompraCtrl)
+app.controller('correoCtrl',correoCtrl)
 
 ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
-ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos'];
+ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog'];
+correoCtrl.$inject = ['$scope','$mdDialog','operacion'];
 
 
 function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
@@ -49,7 +51,7 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 }
 
 
-function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos){
+function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialog){
 
 	$scope.paso1 = 'views/ordenPaso1.html';
 	$scope.paso2 = 'views/ordenPaso2.html';
@@ -329,5 +331,33 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos){
 		);
 	}
 
+	$scope.generaPDF = function(index){
+
+		var orden = $scope.ordenesListas[index];
+		pdf.ordenCompra(orden.data);
+	}
+
+	$scope.generaCorreo = function(ev,index) {
+	    $mdDialog.show({
+	      controller: correoCtrl,
+	      templateUrl: 'views/correo.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      clickOutsideToClose:true
+	    }).then(function(){
+	    	
+	    });
+	};
+
+}
+
+function correoCtrl($scope,$mdDialog,operacion){
+
+	$scope.datos = {
+		correo:'',
+		copias:[],
+		observaciones:''
+	}
+	
 }
 

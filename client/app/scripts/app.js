@@ -10,7 +10,8 @@ var app = angular.module('app', [
 	'ngAnimate',
 	'md.data.table',
 	'ngFileUpload',
-	'angular.filter'
+	'angular.filter',
+	'mdPickers'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
@@ -359,13 +360,34 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 	})
 
 
+	.state('index.reporteExistencias',{
+		url:'reporteExistencias',
+		templateUrl :'views/reporteExistencias.html',
+		controller:'reporteExistenciasCtrl',
+		controllerAs: "existencia",
+		resolve:{
+            datos:function(busqueda,$q){
+                var promesa = $q.defer(),
+            		unidades = busqueda.unidades(),
+            		items 	 = busqueda.items();
+            	$q.all([unidades,items]).then(function (data){
+            		promesa.resolve(data);
+            	});
+
+                return promesa.promise;
+            }
+        }
+	})
+
+
+
+
 
 	$locationProvider.html5Mode(true);
 
     $mdThemingProvider.theme('theme1')
 	.primaryPalette('indigo')
-    .accentPalette('red')
-    .warnPalette('red');
+    .accentPalette('red');
 
     $mdThemingProvider.theme('theme2')
 	.primaryPalette('red')

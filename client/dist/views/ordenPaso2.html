@@ -7,37 +7,52 @@
         
         <div ng-repeat="(item, value) in ordenItems | groupBy: 'ITE_nombre'">
 
-          <md-subheader class="md-no-sticky" >
-            {{item}}
-          </md-subheader>
-          <md-divider></md-divider>
+          
+          <md-toolbar class="md-warn">
+            <div class="md-toolbar-tools">
+              <samll class="md-flex">{{ item }}</samll>
+              <span flex></span>
+              <md-button class="md-raised c-black" ng-click="itemProporcional(item)">
+                Proporcional
+              </md-button>
+              <md-button class="md-raised c-black" ng-click="itemEconomico(item)">
+                Económico
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-content layout="row" layout-margin>
+            <div flex>Por Surtir: {{ cantidad(item) }} </div>
+            <div flex>Existencia: {{ existencia(item) }} </div>
+            <div flex>Nivel de Compra: {{ compra(item) }} </div>
+          </md-content>
           <md-list>
             <md-list-item ng-repeat="proveedor in value" >
               <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
               <p>{{proveedor.PRO_nombrecorto}}</p>
-              <p class="right">Costo: {{proveedor.IPR_ultimoCosto | currency}}</p>
+              <p class="right">Costo: {{ proveedor.IPR_ultimoCosto | currency }}</p>
               <p>
                 <md-input-container md-no-float class="lista">
-                  <input type="number" ng-model="proveedor.cantidad" placeholder="Cantidad">
+                  <input type="number" ng-model="proveedor.cantidad" ng-change="verificaCantidad(item,proveedor)" min="0" max="{{ cantidad(item) }}" placeholder="Cantidad">
                 </md-input-container>
               </p>
             </md-list-item>
           </md-list>
-          <md-divider ng-hide="$last"></md-divider>
 
         </div>
     
           
       </div>
 
-      <div flex layout="row" layout-sm="column" layout-align="center center">
+      <div flex layout="column" layout-sm="column" layout-align="center center">
           
-          <div layout="column">
-            <md-button class="md-raised" ng-click="generaCantidades()">Aplicar cantidad proporcional</md-button>
-            <md-button class="md-raised" ng-click="generaMasBarato()">Aplicar al mas económico</md-button>
-            <br>
-            <md-button class="md-raised" ng-disabled="ordenItems.length == 0" ng-click="generaOrden()">Genera Orden</md-button>
+          <div layout="row">
+            <md-button class="md-raised" ng-click="generaCantidades()">Aplicar todos cantidad proporcional</md-button>
+            <md-button class="md-raised" ng-click="generaMasBarato()">Aplicar todos al mas económico</md-button>
           </div>
+          <br>
+          <br>
+          <br>
+          <md-button class="md-raised md-primary" ng-disabled="ordenItems.length == 0" ng-click="generaOrden()">Genera Orden</md-button>
       </div>
       
   </div>

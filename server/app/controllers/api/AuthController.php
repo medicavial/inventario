@@ -31,4 +31,8 @@ class AuthController extends BaseController {
 		
 	}
 
+	public function inicio($usuario){
+		
+	}
+
 }

@@ -20,6 +20,17 @@ class Existencia extends Eloquent {
 
     }
 
+    public function scopeItem($query,$item)
+    {
+        return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+                     ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+                     ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+                     ->select('ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto')
+                     ->where('items.ITE_clave', $item)
+                     ->get();
+
+    }
+
 
     public function scopeAlmacenes($query,$unidad,$almacenes)
     {
@@ -54,8 +65,8 @@ class Existencia extends Eloquent {
     {
         return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
                      ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
-                     ->select('ITE_nombre','items.ITE_clave','almacenes.UNI_clave')
-                     ->groupBy('items.ITE_clave')
+                     ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+                     ->select('ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave')
                      ->where('almacenes.UNI_clave', $unidad)
                      ->get();
 

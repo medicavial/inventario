@@ -170,14 +170,25 @@
             <p> Facturas </p>
             <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-
-
         </div>
 
         <md-divider></md-divider>
-        <md-subheader class="md-no-sticky">Reportes</md-subheader>
-        <div>
-          
+        <md-subheader ng-click="reportes = !reportes" class="categoria md-no-sticky" md-ink-ripple>
+          Reportes
+          <ng-md-icon ng-if="!reportes" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
+          <ng-md-icon ng-if="reportes" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
+        </md-subheader>
+        <div ng-show="reportes">
+
+          <md-list-item ng-click="ir('index.reporteexistencias')">
+            <p> Existencias </p>
+            <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.reporteordenes')">
+            <p> Ordenes de Compra </p>
+            <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+
         </div>
             
 

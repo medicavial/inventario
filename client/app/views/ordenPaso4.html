@@ -12,7 +12,7 @@
   
   <div ng-repeat="dato in ordenesListas">
 
-    <md-toolbar class="md-warn md-hue-1">
+    <md-toolbar class="md-warn">
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button" aria-label="Settings">
           <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
@@ -23,23 +23,23 @@
         <span flex></span>
         <span style="padding-right:5px;">Items: {{ dato.data.items.length }}</span>
         <span>Total: {{ dato.data.OCM_importeEsperado |currency }}</span>
-        <md-button class="md-icon-button" aria-label="PDF">
+        <md-button class="md-icon-button" aria-label="PDF" ng-click="generaPDF($index)">
             <md-tooltip md-direction="top">
               PDF
             </md-tooltip>
-            <ng-md-icon icon="insert_drive_file" style="fill:black"></ng-md-icon>
+            <ng-md-icon icon="insert_drive_file" style="fill:white"></ng-md-icon>
         </md-button>
-        <md-button class="md-icon-button" aria-label="Correo">
+        <md-button class="md-icon-button" aria-label="Correo" ng-click="generaCorreo($event,dato.data.OCM_clave)">
             <md-tooltip md-direction="top">
               Correo
             </md-tooltip>
-            <ng-md-icon icon="email" style="fill:black"></ng-md-icon>
+            <ng-md-icon icon="email" style="fill:white"></ng-md-icon>
         </md-button>
-        <md-button class="md-icon-button" aria-label="Detalle">
+        <md-button class="md-icon-button" aria-label="Detalle" ng-click="dato.visible = !dato.visible">
             <md-tooltip md-direction="top">
               Detalles
             </md-tooltip>
-            <ng-md-icon icon="keyboard_arrow_right" style="fill:black" ng-click="dato.visible = !dato.visible"></ng-md-icon>
+            <ng-md-icon icon="keyboard_arrow_right" style="fill:white"></ng-md-icon>
         </md-button>
       </div>
     </md-toolbar>
