@@ -9,6 +9,21 @@
 
 ### 0.8.x
 
+#### Version 0.8.14
+###### October 3, 2015
+
+* Support for various attribute syntaxes. For example, `data-ng-repeat`, `x-ng-repeat`, `x:ng:repeat`, etc.
+
+#### Version 0.8.13
+###### September 29, 2015
+
+* As [@sbehun](https://github.com/sbehun) pointed out, the default type for `buttons` across browsers is unpredictable and it is safest to always define a type. This version will prevent tables that are wrapped in forms from submitting the form when the pagination buttons are clicked.
+
+#### Version 0.8.12
+###### September 25, 2015
+
+* Changing Angular Material dependency version to allow versions greater than 0.10.x
+
 #### Version 0.8.11
 ###### September 6, 2015
 

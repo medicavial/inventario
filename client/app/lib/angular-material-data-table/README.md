@@ -153,6 +153,21 @@ angular.module('nutritionApp').controller('nutritionController', ['$nutrition', 
 
 ## Change Log
 
+#### Version 0.8.14
+###### October 3, 2015
+
+* Support for various attribute syntaxes. For example, `data-ng-repeat`, `x-ng-repeat`, `x:ng:repeat`, etc.
+
+#### Version 0.8.13
+###### September 29, 2015
+
+* As [@sbehun](https://github.com/sbehun) pointed out, the default type for `buttons` across browsers is unpredictable and it is safest to always define a type. This version will prevent tables that are wrapped in forms from submitting the form when the pagination buttons are clicked.
+
+#### Version 0.8.12
+###### September 25, 2015
+
+* Changing Angular Material dependency version to allow versions greater than 0.10.x
+
 #### Version 0.8.11
 ###### September 6, 2015
 
@@ -162,24 +177,6 @@ angular.module('nutritionApp').controller('nutritionController', ['$nutrition', 
 ###### August 31, 2015
 
 * Fix for issues [#117](https://github.com/daniel-nagy/md-data-table/issues/117) and [#119](https://github.com/daniel-nagy/md-data-table/issues/119)
-
-#### Version 0.8.9
-###### August 23, 2015
-
-* Fix for issue [#84](https://github.com/daniel-nagy/md-data-table/issues/84)
-* Fix for issue [#93](https://github.com/daniel-nagy/md-data-table/issues/93)
-
-Thanks [@pavelhoral](https://github.com/pavelhoral)!
-
-#### Version 0.8.8
-###### August 16, 2015
-
-* Tables with multi-row headers can now specify a significant row that will be used to append the checkbox to and set the text alignment for numeric columns. The default is to use the last row. See [Numeric Columns](#numeric-columns) and [Row Selection](#row-selection).
-
-#### Version 0.8.7
-###### August 14, 2015
-
-* I no longer replace the `th` element, instead I build the template and append it to the original `th` element. This should fix issues with `ng-repeat`.
 
 View the [archives](ARCHIVE.md) for a complete version history.
 
@@ -205,7 +202,7 @@ View the [archives](ARCHIVE.md) for a complete version history.
 
 The `mdOrder` attribute will be update when the user clicks a `<th>` cell to the value defined by the `order-by` attribute. The `mdOrder` attribute can be used in to do server-side sorting or client-side sorting.
 
-If the function assigned to the `md-triger` attribute returns a promise, a loading indicator will be displayed.
+If the function assigned to the `md-trigger` attribute returns a promise, a loading indicator will be displayed.
 
 > This directive does not support sorting of in-place data, i.e. data included directly in the markup, nor do I plan on supporting this.
 
@@ -222,9 +219,9 @@ Just add an `orderBy:` property to the `ng-repeat` attribute that matches the `m
   <table md-data-table>
     <thead md-order="order">
       <!-- this cell will order by the name property -->
-      <th order-by="name">Dessert (100g serving)</th>
+      <th order-by="name" name="Dessert (100g serving)"></th>
       <!-- this cell will not change the order when clicked -->
-      <th numeric>Calories</th>
+      <th numeric name="Calories"></th>
     </thead>
     <tbody>
       <tr ng-repeat="dessert in desserts | orderBy: order"></tr>
@@ -308,7 +305,7 @@ The `md-label` attribute has the following properties.
 | text     | `String` | The pagination label. |
 | of       | `String` | The 'of' in 'x - y of z'. |
 
-If the function assigned to the `md-triger` attribute returns a promise, a loading indicator will be displayed.
+If the function assigned to the `md-trigger` attribute returns a promise, a loading indicator will be displayed.
 
 **Example: Client Side pagination using ngRepeat.**
 
