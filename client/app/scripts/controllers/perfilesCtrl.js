@@ -45,7 +45,8 @@ function perfilesCtrl($rootScope,$mdDialog,datos,permisos,mensajes){
 	      templateUrl: 'views/perfil.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: perfil }
+	      locals: {informacion: perfil },
+	      closeTo:{bottom: 1500}
 	    }).then(
 	    function(){
 	    	scope.info = permisos.query();
@@ -64,7 +65,10 @@ function perfilesCtrl($rootScope,$mdDialog,datos,permisos,mensajes){
 	          .ariaLabel('Desactivar permiso')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
 
 	    $mdDialog.show(confirm).then(function() {
 

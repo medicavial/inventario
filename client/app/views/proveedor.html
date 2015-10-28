@@ -60,7 +60,7 @@
         
         <md-input-container flex>
           <label>Correo para orden de compra</label>
-          <input type="email"  name="correo1" ng-model="datos.correo1"> 
+          <input type="email"  name="correo1" ng-model="datos.correo1" required> 
           <div ng-messages="proveedorForm.correo1.$error">
             <div ng-message="email">Correo invalido</div>
           </div>
@@ -68,10 +68,7 @@
 
         <md-input-container flex>
           <label>Correo Escalamiento</label>
-          <input type="email" name="correo2" ng-model="datos.correo2">
-          <div ng-messages="proveedorForm.correo2.$error">
-            <div ng-message="email">Correo invalido</div>
-          </div> 
+          <input type="email" name="correo2" ng-model="datos.correo2"> 
         </md-input-container>
         
       </div>

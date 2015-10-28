@@ -5,8 +5,8 @@ app.controller('proveedoresCtrl',proveedoresCtrl)
 app.controller('proveedorEditCtrl',proveedorEditCtrl)
 
 proveedoresCtrl.$inject = ['$rootScope','$mdDialog','datos','proveedores','mensajes'];
-proveedorCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes', 'datos', 'Upload', '$rootScope'];
-proveedorEditCtrl.$inject = ['$scope','$mdDialog','permisos','proveedores','mensajes','informacion'];
+proveedorCtrl.$inject = ['$scope','$mdDialog','proveedores','mensajes', 'Upload', '$rootScope'];
+proveedorEditCtrl.$inject = ['$scope','$mdDialog','proveedores','mensajes','datos'];
 
 function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 
@@ -35,21 +35,6 @@ function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 	    });
 	};
 
-	scope.edita = function(ev,index) {
-
-		var usuario = scope.info[index];
-
-	    $mdDialog.show({
-	      controller: proveedorEditCtrl,
-	      templateUrl: 'views/proveedor.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      locals: {informacion: usuario }
-	    }).then(function(){
-	    	scope.info = proveedores.query();
-	    });
-	};
-
 	scope.confirmacion = function(ev,index) {
 	    // Abre ventana de confirmacion
 
@@ -62,7 +47,10 @@ function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 	          .ariaLabel('Desactivar proveedor')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			  });
 
 	    $mdDialog.show(confirm).then(function() {
 
@@ -93,11 +81,10 @@ function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 }
 
 
-function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes, datos, Upload, $rootScope){
+function proveedorCtrl($scope,$mdDialog,proveedores,mensajes, Upload, $rootScope){
 
 	$rootScope.titulo = 'Nuevo Proveedor';
 
-	$scope.permisos = datos;
 
 	$scope.inicio = function(){
 		$scope.datos = {
@@ -105,6 +92,8 @@ function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes, datos, Up
 			nombrecorto:'',
 			rfc:'',
 			razon:'',
+			correo1:'',
+			correo2:'',
 			activo:true
 		}
 		$scope.imagenes = [];
@@ -139,25 +128,23 @@ function proveedorCtrl($scope,$mdDialog,permisos,proveedores,mensajes, datos, Up
 		$scope.imagenes.splice(index,1);
 	}
 
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
-
 }
 
-function proveedorEditCtrl($scope,$mdDialog,permisos,proveedores,mensajes,informacion){
-
-	$scope.permisos = permisos.query();
+function proveedorEditCtrl($scope,$mdDialog,proveedores,mensajes,datos){
 
 	$scope.inicio = function(){
 
 		$scope.datos = {
-			nombre:informacion.PRO_nombre,
-			nombrecorto:informacion.PRO_nombrecorto,
-			razon:informacion.PRO_razon,
-			rfc:informacion.PRO_rfc,
-			activo:informacion.PRO_activo ? true:false
+			nombre:datos.PRO_nombre,
+			nombrecorto:datos.PRO_nombrecorto,
+			razon:datos.PRO_razonSocial,
+			rfc:datos.PRO_rfc,
+			correo1:datos.PRO_correo1,
+			correo2:datos.PRO_correo2,
+			activo:datos.PRO_activo ? true:false
 		}
+
+		$scope.imagenes = datos.imagenes;
 
 		$scope.guardando = false;
 	}
@@ -168,7 +155,7 @@ function proveedorEditCtrl($scope,$mdDialog,permisos,proveedores,mensajes,inform
 		if ($scope.proveedorForm.$valid) {
 
 			$scope.guardando = true;
-			proveedores.update({proveedor:informacion.PRO_clave},$scope.datos,function (data){
+			proveedores.update({proveedor:datos.PRO_clave},$scope.datos,function (data){
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
 				$scope.proveedorForm.$setPristine();
@@ -177,9 +164,5 @@ function proveedorEditCtrl($scope,$mdDialog,permisos,proveedores,mensajes,inform
 		};
 		
 	}
-
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
 
 }

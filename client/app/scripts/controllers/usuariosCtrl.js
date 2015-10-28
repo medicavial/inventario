@@ -31,7 +31,7 @@ function usuariosCtrl($rootScope,$mdDialog,datos,usuarios,mensajes){
 	      templateUrl: 'views/usuario.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      clickOutsideToClose:true
+	      clickOutsideToClose:false
 	    }).then(
 	    function(){
 	    	scope.info = usuarios.query();
@@ -47,7 +47,9 @@ function usuariosCtrl($rootScope,$mdDialog,datos,usuarios,mensajes){
 	      templateUrl: 'views/usuarioEdicion.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: usuario }
+	      locals: {informacion: usuario },
+	      clickOutsideToClose:true,
+	      closeTo:{bottom: 1500}
 	    }).then(
 	    function(){
 	    	scope.info = usuarios.query();
@@ -61,12 +63,15 @@ function usuariosCtrl($rootScope,$mdDialog,datos,usuarios,mensajes){
 	    var usuario = scope.info[index];
 
 	    var confirm = $mdDialog.confirm()
-	          .title('¿Desactivar el usuario?')
-	          .content('Puedes activarlo cuando lo necesites nuevamente')
-	          .ariaLabel('Desactivar usuario')
-	          .ok('Si')
-	          .cancel('No')
-	          .targetEvent(ev);
+			.title('¿Desactivar el usuario?')
+			.content('Puedes activarlo cuando lo necesites nuevamente')
+			.ariaLabel('Desactivar usuario')
+			.ok('Si')
+			.cancel('No')
+			.targetEvent(ev)
+			.closeTo({
+				bottom: 1500
+			});
 
 	    $mdDialog.show(confirm).then(function() {
 

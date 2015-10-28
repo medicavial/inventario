@@ -45,7 +45,8 @@ function unidadesCtrl($rootScope,$mdDialog,datos,unidades,mensajes){
 	      templateUrl: 'views/unidad.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: unidad }
+	      locals: {informacion: unidad },
+	      closeTo:{bottom: 1500}
 	    }).then(
 	    function(){
 	    	scope.info = unidades.query();
@@ -64,7 +65,10 @@ function unidadesCtrl($rootScope,$mdDialog,datos,unidades,mensajes){
 	          .ariaLabel('Desactivar unidad')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			  }); 
 
 	    $mdDialog.show(confirm).then(function() {
 

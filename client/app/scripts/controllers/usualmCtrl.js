@@ -51,7 +51,10 @@ function usualmCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 	          .ariaLabel('Asignar Almacen')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
 
 	    $mdDialog.show(confirm).then(
 		    function() {

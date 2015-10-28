@@ -6,6 +6,7 @@ class ReportesController extends BaseController {
 
 		$item = Input::get('item');
 
+		
 		if (Input::has('unidad')) {
 
 			$unidad = Input::get('unidad');
@@ -58,5 +59,10 @@ class ReportesController extends BaseController {
 		}
 
 		return $datos;
+	}
+
+
+	public function ordenes(){
+		OrdenCompra::todos();
 	}
 }

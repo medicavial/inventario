@@ -45,7 +45,8 @@ function tiposAlmacenCtrl($rootScope,$mdDialog,datos,tiposalmacen,mensajes){
 	      templateUrl: 'views/tipoalmacen.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: tipoalmacen }
+	      locals: {informacion: tipoalmacen },
+	      closeTo:{bottom: 1500}
 	    }).then(
 	    function(){
 	    	scope.info = tiposalmacen.query();
@@ -64,7 +65,10 @@ function tiposAlmacenCtrl($rootScope,$mdDialog,datos,tiposalmacen,mensajes){
 	          .ariaLabel('Desactivar permiso')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
 
 	    $mdDialog.show(confirm).then(function() {
 

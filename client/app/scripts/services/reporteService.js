@@ -4,6 +4,10 @@ function reportes($http, api){
         existencias : function(datos)
         {
             return $http.post(api + 'reportes/existencias',datos);
+        },
+        ordenes : function(datos)
+        {
+            return $http.post(api + 'reportes/ordenes',datos);
         }
     }
 }

@@ -45,7 +45,8 @@ function tiposItemCtrl($rootScope,$mdDialog,datos,tipositem,mensajes){
 	      templateUrl: 'views/tipoitem.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: tipoitem }
+	      locals: {informacion: tipoitem },
+	      closeTo:{bottom: 1500}
 	    }).then(
 	    function(){
 	    	scope.info = tipositem.query();
@@ -64,7 +65,10 @@ function tiposItemCtrl($rootScope,$mdDialog,datos,tipositem,mensajes){
 	          .ariaLabel('Desactivar permiso')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
 
 	    $mdDialog.show(confirm).then(function() {
 

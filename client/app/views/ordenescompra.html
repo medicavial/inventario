@@ -39,7 +39,7 @@
             <td>{{orden.OCM_importeFinal | currency}}</td>
             <td>
               <div ng-if="orden.OCM_cerrada == '1'">
-                  Surtida
+                Surtida
               </div>
               <div ng-if="orden.OCM_cancelada == '1'">
                 Cancelada
@@ -47,6 +47,27 @@
               <div ng-if="orden.OCM_cancelada == '0' && orden.OCM_cerrada == '0'">
                 Abierta
               </div>
+            </td>
+            <td class="option-table">
+                <md-menu md-position-mode="target-right target" >
+                  <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
+                    <md-icon md-menu-origin>
+                      <ng-md-icon icon="more_vert" style="fill:#3F51B5"></ng-md-icon> 
+                    </md-icon>
+                  </md-button>
+                  <md-menu-content width="2">
+                    <md-menu-item>
+                      <md-button ng-click="proveedores.edita($event,$index)">
+                        <p>Surtir</p>
+                      </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="proveedores.edita($event,$index)">
+                        <p>Cancelar</p>
+                      </md-button>
+                    </md-menu-item>
+                  </md-menu-content>
+                </md-menu>
             </td>
           </tr>
         </tbody>

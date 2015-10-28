@@ -127,6 +127,23 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             }
         }
 	})
+
+	.state('index.detalleProveedor',{
+		url:'detalleProveedor?proveedorId',
+		templateUrl :'views/proveedor.html',
+		controller:'proveedorEditCtrl',
+		resolve:{
+            datos:function($q,$stateParams,proveedores){
+             //    var promesa = $q.defer(),
+            	// 	proveedor =  
+            	// $q.when(proveedor).then(function (data){
+            	// 	promesa.resolve(data);
+            	// });
+
+                return proveedores.get({proveedor:$stateParams.proveedorId}).$promise;;
+            }
+        }
+	})
 	
 	.state('index.itempro',{
 		url:'itempro',
@@ -202,13 +219,7 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 	.state('index.proveedor',{
 		url:'proveedor',
 		templateUrl :'views/proveedor.html',
-		controller:'proveedorCtrl',
-		// controllerAs: "item",
-		resolve:{
-            datos:function(permisos){
-                return permisos.query();
-            }
-        }
+		controller:'proveedorCtrl'
 	})
 
 	.state('index.subtipositem',{
@@ -365,6 +376,25 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		templateUrl :'views/reporteExistencias.html',
 		controller:'reporteExistenciasCtrl',
 		controllerAs: "existencia",
+		resolve:{
+            datos:function(busqueda,$q){
+                var promesa = $q.defer(),
+            		unidades = busqueda.unidades(),
+            		items 	 = busqueda.items();
+            	$q.all([unidades,items]).then(function (data){
+            		promesa.resolve(data);
+            	});
+
+                return promesa.promise;
+            }
+        }
+	})
+
+	.state('index.reporteOrdenes',{
+		url:'reporteOrdenes',
+		templateUrl :'views/reporteOrdenes.html',
+		controller:'reporteOrdenesCtrl',
+		controllerAs: "ordenes",
 		resolve:{
             datos:function(busqueda,$q){
                 var promesa = $q.defer(),

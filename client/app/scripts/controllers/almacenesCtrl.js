@@ -54,7 +54,8 @@ function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 	      templateUrl: 'views/almacen.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: usuario }
+	      locals: {informacion: usuario },
+	      closeTo:{bottom: 1500}
 	    }).then(function(){
 	    	scope.info = almacenes.query();
 	    });
@@ -72,7 +73,10 @@ function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 	          .ariaLabel('Desactivar almacen')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
 
 	    $mdDialog.show(confirm).then(function() {
 

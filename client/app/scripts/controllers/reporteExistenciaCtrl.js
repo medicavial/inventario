@@ -25,6 +25,7 @@ function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
 
 	scope.inicio = function(){
 		scope.items = datos[1].data;
+		scope.almacenes = [];
 		scope.datos = {
 			unidad:'',
 			almacen:'',
@@ -49,6 +50,8 @@ function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
 		reportes.existencias(scope.datos).success(function (data){
 			scope.info = data;
 			scope.inicio();
+		}).error(function (error){
+			scope.info = [];
 		})
 	}
 

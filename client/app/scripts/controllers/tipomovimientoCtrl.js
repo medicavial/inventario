@@ -50,7 +50,8 @@ function tiposMovimientoCtrl($rootScope,$mdDialog,datos,tiposmovimiento,mensajes
 	      templateUrl: 'views/tipomovimiento.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: {informacion: usuario }
+	      locals: {informacion: usuario },
+	      closeTo:{bottom: 1500}
 	    }).then(function(){
 	    	scope.info = tiposmovimiento.query();
 	    });
@@ -68,7 +69,10 @@ function tiposMovimientoCtrl($rootScope,$mdDialog,datos,tiposmovimiento,mensajes
 	          .ariaLabel('Desactivar Tipo Movimiento')
 	          .ok('Si')
 	          .cancel('No')
-	          .targetEvent(ev);
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
 
 	    $mdDialog.show(confirm).then(function() {
 

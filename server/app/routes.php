@@ -120,6 +120,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::group(array('prefix' => 'reportes'), function()
     {
         Route::post('existencias', 'ReportesController@existencias');
+        Route::post('ordenes', 'ReportesController@ordenes');
 
     });
 

@@ -1,0 +1,103 @@
+<md-content layout="row" layout-sm="column" layout-md="column" layout-margin class="transparent" ng-init="ordenes.inicio()">
+    
+    <div class="md-whiteframe-z1 white" flex="30" flex-sm="100" flex-md="100" layout-padding>
+        
+        <md-subheader class="c-bluegray">Accesos Directos</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+        
+        <div layout="column" layout-md="row" layout-sm="column" layout-paddin layout-align="center center" flex>
+
+            <md-button class="md-raised" ng-click="ordenes.buscar()">Surtidos ultimos 30 dias</md-button>
+
+            <md-button class="md-raised" ng-click="ordenes.buscar()">Registros ultimos 30 dias</md-button>
+
+            <md-button class="md-raised" ng-click="ordenes.buscar()">Cancelados ultimos 30 dias</md-button>
+
+            <!-- <md-button class="md-raised" ng-click="ordenes.buscar()">Autorizadas ultimos 30 dias</md-button> -->
+        </div>
+
+        <md-subheader class="c-bluegray">X Unidad</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+        <md-select ng-model="ordenes.datos.unidad" md-on-close="ordenes.cargaAlmacenes(ordenes.datos.unidad)"  placeholder="Selecciona Unidad" flex>
+          <md-option ng-repeat="unidad in ordenes.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+        </md-select>
+        
+        
+        <md-subheader class="c-bluegray">X Fechas</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+
+        <div layout="column" layout-md="row" layout-sm="column">
+            <md-radio-group ng-model="ordenes.datos.tipo">
+              <md-radio-button value="registro">Registro</md-radio-button>
+              <md-radio-button value="surtido">Surtido</md-radio-button>
+              <md-radio-button value="cancelacion">Cancelacion</md-radio-button>
+              <!-- <md-radio-button value="autorizacion">Autorizacion</md-radio-button> -->
+            </md-radio-group>
+            <br>
+            <md-datepicker ng-model="ordenes.datos.fechaini" md-placeholder="Fecha Inicial"></md-datepicker>
+
+            <md-datepicker ng-model="ordenes.datos.fechafin" md-min-date="ordenes.datos.fechaini" md-placeholder="Fecha Final"></md-datepicker>
+        </div>
+        
+        <div layout="column" layout-paddin layout-align="center center" flex>
+          <md-button class="md-raised md-primary" ng-click="ordenes.buscar()">Buscar</md-button>
+        </div>
+
+    </div>
+
+    <div flex>
+      <md-data-table-container class="md-whiteframe-z1">
+        <table md-data-table>
+          <thead md-order="ordenescompra.order" md-trigger="ordenescompra.onOrderChange">
+            <tr>
+              <th name="No."  order-by="OCM_clave"></th>
+              <th name="Alta Orden"  order-by="created_at"></th>
+              <th name="Ultimo Movimiento"  order-by="updated_at"></th>
+              <th name="Proveedor" order-by="PRO_nombre"></th>
+              <th name="Tipo Orden" order-by="TOR_nombre"></th>
+              <th name="Usuario Alta"  order-by="USU_nombrecompleto"></th>
+              <th name="Importe Esperado" order-by="OCM_importeEsperado"></th>
+              <th name="Importe Final" order-by="OCM_importeFinal"></th>
+              <th name="Status"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="orden in ordenescompra.info |filter:query | orderBy: ordenescompra.order | limitTo: ordenescompra.limit: (ordenescompra.page - 1) * ordenescompra.limit">
+              <td>{{orden.OCM_clave}}</td>
+              <td>{{orden.created_at}}</td>
+              <td>{{orden.updated_at}}</td>
+              <td>{{orden.PRO_nombrecorto}}</td>
+              <td>{{orden.TOR_nombre}}</td>
+              <td>{{orden.USU_nombrecompleto}}</td>
+              <td>{{orden.OCM_importeEsperado | currency}}</td>
+              <td>{{orden.OCM_importeFinal | currency}}</td>
+              <td>
+                <div ng-if="orden.OCM_cerrada == '1'">
+                    Surtida
+                </div>
+                <div ng-if="orden.OCM_cancelada == '1'">
+                  Cancelada
+                </div>
+                <div ng-if="orden.OCM_cancelada == '0' && orden.OCM_cerrada == '0'">
+                  Abierta
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </md-data-table-container>
+      <br>
+      <md-data-table-pagination md-label="ordenes.texto" md-row-select="ordenes.paginacion" md-limit="ordenes.limit" md-page="ordenes.page" md-total="{{ordenes.info.length}}"></md-data-table-pagination>
+      
+    </div>
+    <br>
+
+  
+</md-content>
+
+<md-button id="nuevo" ng-show="ordenes.info.length > 0" class="md-fab md-fab-bottom-right" ng-click="exportar()" aria-label="Exportar">
+    <md-tooltip md-direction="top">
+      Exportar
+    </md-tooltip>
+    <ng-md-icon icon="assignment_returned" style="fill:white"></ng-md-icon> 
+</md-button>
