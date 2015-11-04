@@ -55,7 +55,7 @@
             </md-input-container>
 
             <md-input-container flex>
-              <md-select placeholder="Tipo de Item" ng-model="datos.tipo" name="tipo" required >
+              <md-select placeholder="Tipo de Item" ng-model="datos.tipo" name="tipo" required flex >
                 <md-option ng-repeat="tipoitem in tipoitems" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
               </md-select>
               <div ng-messages="itemForm.cantidad.$error" ng-if="itemForm.$submitted">
@@ -64,7 +64,7 @@
             </md-input-container>
 
             <md-input-container flex>
-              <md-select placeholder="Sub Tipo de Item" name="subtipo" ng-model="datos.subtipo" required>
+              <md-select placeholder="Sub Tipo de Item" name="subtipo" ng-model="datos.subtipo" required flex>
                 <md-option ng-repeat="subtipoitem in subtipoitems" value="{{subtipoitem.STI_clave}}">{{subtipoitem.STI_nombre}}</md-option>
               </md-select>
               <div ng-messages="itemForm.cantidad.$error" ng-if="itemForm.$submitted">
@@ -73,7 +73,7 @@
             </md-input-container>
             
             <md-input-container flex>
-              <md-select placeholder="Presentación" name="presentacion" ng-model="datos.presentacion" required>
+              <md-select placeholder="Presentación" name="presentacion" ng-model="datos.presentacion" required flex>
                 <md-option ng-repeat="presentacion in presentaciones" value="{{presentacion.PRE_clave}}">{{presentacion.PRE_nombre}}</md-option>
               </md-select>
               <div ng-messages="itemForm.presentacion.$error" ng-if="itemForm.$submitted">

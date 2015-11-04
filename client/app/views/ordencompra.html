@@ -10,18 +10,27 @@
       <md-tab id="tab2" ng-disabled="step2block">
         <md-tab-label>Selecciona Proveedores</md-tab-label>
         <md-tab-body> 
+          <div flex layout="row"layout-align="center center">
+            <h4>Unidad: {{nombreUnidad}}</h4>
+          </div>
           <div ng-include="paso2"></div>
         </md-tab-body>
       </md-tab>
       <md-tab id="tab3" ng-disabled="step3block">
         <md-tab-label>Genera Orden</md-tab-label>
         <md-tab-body>
+           <div flex layout="row"layout-align="center center">
+            <h4>Unidad: {{nombreUnidad}}</h4>
+          </div>
           <div ng-include="paso3"></div>
         </md-tab-body>
       </md-tab>
       <md-tab id="tab3" md-on-select="muestraOrdenes()" ng-disabled="step4block">
         <md-tab-label>Acciones</md-tab-label>
         <md-tab-body>
+           <div flex layout="row"layout-align="center center">
+            <h4>Unidad: {{nombreUnidad}}</h4>
+          </div>
           <div ng-include="paso4"></div>
         </md-tab-body>
       </md-tab>

@@ -20,17 +20,18 @@
         <div layout-padding>
 
           <div layout="row" layout-sm="column">
-            <md-select placeholder="Almacen Destino" ng-model="datos.almacenOrigen" name="origen" md-on-close="itemsxalmacen(datos.almacenOrigen)" flex>
+            <md-select placeholder="Almacen Origen" ng-model="datos.almacenOrigen" name="origen" md-on-close="itemsxalmacen(datos.almacenOrigen)" flex>
               <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
             </md-select>
 
             <md-autocomplete
                 md-input-name="item"
-                md-selected-item-change = "seleccionaItem(item)"
                 md-selected-item="item"
                 md-search-text="busqueda"
-                md-items="item in consultado(busqueda)"
+                md-search-text-change="cambioTexto(busqueda)"
                 md-item-text="item.ITE_nombre"
+                md-selected-item-change = "seleccionaItem(item)"
+                md-items="item in consultado(busqueda)"
                 md-min-length="0"
                 md-floating-label="Selecciona Item" flex>
               <md-item-template >
@@ -66,7 +67,7 @@
           </md-input-container>
           <md-input-container flex>
             <label>Cantidad a Traspasar</label>
-            <input required type="number" step="1" name="cantidad" ng-model="datos.cantidad" min="1" max="{{disponible}}">
+            <input required type="number" step="1" name="cantidad" ng-model="datos.cantidad" min="1" max="{{disponible}}" >
             <div ng-messages="traspasoForm.cantidad.$error" ng-if="traspasoForm.cantidad.$dirty">
               <div ng-message="required">Cantidad obligatoria</div>
               <div ng-message="min">La cantidad no puede ser 0</div>

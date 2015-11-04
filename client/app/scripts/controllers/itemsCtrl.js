@@ -145,7 +145,10 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,arc
 					$scope.inicio();
 				},
 				function(data){
-					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','done_all');
+					mensajes.alerta('Ocurrio un error al subir las imagenes intentelo nuevamente editando el proveedor','error','top right','done_all');
+					$scope.guardando = false;
+					$scope.itemForm.$setPristine();
+					$scope.inicio();
 				},
 				function(data){
 					console.log('Estatus: ' + data);
@@ -213,10 +216,11 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 		presentacion:datos[3].datos.PRE_clave,
 		activo:datos[3].datos.ITE_activo ? true:false
 	}
+	
+	$scope.imagenesguardadas = datos[3].archivos ? datos[3].archivos : [];
 
 	$scope.inicio = function(){
 
-		$scope.imagenesguardadas = datos[3].archivos;
 		$scope.imagenes = [];
 		$scope.guardando = false;
 	}
@@ -249,11 +253,11 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 		$scope.imagenes.splice(index,1);
 	}
 
-	$scope.eliminaImagenGuardad = function(index){
+	$scope.eliminaImagenGuardada = function(index){
 
 		mensajes.alerta('Eliminando imagen','','top right','');
-
 		var imagen = $scope.imagenesguardadas[index];
+		console.log(imagen);
 		archivos.eliminaItem(imagen,$scope.clave).success(function (data){
 			$scope.imagenesguardadas.splice(index,1);
 		});

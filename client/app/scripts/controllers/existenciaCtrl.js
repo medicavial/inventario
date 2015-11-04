@@ -63,6 +63,8 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,da
 	    $scope.busqueda = null;
 	    $scope.consultado = consultado;
 	    $scope.item = '';
+	    $scope.disponible = '';
+	    $scope.itemsAlmacen = [];
 
 		$scope.datos = {
 			almacenOrigen:'',
@@ -81,7 +83,7 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,da
 		// console.log($scope.datos);
 		if ($scope.traspasoForm.$valid) {
 
-			console.log($scope.datos);
+			// console.log($scope.datos);
 			$scope.guardando = true;
 			operacion.altaTraspaso($scope.datos).success(function (data){
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
@@ -95,16 +97,24 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,da
 	}
 
 	$scope.itemsxalmacen = function(clave){
+
+		$scope.seleccionado = null;
+	    $scope.busqueda = null;
+	    $scope.disponible = '';
+
 		busqueda.itemsAlmacen(clave).success(function (data){
 			$scope.itemsAlmacen = data;
-		})
+		});
+
 	}
 
 	$scope.seleccionaItem = function(item){
 		// $scope.disponible = '';
 		console.log(item);
-		$scope.datos.item = item.ITE_clave;
-		$scope.disponible = item.EXI_cantidad;
+		if (item) {
+			$scope.datos.item = item.ITE_clave;
+			$scope.disponible = Number(item.EXI_cantidad);
+		};
 	}
 
 	$scope.verificaAlmacen = function(ev){
@@ -114,24 +124,29 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,da
 		};
 	}
 
+	function cambioTexto(text) {
+      console.log('Text changed to ' + text);
+    }
 
 	function consultado(query) {
 
-		var q = $q.defer();
+		console.log($scope.itemsAlmacen);
 
-		findValues( query, $scope.itemsAlmacen ).then( function ( res ) {
-			q.resolve( res );
-		} );
+		var q = $q.defer(),
+			response = query ? $filter( 'filter' )( $scope.itemsAlmacen, query ) : $scope.itemsAlmacen;
+			q.resolve( response );
+
 		return q.promise;
     }
 
-    function findValues ( query, obj ) {
+ //    function findValues ( query, obj ) {
 
-		var deferred = $q.defer();
-		deferred.resolve( $filter( 'filter' )( obj, query ) );
-		return deferred.promise;
+	// 	var deferred = $q.defer(),
+	// 		response = query ? $filter( 'filter' )( obj, query ) : obj;
+	// 	deferred.resolve( response );
+	// 	return deferred.promise;
 
-	}
+	// }
 
 
 }

@@ -13,7 +13,7 @@
 
   <form name="movimientoForm" novalidate ng-submit="guardar()">
 
-  <md-dialog-content>
+  <md-dialog-content layout-padding>
 
       <md-autocomplete
           md-selected-item="item"
@@ -51,7 +51,7 @@
         </md-input-container>
         
         <md-input-container flex>
-          <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required >
+          <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
             <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
           </md-select>
           <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
@@ -71,7 +71,7 @@
         </md-input-container>
 
       </div>
-      <br>
+    
       <md-input-container flex>
         <label>Observaciones</label>
         <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>

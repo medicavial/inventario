@@ -59,6 +59,20 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter){
 
             return promesa.promise;
         },
+        eliminaOrden : function(proveedor,catalogo){
+            var promesa = $q.defer(),
+                ordenes   = [],
+                items;
+
+            items = $filter('filter')(catalogo, proveedor);
+
+            angular.forEach(items, function(value, key) {
+                
+                var id = catalogo.indexOf(value);
+                catalogo.splice(id, 1);
+            });
+
+        },
         itemsAlmacenes : function(unidad,almacenes)
         {
             return $http.post(api + 'operacion/items/almacenes/' + unidad,almacenes);

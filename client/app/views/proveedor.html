@@ -78,7 +78,7 @@
         
         <div layout="row" layout-sm="column">
           <div class="drop-box"  ngf-drop accept="image/*" ngf-drag-over-class="dragover" ngf-multiple="true" ngf-pattern="'image/*" ngf-change="upload($files, $file, $event)" flex>
-              <md-button type="button" class="md-raised" accept="image/*" ngf-change="upload($files, $file, $event)" multiple="multiple" ngf-pattern="'image/*">Subir Imagenes</md-button><br>
+              <md-button type="button" class="md-raised" accept="image/*" ngf-select="upload($files)" ngf-change="upload($files, $file, $event)" multiple="multiple" ngf-pattern="'image/*">Subir Imagenes</md-button><br>
               Arrastra tus archivos aqui
           </div>
 
@@ -90,6 +90,17 @@
               </md-button>
               <md-divider md-inset ng-if="!$last"></md-divider>
             </md-list-item>
+
+
+            <md-list-item class="md-3-line relative" ng-repeat="file in imagenesguardadas">
+              <img ng-src="{{file}}" class="face"  ng-mouseover="ver = true" ng-mouseleave="ver = false">
+              <md-button type="button" class="md-fab boton abajo-derecho" ng-click="eliminaImagenGuardada($index)" ng-mouseover="ver = true" ng-show="ver" aria-label="Eliminar Imagen">
+                  <ng-md-icon icon="delete" style="fill:white"></ng-md-icon> 
+              </md-button>
+              <md-divider md-inset ng-if="!$last"></md-divider>
+            </md-list-item>
+
+            
           </md-list>
           
         </div>

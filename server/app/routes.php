@@ -12,7 +12,12 @@
 */
 Route::get('/', function()
 {
-	return View::make('hello');
+
+    $pdf = PDF::loadView('ordenes.ordenCompra');
+    return $pdf->stream();
+    // $pdf->save('ordenesCompra/orden1.pdf');
+    // return "Success";
+    // return View::make('ordenes.ordenCompra');
 });
 
 
@@ -24,9 +29,9 @@ Route::group(array('prefix' => 'api'), function()
 		return View::make('hello');
 	});
 
-    Route::post('/upload', function(){
+    Route::post('/upload/{tipo}', function($tipo){
         
-        $ruta = "resource/items/" . Input::get('clave');
+        $ruta = "resource/".$tipo."/" . Input::get('clave');
 
         if(Input::hasFile('file')) {
             
@@ -39,13 +44,10 @@ Route::group(array('prefix' => 'api'), function()
             
     });
 
-    Route::delete('delete',function(){
+    Route::post('delete',function(){
 
         $archivo = Input::get('imagen');
-        // $item = Input::get('item');
-
-        // $ruta = public_path() . "/resource/items/" . $item . '/' . $archivo;
-
+        $archivo = str_replace(url('/'), public_path(), $archivo);
         File::delete($archivo);
 
         return Response::json(array('respuesta' => 'Imagen eliminada Correctamente','archivo' => $archivo));

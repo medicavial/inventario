@@ -18,6 +18,7 @@
           <tr>
             <th name="ID"  order-by="UNI_clave"></th>
             <th name="Nombre" order-by="UNI_nombre"></th>
+            <th name="Responsable" order-by="UNI_responsable"></th>
             <th name="Correo" order-by="UNI_correo"></th>
             <th name="Activo"  order-by="UNI_activo"></th>
           </tr>
@@ -26,6 +27,7 @@
           <tr ng-repeat="unidad in unidades.info |filter:query | orderBy: unidades.order | limitTo: unidades.limit: (unidades.page - 1) * unidades.limit">
             <td>{{unidad.UNI_clave}}</td>
             <td>{{unidad.UNI_nombrecorto}}</td>
+            <td>{{unidad.UNI_responsable}}</td>
             <td>{{unidad.UNI_correo}}</td>
             <td>
               <div ng-show="unidad.UNI_activo">SI</div>

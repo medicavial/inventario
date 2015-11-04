@@ -304,7 +304,7 @@ class OperacionController extends BaseController {
 
 		$movimiento->ITE_clave = $item;
 		$movimiento->ALM_clave = $almacenOrigen;
-		$movimiento->TIM_clave = 3;
+		$movimiento->TIM_clave = 5;
 		$movimiento->USU_clave = Input::get('usuario');
 		$movimiento->MOV_cantidad = $cantidad;
 		$movimiento->MOV_observaciones = 'Disminución por traspaso';
@@ -333,7 +333,7 @@ class OperacionController extends BaseController {
 
 		$movimiento->ITE_clave = $item;
 		$movimiento->ALM_clave = $almacenDestino;
-		$movimiento->TIM_clave = 2;
+		$movimiento->TIM_clave = 4;
 		$movimiento->USU_clave = Input::get('usuario');
 		$movimiento->MOV_cantidad = $cantidad;
 		$movimiento->MOV_observaciones = 'Incremento por traspaso';

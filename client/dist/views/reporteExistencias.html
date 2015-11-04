@@ -1,0 +1,69 @@
+<md-content layout="row" layout-sm="column" layout-margin class="transparent" ng-init="existencia.inicio()">
+    
+    <div class="md-whiteframe-z1 white" flex="20" flex-sm="100" layout-padding>
+
+        <md-subheader class="c-bluegray">X Unidad</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+        <md-select ng-model="existencia.datos.unidad" md-on-close="existencia.cargaAlmacenes(existencia.datos.unidad)"  placeholder="Selecciona Unidad" flex>
+          <md-option ng-repeat="unidad in existencia.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+        </md-select>
+        
+        <md-subheader class="c-bluegray">X Almacen</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+        <md-select ng-model="existencia.datos.almacen" placeholder="Selecciona Almacen" md-on-close="existencia.cargaItems(existencia.datos.almacen)" flex>
+          <md-option ng-repeat="almacen in existencia.almacenes" ng-value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+        </md-select>
+        
+        <md-subheader class="c-bluegray">X Item especifico</md-subheader>  
+        <md-divider class="bgm-bluegray"></md-divider>
+        <md-select ng-model="existencia.datos.item" placeholder="Selecciona Item" flex>
+          <md-option ng-repeat="item in existencia.items" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
+        </md-select>
+        
+        <div layout="column" layout-paddin layout-align="center center" flex>
+          <md-button class="md-raised md-primary" ng-click="existencia.buscar()">Buscar</md-button>
+        </div>
+        
+
+    </div>
+
+
+
+    <div flex>
+      <md-data-table-container class="md-whiteframe-z1">
+        <table md-data-table>
+          <thead md-order="existencia.order" md-trigger="existencias.onOrderChange">
+            <tr>
+              <th name="Item"  order-by="ITE_nombre"></th>
+              <th name="Almacen" order-by="ALM_nombre"></th>
+              <th name="Cantidad" order-by="EXI_cantidad"></th>
+              <th name="Unidad"  order-by="UNI_nombrecorto"></th>
+              <th name="Ultimo Movimiento"  order-by="EXI_ultimoMovimiento"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="existencia in existencia.info |filter:query | orderBy: existencia.order | limitTo: existencia.limit: (existencia.page - 1) * existencia.limit">
+              <td>{{existencia.ITE_nombre}}</td>
+              <td>{{existencia.ALM_nombre}}</td>
+              <td>{{existencia.EXI_cantidad}}</td>
+              <td>{{existencia.UNI_nombrecorto}}</td>
+              <td>{{existencia.EXI_ultimoMovimiento}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </md-data-table-container>
+      <br>
+      <md-data-table-pagination md-label="existencia.texto" md-row-select="existencia.paginacion" md-limit="existencia.limit" md-page="existencia.page" md-total="{{existencia.info.length}}"></md-data-table-pagination>
+      
+    </div>
+    <br>
+
+  
+</md-content>
+
+<md-button id="nuevo" ng-show="existencia.info.length > 0" class="md-fab md-fab-bottom-right" ng-click="exportar()" aria-label="Exportar">
+    <md-tooltip md-direction="top">
+      Exportar
+    </md-tooltip>
+    <ng-md-icon icon="assignment_returned" style="fill:white"></ng-md-icon> 
+</md-button>

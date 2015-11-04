@@ -65,7 +65,14 @@ class ItemsController extends \BaseController {
 	{	
 		$respuesta = array();
 		$ruta = public_path() . "/resource/items/" . $id;
-		$archivos = (File::exists($ruta) ? File::files($ruta) : '');
+		$datos = (File::exists($ruta) ? File::files($ruta) : array());
+		$archivos = array();
+
+		foreach ($datos as $archivo) {
+			//remplazamos la el texto con la ruta fisica por la ruta de directorio
+			$texto = str_replace(public_path(), url('/'), $archivo);
+			array_push($archivos, $texto);
+		}
 		$datos = Item::find($id);
 
 		return Response::json(array('archivos' => $archivos,'datos' => $datos));

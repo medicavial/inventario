@@ -5,7 +5,7 @@
       
       <div flex flex-gt-sm="30">
           <md-select ng-model="unidad" placeholder="Selecciona Unidad" md-on-close="info(unidad)" flex required>
-            <md-option ng-repeat="unidad in unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+            <md-option ng-repeat="unidad in unidades" ng-value="unidad">{{unidad.UNI_nombre}}</md-option>
           </md-select>
       </div>
 

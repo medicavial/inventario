@@ -35,6 +35,9 @@ class UnidadesController extends \BaseController {
 
 		$unidad->UNI_nombre = Input::get('nombre');
 		$unidad->UNI_nombrecorto = Input::get('nombrecorto');
+		$unidad->UNI_direccion = Input::get('direccion');
+		$unidad->UNI_horaentrega = Input::get('horaentrega');
+		$unidad->UNI_responsable = Input::get('responsable');
 		$unidad->UNI_correo = Input::get('correo');
 		$unidad->UNI_activo = Input::get('activo');
 
@@ -80,6 +83,9 @@ class UnidadesController extends \BaseController {
 
 		$unidad->UNI_nombre = Input::get('nombre');
 		$unidad->UNI_nombrecorto = Input::get('nombrecorto');
+		$unidad->UNI_direccion = Input::get('direccion');
+		$unidad->UNI_horaentrega = Input::get('horaentrega');
+		$unidad->UNI_responsable = Input::get('responsable');
 		$unidad->UNI_correo = Input::get('correo');
 		$unidad->UNI_activo = Input::get('activo');
 

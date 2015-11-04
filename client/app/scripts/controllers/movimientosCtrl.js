@@ -118,23 +118,15 @@ function movimientoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,
 		}
 	}
 
-	function consultado(query) {
+    function consultado(query) {
 
-		var q = $q.defer();
+		var q = $q.defer(),
+			response = query ? $filter( 'filter' )( $scope.items, query ) : $scope.items;
+			q.resolve( response );
 
-		findValues( query, $scope.items ).then( function ( res ) {
-			q.resolve( res );
-		} );
 		return q.promise;
     }
 
-    function findValues ( query, obj ) {
-
-		var deferred = $q.defer();
-		deferred.resolve( $filter( 'filter' )( obj, query ) );
-		return deferred.promise;
-
-	}
 
 	$scope.cancel = function() {
 		$mdDialog.hide();

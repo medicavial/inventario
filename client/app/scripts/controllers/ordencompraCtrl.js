@@ -4,12 +4,12 @@ app.controller('ordenCompraCtrl',ordenCompraCtrl)
 app.controller('ordenesCompraCtrl',ordenesCompraCtrl)
 app.controller('correoCtrl',correoCtrl)
 
-ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
+ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','pdf'];
 ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog'];
 correoCtrl.$inject = ['$scope','$mdDialog','operacion'];
 
 
-function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
+function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
@@ -31,10 +31,10 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 
 	scope.onOrderChange = function (order) {
 		console.log(scope.query);
-	    //return $nutrition.desserts.get(scope.query, success).$promise; 
 	};
 
 	scope.nuevo = function(ev) {
+
 	    $mdDialog.show({
 	      controller: ordenCompraCtrl,
 	      templateUrl: 'views/ordencompra.html',
@@ -46,7 +46,12 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 	    		scope.info = data;
 	    	});
 	    });
+	    
 	};
+
+	scope.pdf = function(index){
+		pdf.enviaOrden(index);
+	}
 
 }
 
@@ -86,12 +91,14 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 	$scope.info = function(unidad){
 
+		console.log(unidad);
 		$scope.selected = [];
 		$scope.items = [];
 		$scope.almacenes = '';
-		$scope.unidad = unidad;
+		$scope.unidad = unidad.UNI_clave;
+		$scope.nombreUnidad = unidad.UNI_nombre;
 
-		operacion.infoUnidad(unidad).then(
+		operacion.infoUnidad(unidad.UNI_clave).then(
 			function (data){
 
 				$scope.almacenes = data[0].data;
@@ -144,6 +151,7 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 			$scope.proveedores = data.proveedores;
 
 			$scope.selectedIndex = 1;
+
 			$scope.step2block = false;
 		});
 	}
@@ -222,6 +230,7 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 	$scope.generaOrden = function(){
 		$scope.selectedIndex = 2;
+		$scope.todos = true;
 		$scope.step3block = false;
 		operacion.verificaItems($scope.ordenItems).then(function (data){
 			$scope.seleccionOrden = data;
@@ -316,6 +325,12 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 				alert(error);
 			}
 		);
+	}
+
+	$scope.eliminaOrden = function(proveedor){
+
+		operacion.eliminaOrden(proveedor, $scope.seleccionOrden);
+		$scope.todos = false;
 	}
 
 

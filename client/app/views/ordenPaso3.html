@@ -13,6 +13,9 @@
               <samll class="md-flex">Proveedor:{{proveedor}}</samll>
               <span flex></span>
               <span class="right">Total: {{ muestraTotal(proveedor) | currency}} </span>
+              <md-button class="md-icon-button" aria-label="Eliminar" ng-click="eliminaOrden(proveedor)">
+                  <ng-md-icon icon="clear" style="fill:white"></ng-md-icon> 
+              </md-button>
               <md-button class="md-raised c-black" ng-click="confirmaOrdenProveedor(proveedor)">
                 Confirmar Orden
               </md-button>

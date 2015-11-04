@@ -105,6 +105,9 @@ function unidadCtrl($scope,$mdDialog,unidades,mensajes){
 		$scope.datos = {
 			nombre:'',
 			nombrecorto:'',
+			responsable:'',
+			horaentrega:'',
+			direccion:'',
 			correo:'',
 			activo:true
 		}
@@ -142,6 +145,9 @@ function unidadEditCtrl($scope,$mdDialog,unidades,mensajes,informacion){
 			nombre : informacion.UNI_nombre,
 			nombrecorto:informacion.UNI_nombrecorto,
 			correo:informacion.UNI_correo,
+			responsable:informacion.UNI_responsable,
+			horaentrega:informacion.UNI_horaentrega,
+			direccion:informacion.UNI_direccion,
 			activo : informacion.UNI_activo ? true:false
 		}
 

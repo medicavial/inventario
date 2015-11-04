@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"barryvdh/laravel-cors": "0.2.x"
+		"barryvdh/laravel-cors": "0.2.x",
+		"barryvdh/laravel-dompdf": "0.4.*",
+		"barryvdh/laravel-snappy": "0.1.x"
 	},
 	"autoload": {
 		"classmap": [

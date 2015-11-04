@@ -13,13 +13,13 @@
         <ng-md-icon md-menu-origin icon="more_vert" style="fill:white"></ng-md-icon> 
       </md-button>
       <md-menu-content width="3" >
-        <md-menu-item>
+        <!-- <md-menu-item>
           <md-button ng-click="">
               <ng-md-icon md-menu-align-target icon="assignment_ind" style="fill:gray"></ng-md-icon>
               <span flex></span>
               Perfil
           </md-button>
-        </md-menu-item>
+        </md-menu-item> -->
         <md-menu-item>
           <md-button ng-click="">
               <ng-md-icon icon="lock" style="fill:gray"></ng-md-icon>
@@ -144,10 +144,10 @@
             <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
-          <md-list-item ng-click="ir('index.existencias')">
+          <!-- <md-list-item ng-click="ir('index.existencias')">
             <p> Existencias </p>
             <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
+          </md-list-item> -->
           
           <md-list-item ng-click="ir('index.traspaso')">
             <p> Traspasos </p>
@@ -188,17 +188,21 @@
             <p> Ordenes de Compra </p>
             <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
+          <md-list-item ng-click="ir('index.movimientos')">
+            <p> Movimientos </p>
+            <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
 
         </div>
             
 
       </md-list>
     </md-sidenav>
-    <div layout="column" flex id="content">
-        <md-content layout="column" flex class="md-padding gris ui-view-container">
+    <div layout="column" flex>
+        <md-content layout="column" flex class="md-padding gris ui-view-container" id="content">
           <ui-view ng-hide="cargando" class="muestras"></ui-view>
           <div id="centro" ng-show="cargando">
-              <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
         </md-content>
     </div>

@@ -57,13 +57,18 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="proveedores.edita($event,$index)">
+                      <md-button ng-click="ordenescompra.edita($event,$index)">
                         <p>Surtir</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="proveedores.edita($event,$index)">
+                      <md-button ng-click="ordenescompra.edita($event,$index)">
                         <p>Cancelar</p>
+                      </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="ordenescompra.pdf(orden.OCM_clave)">
+                        <p>PDF</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

@@ -18,7 +18,7 @@
       <md-input-container>
         <label>Nombre</label>
         <input required name="nombre" ng-model="datos.nombre">
-        <div ng-messages="unidadForm.nombre.$dirty && unidadForm.nombre.$error">
+        <div ng-messages="unidadForm.nombre.$error" ng-if="unidadForm.$submitted">
           <div ng-message="required">Campo obligatorio.</div>
         </div>
       </md-input-container>
@@ -29,7 +29,7 @@
         <md-input-container flex>
           <label>Nombre corto</label>
           <input  name="nombrecorto" ng-model="datos.nombrecorto" required> 
-          <div ng-messages="unidadForm.nombrecorto.$dirty && unidadForm.nombrecorto.$error">
+          <div ng-messages="unidadForm.nombrecorto.$error" ng-if="unidadForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
         </md-input-container>
@@ -37,7 +37,35 @@
         <md-input-container flex>
           <label>Correo</label>
           <input  name="correo" ng-model="datos.correo" required>
-          <div ng-messages="unidadForm.correo.$dirty && unidadForm.correo.$error">
+          <div ng-messages="unidadForm.correo.$error" ng-if="unidadForm.$submitted">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div> 
+        </md-input-container>
+        
+      </div>
+
+      <md-input-container>
+        <label>Dirección</label>
+        <textarea ng-model="datos.direccion" name="direccion" columns="2" required></textarea>
+        <div ng-messages="unidadForm.direccion.$error" ng-if="unidadForm.$submitted">
+          <div ng-message="required">Campo obligatorio.</div>
+        </div>
+      </md-input-container>
+
+      <div layout="row" layout-sm="column">
+        
+        <md-input-container flex>
+          <label>Horario de Entrega</label>
+          <input  name="entrega" ng-model="datos.horaentrega" required> 
+          <div ng-messages="unidadForm.horaentrega.$error" ng-if="unidadForm.$submitted">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex>
+          <label>Entregar A</label>
+          <input  name="responsable" ng-model="datos.responsable" required>
+          <div ng-messages="unidadForm.responsable.$error" ng-if="unidadForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div> 
         </md-input-container>

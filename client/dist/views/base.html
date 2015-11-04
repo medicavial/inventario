@@ -80,6 +80,10 @@
             <p> Tipos Orden </p>
             <ng-md-icon icon="description" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
+          <md-list-item ng-click="ir('index.subtipositem')">
+            <p> SubTipos item </p>
+            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
         
         </div>
 
@@ -95,13 +99,13 @@
             <p> Unidades </p>
             <ng-md-icon icon="business" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
+          <md-list-item ng-click="ir('index.proveedores')">
+            <p> Proveedores </p>
+            <ng-md-icon icon="store" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
           <md-list-item ng-click="ir('index.tipositem')">
             <p> Tipos item </p>
             <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          <md-list-item ng-click="ir('index.subtipositem')">
-            <p> SubTipos item </p>
-            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.items')">
             <p> Items </p>
@@ -114,10 +118,6 @@
           <md-list-item ng-click="ir('index.almacenes')">
             <p> Almacenes </p>
             <ng-md-icon icon="layers" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
-          <md-list-item ng-click="ir('index.proveedores')">
-            <p> Proveedores </p>
-            <ng-md-icon icon="store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           
         </div>
@@ -144,10 +144,10 @@
             <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
-          <md-list-item ng-click="ir('index.existencias')">
+          <!-- <md-list-item ng-click="ir('index.existencias')">
             <p> Existencias </p>
             <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
+          </md-list-item> -->
           
           <md-list-item ng-click="ir('index.traspaso')">
             <p> Traspasos </p>
@@ -180,13 +180,17 @@
         </md-subheader>
         <div ng-show="reportes">
 
-          <md-list-item ng-click="ir('index.reporteexistencias')">
+          <md-list-item ng-click="ir('index.reporteExistencias')">
             <p> Existencias </p>
             <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          <md-list-item ng-click="ir('index.reporteordenes')">
+          <md-list-item ng-click="ir('index.reporteOrdenes')">
             <p> Ordenes de Compra </p>
             <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
+          <md-list-item ng-click="ir('index.movimientos')">
+            <p> Movimientos </p>
+            <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
         </div>
@@ -194,11 +198,11 @@
 
       </md-list>
     </md-sidenav>
-    <div layout="column" flex id="content">
-        <md-content layout="column" flex class="md-padding gris ui-view-container">
+    <div layout="column" flex>
+        <md-content layout="column" flex class="md-padding gris ui-view-container" id="content">
           <ui-view ng-hide="cargando" class="muestras"></ui-view>
-          <div id="centro" ng-show="cargando">
-              <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          <div id="centro">
+            <md-progress-circular md-mode="indeterminate" ng-show="cargando"></md-progress-circular>
           </div>
         </md-content>
     </div>

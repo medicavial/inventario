@@ -15,7 +15,7 @@ class ReportesController extends BaseController {
 				$almacen = Input::get('almacen');
 				$nombre = Almacen::find($almacen)->ALM_nombre;
 
-				$items = Existencia::unidad($unidad);
+				$items = Existencia::reporteUnidad($unidad);
 
 				foreach ($items as $item => $value) {
 
@@ -48,7 +48,7 @@ class ReportesController extends BaseController {
 				}
 
 			}else{
-				$datos = Existencia::unidad($unidad);
+				$datos = Existencia::reporteUnidad($unidad);
 			}
 
 		}else if (Input::has('item')) {

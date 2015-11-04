@@ -59,8 +59,8 @@ function imagenes($q){
     }
 }
 
-//servicio para usuarios
-function pdf($http,busqueda,$q,imagenes){
+//genera el pdf de la orden de compra
+function pdf($http,busqueda,$q,imagenes,Upload,api){
     return{
    		ordenCompra:function(orden){
 
@@ -165,6 +165,126 @@ function pdf($http,busqueda,$q,imagenes){
 
             });
 
+   		},
+   		enviaOrden:function(id){
+
+   			var promesa = $q.defer(),
+	   			datos = ['img/logomv.jpg'];
+
+            var imagenTodo = imagenes.convierte(datos),
+            	detalle    = busqueda.detalleOrdenCompra(id);
+
+            $q.all([imagenTodo,detalle]).then(function (data){
+
+            	console.log(data[1].data);
+
+            	var imgData = data[0][0],
+            		orden   = data[1].data;
+
+
+	   			var doc = new jsPDF();
+
+				doc.addImage(imgData, 'JPEG', 10, 8, 40, 20);
+
+				doc.setFontSize(10);
+				doc.setFontType("normal");
+				doc.text(180,10, '10/10/2015'); 
+
+				doc.setFontSize(12);
+				doc.setFont("helvetica");
+				doc.setFontType("bold");
+				doc.text(145,25, 'Orden de Compra No.' + String(orden.OCM_clave)); 
+
+				doc.setDrawColor(29, 79, 232);
+				doc.setLineWidth(1);
+				doc.line(10, 30, 200, 30);
+
+				doc.setFontSize(9);
+				doc.setFontType("normal");
+
+				doc.text(10,40, 'Proveedor:'); 
+				doc.text(32,40, doc.splitTextToSize(orden.PRO_razonSocial, 166));
+
+				doc.text(10,50, 'Facturar a:'); 
+				doc.text(32,50, doc.splitTextToSize('MEDICAVIAL, SA DE CV, RFC: MED011012TD4 Av. Alvaro Obregón, 151, Piso 9 Roma, Del. Cuauhtémoc, México, México DF Distrito Federal, 06700.', 166));
+
+				doc.text(10,60, 'Entregar en:'); 
+				doc.text(35,60, doc.splitTextToSize(orden.UNI_nombre, 166));
+
+				doc.text(10,80, 'Clave'); 
+
+				doc.text(30,80, 'Cant.'); 
+
+				doc.text(50,80, 'Nombre'); 
+
+				doc.text(148,80, 'Costo'); 
+
+				doc.text(168,80, 'Desc.'); 
+
+				doc.text(190,80, 'Total'); 
+
+				doc.setDrawColor(29, 79, 232);
+				doc.setLineWidth(0.5);
+				doc.line(10, 82, 200, 82);
+
+				//aqui van los items
+
+				// posiciones iniciales en y 
+
+                var x = 90; //para la linea que divide cada receta
+                var cantidades = 0;
+
+
+				angular.forEach(orden.items,function (value,key){
+
+					doc.text(10,x, value.ITE_codigo); 
+
+					doc.text(30,x, String(value.OIT_cantidadPedida)); 
+
+					doc.text(50,x, doc.splitTextToSize(value.ITE_nombre,94)); 
+
+					doc.text(145,x, '$ ' + value.OIT_precioEsperado); 
+
+					doc.text(168,x, '% 0'); 
+
+					doc.text(185,x, '$ '+ String(value.OIT_precioEsperado * value.OIT_cantidadPedida)); 
+
+					x += 10;
+					
+				});
+				
+
+				//aqui va el total
+
+				doc.setDrawColor(29, 79, 232);
+				doc.setLineWidth(0.3);
+				doc.line(10, 110, 200, 110);
+
+				doc.text(160,116, 'Total:'); 
+				doc.text(185,116, '$ '+ orden.OCM_importeEsperado); 
+
+				doc.setDrawColor(29, 79, 232);
+				doc.setLineWidth(0.3);
+				doc.line(10, 120, 200, 120);
+
+                var pdf = btoa(doc.output());
+
+                Upload.upload({
+                    url: api + 'upload/ordenes',
+                    file: pdf
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                }).error(function (data, status, headers, config) {
+                    console.log('error status: ' + status);
+                })
+
+				// doc.save('orden_compra_' + orden.OCM_clave);
+
+
+            });
 
    		}
     }
