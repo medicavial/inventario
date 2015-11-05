@@ -44,6 +44,18 @@ Route::group(array('prefix' => 'api'), function()
             
     });
 
+    Route::post('/subePDF/{orden}', function($orden){
+
+        if(Input::has('data')) {
+            
+            $data =  base64_decode(Input::get('data'));
+            file_put_contents(public_path().'/ordenesCompra/'.$orden.'.pdf', $data );
+            return Response::json(array('respuesta' => 'Imagenes subidas Correctamente'));
+
+        }
+              
+    });
+
     Route::post('delete',function(){
 
         $archivo = Input::get('imagen');

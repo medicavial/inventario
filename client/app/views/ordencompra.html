@@ -1,7 +1,7 @@
 <md-content class="md-whiteframe-z1 white" layout="column" ng-init="inicio()">
 
      <md-tabs md-selected="selectedIndex" md-align-tabs="'top'" md-dynamic-height md-border-bottom>
-      <md-tab id="tab1">
+      <md-tab id="tab1" ng-disabled="step1block">
         <md-tab-label>Selecciona Unidad</md-tab-label>
         <md-tab-body>
           <div ng-include="paso1"></div>
@@ -25,7 +25,7 @@
           <div ng-include="paso3"></div>
         </md-tab-body>
       </md-tab>
-      <md-tab id="tab3" md-on-select="muestraOrdenes()" ng-disabled="step4block">
+      <md-tab id="tab3" md-on-select="muestraOrdenes()" ng-disabled="step4block" ng-click="confirmaIncompleto($event)">
         <md-tab-label>Acciones</md-tab-label>
         <md-tab-body>
            <div flex layout="row"layout-align="center center">

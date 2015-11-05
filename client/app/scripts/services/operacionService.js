@@ -1,4 +1,4 @@
-function operacion($http, api,$q,busqueda,$rootScope,$filter){
+function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
     return{
         altaAlmacenes : function(datos)
         {
@@ -70,6 +70,7 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter){
                 
                 var id = catalogo.indexOf(value);
                 catalogo.splice(id, 1);
+                
             });
 
         },
@@ -441,12 +442,14 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter){
                 promesas = [];
 
             angular.forEach(ordenes,function(value,key){
-                var dato = busqueda.detalleOrdenCompra(value);
+
+                var dato = pdf.enviaOrden(value);
                 promesas.push(dato);
+
             });
 
             $q.all(promesas).then(function (datos){
-                console.log(datos);
+                // console.log(datos);
                 promesa.resolve(datos);
             });
 

@@ -1,7 +1,18 @@
 function mensajes($mdToast,$mdDialog){
     return{
-        confirmacion:function(titulo,mensaje){
-         
+        confirmacion:function(titulo,mensaje,ev){
+            var confirm = $mdDialog.confirm()
+                .title(titulo)
+                .content(mensaje)
+                .ariaLabel('Confirmación')
+                .targetEvent(ev)
+                .ok('SI')
+                .cancel('NO');
+            $mdDialog.show(confirm).then(function() {
+                return true;
+            }, function() {
+                return false;
+            });
         },
         notifica:function(mensaje,descripcion,ev){
 

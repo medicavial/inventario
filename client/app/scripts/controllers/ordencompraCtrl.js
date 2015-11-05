@@ -50,7 +50,7 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf){
 	};
 
 	scope.pdf = function(index){
-		pdf.enviaOrden(index);
+		pdf.imprimeOrden(index);
 	}
 
 }
@@ -69,6 +69,7 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 	$scope.inicio = function(){
 		
+		$scope.step1block = false;
 		$scope.step2block = true;
 		$scope.step3block = true;
 		$scope.step4block = true;
@@ -298,11 +299,12 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 		operacion.generaOrdenes($scope.seleccionOrden,$scope.proveedores,$scope.unidad,$scope.almacenes).then(
 			function (data){
 				// console.log(data);
-				$scope.selectedIndex = 3;
-				$scope.step4block = false;
-				$scope.step3block = true;
-				$scope.step2block = true;
 				$scope.ordenes = data.ordenes;
+				$scope.selectedIndex = 3;
+				$scope.step1block = true;
+				$scope.step2block = true;
+				$scope.step3block = true;
+				$scope.step4block = false;
 			},function (error){
 				alert(error);
 			}
@@ -312,16 +314,26 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 	//se generan las ordenes en cada proveedor 
 	$scope.confirmaOrdenProveedor = function(proveedor){
+		
+		$scope.todos = false;
+
 		operacion.ordenXproveedor(proveedor,$scope.unidad,$scope.almacenes,$scope.seleccionOrden).then(
 			function (data){
 				// console.log(data);
 				mensajes.alerta('Orden generada satisfactoriamente','success','top right','done_all');
-				$scope.todos = false;
+				$scope.ordenes.push(data.ordenes[0]);
 				$scope.step2block = true;
 				$scope.step4block = false;
-				$scope.ordenes.push(data.ordenes[0]);
+
+				if ($scope.seleccionOrden.length == 0) {
+					$scope.step1block = true;
+					$scope.step3block = true;
+					$scope.selectedIndex = 3;
+				}
+
 			},function (error){
 				// mensajes.alerta('Orden generada satisfactoriamente','success','top right','done_all');
+				$scope.todos = true;
 				alert(error);
 			}
 		);
@@ -331,6 +343,13 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 		operacion.eliminaOrden(proveedor, $scope.seleccionOrden);
 		$scope.todos = false;
+	}
+
+	$scope.confirmaIncompleto = function(ev){
+
+		if ($scope.selectedIndex == 2 && $scope.step4block == false) {
+
+		};
 	}
 
 
