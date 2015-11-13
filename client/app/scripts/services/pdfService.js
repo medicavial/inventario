@@ -165,7 +165,7 @@ function pdf($http,busqueda,$q,imagenes,Upload,api){
 
                 var pdf = btoa(doc.output());
 
-                $http.post(api+'subePDF/'+orden.OCM_clave,{data:pdf}).success(function (data){
+                $http.post(api+'operacion/envia/orden/'+orden.OCM_clave,{data:pdf}).success(function (data){
                 	promesa.resolve(orden);
                 });
 

@@ -443,7 +443,7 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
 
             angular.forEach(ordenes,function(value,key){
 
-                var dato = pdf.enviaOrden(value);
+                var dato = busqueda.detalleOrdenCompra(value);
                 promesas.push(dato);
 
             });

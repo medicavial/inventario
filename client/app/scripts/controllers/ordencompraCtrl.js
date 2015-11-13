@@ -241,8 +241,8 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 	$scope.generaCantidades = function(){
 
-		console.log($scope.ordenItems);
-		console.log($scope.totalItems);
+		// console.log($scope.ordenItems);
+		// console.log($scope.totalItems);
 
 		operacion.generaCantidades($scope.totalItems).then(function (data){
 			$scope.ordenItems = data;
@@ -319,9 +319,14 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 		operacion.ordenXproveedor(proveedor,$scope.unidad,$scope.almacenes,$scope.seleccionOrden).then(
 			function (data){
-				// console.log(data);
+				console.log(data);
 				mensajes.alerta('Orden generada satisfactoriamente','success','top right','done_all');
-				$scope.ordenes.push(data.ordenes[0]);
+
+				var idOrden = data.ordenes[0];
+				$scope.ordenes.push(idOrden);
+				
+				pdf.enviaOrden(idOrden);
+
 				$scope.step2block = true;
 				$scope.step4block = false;
 

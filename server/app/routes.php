@@ -49,8 +49,25 @@ Route::group(array('prefix' => 'api'), function()
         if(Input::has('data')) {
             
             $data =  base64_decode(Input::get('data'));
-            file_put_contents(public_path().'/ordenesCompra/'.$orden.'.pdf', $data );
-            return Response::json(array('respuesta' => 'Imagenes subidas Correctamente'));
+            $ruta =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+
+            $datos = OrdenCompra::find($orden);
+
+            file_put_contents($ruta, $datos);
+
+            Mail::send('emails.orden', array('key' => 'value'), function($message) use ($orden)
+            {
+
+                $ruta2 =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+
+                $message->from('salcala@medicavial.com.mx', 'Sistema de Inventario MV');
+                $message->subject('Welcome!');
+                $message->to('salcala@medicavial.com.mx');
+                // ->cc('bar@example.com');
+                $message->attach($ruta2);
+            });
+
+            return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
 
         }
               
@@ -122,6 +139,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');
         Route::post('items/almacenes/{unidad}', 'OperacionController@itemsAlmacenes');
         Route::post('ordencompra', 'OperacionController@ordencompra');
+        Route::post('envia/orden/{orden}', 'OperacionController@enviaCorreoOrden');
         Route::post('proveedores/items', 'OperacionController@proveedoresItems');
         Route::post('movimiento', 'OperacionController@movimiento');
         Route::post('traspaso', 'OperacionController@traspaso');

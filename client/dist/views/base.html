@@ -13,13 +13,13 @@
         <ng-md-icon md-menu-origin icon="more_vert" style="fill:white"></ng-md-icon> 
       </md-button>
       <md-menu-content width="3" >
-        <md-menu-item>
+        <!-- <md-menu-item>
           <md-button ng-click="">
               <ng-md-icon md-menu-align-target icon="assignment_ind" style="fill:gray"></ng-md-icon>
               <span flex></span>
               Perfil
           </md-button>
-        </md-menu-item>
+        </md-menu-item> -->
         <md-menu-item>
           <md-button ng-click="">
               <ng-md-icon icon="lock" style="fill:gray"></ng-md-icon>
@@ -201,8 +201,8 @@
     <div layout="column" flex>
         <md-content layout="column" flex class="md-padding gris ui-view-container" id="content">
           <ui-view ng-hide="cargando" class="muestras"></ui-view>
-          <div id="centro">
-            <md-progress-circular md-mode="indeterminate" ng-show="cargando"></md-progress-circular>
+          <div id="centro" ng-show="cargando">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
         </md-content>
     </div>

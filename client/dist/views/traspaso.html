@@ -20,7 +20,7 @@
         <div layout-padding>
 
           <div layout="row" layout-sm="column">
-            <md-select placeholder="Almacen Destino" ng-model="datos.almacenOrigen" name="origen" md-on-close="itemsxalmacen(datos.almacenOrigen)" flex>
+            <md-select placeholder="Almacen Origen" ng-model="datos.almacenOrigen" name="origen" md-on-close="itemsxalmacen(datos.almacenOrigen)" flex>
               <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
             </md-select>
 

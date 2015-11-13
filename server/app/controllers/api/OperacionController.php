@@ -23,7 +23,6 @@ class OperacionController extends BaseController {
 
 	}
 
-
 	public function configuraciones(){
 
 		$configuracion = new Configuracion;
@@ -45,6 +44,7 @@ class OperacionController extends BaseController {
 	}
 
 
+	//muestra los datos de existencia con la unidad 
 	public function configuracionUnidad($unidad){
 		return Existencia::unidad($unidad);
 	}
@@ -52,6 +52,39 @@ class OperacionController extends BaseController {
 	public function eliminaUsuarioAlmacen($almacen,$usuario){
 		UsuarioAlmacen::where('USU_clave',$usuario)->where('ALM_clave',$almacen)->delete();
 		return Response::json(array('respuesta' => 'Almacen removido Correctamente'));
+	}
+
+	public function enviaCorreoOrden($orden){
+
+		if(Input::has('data')) {
+            
+            $data =  base64_decode(Input::get('data'));
+            $ruta =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+
+            $datos = OrdenCompra::find($orden);
+
+            file_put_contents($ruta, $datos);
+
+            Mail::send('emails.orden', array('key' => $datos), function($message) use ($orden)
+            {
+
+            	$clave = OrdenCompra::find($orden)->UNI_clave;
+            	$nombreUnidad = Unidad::find($clave)->UNI_nombrecorto;
+
+                $ruta2 =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+
+                $message->from('sistemasrep2@medicavial.com.mx', 'Sistema de Inventario MV');
+                $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
+                $message->to('salcala@medicavial.com.mx');
+                // ->cc('bar@example.com');
+                $message->attach($ruta2);
+
+            });
+
+            return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
+
+        }
+
 	}
 
 	public function itemsAlmacenes($unidad){
