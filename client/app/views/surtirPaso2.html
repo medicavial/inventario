@@ -1,0 +1,72 @@
+<md-content layout-padding>
+  
+
+  <div layout="row" layout-sm="column">
+      
+      <div flex-gt-md="20">
+        <p>Verificación de items: </p>
+        <md-radio-group ng-model="datos.verificacion" flex>
+          <md-radio-button value="momento">Conteo al momento</md-radio-button>
+          <md-radio-button value="posterior"> Conteo posterior </md-radio-button>
+        </md-radio-group>
+      </div>
+      
+      <md-input-container flex ng-show="datos.verificacion == 'posterior' ">
+        <label>Motivo</label>
+        <textarea ng-model="datos.observaciones" columns="1" rows="5"></textarea>
+      </md-input-container>
+      
+      <div flex ng-show="datos.verificacion == 'momento' " layout="column">
+        
+        <md-data-table-container class="md-whiteframe-z1">
+          <table md-data-table md-row-select="seleccionItems" >
+            <thead md-order="order" md-trigger="onOrderChange">
+              <tr>
+                <th name="Item"  order-by="ITE_nombre"></th>
+                <th name="Cantidad"  order-by="OIT_cantidadPedida"></th>
+                <th name="Costo"  order-by="OIT_precioEsperado"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  md-auto-select ng-repeat="item in info.items |filter:query | orderBy: items.order">
+                <td>{{item.ITE_nombre}}</td>
+                <td>{{item.OIT_cantidadPedida}}  <span ng-if="item.OIT_cantidadSurtida > 0">/ {{ item.OIT_cantidadSurtida }}</span></td>
+                <td>{{item.OIT_precioEsperado | currency}} <span ng-if="item.OIT_precioFinal > 0">/ {{ item.OIT_precioFinal | currency }}</span> </td>
+                <td class="option-table">
+                    <md-menu md-position-mode="target-right target" >
+                      <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
+                        <md-icon md-menu-origin>
+                          <ng-md-icon icon="more_vert" style="fill:#3F51B5"></ng-md-icon> 
+                        </md-icon>
+                      </md-button>
+                      <md-menu-content width="2">
+                        <md-menu-item>
+                          <md-button ng-click="modifica($event,$index)">
+                            <p>Modificar Costo/Cantidad</p>
+                          </md-button>
+                        </md-menu-item>
+                      </md-menu-content>
+                    </md-menu>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </md-data-table-container>
+
+        <div class="totales">
+            <strong>Total: </strong>{{ info.OCM_importeFinal | currency }}
+        </div>
+
+      </div>
+      
+
+
+
+  </div>
+
+
+  <div layout="row" layout-align="center center">
+    <md-button ng-disabled="!datos.verificacion" class="md-raised md-primary" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
+  </div>
+
+</md-content>

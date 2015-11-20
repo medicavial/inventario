@@ -6,7 +6,7 @@ app.controller('correoCtrl',correoCtrl)
 
 ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','pdf'];
 ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog'];
-correoCtrl.$inject = ['$scope','$mdDialog','operacion'];
+correoCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
 
 
 function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf){
@@ -298,7 +298,12 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 		operacion.generaOrdenes($scope.seleccionOrden,$scope.proveedores,$scope.unidad,$scope.almacenes).then(
 			function (data){
-				// console.log(data);
+
+				angular.forEach(data.ordenes,function (value,key){
+					pdf.enviaOrden(value);
+				});
+
+
 				$scope.ordenes = data.ordenes;
 				$scope.selectedIndex = 3;
 				$scope.step1block = true;
@@ -359,9 +364,9 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 
 	$scope.muestraOrdenes = function(){
+		
 		operacion.generaDetalleOrdenes($scope.ordenes).then(
 			function(data){
-				// console.log(data);
 				$scope.ordenesListas = data;
 			},
 			function(error){
@@ -377,12 +382,16 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 	}
 
 	$scope.generaCorreo = function(ev,index) {
+
+		var orden = $scope.ordenesListas[index];
+
 	    $mdDialog.show({
 	      controller: correoCtrl,
 	      templateUrl: 'views/correo.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      clickOutsideToClose:true
+	      clickOutsideToClose:true,
+	      locals: { info: orden }
 	    }).then(function(){
 	    	
 	    });
@@ -390,13 +399,32 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 
 }
 
-function correoCtrl($scope,$mdDialog,operacion){
+function correoCtrl($scope, $mdDialog, info, operacion, mensajes){
 
-	$scope.datos = {
-		correo:'',
-		copias:[],
-		observaciones:''
+	$scope.inicio = function(){
+		$scope.datos = {
+			orden:info.data.OCM_clave,
+			correo:'',
+			copias:[],
+			asunto:'',
+			comentarios:''
+		}
 	}
+
+	$scope.enviaCorreo = function(){
+		
+		operacion.correo($scope.datos).success(function (data){
+			$scope.inicio();
+			mensajes.alerta(data.respuesta,'success','top right','done_all');
+		}).error(function (data){
+			mensajes.alerta('No se logro enviar el correo favor de intentarlo nuevamente','error','top right','done_all');
+		});
+
+	}
+
+	$scope.cancel = function() {
+		$mdDialog.hide();
+	};
 	
 }
 

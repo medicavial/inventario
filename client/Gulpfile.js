@@ -43,7 +43,7 @@ gulp.task('html', function() {
 
 // Busca en las carpetas de estilos y javascript los archiv os que hayamos creado // para inyectarlos en el index.html 
 gulp.task('inject', function() {  
-	var sources = gulp.src(['./app/scripts/**/*.js','./app/stylesheets/**/*.css']);  
+	var sources = gulp.src(['./app/scripts/**/*.js', './app/stylesheets/**/*.css']);  
 	return gulp.src('index.html', {cwd: './app'})    
 	.pipe(inject(sources, {      
 		read: false,      

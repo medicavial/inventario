@@ -1,0 +1,52 @@
+<div layout-align="center">
+  <div layout="row" layout-align="start center">
+      <md-button class="md-icon-button" aria-label="Atras" ng-click="muestra('index.ordenescompra')">
+        <ng-md-icon icon="keyboard_backspace" style="fill:#3F51B5" size="35"></ng-md-icon> 
+      </md-button>
+  </div>
+  <md-grid-list
+        md-cols-sm="1" md-cols-md="3" md-cols-gt-md="5"
+        md-row-height-gt-md="1:1" md-row-height="1:1"
+        md-gutter="12px" md-gutter-gt-sm="8px" >
+
+    <md-grid-tile class="bgm-blue grid-icon md-whiteframe-z5" md-ink-ripple ui-sref="index.surtir({ordenId:orden})">
+      <div>
+        <ng-md-icon icon="open_in_new" style="fill:white" size="52"></ng-md-icon>
+      </div>
+      <md-grid-tile-footer>
+        <h3>
+          Surtir Orden de Compra
+          <span flex></span>
+          <ng-md-icon icon="keyboard_arrow_right" style="fill:white"></ng-md-icon>
+        </h3>
+      </md-grid-tile-footer>
+    </md-grid-tile>
+
+    <md-grid-tile class="bgm-red grid-icon md-whiteframe-z5" md-ink-ripple ui-sref="index.surtir({ordenId:orden})">
+      <div>
+        <ng-md-icon icon="check_circle" style="fill:white" size="52"></ng-md-icon>
+      </div>
+      <md-grid-tile-footer>
+        <h3>
+          Completar Orden
+          <span flex></span>
+          <ng-md-icon icon="keyboard_arrow_right" style="fill:white"></ng-md-icon>
+        </h3>
+      </md-grid-tile-footer>
+    </md-grid-tile>
+
+    <md-grid-tile class="bgm-lightgreen grid-icon md-whiteframe-z5" md-ink-ripple ui-sref="index.surtir({ordenId:orden})">
+      <div>
+        <ng-md-icon icon="lock" style="fill:white" size="52"></ng-md-icon>
+      </div>
+      <md-grid-tile-footer>
+        <h3>
+          Cerrar Orden
+          <span flex></span>
+          <ng-md-icon icon="keyboard_arrow_right" style="fill:white"></ng-md-icon>
+        </h3>
+      </md-grid-tile-footer>
+    </md-grid-tile>
+
+  </md-grid-list>
+</div>

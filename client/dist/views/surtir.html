@@ -1,0 +1,43 @@
+<div layout="row" layout-align="start center">
+    <md-button class="md-icon-button" aria-label="Atras" ui-sref="index.accionOrden({ordenId:orden})">
+      <ng-md-icon icon="keyboard_backspace" style="fill:#3F51B5" size="35"></ng-md-icon> 
+    </md-button>
+    <h4>{{ descripcion }} <span ng-if="completa"> - ORDEN COMPLETA </span> <span ng-if="incompleta"> - ORDEN INCOMPLETA </span>  </h4>
+</div>
+
+<md-content class="md-whiteframe-z1 white" layout="column" ng-init="inicio()">
+
+    <md-tabs md-selected="selectedIndex" md-align-tabs="'top'" md-dynamic-height md-border-bottom>
+        
+        <md-tab id="tab1">
+          <md-tab-label>Tipo de Entrega</md-tab-label>
+          <md-tab-body>
+            <div ng-include="paso1"></div>
+          </md-tab-body>
+        </md-tab>
+
+        <md-tab id="tab2" >
+          <md-tab-label>Selecciona Proveedores</md-tab-label>
+          <md-tab-body> 
+            <div ng-include="paso2"></div>
+          </md-tab-body>
+        </md-tab>
+
+        <md-tab id="tab3">
+          <md-tab-label>Genera Orden</md-tab-label>
+          <md-tab-body>
+            <!-- <div ng-include="paso3"></div> -->
+          </md-tab-body>
+        </md-tab>
+
+        <!-- <md-tab id="tab3" md-on-select="muestraOrdenes()" ng-disabled="step4block" ng-click="confirmaIncompleto($event)">
+          <md-tab-label>Acciones</md-tab-label>
+          <md-tab-body>
+            <div ng-include="paso4"></div>
+          </md-tab-body>
+        </md-tab> -->
+
+    </md-tabs>
+
+
+</md-content>

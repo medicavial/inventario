@@ -17,6 +17,9 @@ function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
 	scope.total = 0;
 	scope.limit = 10;
 	scope.page = 1;
+	scope.busqueda = '';
+
+
 	scope.texto = {
       text: 'Resultados por pagina:',
       of: 'de'
@@ -33,7 +36,20 @@ function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
 		}
 	}
 
+	scope.agregaUnidad = function(unidad){
+		scope.unidadB = ' ' + unidad;
+	}
+
+	scope.agregaAlmacen = function(almacen){
+		scope.almacenB = ' /' + almacen;
+	}
+
+	scope.agregaItem = function(item){
+		scope.itemB = ' /' + item;
+	}
+
 	scope.cargaAlmacenes = function(unidad){
+
 		busqueda.almacenesUnidad(unidad).success(function (data){
 				console.log(data);
 				scope.almacenes = data;
@@ -47,6 +63,11 @@ function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
 	};
 
 	scope.buscar = function(){
+
+		scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
+		scope.almacenB = scope.datos.almacen ? scope.almacenB : '';
+		scope.itemB = scope.datos.item ? scope.itemB : '';
+
 		reportes.existencias(scope.datos).success(function (data){
 			scope.info = data;
 			scope.inicio();

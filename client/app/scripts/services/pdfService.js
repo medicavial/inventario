@@ -62,6 +62,7 @@ function imagenes($q){
 //genera el pdf de la orden de compra
 function pdf($http,busqueda,$q,imagenes,Upload,api){
     return{
+
     	enviaOrden:function(id){
 
    			var promesa = $q.defer(),
@@ -186,11 +187,8 @@ function pdf($http,busqueda,$q,imagenes,Upload,api){
 
             $q.all([imagenTodo,detalle]).then(function (data){
 
-            	// console.log(data[1].data);
-
             	var imgData = data[0][0],
             		orden   = data[1].data;
-
 
 	   			var doc = new jsPDF();
 
@@ -198,7 +196,7 @@ function pdf($http,busqueda,$q,imagenes,Upload,api){
 
 				doc.setFontSize(10);
 				doc.setFontType("normal");
-				doc.text(180,10, '10/10/2015'); 
+				doc.text(180,10, FechaAct); 
 
 				doc.setFontSize(12);
 				doc.setFont("helvetica");
@@ -219,7 +217,7 @@ function pdf($http,busqueda,$q,imagenes,Upload,api){
 				doc.text(32,50, doc.splitTextToSize('MEDICAVIAL, SA DE CV, RFC: MED011012TD4 Av. Alvaro Obregón, 151, Piso 9 Roma, Del. Cuauhtémoc, México, México DF Distrito Federal, 06700.', 166));
 
 				doc.text(10,60, 'Entregar en:'); 
-				doc.text(35,60, doc.splitTextToSize(orden.UNI_nombre, 166));
+				doc.text(32,60, doc.splitTextToSize(orden.UNI_direccion + ' horarios de entrega: ' + orden.UNI_horaentrega, 166));
 
 				doc.text(10,80, 'Clave'); 
 
@@ -276,6 +274,12 @@ function pdf($http,busqueda,$q,imagenes,Upload,api){
 				doc.setDrawColor(29, 79, 232);
 				doc.setLineWidth(0.3);
 				doc.line(10, 120, 200, 120);
+
+
+				doc.line(10, 270, 200, 270);
+				doc.text(10,275, orden.OCM_fechaReg); 
+				doc.text(50,275, 'Tel. 55-14-47-00'); 
+				doc.text(80,275,  'Responsable: ' + orden.UNI_responsable); 
 
 				doc.save('orden_compra_' + orden.OCM_clave);
 
@@ -386,7 +390,7 @@ function pdf($http,busqueda,$q,imagenes,Upload,api){
 
             });
 
-   		},
+   		}
    		
     }
 }

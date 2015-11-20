@@ -59,6 +59,9 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
 
             return promesa.promise;
         },
+        correo: function(datos){
+            return $http.post(api + 'operacion/correo',datos);
+        },
         eliminaOrden : function(proveedor,catalogo){
             var promesa = $q.defer(),
                 ordenes   = [],

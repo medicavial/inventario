@@ -1,5 +1,17 @@
 "use strict"
 
+
+var hoy = new Date(); 
+var dd = hoy.getDate(); 
+var mm = hoy.getMonth()+1;//enero es 0! 
+if (mm < 10) { mm = '0' + mm; }
+if (dd < 10) { dd = '0' + dd; }
+
+var yyyy = hoy.getFullYear();
+//armamos fecha para los datepicker
+var FechaAct = dd + '/' + mm + '/' + yyyy;
+
+
 var app = angular.module('app', [
 	'ui.router',
 	'ngMaterial',
@@ -11,7 +23,8 @@ var app = angular.module('app', [
 	'md.data.table',
 	'ngFileUpload',
 	'angular.filter',
-	'mdPickers'
+	'mdPickers',
+	'barcodeGenerator'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
@@ -48,6 +61,15 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
                 return almacenes.query().$promise;
             }
         }
+	})
+
+	.state('index.accionOrden',{
+		url:'accionOrden?ordenId',
+		templateUrl :'views/accionOrden.html',
+		controller 	: function($rootScope,$scope,$stateParams){
+			$rootScope.titulo = 'Orden de Compra';
+			$scope.orden = $stateParams.ordenId;
+		}
 	})
 
 	.state('index.conexiones',{
@@ -234,7 +256,17 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-	
+	.state('index.surtir',{
+		url:'surtir?ordenId',
+		templateUrl :'views/surtir.html',
+		controller 	: 'surtirCtrl',
+		resolve:{
+            datos:function($stateParams,busqueda){
+                return busqueda.detalleOrdenCompra($stateParams.ordenId);
+            }
+        }
+	})
+
 	.state('index.tipositem',{
 		url:'tipositem',
 		templateUrl :'views/tipositem.html',
@@ -307,7 +339,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-
 	.state('index.unidades',{
 		url:'unidades',
 		templateUrl :'views/unidades.html',
@@ -339,7 +370,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-
 	.state('index.traspaso',{
 		url:'traspaso',
 		templateUrl :'views/traspaso.html',
@@ -357,7 +387,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-
 	.state('index.configuracion',{
 		url:'configuracion',
 		templateUrl :'views/configuracion.html',
@@ -369,7 +398,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             }
         }
 	})
-
 
 	.state('index.reporteExistencias',{
 		url:'reporteExistencias',
@@ -408,9 +436,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             }
         }
 	})
-
-
-
 
 
 	$locationProvider.html5Mode(true);

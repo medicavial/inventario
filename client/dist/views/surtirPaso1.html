@@ -1,0 +1,47 @@
+<md-content layout-padding>
+
+  <div layout layout-sm="column">
+      <md-input-container flex flex-gt-md="30">
+        <label>Tipo de Entrega</label>
+        <md-select ng-model="datos.tipoentrega">
+          <md-option value="personal">Personal</md-option>
+          <md-option value="mensajeria">mensajeria</md-option>
+        </md-select>
+      </md-input-container>
+  </div>
+  <div layout layout-sm="column" ng-show=" datos.tipoentrega == 'mensajeria' ">
+      
+      <md-input-container flex>
+        <label># Guia</label>
+        <input type="text" ng-model="datos.guia">
+      </md-input-container>
+
+      <md-input-container flex>
+        <label># Cajas</label>
+        <input type="number" min="0" ng-model="datos.cajas">
+      </md-input-container>
+
+      <md-input-container flex>
+        <label># Bultos</label>
+        <input type="number" min="0" ng-model="datos.bultos">
+      </md-input-container>
+
+      <md-input-container flex>
+        <label># Bolsas</label>
+        <input type="number" min="0" ng-model="datos.bolsas">
+      </md-input-container>
+
+  </div>
+
+  <div layout layout-sm="column" ng-show=" datos.tipoentrega ">
+      <md-input-container flex>
+        <label>Observaciones</label>
+        <textarea ng-model="datos.observaciones" columns="1" rows="5"></textarea>
+      </md-input-container>
+  </div>
+
+  <div layout="row" layout-align="center center">
+    <md-button ng-disabled="!datos.tipoentrega" class="md-raised md-primary" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
+  </div>
+
+</md-content>

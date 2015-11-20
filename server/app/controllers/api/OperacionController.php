@@ -54,6 +54,42 @@ class OperacionController extends BaseController {
 		return Response::json(array('respuesta' => 'Almacen removido Correctamente'));
 	}
 
+	public function enviaCorreo(){
+
+     	$datos = Input::all();
+     	$comentario = Input::get('comentarios');
+
+        Mail::send('emails.correo', array('key' => $datos), function($message) use ($datos)
+        {
+
+        	$ordeCompra = $datos['orden'];
+        	$correo = $datos['correo'];
+        	$copias = $datos['copias'];
+        	$asunto = $datos['asunto'];
+
+        	$clave = OrdenCompra::find($ordeCompra)->UNI_clave;
+        	$nombreUnidad = Unidad::find($clave)->UNI_nombrecorto;
+
+            $ruta2 =  public_path().'/ordenesCompra/'.$ordeCompra.'.pdf';
+
+            $message->from('sistemasrep2@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+            foreach ($copias as $copia) {
+            	$message->cc($copia);
+            }
+
+            $message->subject($asunto);
+            $message->to($correo);
+
+            $message->attach($ruta2);
+
+        });
+
+        return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
+
+
+
+	}
+
 	public function enviaCorreoOrden($orden){
 
 		if(Input::has('data')) {

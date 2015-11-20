@@ -1,14 +1,15 @@
 <div layout="row" class="fondo" layout-align="center center" ng-init="sesion.inicio()">
 	
 	<md-whiteframe class="md-whiteframe-z5 white" layout-align="center center" flex="40" flex-sm="95" flex-md="75">
+		
 		<md-toolbar class="md-tall">
 	      <span flex></span>
 	      <h2 class="md-toolbar-tools md-toolbar-tools-bottom">
 	        <span class="md-flex">Bienvenido</span>
 	      </h2>
 	    </md-toolbar>
-	    <div layout="column" class="padding">
-	    	<form name="loginForm" ng-submit="sesion.login()">
+	    <div layout-padding>
+	    	<form name="loginForm" ng-submit="sesion.login()" layout="column">
 				<md-input-container class="md-icon-float" flex>
 					<label>Usuario</label>
 					<md-icon  class="name">

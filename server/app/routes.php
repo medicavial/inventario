@@ -134,6 +134,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('configuracion/unidad/{unidad}', 'OperacionController@configuracionUnidad');
         Route::post('configuraciones', 'OperacionController@configuraciones');
         Route::put('configuraciones/{id}', 'OperacionController@actualizaConfiguracion');
+        Route::post('correo', 'OperacionController@enviaCorreo');
         Route::get('elimina/almacen/{almacen}/{usuario}', 'OperacionController@eliminaUsuarioAlmacen');
         Route::post('item/proveedor', 'OperacionController@itemProveedor');
         Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');

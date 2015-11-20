@@ -332,7 +332,7 @@ md-tooltip{
 }
 
 .categoria ng-md-icon{
-  margin-right: 1em;
+  /*margin-right: 1em;*/
 }
 
 .categoria:hover, .categoria:active, .categoria:focus{
@@ -349,4 +349,10 @@ md-tooltip{
     position: absolute;
     top: -6px;
     right: 0;
+}
+
+.totales {
+  font-size: 2em !important;
+  padding:0.5em 1em;
+  text-align: right;
 }
