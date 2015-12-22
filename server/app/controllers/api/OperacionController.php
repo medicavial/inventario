@@ -23,6 +23,39 @@ class OperacionController extends BaseController {
 
 	}
 
+	public function cerrarOrden($orden){
+
+		$orden = OrdenCompra::find($orden);
+
+		$orden->OCM_incompleta = 0;
+		$orden->save();
+
+		return Response::json(array('respuesta' => 'Orden Cerrada Correctamente'));
+
+	}
+
+	public function completaOrden($orden){
+
+		$datos = OrdenItem::where('OCM_clave',$orden)->get();
+		$respuesta = array();
+
+		foreach ($datos as $item) {
+			
+			$pedido = $item['OIT_cantidadPedida'];
+			$surtido = $item['OIT_cantidadSurtida'];
+
+			if ($surtido == 0) {
+				array_push($respuesta,$item);
+			}elseif ($surtido < $pedido) {
+				array_push($respuesta,$item);
+			}
+
+		}
+
+		return $respuesta;
+
+	}
+
 	public function configuraciones(){
 
 		$configuracion = new Configuracion;
@@ -52,6 +85,7 @@ class OperacionController extends BaseController {
 	public function eliminaUsuarioAlmacen($almacen,$usuario){
 		UsuarioAlmacen::where('USU_clave',$usuario)->where('ALM_clave',$almacen)->delete();
 		return Response::json(array('respuesta' => 'Almacen removido Correctamente'));
+
 	}
 
 	public function enviaCorreo(){
@@ -70,8 +104,6 @@ class OperacionController extends BaseController {
         	$clave = OrdenCompra::find($ordeCompra)->UNI_clave;
         	$nombreUnidad = Unidad::find($clave)->UNI_nombrecorto;
 
-            $ruta2 =  public_path().'/ordenesCompra/'.$ordeCompra.'.pdf';
-
             $message->from('sistemasrep2@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
             foreach ($copias as $copia) {
             	$message->cc($copia);
@@ -80,26 +112,25 @@ class OperacionController extends BaseController {
             $message->subject($asunto);
             $message->to($correo);
 
-            $message->attach($ruta2);
+
+            $archivo =  public_path().'/ordenesCompra/'.$ordeCompra.'.pdf';
+
+            $pdf = helpers::ordenPDF($ordeCompra);
+            $pdf->save($archivo);
+
+            $message->attach($archivo);
 
         });
 
         return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
-
-
 
 	}
 
 	public function enviaCorreoOrden($orden){
 
 		if(Input::has('data')) {
-            
-            $data =  base64_decode(Input::get('data'));
-            $ruta =  public_path().'/ordenesCompra/'.$orden.'.pdf';
 
             $datos = OrdenCompra::find($orden);
-
-            file_put_contents($ruta, $datos);
 
             Mail::send('emails.orden', array('key' => $datos), function($message) use ($orden)
             {
@@ -107,13 +138,16 @@ class OperacionController extends BaseController {
             	$clave = OrdenCompra::find($orden)->UNI_clave;
             	$nombreUnidad = Unidad::find($clave)->UNI_nombrecorto;
 
-                $ruta2 =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+            	$archivo =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+
+                $pdf = helpers::ordenPDF($orden);
+                $pdf->save($archivo);
 
                 $message->from('sistemasrep2@medicavial.com.mx', 'Sistema de Inventario MV');
                 $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
                 $message->to('salcala@medicavial.com.mx');
                 // ->cc('bar@example.com');
-                $message->attach($ruta2);
+                $message->attach($archivo);
 
             });
 
@@ -132,6 +166,7 @@ class OperacionController extends BaseController {
 		}
 
 		return Existencia::almacenes($unidad,$almacenes);
+
 	}
 
 	public function itemsUnidad($unidad){
@@ -149,20 +184,41 @@ class OperacionController extends BaseController {
 				$cantidad = 0;
 			}
 
+			$existencia = $dato['EXI_cantidad'];
+			$nivelCompra = $dato['CON_nivelCompra'];
+			$nivelMaximo = $dato['CON_nivelMaximo'];
+			$nivelMinimo = $dato['CON_nivelMinimo'];
+
+			//se genera una cantidad virtual cuando tienes cantidades por surtir
+			$existenciaAparente = $existencia + $cantidad;
+
+			$comprar = $nivelMaximo - $existenciaAparente;
+			
+			if ($existenciaAparente <= $nivelMinimo) {
+				$semaforo = 'bgm-red';
+			}elseif ( ($existenciaAparente > $nivelMinimo && $existenciaAparente < $nivelCompra) || $existenciaAparente == $nivelCompra ) {
+				$semaforo = 'bgm-yellow';
+			}elseif ($existenciaAparente > $nivelCompra) {
+				$semaforo = 'bgm-green';
+			}
+
 			$respuesta[] = array(
 				'ITE_clave' => $dato['ITE_clave'],
 				'ITE_nombre' => $dato['ITE_nombre'],
 				'UNI_clave' => $dato['UNI_clave'],
-				'EXI_cantidad' => $dato['EXI_cantidad'],
+				'EXI_cantidad' => $existencia,
 				'POR_surtir' => $cantidad,
-				'CON_nivelCompra' => $dato['CON_nivelCompra'],
-				'CON_nivelMinimo' => $dato['CON_nivelMinimo'],
-				'CON_nivelMaximo' => $dato['CON_nivelMaximo'],
-				'ITE_codigo' => $dato['ITE_codigo']
+				'CON_nivelCompra' => $nivelCompra,
+				'CON_nivelMinimo' => $nivelMinimo,
+				'CON_nivelMaximo' => $nivelMaximo,
+				'ITE_codigo' => $dato['ITE_codigo'],
+				'semaforo'	=> $semaforo,
+				'compra' => $comprar,
 			);
 		}
 
 		return $respuesta;
+
 	}
 
 	public function itemProveedor(){
@@ -284,7 +340,6 @@ class OperacionController extends BaseController {
 	}
 
 	public function ordencompra(){
-
 
 		$datos = Input::all();
 		$ordenes = array();
@@ -488,6 +543,65 @@ class OperacionController extends BaseController {
 		}
 
 		return $respuesta;
+
+	}
+
+	public function surtirOrden(){
+
+
+		$ordenClave = Input::get('orden');
+		$usuario = Input::get('usuario');
+
+		$unidad = OrdenCompra::find($ordenClave)->UNI_clave;
+		$proveedor = OrdenCompra::find($ordenClave)->PRO_clave;
+
+		$resultado = Almacen::where('UNI_clave',$unidad)->where('TAL_clave',1)->first();
+		$almacen = $resultado->ALM_clave;
+
+		$orden = OrdenCompra::find($ordenClave);
+
+		$orden->OCM_bolsas = Input::get('bolsas');
+		$orden->OCM_bultos = Input::get('bultos');
+		$orden->OCM_cajas = Input::get('cajas');
+		$orden->OCM_guia = Input::get('guia');
+		$orden->OCM_incompleta = Input::get('incompleta');
+		$orden->OCM_observacionEntrega = Input::get('observacionEntrega');
+		$orden->OCM_observacionesVerificacion = Input::get('observacionesVerificacion');
+		$orden->OCM_incompleta = Input::get('incompleta');
+		$orden->OCM_entrega = Input::get('tipoEntrega');
+		$orden->OCM_verificacion = Input::get('verificacion');
+		$orden->OCM_importeFinal = Input::get('total');
+		$orden->OCM_cerrada = true;
+		$orden->USU_cerro = $usuario;	
+
+		$orden->save();
+
+		$items = Input::get('surtidos');
+
+		foreach ($items as $valor) {
+
+			$clave = $valor['OIT_clave'];
+			$cantidadSurtida = ($valor['OIT_cantidadSurtida'] > 0) ? $valor['OIT_cantidadSurtida']  : $valor['OIT_cantidadPedida'];
+			$ultimoCosto = ($valor['OIT_precioFinal'] > 0) ? $valor['OIT_precioFinal'] : $valor['OIT_precioEsperado'];
+			$claveItem = $valor['ITE_clave'];
+			$lotes = $valor['lotes'];
+
+			$item = ordenItem::find($clave);
+			$item->OIT_cantidadSurtida = $cantidadSurtida;
+			$item->OIT_precioFinal = $ultimoCosto;
+			$item->save();
+
+			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,$proveedor,$ultimoCosto);
+
+			helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+		
+		}	
+
+		return Response::json(array('respuesta' => 'Orden Surtida Correctamente Correctamente'));
+
+
+
+		
 	}
 
 

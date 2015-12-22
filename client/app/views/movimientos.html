@@ -74,5 +74,6 @@
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>
-    <ng-md-icon icon="add" style="fill:white"></ng-md-icon> 
+    <ng-md-icon icon="add" style="fill:white" ng-hide="movimientos.loading"></ng-md-icon> 
+    <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="movimientos.loading"></md-progress-circular>
 </md-button>

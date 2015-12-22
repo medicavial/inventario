@@ -1,0 +1,74 @@
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
+
+  <md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+      <h2>Nuevo Movimiento</h2>
+      <span flex></span>
+      <md-button  class="md-icon-button" ng-click="cancel()">
+        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <form name="movimientoForm" novalidate ng-submit="guardar()">
+
+  <md-dialog-content layout-padding>
+      
+      <md-content layout="column">
+
+          <div layout-gt-sm="row" layout="column">
+            
+            <md-input-container flex>
+              <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" required >
+                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+
+            <md-input-container flex>
+              <label>Cantidad</label>
+              <input type="number" name="cantidad" ng-model="datos.cantidad" required>
+              <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+            
+            <md-input-container flex>
+              <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
+                <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+
+          </div>
+        
+          <md-input-container flex>
+            <label>Observaciones</label>
+            <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>
+          </md-input-container>
+
+          <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
+
+      </md-content>
+    
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+
+    <span flex></span>
+    <md-button type="button" ng-click="cancel()">
+        Salir
+    </md-button>
+    <md-button type="submit" ng-disabled="verificaForm()">
+        Guardar
+    </md-button>
+  </div>
+
+  </form>
+</md-dialog>

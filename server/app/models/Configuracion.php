@@ -3,6 +3,7 @@
 class Configuracion extends Eloquent {
 
     protected $table = 'configuraciones';
+    protected $guarded = []; 
 
     public function scopeActivos($query)
     {

@@ -84,8 +84,8 @@ function proveedoresCtrl($rootScope,$mdDialog,datos,proveedores,mensajes){
 function proveedorCtrl($scope,$mdDialog,proveedores,mensajes,archivos, Upload, $rootScope){
 
 	$rootScope.titulo = 'Nuevo Proveedor';
-
-
+	$rootScope.atras = true;
+	
 	$scope.inicio = function(){
 		
 		$scope.datos = {
@@ -95,7 +95,7 @@ function proveedorCtrl($scope,$mdDialog,proveedores,mensajes,archivos, Upload, $
 			razon:'',
 			correo1:'',
 			correo2:'',
-			activo:true
+			activo: true
 		}
 
 		$scope.imagenes = [];

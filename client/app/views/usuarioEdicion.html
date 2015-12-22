@@ -1,4 +1,4 @@
-<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
 
   <md-toolbar class="md-warn">
     <div class="md-toolbar-tools">
@@ -13,7 +13,7 @@
 
   <form name="usuarioForm" novalidate ng-submit="guardar()">
 
-  <md-dialog-content layout-padding>
+  <md-dialog-content layout="column" layout-padding>
 
       <md-input-container>
         <label>Nombre</label>

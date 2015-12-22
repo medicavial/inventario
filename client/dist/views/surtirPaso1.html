@@ -1,15 +1,22 @@
 <md-content layout-padding>
 
-  <div layout layout-sm="column">
+  <div layout-gt-sm="row" layout="column">
+
       <md-input-container flex flex-gt-md="30">
         <label>Tipo de Entrega</label>
-        <md-select ng-model="datos.tipoentrega">
+        <md-select ng-model="datos.tipoEntrega">
           <md-option value="personal">Personal</md-option>
           <md-option value="mensajeria">mensajeria</md-option>
         </md-select>
       </md-input-container>
+
+      <md-input-container flex flex-gt-md="80">
+        <label>Observaciones</label>
+        <textarea ng-model="datos.observacionEntrega" columns="1" rows="5"></textarea>
+      </md-input-container>
+
   </div>
-  <div layout layout-sm="column" ng-show=" datos.tipoentrega == 'mensajeria' ">
+  <div layout-gt-sm="row" layout="column" ng-show=" datos.tipoEntrega == 'mensajeria' ">
       
       <md-input-container flex>
         <label># Guia</label>
@@ -32,16 +39,25 @@
       </md-input-container>
 
   </div>
+  
+  <div layout-gt-sm="row" layout="column">
+      <div flex-gt-md="20" flex>
+        <p>Verificación de items: </p>
+        <md-radio-group ng-model="datos.verificacion" flex>
+          <md-radio-button value="1">Conteo al momento</md-radio-button>
+          <md-radio-button value="2">Conteo posterior</md-radio-button>
+        </md-radio-group>
+      </div>
 
-  <div layout layout-sm="column" ng-show=" datos.tipoentrega ">
-      <md-input-container flex>
-        <label>Observaciones</label>
-        <textarea ng-model="datos.observaciones" columns="1" rows="5"></textarea>
+      <md-input-container flex flex-gt-md="80" ng-show="datos.verificacion == 2 ">
+        <label>Motivo</label>
+        <textarea ng-model="datos.observacionesVerificacion" columns="1" rows="5"></textarea>
       </md-input-container>
   </div>
+  
 
   <div layout="row" layout-align="center center">
-    <md-button ng-disabled="!datos.tipoentrega" class="md-raised md-primary" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
+    <md-button ng-disabled="!datos.tipoEntrega" class="md-raised md-primary" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
   </div>
 
 </md-content>

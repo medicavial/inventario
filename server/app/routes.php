@@ -10,14 +10,21 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
+
+include(app_path() . '/classes/helpers.php');
+
+
 Route::get('/', function()
 {
 
-    $pdf = PDF::loadView('ordenes.ordenCompra');
-    return $pdf->stream();
-    // $pdf->save('ordenesCompra/orden1.pdf');
-    // return "Success";
-    // return View::make('ordenes.ordenCompra');
+    require '../vendor/autoload.php';
+
+    // dump the database to backup/test.sql
+    $shellProcessor = new McCool\DatabaseBackup\Processors\ShellProcessor(new Symfony\Component\Process\Process(''));
+    $dumper = new McCool\DatabaseBackup\Dumpers\MysqlDumper($shellProcessor, 'www.medicavial.mx', 3306, 'medica2_webusr', 'tosnav50', 'medica2_inventario', 'medicavialmx.sql');
+
+    $backup = new McCool\DatabaseBackup\BackupProcedure($dumper);
+    $backup->backup();
 });
 
 
@@ -100,6 +107,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::resource('permisos', 'PermisosController');
     Route::resource('subtipositem', 'SubTipoItemController');
     Route::resource('unidades', 'UnidadesController');
+    Route::resource('unidadesitem', 'UnidadItemController');
     Route::resource('usuarios', 'UsuariosController');
 
     
@@ -126,23 +134,27 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('proveedores', 'BusquedasController@proveedores');
         Route::get('subtipositem', 'BusquedasController@subtipositem');
         Route::get('unidades', 'BusquedasController@unidades');
+        Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
     });
 
     Route::group(array('prefix' => 'operacion'), function()
     {
+        Route::get('cerrarorden/{orden}', 'OperacionController@cerrarOrden');
+        Route::get('completa/orden/{orden}', 'OperacionController@completaOrden');
         Route::get('configuracion/unidad/{unidad}', 'OperacionController@configuracionUnidad');
         Route::post('configuraciones', 'OperacionController@configuraciones');
         Route::put('configuraciones/{id}', 'OperacionController@actualizaConfiguracion');
         Route::post('correo', 'OperacionController@enviaCorreo');
         Route::get('elimina/almacen/{almacen}/{usuario}', 'OperacionController@eliminaUsuarioAlmacen');
+        Route::get('envia/orden/{orden}', 'OperacionController@enviaCorreoOrden');
         Route::post('item/proveedor', 'OperacionController@itemProveedor');
         Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');
         Route::post('items/almacenes/{unidad}', 'OperacionController@itemsAlmacenes');
-        Route::post('ordencompra', 'OperacionController@ordencompra');
-        Route::post('envia/orden/{orden}', 'OperacionController@enviaCorreoOrden');
-        Route::post('proveedores/items', 'OperacionController@proveedoresItems');
         Route::post('movimiento', 'OperacionController@movimiento');
+        Route::post('ordencompra', 'OperacionController@ordencompra');
+        Route::post('proveedores/items', 'OperacionController@proveedoresItems');
+        Route::post('surtir/orden', 'OperacionController@surtirOrden');
         Route::post('traspaso', 'OperacionController@traspaso');
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
@@ -154,10 +166,8 @@ Route::group(array('prefix' => 'api'), function()
     {
         Route::post('existencias', 'ReportesController@existencias');
         Route::post('ordenes', 'ReportesController@ordenes');
+        Route::get('pdf/ordencompra/{id}','ReportesController@ordenCompraPDF');
 
     });
-
-
-
 
 });

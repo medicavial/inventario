@@ -24,6 +24,24 @@ class PermisoTableSeeder extends Seeder {
             'PER_asociar' => true
         ));
 
+        Permiso::create(array(
+
+            'PER_nombre'=> 'Administrador Jr.',
+            'PER_entradas' => true,
+            'PER_salidas' => false,
+            'PER_traspasos' => true,
+            'PER_consultaItems' => true,
+            'PER_desactivaItems' => true,
+            'PER_consultaCatalogo' => true,
+            'PER_desactivaCatalogo' => false,
+            'PER_autorizaOrden' => true,
+            'PER_modificaOrden' => false,
+            'PER_cerrarOrden' => true,
+            'PER_surtir' => true,
+            'PER_subirFactura' => false,
+            'PER_asociar' => true
+        ));
+
     }
 
 }

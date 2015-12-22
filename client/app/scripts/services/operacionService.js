@@ -1,15 +1,12 @@
 function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
     return{
-        altaAlmacenes : function(datos)
-        {
+        altaAlmacenes : function(datos){
             return $http.post(api + 'operacion/usuario/almacenes',datos);
         },
-        actualizaConfiguracion : function(id,datos)
-        {
+        actualizaConfiguracion : function(id,datos){
             return $http.put(api + 'operacion/configuraciones/'+id,datos);
         },
-        altaConfiguracion : function(datos)
-        {
+        altaConfiguracion : function(datos){
             return $http.post(api + 'operacion/configuraciones',datos);
         },
         altaItempro :function(datos){
@@ -23,6 +20,9 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
         },
         bajaAlmacen : function(almacen,usuario){
             return $http.get(api + 'operacion/elimina/almacen/'+almacen+'/'+usuario);
+        },
+        cerrarOrden : function(orden){
+            return $http.get(api+'operacion/cerrarorden/'+orden);
         },
         cambioXproveedor :function(poveedor,item,items){
 
@@ -62,90 +62,6 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
         correo: function(datos){
             return $http.post(api + 'operacion/correo',datos);
         },
-        eliminaOrden : function(proveedor,catalogo){
-            var promesa = $q.defer(),
-                ordenes   = [],
-                items;
-
-            items = $filter('filter')(catalogo, proveedor);
-
-            angular.forEach(items, function(value, key) {
-                
-                var id = catalogo.indexOf(value);
-                catalogo.splice(id, 1);
-                
-            });
-
-        },
-        itemsAlmacenes : function(unidad,almacenes)
-        {
-            return $http.post(api + 'operacion/items/almacenes/' + unidad,almacenes);
-        },
-        infoUnidad : function(unidad){
-            var promesa   = $q.defer(),
-                almacenes = busqueda.almacenesUnidad(unidad),
-                items     = busqueda.itemsUnidad(unidad);
-
-            $q.all([almacenes,items]).then( 
-                function (data){
-                    promesa.resolve(data);
-                },
-                function (error){
-                    promesa.reject('Hubo un problema favor de reintentarlo');
-                }
-            );
-
-            return promesa.promise;
-        },
-        preparaOrden : function(items)
-        {
-            var promesa = $q.defer(),
-                proveedores = [],
-                seleccionOrden = [];
-
-            $http.post(api + 'operacion/proveedores/items',items).success(function (data){
-
-                var info = data;
-                angular.forEach(data, function(value, key) {
-                    var cantidad = value.Cantidad,
-                        nivelcompra = value.CON_nivelCompra,
-                        existenciaitem = value.EXI_cantidad;
-
-                    angular.forEach(value.proveedores, function(value, key) {
-
-
-                        var existencia = proveedores.indexOf(value.PRO_clave);
-                        if (existencia == -1) proveedores.push(value.PRO_clave);
-
-                        value.porsurtir = cantidad;
-                        value.nivelcompra = nivelcompra;
-                        value.existencia = existenciaitem;
-
-                        if (key == 0) {
-                            value.cantidad = cantidad;
-                            seleccionOrden.push(value);
-                        }else{
-                            value.cantidad = 0;
-                            seleccionOrden.push(value);
-                        }
-                    });
-                });
-
-                $q.when(seleccionOrden).then(function (data){
-                    var respuesta = {
-                        info:info,
-                        datos:data,
-                        proveedores:proveedores
-                    };
-
-                    promesa.resolve(respuesta);
-                });
-
-            })
-
-            return promesa.promise;
-
-        },
         economicoXitem :function(item,items){
 
             var promesa = $q.defer(),
@@ -178,52 +94,25 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
             });
 
             return promesa.promise;
+            
         },
-        proporcionalXitem : function(item,items){
+        eliminaOrden : function(proveedor,catalogo){
+
             var promesa = $q.defer(),
-                respuesta = [],
-                datos;
+                ordenes   = [],
+                items;
 
-            datos = $filter('filter')(items, item);
+            items = $filter('filter')(catalogo, proveedor);
 
-            //generamos datos de los filtrados
-            var cantidad = datos[0].porsurtir;
-                proveedores = datos.length;
-
-            angular.forEach(datos, function(value, key) {
-
-                //calculamos la cantidad que debe ser proporcional segun el numero de proveedores
-                //y la redondeamos 
-                var cantidadProporcionada = parseInt(cantidad/proveedores);
-
-                // esta multiplicacion es necesaria para saber si quedo menor o igual el numero de veces al total  
-                var cantidadSegunProporcion = cantidadProporcionada * proveedores;
-
-                //se genera una diferencia para que esa cantidad sea para el item mas barato 
-                var diferencia = cantidad - cantidadSegunProporcion;
-
-                var id = items.indexOf(value);
-
-                if (key == 0) {
-                    items[id].cantidad = cantidadProporcionada + diferencia;
-                }else{
-                    items[id].cantidad = cantidadProporcionada;
-                }
-
-                respuesta.push(id);
-
+            angular.forEach(items, function(value, key) {
+                
+                var id = catalogo.indexOf(value);
+                catalogo.splice(id, 1);
+                
             });
-
-            $q.when(respuesta).then(function (data){
-                promesa.resolve(items);
-            });
-
-            return promesa.promise;
-
 
         },
-        generaCantidades : function(items)
-        {
+        generaCantidades : function(items){
             
             var promesa = $q.defer(),
                 seleccionOrden = [];
@@ -266,8 +155,8 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
             return promesa.promise;
 
         },
-        generaMasBarato : function(items)
-        {
+        generaMasBarato : function(items){
+
             var promesa = $q.defer(),
                 seleccionOrden = [];
 
@@ -298,6 +187,7 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
 
         },
         ordenXproveedor : function(proveedor,unidad,almacenes,catalogo){
+
             var promesa = $q.defer(),
                 ordenes   = [],
                 items;
@@ -349,9 +239,13 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
             });
 
             return promesa.promise;
+
         },
-        generaOrdenes : function(items,proveedores,unidad,almacenes)
-        {
+        generarOrden : function(datos){
+            return $http.post(api + 'operacion/ordencompra',datos);
+        },
+        generaOrdenes : function(items,proveedores,unidad,almacenes){
+            
             var promesa = $q.defer(),
                 ordenes   = [];
 
@@ -412,8 +306,8 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
             return promesa.promise;
 
         },
-        generaTotales : function(items,proveedor)
-        {
+        generaTotales : function(items,proveedor){
+            
             var promesa = $q.defer(),
                 seleccionOrden = [],
                 total = 0;
@@ -459,12 +353,184 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
             return promesa.promise;
 
         },
-        proveedoresItems : function(items)
-        {
+        itemsAlmacenes : function(unidad,almacenes){
+            return $http.post(api + 'operacion/items/almacenes/' + unidad,almacenes);
+        },
+        infoUnidad : function(unidad){
+
+            var promesa   = $q.defer(),
+                almacenes = busqueda.almacenesUnidad(unidad),
+                items     = busqueda.itemsUnidad(unidad);
+
+            $q.all([almacenes,items]).then( 
+                function (data){
+                    promesa.resolve(data);
+                },
+                function (error){
+                    promesa.reject('Hubo un problema favor de reintentarlo');
+                }
+            );
+
+            return promesa.promise;
+
+        },
+        preparaOrden : function(items){
+
+            var promesa = $q.defer(),
+                proveedores = [],
+                seleccionOrden = [];
+
+            $http.post(api + 'operacion/proveedores/items',items).success(function (data){
+
+                var info = data;
+                angular.forEach(data, function(value, key) {
+                    var cantidad = value.Cantidad,
+                        nivelcompra = value.CON_nivelCompra,
+                        existenciaitem = value.EXI_cantidad;
+
+                    angular.forEach(value.proveedores, function(value, key) {
+
+                        var existencia = proveedores.indexOf(value.PRO_clave);
+                        if (existencia == -1) proveedores.push(value.PRO_clave);
+
+                        value.porsurtir = cantidad;
+                        value.nivelcompra = nivelcompra;
+                        value.existencia = existenciaitem;
+
+                        if (key == 0) {
+                            value.cantidad = cantidad;
+                            seleccionOrden.push(value);
+                        }else{
+                            value.cantidad = 0;
+                            seleccionOrden.push(value);
+                        }
+                    });
+                });
+
+                $q.when(seleccionOrden).then(function (data){
+                    var respuesta = {
+                        info:info,
+                        datos:data,
+                        proveedores:proveedores
+                    };
+
+                    promesa.resolve(respuesta);
+                });
+
+            })
+
+            return promesa.promise;
+
+        },
+        proporcionalXitem : function(item,items){
+
+            var promesa = $q.defer(),
+                respuesta = [],
+                datos;
+
+            datos = $filter('filter')(items, item);
+
+            //generamos datos de los filtrados
+            var cantidad = datos[0].porsurtir;
+                proveedores = datos.length;
+
+            angular.forEach(datos, function(value, key) {
+
+                //calculamos la cantidad que debe ser proporcional segun el numero de proveedores
+                //y la redondeamos 
+                var cantidadProporcionada = parseInt(cantidad/proveedores);
+
+                // esta multiplicacion es necesaria para saber si quedo menor o igual el numero de veces al total  
+                var cantidadSegunProporcion = cantidadProporcionada * proveedores;
+
+                //se genera una diferencia para que esa cantidad sea para el item mas barato 
+                var diferencia = cantidad - cantidadSegunProporcion;
+
+                var id = items.indexOf(value);
+
+                if (key == 0) {
+                    items[id].cantidad = cantidadProporcionada + diferencia;
+                }else{
+                    items[id].cantidad = cantidadProporcionada;
+                }
+
+                respuesta.push(id);
+
+            });
+
+            $q.when(respuesta).then(function (data){
+                promesa.resolve(items);
+            });
+
+            return promesa.promise;
+
+        },
+        proveedoresItems : function(items){
             return $http.post(api + 'operacion/proveedores/items',items);
         },
-        verificaItems : function(items)
-        {
+        surtirOrden : function(datos){
+            return $http.post(api + 'operacion/surtir/orden',datos);
+        },
+        verificaFaltantes : function(itemsOriginales,itemsSeleccionados,proveedor,unidad,almacenes){
+
+            var promesa = $q.defer(),
+                faltantes = [];
+
+            var orden = {
+                provedor: proveedor,
+                unidad:unidad,
+                almacenes:almacenes,
+                total:0,
+                usuario:$rootScope.id,
+                items: faltantes
+            }
+
+            angular.forEach(itemsOriginales,function (value,key){
+
+                // busca el indice del valor dentro de nuestra seleccion que se surtio 
+                var idx = itemsSeleccionados.indexOf(value);
+                
+                var item = {
+                    ITE_clave:value.ITE_clave,
+                    ITE_nombre:value.ITE_nombre,
+                    cantidad:0,
+                    IPR_ultimoCosto: (value.OIT_precioEsperado == value.OIT_precioFinal) ? value.OIT_precioFinal : value.OIT_precioEsperado
+                }
+
+                // en caso de que no se haya ingresado
+                if (idx == -1) {
+
+                    item.cantidad = value.OIT_cantidadPedida;
+                    orden.total += Number(value.OIT_precioEsperado * item.cantidad);
+
+                    faltantes.push(item);
+
+                }else{
+                    
+
+                    var itemMuestra = itemsSeleccionados[idx];
+
+                    if ( (itemMuestra.OIT_cantidadSurtida < value.OIT_cantidadPedida) && itemMuestra.OIT_cantidadSurtida > 0 ) {
+
+                        item.cantidad = value.OIT_cantidadPedida - itemMuestra.OIT_cantidadSurtida;
+                        var totalMuestra = item.cantidad  * item.IPR_ultimoCosto;
+                        orden.total +=  Number(totalMuestra);
+                        faltantes.push(item);
+
+                    };
+                }
+
+            });
+
+            $q.when(faltantes).then(function (data){
+                promesa.resolve(orden);
+            });
+
+            return promesa.promise;
+
+        },
+        verificaItems : function(items){
+
             var promesa = $q.defer(),
                 validos = [];
 
@@ -485,7 +551,9 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
 
         }
     }
+
 }
 
 app.factory("operacion",operacion);
+
 

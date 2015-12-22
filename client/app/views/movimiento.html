@@ -1,4 +1,4 @@
-<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="99" flex-md="75">
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
 
   <md-toolbar class="md-warn">
     <div class="md-toolbar-tools">
@@ -14,79 +14,81 @@
   <form name="movimientoForm" novalidate ng-submit="guardar()">
 
   <md-dialog-content layout-padding>
-
-      <md-autocomplete
-          md-selected-item="item"
-          md-search-text="busqueda"
-          md-items="item in consultado(busqueda)"
-          md-item-text="item.ITE_nombre"
-          md-min-length="0"
-          placeholder="Escribe item a buscar">
-        <md-item-template>
-          <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
-        </md-item-template>
-        <md-not-found>
-          No se encontro "{{busqueda}}".
-        </md-not-found>
-      </md-autocomplete>
-      <br/>
       
-      <md-input-container flex>
-        <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" required >
-          <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
-        </md-select>
-        <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
-          <div ng-message="required">Campo obligatorio.</div>
-        </div>
-      </md-input-container>
+      <md-content layout="column">
 
-      <div layout="row" layout-sm="column">
-        
-        <md-input-container flex>
-          <label>Cantidad</label>
-          <input type="number" name="cantidad" ng-model="datos.cantidad" required>
-          <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
-            <div ng-message="required">Campo obligatorio.</div>
+          <md-autocomplete
+              md-selected-item="item"
+              md-search-text="busqueda"
+              md-items="item in consultado(busqueda)"
+              md-item-text="item.ITE_nombre"
+              md-min-length="0"
+              placeholder="Escribe item a buscar">
+            <md-item-template>
+              <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
+            </md-item-template>
+            <md-not-found>
+              No se encontro "{{busqueda}}".
+            </md-not-found>
+          </md-autocomplete>
+
+          <div layout-gt-sm="row" layout="column">
+            
+            <md-input-container flex>
+              <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" required >
+                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+
+            <md-input-container flex>
+              <label>Cantidad</label>
+              <input type="number" name="cantidad" ng-model="datos.cantidad" required>
+              <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+            
+            <md-input-container flex>
+              <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
+                <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+
           </div>
-        </md-input-container>
-        
-        <md-input-container flex>
-          <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
-            <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
-          </md-select>
-          <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
-            <div ng-message="required">Campo obligatorio.</div>
+
+          <div layout="row" layout-sm="column" ng-if="datos.tipomov == 1">
+            
+            <md-input-container flex flex-gt-sm="40">
+              <md-select placeholder="Tipo de Ajuste" ng-model="datos.tipoa" name="tipo">
+                <md-option ng-repeat="tipoajuste in tiposajuste" value="{{tipoajuste.TIA_clave}}">{{tipoajuste.TIA_nombre}}</md-option>
+              </md-select>
+            </md-input-container>
+
           </div>
-        </md-input-container>
-
         
-      </div>
+          <md-input-container flex>
+            <label>Observaciones</label>
+            <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>
+          </md-input-container>
 
-      <div layout="row" layout-sm="column" ng-show="datos.tipomov == 1">
-        
-        <md-input-container flex flex-gt-sm="40">
-          <md-select placeholder="Tipo de Ajuste" ng-model="datos.tipoa" name="tipo">
-            <md-option ng-repeat="tipoajuste in tiposajuste" value="{{tipoajuste.TIA_clave}}">{{tipoajuste.TIA_nombre}}</md-option>
-          </md-select>
-        </md-input-container>
+          <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
 
-      </div>
-    
-      <md-input-container flex>
-        <label>Observaciones</label>
-        <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>
-      </md-input-container>
-
-      <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
-        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-      </div>
+      </md-content>
     
   </md-dialog-content>
   <div class="md-actions" layout="row">
 
     <span flex></span>
     <md-button type="button" ng-click="cancel()">
-        Cancelar
+        Salir
     </md-button>
     <md-button type="submit" ng-disabled="verificaForm()">
         Guardar

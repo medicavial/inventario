@@ -38,13 +38,16 @@
             <td>{{orden.OCM_importeEsperado | currency}}</td>
             <td>{{orden.OCM_importeFinal | currency}}</td>
             <td>
-              <div ng-if="orden.OCM_cerrada == '1'">
-                Surtida
+              <div ng-if="orden.OCM_cerrada == 1  && orden.OCM_incompleta == 1">
+                Surtida Incompleta
               </div>
-              <div ng-if="orden.OCM_cancelada == '1'">
+              <div ng-if="orden.OCM_cerrada == 1  && orden.OCM_incompleta == 0">
+                Cerrada
+              </div>
+              <div ng-if="orden.OCM_cancelada == 1">
                 Cancelada
               </div>
-              <div ng-if="orden.OCM_cancelada == '0' && orden.OCM_cerrada == '0'">
+              <div ng-if="orden.OCM_cancelada == 0 && orden.OCM_cerrada == 0">
                 Abierta
               </div>
             </td>
@@ -56,19 +59,29 @@
                     </md-icon>
                   </md-button>
                   <md-menu-content width="2">
+                    <md-menu-item ng-if="orden.OCM_cancelada == 0 && orden.OCM_cerrada == 0">
+                      <md-button ui-sref="index.surtir({ordenId:orden.OCM_clave})">
+                        Surtir
+                      </md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-if="orden.OCM_cerrada == 1  && orden.OCM_incompleta == 1">
+                      <md-button ui-sref="index.surtir({ordenId:orden.OCM_clave})">
+                        Completar
+                      </md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-if="orden.OCM_cerrada == 1  && orden.OCM_incompleta == 1">
+                      <md-button ng-click="ordenescompra.cerrar($event,$index)">
+                        Cerrar Orden
+                      </md-button>
+                    </md-menu-item>
                     <md-menu-item>
-                      <md-button ui-sref="index.accionOrden({ordenId:orden.OCM_clave})">
-                        Acciones
+                      <md-button ng-click="pdf(orden.OCM_clave)">
+                        <p>Descargar PDF</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
                       <md-button ng-click="ordenescompra.edita($event,$index)">
                         <p>Cancelar</p>
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="ordenescompra.pdf(orden.OCM_clave)">
-                        <p>Descargar PDF</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

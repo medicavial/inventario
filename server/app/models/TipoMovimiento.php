@@ -4,6 +4,7 @@ class TipoMovimiento extends Eloquent {
 
 	protected $primaryKey ='TIM_clave';
     protected $table = 'tiposMovimiento';
+    protected $guarded = []; 
 
     public function scopeActivos($query)
     {

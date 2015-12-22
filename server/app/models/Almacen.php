@@ -4,6 +4,7 @@ class Almacen extends Eloquent {
 
 	protected $primaryKey ='ALM_clave';
     protected $table = 'almacenes';
+    protected $guarded = []; 
 
     public function scopeActivos($query)
     {

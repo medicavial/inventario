@@ -17,8 +17,10 @@ function loginCtrl(auth, $rootScope){
 	}
 
 	sesion.login = function(){
-		$rootScope.cargando = true;
-		auth.login(sesion.datos);
+		if (sesion.loginForm.$valid) {
+			$rootScope.cargando = true;
+			auth.login(sesion.datos);
+		};
 	}
 
 }

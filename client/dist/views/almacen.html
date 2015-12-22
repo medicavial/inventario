@@ -1,4 +1,4 @@
-<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
 
   <md-toolbar class="md-warn">
     <div class="md-toolbar-tools">
@@ -11,39 +11,42 @@
     </div>
   </md-toolbar>
 
-  <form name="almacenForm" ng-submit="guardar()">
+  <form name="almacenForm" ng-submit="guardar()" novalidate>
 
   <md-dialog-content layout-padding>
+      
+      <md-content layout="column">
 
-      <md-input-container>
-        <label>Nombre</label>
-        <input required name="nombre" ng-model="datos.nombre">
-        <div ng-messages="almacenForm.nombre.$dirty && almacenForm.nombre.$error">
-          <div ng-message="required">Campo obligatorio.</div>
+        <md-input-container>
+          <label>Nombre</label>
+          <input name="nombre" ng-model="datos.nombre" required>
+          <div ng-messages="almacenForm.nombre.$error" ng-if="almacenForm.$submitted">
+            <div ng-message="required">Campo obligatorio.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container>
+          <label>Observaciones</label>
+          <input name="observaciones" ng-model="datos.observaciones">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Ubicación</label>
+          <input name="ubicacion" ng-model="datos.ubicacion">
+        </md-input-container>
+
+        <div layout-gt-sm="row" layout="column" layout-fill flex>
+
+          <md-select ng-model="datos.unidad" placeholder="Selecciona Unidad" flex>
+            <md-option ng-repeat="unidad in unidades" ng-value="{{unidad.UNI_clave}}" required>{{unidad.UNI_nombre}}</md-option>
+          </md-select>
+
+          <md-select ng-model="datos.tipo" placeholder="Selecciona Tipo de Almacen" flex>
+            <md-option ng-repeat="tipoalmacen in tiposalmacen" ng-value="{{tipoalmacen.TAL_clave}}" required>{{tipoalmacen.TAL_nombre}}</md-option>
+          </md-select>
+
         </div>
-      </md-input-container>
-
-      <md-input-container>
-        <label>Observaciones</label>
-        <input name="observaciones" ng-model="datos.observaciones">
-      </md-input-container>
-
-      <md-input-container>
-        <label>Ubicación</label>
-        <input name="ubicacion" ng-model="datos.ubicacion">
-      </md-input-container>
-
-      <div layout="row" layout-sm="column" layout-fill flex>
-
-        <md-select ng-model="datos.unidad" placeholder="Selecciona Unidad" flex>
-          <md-option ng-repeat="unidad in unidades" ng-value="{{unidad.UNI_clave}}" required>{{unidad.UNI_nombre}}</md-option>
-        </md-select>
-
-        <md-select ng-model="datos.tipo" placeholder="Selecciona Tipo de Almacen" flex>
-          <md-option ng-repeat="tipoalmacen in tiposalmacen" ng-value="{{tipoalmacen.TAL_clave}}" required>{{tipoalmacen.TAL_nombre}}</md-option>
-        </md-select>
-
-      </div>
+      </md-content>
       
 
       <md-switch ng-model="datos.activo" aria-label="Almacen Activo">
@@ -64,7 +67,7 @@
 
     <span flex></span>
     <md-button type="button" ng-click="cancel()">
-        Cancelar
+        Salir
     </md-button>
     <md-button type="submit" ng-disabled="guardando">
         Guardar

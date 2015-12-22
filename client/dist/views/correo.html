@@ -14,33 +14,37 @@
   <form name="mailForm" novalidate ng-submit="enviaCorreo()">
 
     <md-dialog-content layout-padding>
+      
+      <md-content layout="column">
 
-        <md-input-container>
-          <label>Correo</label>
-          <input required type="mail" name="correo" ng-model="datos.correo" required>
-        </md-input-container>
+          <md-input-container>
+            <label>Correo</label>
+            <input required type="mail" name="correo" ng-model="datos.correo" required>
+          </md-input-container>
 
-        <md-chips
-          ng-model="datos.copias"
-          placeholder="CC"
-          delete-hint="Presiona para eliminar"
-          secondary-placeholder="CC">
-        </md-chips>
-        <br>
-        <md-input-container>
-          <label>Asunto</label>
-          <input required type="text" name="asunto" ng-model="datos.asunto" required>
-        </md-input-container>
+          <md-chips
+            ng-model="datos.copias"
+            placeholder="CC"
+            delete-hint="Presiona para eliminar"
+            secondary-placeholder="CC">
+          </md-chips>
+          <br>
+          <md-input-container>
+            <label>Asunto</label>
+            <input required type="text" name="asunto" ng-model="datos.asunto" required>
+          </md-input-container>
 
-        <md-input-container flex>
-          <label>Comentarios</label>
-          <textarea ng-model="datos.comentarios"  columns="1"></textarea>
-        </md-input-container>
+          <md-input-container flex>
+            <label>Comentarios</label>
+            <textarea ng-model="datos.comentarios"  columns="1"></textarea>
+          </md-input-container>
 
-        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
-          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
-        <br>
+          <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
+          
+
+      </md-content>
 
     </md-dialog-content>
     <div class="md-actions" layout="row">

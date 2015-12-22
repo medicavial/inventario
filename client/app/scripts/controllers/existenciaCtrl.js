@@ -128,9 +128,7 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,da
       console.log('Text changed to ' + text);
     }
 
-	function consultado(query) {
-
-		console.log($scope.itemsAlmacen);
+    function consultado(query) {
 
 		var q = $q.defer(),
 			response = query ? $filter( 'filter' )( $scope.itemsAlmacen, query ) : $scope.itemsAlmacen;
@@ -139,14 +137,6 @@ function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,da
 		return q.promise;
     }
 
- //    function findValues ( query, obj ) {
-
-	// 	var deferred = $q.defer(),
-	// 		response = query ? $filter( 'filter' )( obj, query ) : obj;
-	// 	deferred.resolve( response );
-	// 	return deferred.promise;
-
-	// }
 
 
 }

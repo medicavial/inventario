@@ -3,6 +3,7 @@
 class ItemProveedor extends Eloquent {
 
     protected $table = 'itemsProveedor';
+    protected $guarded = []; 
 
     public function scopeTodo($query,$item)
     {

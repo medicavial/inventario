@@ -23,7 +23,7 @@
         <span flex></span>
         <span style="padding-right:5px;">Items: {{ dato.data.items.length }}</span>
         <span>Total: {{ dato.data.OCM_importeEsperado |currency }}</span>
-        <md-button class="md-icon-button" aria-label="PDF" ng-click="generaPDF($index)">
+        <md-button class="md-icon-button" aria-label="PDF" ng-click="pdf(dato.data.OCM_clave)">
             <md-tooltip md-direction="top">
               PDF
             </md-tooltip>

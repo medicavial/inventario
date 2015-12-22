@@ -43,7 +43,7 @@ class ProveedoresController extends \BaseController {
 
 		$proveedor->save();
 
-		$registro = $item->PRO_clave;
+		$registro = $proveedor->PRO_clave;
 
 		return Response::json(array('respuesta' => 'Proveedor Guardado Correctamente','clave' => $registro));
 	}

@@ -4,12 +4,12 @@ app.controller('ordenCompraCtrl',ordenCompraCtrl)
 app.controller('ordenesCompraCtrl',ordenesCompraCtrl)
 app.controller('correoCtrl',correoCtrl)
 
-ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','pdf'];
+ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','pdf','$window','api','operacion'];
 ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog'];
 correoCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
 
 
-function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf){
+function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf,$window,api,operacion){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
@@ -22,6 +22,8 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf){
       text: 'Movimientos por pagina:',
       of: 'de'
     };
+
+
 	scope.paginacion = [10,20,30,40];
 
 	scope.onPaginationChange = function (page, limit) {
@@ -49,9 +51,68 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf){
 	    
 	};
 
-	scope.pdf = function(index){
-		pdf.imprimeOrden(index);
-	}
+	scope.completar = function(ev,$index) {
+
+		var orden = scope.info[index];
+
+
+	    $mdDialog.show({
+	      controller: ordenCompraCtrl,
+	      templateUrl: 'views/movimientoorden.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      locals: { info: itemSurtido },
+	      resolve:{
+            informacion:function(busqueda,$q){
+            	scope.loading = true;
+                var promesa 		= $q.defer(),
+            		items 			= busqueda.items(),
+            		tiposMovimiento = busqueda.tiposMovimiento(),
+            		almacenes 		= busqueda.almacenes(),
+            		tiposajuste 	= busqueda.tiposAjuste();
+
+            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+            		console.log(data);
+            		promesa.resolve(data);
+            		scope.loading = false;
+            	});
+
+                return promesa.promise;
+            }
+          },
+	      clickOutsideToClose:false
+	    }).then(function(){
+	    	busqueda.ordenescompra().success(function (data){
+	    		scope.info = data;
+	    	});
+	    });
+	    
+	};
+
+	scope.cerrar = function(ev,index) {
+	    // Abre ventana de confirmacion
+
+	    var orden = scope.info[index];
+
+	    var confirm = $mdDialog.confirm()
+	          .title('¿Desactivar cerrar la orden?')
+	          .content('')
+	          .ariaLabel('Cerrar orden')
+	          .ok('Si')
+	          .cancel('No')
+	          .targetEvent(ev)
+	          .closeTo({
+				bottom: 1500
+			   });
+
+	    $mdDialog.show(confirm).then(function() {
+	    	console.log(orden);
+	    	operacion.cerrarOrden(orden.OCM_clave).success( function (data){
+	    		mensajes.alerta(data.respuesta,'success','top right','done_all');
+	    		orden.OCM_incompleta = 0;
+	    	})
+	    });
+	};
 
 }
 
@@ -63,6 +124,7 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 	$scope.paso3 = 'views/ordenPaso3.html';
 	$scope.paso4 = 'views/ordenPaso4.html';
 
+	$rootScope.atras = true;
 	$rootScope.tema = 'theme1';
 	$rootScope.titulo = 'Nueva Orden';
 	$scope.unidades = datos.data;
@@ -102,12 +164,18 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 		operacion.infoUnidad(unidad.UNI_clave).then(
 			function (data){
 
-				$scope.almacenes = data[0].data;
-				$scope.items = data[1].data;
+				if (data[1].data.length > 0) {
 
-				angular.forEach(data[0].data, function(value, key) {
-					$scope.selected.push(value);
-				});
+					$scope.almacenes = data[0].data;
+					$scope.items = data[1].data;
+
+					angular.forEach(data[0].data, function(value, key) {
+						$scope.selected.push(value);
+					});
+
+				}else{
+					mensajes.alerta('No hay items en este almacen','info','top right','info');
+				}
 			},
 			function (error){
 				alert(error);
@@ -133,16 +201,6 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 		return list.indexOf(item) > -1;
 	};
 
-
-	$scope.muestraSemaforo = function(existencia,nivelMinimo,nimvelCompra){
-		if (existencia == nivelMinimo || existencia < nivelMinimo) {
-			return 'bgm-red';
-		}else if(existencia > nivelMinimo && existencia < nimvelCompra || existencia == nimvelCompra){
-			return 'bgm-yellow';
-		}else if(existencia > nimvelCompra){
-			return 'bgm-green';
-		}
-	}	
 
 	$scope.ir2 = function(selecciones){
 
@@ -310,6 +368,7 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 				$scope.step2block = true;
 				$scope.step3block = true;
 				$scope.step4block = false;
+
 			},function (error){
 				alert(error);
 			}

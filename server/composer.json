@@ -7,7 +7,10 @@
 		"laravel/framework": "4.2.*",
 		"barryvdh/laravel-cors": "0.2.x",
 		"barryvdh/laravel-dompdf": "0.4.*",
-		"barryvdh/laravel-snappy": "0.1.x"
+		"barryvdh/laravel-snappy": "0.1.x",
+		"softpampa/barcode": "dev-master",
+		"mccool/database-backup": "dev-master",
+		"backup-manager/backup-manager": "~1.0"
 	},
 	"autoload": {
 		"classmap": [

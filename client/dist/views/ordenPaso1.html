@@ -34,8 +34,8 @@
           <th name="Minimo" order-by="CON_nivelMinimo"></th>
           <th name="Maximo"  order-by="CON_nivelMaximo"></th>
           <th name="Nivel. Compra"  order-by="CON_nivelCompra"></th>
-          <th name="Semaforo"></th>
-          <th name="Compra"></th>
+          <th name="Semaforo" order-by="semaforo"></th>
+          <th name="Compra" order-by="compra"></th>
         </tr>
       </thead>
       <tbody>
@@ -48,12 +48,12 @@
           <td>{{existencia.CON_nivelMaximo}}</td>
           <td>{{existencia.CON_nivelCompra}}</td>
           <td>
-              <div class="md-whiteframe-z2"  ng-class="muestraSemaforo(existencia.EXI_cantidad,existencia.CON_nivelMinimo,existencia.CON_nivelCompra)" layout layout-align="center center">
+              <div class="md-whiteframe-z2"  ng-class="existencia.semaforo" layout layout-align="center center">
                 <span>----</span>
               </div>
           </td>
           <td>
-            {{existencia.CON_nivelMaximo - existencia.EXI_cantidad}}
+            {{existencia.compra}}
           </td>
         </tr>
       </tbody>

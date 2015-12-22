@@ -105,6 +105,9 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,arc
 	$scope.tipoitems = datos[0].data;
 	$scope.subtipoitems = datos[1].data;
 	$scope.presentaciones = datos[2].data;
+	$scope.unidades = datos[3].data;
+
+	$rootScope.atras = true;
 
 	$scope.inicio = function(){
 		
@@ -124,6 +127,10 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,arc
 			clasificacion:'',
 			sustancia:$scope.sustancias,
 			posologia:'',
+			agranel:false,
+			segmentado:false,
+			unidad:'',
+			cantidadCaja :'',
 			activo:true
 		}
 
@@ -198,9 +205,12 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 
 	$rootScope.titulo = 'Detalle de Item';
 
+	$rootScope.atras = true;
+
 	$scope.tipoitems = datos[0].data;
 	$scope.subtipoitems = datos[1].data;
 	$scope.presentaciones = datos[2].data;
+	$scope.unidades = datos[4].data;
 
 	$scope.sustancias = datos[3].datos.ITE_sustancia ? datos[3].datos.ITE_sustancia.split(","):'';
 	$scope.clave = datos[3].datos.ITE_clave;
@@ -214,6 +224,10 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 		sustancia: $scope.sustancias,
 		posologia:datos[3].datos.ITE_posologia,
 		presentacion:datos[3].datos.PRE_clave,
+		agranel:datos[3].datos.ITE_agranel ? true:false,
+		segmentado:datos[3].datos.ITE_segmentable ? true:false,
+		unidad:datos[3].datos.UTI_clave,
+		cantidadCaja :datos[3].datos.ITE_cantidadCaja,
 		activo:datos[3].datos.ITE_activo ? true:false
 	}
 	

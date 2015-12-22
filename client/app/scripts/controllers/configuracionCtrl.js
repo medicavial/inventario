@@ -41,9 +41,17 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 	}
 
 	scope.verificaUnidad = function(unidad){
+
+		scope.items = [];
+		
 		busqueda.configuracion(unidad).success(function (data){
-			scope.edicion = true;
-			scope.items = data;
+
+			if (data.length > 0) {
+				scope.edicion = true;
+				scope.items = data;
+			}else{
+				mensajes.alerta('Esta Unidad no tiene items en stock','info','top right','info');
+			}
 		});
 	}
 
@@ -92,12 +100,14 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 		}
 	}
 
-	scope.verificaMinimo = function(){
-		scope.datos.minimo = Number( (scope.minimo * scope.datos.maxima)/100 );
+	scope.verificaMinimo = function(minimo){
+		scope.datos.minimo = Number( (minimo * scope.datos.maxima)/100 );
+		$rootScope.$apply();
 	}
 
-	scope.verificaCompra = function(){
-		scope.datos.compra = Number( (scope.compra * scope.datos.maxima)/100 );
+	scope.verificaCompra = function(compra){
+		scope.datos.compra = Number( (compra * scope.datos.maxima)/100 );
+		$rootScope.$apply();
 	}
 
 	scope.guardar = function(){

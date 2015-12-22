@@ -39,13 +39,19 @@ class ItemsController extends \BaseController {
 		$item->ITE_cantidadtotal = Input::get('cantidad');
 		$item->TIT_clave = Input::get('tipo');
 		$item->STI_clave = Input::get('subtipo');
+		
 		if (Input::has('sustancia')) {
 			$item->ITE_sustancia = implode("," , Input::get('sustancia'));			
 		}
+
 		$item->ITE_posologia = Input::get('posologia');
 		$item->PRE_clave = Input::get('presentacion');
 		$item->ITE_clasificacion = Input::get('clasificacion');
 		$item->ITE_codigoean = Input::get('codigoean');
+		$item->ITE_agranel = Input::get('agranel');
+		$item->ITE_segmentable = Input::get('segmentado');
+		$item->ITE_cantidadCaja = Input::get('cantidadCaja');
+		$item->UTI_clave = Input::get('unidad');
 
 		$item->save();
 

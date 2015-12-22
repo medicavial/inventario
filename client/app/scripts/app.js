@@ -23,16 +23,19 @@ var app = angular.module('app', [
 	'md.data.table',
 	'ngFileUpload',
 	'angular.filter',
-	'mdPickers',
-	'barcodeGenerator'
+	'mdPickers'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
-app.run(['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage', run]);
-// app.constant('api', 'http://localhost/inventario/server/public/api/');
-app.constant('api', 'http://api.medicavial.mx/api/');
+app.run(['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api', run]);
+app.constant('api', 'http://localhost/inventario/server/public/api/');
+// app.constant('api', 'http://api.medicavial.mx/api/');
+
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
+
+
+  	$httpProvider.interceptors.push(testInterceptor);
 
 	$urlRouterProvider.otherwise("/home");
 
@@ -69,7 +72,8 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		controller 	: function($rootScope,$scope,$stateParams){
 			$rootScope.titulo = 'Orden de Compra';
 			$scope.orden = $stateParams.ordenId;
-		}
+		},
+		reload:true
 	})
 
 	.state('index.conexiones',{
@@ -119,9 +123,10 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
                 var promesa = $q.defer(),
             		tipoitems = busqueda.tiposItem(),
             		subtipoitems = busqueda.SubTiposItem(),
+            		unidadesitem = busqueda.unidadesItem(),
             		presentaciones = busqueda.presentaciones();
 
-            	$q.all([tipoitems,subtipoitems,presentaciones]).then(function (data){
+            	$q.all([tipoitems,subtipoitems,presentaciones,unidadesitem]).then(function (data){
             		promesa.resolve(data);
             	});
 
@@ -140,8 +145,9 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             		tipoitems = busqueda.tiposItem(),
             		subtipoitems = busqueda.SubTiposItem(),
             		presentaciones = busqueda.presentaciones(),
+            		unidadesitem = busqueda.unidadesItem(),
             		item =  items.get({item:$stateParams.itemId}).$promise;
-            	$q.all([tipoitems,subtipoitems,presentaciones,item]).then(function (data){
+            	$q.all([tipoitems,subtipoitems,presentaciones,item,unidadesitem]).then(function (data){
             		promesa.resolve(data);
             	});
 
@@ -156,12 +162,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		controller:'proveedorEditCtrl',
 		resolve:{
             datos:function($q,$stateParams,proveedores){
-             //    var promesa = $q.defer(),
-            	// 	proveedor =  
-            	// $q.when(proveedor).then(function (data){
-            	// 	promesa.resolve(data);
-            	// });
-
                 return proveedores.get({proveedor:$stateParams.proveedorId}).$promise;;
             }
         }
@@ -264,7 +264,8 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             datos:function($stateParams,busqueda){
                 return busqueda.detalleOrdenCompra($stateParams.ordenId);
             }
-        }
+        },
+		reload:true
 	})
 
 	.state('index.tipositem',{
@@ -347,6 +348,18 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		resolve:{
             datos:function(unidades){
                 return unidades.query().$promise;
+            }
+        }
+	})
+
+	.state('index.unidadesitem',{
+		url:'unidadesitem',
+		templateUrl :'views/unidadesitem.html',
+		controller:'unidadesItemCtrl',
+		controllerAs: "unidadesItem",
+		resolve:{
+            datos:function(unidadesItem){
+                return unidadesItem.query().$promise;
             }
         }
 	})
@@ -485,11 +498,14 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
     $mdThemingProvider.setDefaultTheme('theme1');
     $mdThemingProvider.alwaysWatchTheme(true);
 
-    $httpProvider.defaults.timeout = 10000;
+    $httpProvider.defaults.timeout = 5000;
+
+
+    // $httpProvider.interceptors.push('myHttpInterceptor');
   
 };
 
-function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage) {
+function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api) {
 
 	var url = '';
 
@@ -518,8 +534,14 @@ function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage) {
 		$state.go(ruta);
 	}
 
+	$rootScope.pdf = function(index){
+		$window.open(api + 'reportes/pdf/ordencompra/'+ index, '_blank');
+	}
+
 	$rootScope.$on('$stateChangeStart',	function(event, toState, toParams, fromState, fromParams){ 
         
+        $rootScope.atras = false;
+
         url = toState.name;
 	    if(url != 'login' && webStorage.session.get('username') == null)
         {   

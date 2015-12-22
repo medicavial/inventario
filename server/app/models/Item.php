@@ -4,6 +4,7 @@ class Item extends Eloquent {
 
 	protected $primaryKey ='ITE_clave';
     protected $table = 'items';
+    protected $guarded = []; 
 
     public function scopeActivos($query)
     {

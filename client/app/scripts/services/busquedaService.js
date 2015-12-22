@@ -101,6 +101,9 @@ function busqueda($http, api){
         {
             return $http.get(api + 'busquedas/usuarios');
         },
+        unidadesItem : function(){
+            return $http.get(api + 'busquedas/unidadesItem');
+        },
         usuariosAlmacen : function(){
             return $http.get(api + 'operacion/usuarios/almacen');
         }

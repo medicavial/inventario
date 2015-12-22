@@ -8,8 +8,9 @@ function usualmCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 
 	var scope = this;
 
-	$rootScope.titulo = 'Conexiones';
+	$rootScope.titulo = 'Registro de Usuario en almacen';
 	$rootScope.cargando = false;
+	$rootScope.atras = true;
 	$rootScope.tema = 'theme1';
 
 	scope.inicio = function(){
@@ -40,14 +41,12 @@ function usualmCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 	    });
 	};
 
-	scope.confirma = function(ev,index,almacen) {
+	scope.confirma = function(ev,usuario,almacen) {
 	    // Abre ventana de confirmacion
-
-	    var usuario = scope.usuarios[index];
-
+	    
 	    var confirm = $mdDialog.confirm()
 	          .title('¿Seguro que deseas asignar este almacen?')
-	          .content('')
+	          .textContent('')
 	          .ariaLabel('Asignar Almacen')
 	          .ok('Si')
 	          .cancel('No')
@@ -58,7 +57,6 @@ function usualmCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 
 	    $mdDialog.show(confirm).then(
 		    function() {
-		    	// console.log(usuario.clave);
 		    	// console.log(almacen.ALM_clave);
 		    	operacion.bajaAlmacen(almacen.ALM_clave,usuario.clave);
 		    },
@@ -94,23 +92,16 @@ function nuevoUsualmCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,informaci
 		$scope.guardando = false;
 	}
 
-	function consultado(query) {
+    function consultado(query) {
 
-		var q = $q.defer();
+		var q = $q.defer(),
+			response = query ? $filter( 'filter' )( $scope.almacenes, query ) : $scope.almacenes;
+			q.resolve( response );
 
-		findValues( query, $scope.almacenes ).then( function ( res ) {
-			q.resolve( res );
-		} );
 		return q.promise;
+
     }
 
-    function findValues ( query, obj ) {
-
-		var deferred = $q.defer();
-		deferred.resolve( $filter( 'filter' )( obj, query ) );
-		return deferred.promise;
-
-	}
 
 	$scope.guardar = function(){
 			console.log($scope.datos);

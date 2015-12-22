@@ -1,5 +1,6 @@
 <?php
 
+
 class ReportesController extends BaseController {
 
 	public function existencias(){
@@ -64,5 +65,10 @@ class ReportesController extends BaseController {
 
 	public function ordenes(){
 		OrdenCompra::todos();
+	}
+
+	public function ordenCompraPDF($id){
+		$pdf = helpers::ordenPDF($id);
+    	return $pdf->stream();
 	}
 }

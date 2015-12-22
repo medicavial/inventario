@@ -1,7 +1,7 @@
 <md-content layout-padding>
   
 
-  <div layout="row" layout-sm="column" layout-margin>
+  <div layout-gt-sm="row" layout="column" layout-margin>
       
       <div flex>
         
@@ -43,9 +43,9 @@
           
       </div>
 
-      <div flex layout="column" layout-sm="column" layout-align="center center">
+      <div flex layout="column"  layout-align="center center">
           
-          <div layout="row">
+          <div layout-gt-sm="row" layout="column">
             <md-button class="md-raised" ng-click="generaCantidades()">Aplicar todos cantidad proporcional</md-button>
             <md-button class="md-raised" ng-click="generaMasBarato()">Aplicar todos al mas económico</md-button>
           </div>

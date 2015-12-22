@@ -1,4 +1,4 @@
-<md-dialog aria-label="Nueva Conexion" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+<md-dialog aria-label="Nueva Conexion" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
 
   <md-toolbar class="md-warn">
     <div class="md-toolbar-tools">
@@ -12,7 +12,8 @@
   </md-toolbar>
 
   <md-dialog-content>
-      <section>
+      <md-content layout-padding>
+
         <md-chips ng-model="almacenesseleccionados" readonly="false"  md-autocomplete-snap md-require-match>
           <md-autocomplete
               md-selected-item="seleccionado"
@@ -20,7 +21,7 @@
               md-items="alm in consultado(busqueda)"
               md-item-text="alm.ALM_nombre"
               placeholder="Escribe el Almacen">
-            <span md-highlight-text="busqueda">{{alm.ALM_nombre}} :: {{alm.TAL_nombre}} :: {{alm.UNI_nombre}}</span>
+            <span md-highlight-text="busqueda">{{alm.ALM_nombre}}</span>
           </md-autocomplete>
           <md-chip-template>
             <strong>{{$chip.ALM_nombre}}</strong>
@@ -31,30 +32,15 @@
           <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
 
-        <br />
-        <!-- <h2 class="md-title">Almacenes Disponibles</h2>
-        <md-list>
-          <md-list-item class="md-2-line veggie-option" ng-repeat="almacen in almacenes" layout="row"
-              layout-wrap>
-            <div class="md-item-text md-whiteframe-z1" flex>
-              <h3>{{almacen.ALM_nombre}}</h3>
-              <h3>{{almacen.UNI_nombre}}</h3>
-              <p>{{almacen.TAL_nombre}}</p>
-            </div>
-          </md-list-item>
-        </md-list> -->
-      </section>
+      </md-content>
 
-      
-
-      <br>
     
   </md-dialog-content>
   <div class="md-actions" layout="row">
 
     <span flex></span>
     <md-button type="button" ng-click="cancel()">
-        Cancelar
+        Salir
     </md-button>
     <md-button type="button" ng-disabled="guardando" ng-click="guardar()">
         Guardar

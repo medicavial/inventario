@@ -1,4 +1,4 @@
-<md-dialog aria-label="Modifica Item" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+<md-dialog aria-label="Modifica Item" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
 
   <form name="modificaForm" novalidate ng-submit="actualiza()">
 
@@ -8,12 +8,12 @@
 
         <md-input-container flex>
           <label>Costo</label>
-          <input type="text" name="correo" ng-model="datos.costo" required>
+          <input type="text" name="correo" ng-model="datos.costo" disabled>
         </md-input-container>
 
         <md-input-container flex>
           <label>Cantidad</label>
-          <input type="number" name="asunto" ng-model="datos.cantidad" required>
+          <input type="number" name="asunto" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required>
         </md-input-container>
 
       </md-content>
@@ -23,11 +23,12 @@
 
       <span flex></span>
       <md-button type="button" ng-click="cancel()">
-          Cancelar
+          Salir
       </md-button>
       <md-button type="submit">
           Actualizar
       </md-button>
+
     </div>
 
   </form>

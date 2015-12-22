@@ -1,10 +1,4 @@
 <div layout="column" ng-init="itempro.inicio()">
-    <div layout="row" layout-align="start center">
-      <md-button class="md-icon-button" aria-label="Atras" ng-click="muestra('index.conexiones')">
-        <ng-md-icon icon="keyboard_backspace" style="fill:#3F51B5" size="35"></ng-md-icon> 
-      </md-button>
-      <h4>Registro de Costos por item</h4>
-    </div>
     <md-data-table-toolbar class="md-whiteframe-z1">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
@@ -45,7 +39,8 @@
         <md-tooltip md-direction="top">
           Nuevo
         </md-tooltip>
-        <ng-md-icon icon="add" style="fill:white"></ng-md-icon> 
+        <ng-md-icon icon="add" style="fill:white" ng-hide="itempro.loading"></ng-md-icon> 
+        <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="itempro.loading"></md-progress-circular>
     </md-button>
 
 </div>

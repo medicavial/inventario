@@ -28,15 +28,14 @@
     ".bowercc"
   ],
   "homepage": "https://github.com/a8m/angular-filter",
-  "version": "0.5.7",
-  "_release": "0.5.7",
+  "version": "0.5.8",
+  "_release": "0.5.8",
   "_resolution": {
     "type": "version",
-    "tag": "v0.5.7",
-    "commit": "9053ac7e49028679154c71800c2511bffab9c049"
+    "tag": "v0.5.8",
+    "commit": "eadb09d9fd168f67d4b2129771f64b8202ff8e30"
   },
   "_source": "git://github.com/a8m/angular-filter.git",
   "_target": "~0.5.7",
-  "_originalSource": "angular-filter",
-  "_direct": true
+  "_originalSource": "angular-filter"
 }

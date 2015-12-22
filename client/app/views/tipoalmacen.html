@@ -1,4 +1,4 @@
-<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex="40" flex-sm="95" flex-md="75">
+<md-dialog aria-label="Nuevo Estado" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
 
   <md-toolbar class="md-warn">
     <div class="md-toolbar-tools">
@@ -15,6 +15,8 @@
 
   <md-dialog-content layout-padding>
 
+    <md-content layout="column">
+
       <md-input-container>
         <label>Nombre</label>
         <input required name="nombre" ng-model="datos.nombre">
@@ -22,28 +24,23 @@
           <div ng-message="required">Campo obligatorio.</div>
         </div>
       </md-input-container>
-      <br>
-      <div layout="row" layout-sm="column" layout-fill>
 
-        <md-switch ng-model="datos.activo" aria-label="Usuario Activo" flex>
-              <span ng-show="datos.activo">Tipo Activo</span>
-              <span ng-hide="datos.activo">Tipo Inactivo</span>
-        </md-switch>
-        
-      </div>
-
+      <md-switch ng-model="datos.activo" aria-label="Usuario Activo" flex>
+            <span ng-show="datos.activo">Tipo Activo</span>
+            <span ng-hide="datos.activo">Tipo Inactivo</span>
+      </md-switch>
+      
       <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
       </div>
-
-      <br>
+    </md-content>
     
   </md-dialog-content>
   <div class="md-actions" layout="row">
 
     <span flex></span>
     <md-button type="button" ng-click="cancel()">
-        Cancelar
+        Salir
     </md-button>
     <md-button type="submit" ng-disabled="guardando">
         Guardar

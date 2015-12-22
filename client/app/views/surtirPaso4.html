@@ -1,0 +1,12 @@
+<md-content layout-padding>
+
+	<div layout="row" layout-sm="column">
+		<h4>Tu orden ha sido confirmada correctamente da click en surtir para ingresar en existencias.</h4>
+	</div>
+
+	<div layout="row" layout-align="center center">
+		<md-button class="md-raised md-primary" ng-click="surtir()" ng-hide="guardando" ng-disabled="inavilitado" type="submit">Surtir</md-button>
+		<md-progress-circular md-mode="indeterminate" ng-show="guardando"></md-progress-circular>
+	</div>
+
+</md-content>

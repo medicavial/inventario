@@ -20,6 +20,10 @@ h1,h2,h3,h4{
   position: relative;
 }
 
+md-input-container{
+  margin-bottom: 0.4em;
+}
+
 md-input-container label, md-input-container .md-placeholder,md-select .md-select-value.md-select-placeholder {
   color: rgba(0,0,0,0.70) !important;
   /*color:#000 !important;*/
@@ -36,7 +40,6 @@ md-select .md-select-value.md-select-placeholder{
 /*.md-list-item, .md-list-item .md-list-item-inner {
     height: 54px !important; 
 }*/
-
 
 
 .md-sidenav-left {
@@ -109,6 +112,7 @@ md-tooltip{
 
 .gris{
   background-color: #EBEFF2 !important;
+  padding: 1em;
 }
 
 .fondo{
@@ -148,6 +152,14 @@ md-tooltip{
 .md-toolbar-tools md-input-container md-input {
   color:white !important;
 }
+
+.info{
+
+  background-color: #323232 !important;
+  color: rgb(250,250,250);
+}
+
+
 
 .error{
   background-color: #ef5350 !important;
@@ -356,3 +368,22 @@ md-tooltip{
   padding:0.5em 1em;
   text-align: right;
 }
+
+/*.md-input.ng-invalid.ng-dirty {
+    border-color: #FA787E;
+}
+.md-input.ng-valid.ng-dirty {
+    border-color: #78FA89;
+}
+*/
+
+@media (max-width: 960px) {
+  .gris{
+    padding: 0 !important;
+  }
+}
+
+/*
+.no-padding{
+  padding: 0;
+}*/

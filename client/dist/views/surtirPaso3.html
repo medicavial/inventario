@@ -1,0 +1,26 @@
+<md-content layout-padding>
+
+	<div layout="row">
+		<h4 flex>Alta de lotes por items surtidos</h4>
+		<div flex>
+	    	<md-button class="md-raised md-primary" ng-disabled="seleccionItems.length == 0" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
+		</div>
+	</div>
+	
+	<md-list>
+		<md-list-item>
+		    <p> Item </p>
+		    <p> Cantidad Surtida </p>
+		    <p> Lotes </p>
+		</md-list-item>
+		<md-divider></md-divider>
+		<md-list-item ng-click="agregaLote($index, $event)" ng-repeat="surtido in seleccionItems">
+		    <p> {{ surtido.ITE_nombre }} </p>
+		    <p ng-if="surtido.OIT_cantidadSurtida == 0"> {{ surtido.OIT_cantidadPedida }} </p>
+		    <p ng-if="surtido.OIT_cantidadSurtida > 0"> {{ surtido.OIT_cantidadSurtida }} </p>
+		    <p ng-if="surtido.lotes.length > 0"> <ng-md-icon icon="done" style="fill:green"></ng-md-icon>  </p>
+		    <p ng-if="!surtido.lotes"> <ng-md-icon icon="clear" style="fill:red"></ng-md-icon>  </p>
+		</md-list-item>
+    </md-list>
+
+</md-content>

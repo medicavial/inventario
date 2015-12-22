@@ -4,7 +4,7 @@ app.controller('movimientoCtrl',movimientoCtrl)
 app.controller('movimientosCtrl',movimientosCtrl)
 
 movimientosCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
-movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','$q','$filter'];
+movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter'];
 
 
 function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
@@ -20,6 +20,7 @@ function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
       text: 'Movimientos por pagina:',
       of: 'de'
     };
+    
 	scope.paginacion = [10,20,30,40];
 
 	scope.onPaginationChange = function (page, limit) {
@@ -33,11 +34,30 @@ function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 	};
 
 	scope.nuevo = function(ev) {
+
 	    $mdDialog.show({
 	      controller: movimientoCtrl,
 	      templateUrl: 'views/movimiento.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
+	      resolve:{
+            informacion:function(busqueda,$q){
+            	scope.loading = true;
+                var promesa 		= $q.defer(),
+            		items 			= busqueda.items(),
+            		tiposMovimiento = busqueda.tiposMovimiento(),
+            		almacenes 		= busqueda.almacenes(),
+            		tiposajuste 	= busqueda.tiposAjuste();
+
+            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+            		console.log(data);
+            		promesa.resolve(data);
+            		scope.loading = false;
+            	});
+
+                return promesa.promise;
+            }
+          },
 	      clickOutsideToClose:false
 	    }).then(function(){
 	    	busqueda.movimientos().success(function (data){
@@ -49,23 +69,13 @@ function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 }
 
 
-function movimientoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,$q,$filter){
+function movimientoCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter){
 
-	busqueda.items().then(function (info){
-		$scope.items = info.data;
-	});
+	$scope.items = informacion[0].data;
+	$scope.tiposmovimiento = informacion[1].data;
+	$scope.almacenes = informacion[2].data;
+	$scope.tiposajuste = informacion[3].data;
 
-	busqueda.almacenes().then(function (info){
-		$scope.almacenes = info.data;
-	});
-
-	busqueda.tiposMovimiento().then(function (info){
-		$scope.tiposmovimiento = info.data;
-	});
-
-	busqueda.tiposAjuste().then(function (info){
-		$scope.tiposajuste = info.data;
-	});
 
 	$scope.inicio = function(){
 

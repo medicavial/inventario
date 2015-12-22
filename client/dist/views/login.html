@@ -1,6 +1,6 @@
-<div layout="row" class="fondo" layout-align="center center" ng-init="sesion.inicio()">
+<div layout="row" class="fondo" layout-align="center start" layout-align-gt-xs="center center" ng-init="sesion.inicio()">
 	
-	<md-whiteframe class="md-whiteframe-z5 white" layout-align="center center" flex="40" flex-sm="95" flex-md="75">
+	<md-whiteframe class="md-whiteframe-z5 white" flex-sm="65" flex-gt-md="40" flex="100">
 		
 		<md-toolbar class="md-tall">
 	      <span flex></span>
@@ -9,14 +9,14 @@
 	      </h2>
 	    </md-toolbar>
 	    <div layout-padding>
-	    	<form name="loginForm" ng-submit="sesion.login()" layout="column">
+	    	<form name="sesion.loginForm" ng-submit="sesion.login()" layout="column" novalidate>
 				<md-input-container class="md-icon-float" flex>
 					<label>Usuario</label>
 					<md-icon  class="name">
 						<ng-md-icon icon="person" style="fill:#595959"></ng-md-icon> 
 					</md-icon>
 					<input ng-model="sesion.datos.usuario" name="usuario" type="text" aria-label="usuario" required>
-					<div ng-messages="loginForm.usuario.$error" ng-if="loginForm.$submitted">
+					<div ng-messages="sesion.loginForm.usuario.$error" ng-if="sesion.loginForm.$submitted">
 						<div ng-message="required">Campo obligatorio.</div>
 			        </div>
 			    </md-input-container>
@@ -26,10 +26,11 @@
 						<ng-md-icon icon="lock" style="fill:#595959"></ng-md-icon> 
 					</md-icon>
 					<input ng-model="sesion.datos.psw" name="psw" type="password" aria-label="contraseña" required>
-					<div ng-messages="loginForm.psw.$error" ng-if="loginForm.$submitted">
+					<div ng-messages="sesion.loginForm.psw.$error" ng-if="sesion.loginForm.$submitted">
 						<div ng-message="required">Campo obligatorio.</div>
 			        </div>
 			    </md-input-container>
+			    <br>
 				<md-checkbox ng-model="sesion.datos.guardar" aria-label="Mantenerme conectado">
 		        	Mantenerme conectado
 		        </md-checkbox>
@@ -37,7 +38,7 @@
 					<md-button class="md-raised md-primary" type="submit" ng-hide="cargando">
 						Iniciar Sesion
 					</md-button>
-					<md-progress-circular md-mode="indeterminate" ng-show="cargando"></md-progress-circular>
+					<md-progress-circular md-mode="indeterminate" md-diameter="70" ng-show="cargando"></md-progress-circular>
 				</div>
 	    	</form>
   		</div>

@@ -2,19 +2,21 @@ app.controller('itemproCtrl',itemproCtrl)
 app.controller('nuevoItemproCtrl',nuevoItemproCtrl)
 
 itemproCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','operacion'];
-nuevoItemproCtrl.$inject = ['$scope','$mdDialog','busqueda','mensajes','$q','$filter','operacion','$rootScope'];
+nuevoItemproCtrl.$inject = ['$scope','$mdDialog','informacion','mensajes','$q','$filter','operacion','$rootScope'];
 
 function itemproCtrl($rootScope,$mdDialog,datos,busqueda,operacion){
 
 	var scope = this;
 
-	$rootScope.titulo = 'Conexiones';
+	$rootScope.titulo = 'Registro de Costos por item';
 	$rootScope.cargando = false;
+	$rootScope.atras = true;
 	$rootScope.tema = 'theme1';
 	scope.items = datos.data;
 
 	scope.inicio = function(){
 
+		scope.loading = false;
 		scope.total = 0;
 		scope.limit = 10;
 		scope.page = 1;
@@ -29,6 +31,22 @@ function itemproCtrl($rootScope,$mdDialog,datos,busqueda,operacion){
 	      templateUrl: 'views/altaitempro.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
+	      resolve:{
+            informacion:function(busqueda,$q){
+            	scope.loading = true;
+                 var promesa = $q.defer(),
+            		items = busqueda.items(),
+            		proveedores = busqueda.proveedores();
+
+            	$q.all([items,proveedores]).then(function (data){
+            		console.log(data);
+            		promesa.resolve(data);
+            		scope.loading = false;
+            	});
+
+                return promesa.promise;
+            }
+          },
 	      clickOutsideToClose:false
 	    }).then(function(){
 	    	busqueda.itemsProveedor().success(function (data){
@@ -67,15 +85,10 @@ function itemproCtrl($rootScope,$mdDialog,datos,busqueda,operacion){
 
 }
 
-function nuevoItemproCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,operacion,$rootScope){
+function nuevoItemproCtrl($scope,$mdDialog,informacion,mensajes,$q,$filter,operacion,$rootScope){
 
-	busqueda.proveedores().then(function (info){
-		$scope.proveedores = info.data;
-	});
-
-	busqueda.items().then(function (info){
-		$scope.items = info.data;
-	});
+	$scope.items = informacion[0].data;
+	$scope.proveedores = informacion[1].data;
 
 	$scope.inicio = function(){
 		$scope.seleccionado = null;
@@ -93,21 +106,13 @@ function nuevoItemproCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,operacio
 
 	function consultado(query) {
 
-		var q = $q.defer();
+		var q = $q.defer(),
+			response = query ? $filter( 'filter' )( $scope.items, query ) : $scope.items;
+			q.resolve( response );
 
-		findValues( query, $scope.items ).then( function ( res ) {
-			q.resolve( res );
-		} );
 		return q.promise;
+
     }
-
-    function findValues ( query, obj ) {
-
-		var deferred = $q.defer();
-		deferred.resolve( $filter( 'filter' )( obj, query ) );
-		return deferred.promise;
-
-	}
 
 	$scope.guardar = function(){
 			console.log($scope.datos);

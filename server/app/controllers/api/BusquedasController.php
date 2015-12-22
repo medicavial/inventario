@@ -75,6 +75,7 @@ class BusquedasController extends BaseController {
 
 		$orden = array(
 			'OCM_clave' => $dato->OCM_clave,
+			'PRO_clave' => $dato->PRO_clave,
 			'PRO_nombrecorto' => $dato->PRO_nombrecorto,
 			'PRO_nombre' => $dato->PRO_nombre,
 			'PRO_rfc' => $dato->PRO_rfc,
@@ -84,6 +85,7 @@ class BusquedasController extends BaseController {
 			'USU_nombrecompleto' => $dato->USU_nombrecompleto,
 			'OCM_fechaReg' => $dato->OCM_fechaReg,
 			'OCM_almacenes' => explode(',', $dato->OCM_almacenes),
+			'UNI_clave' => $dato->UNI_clave,
 			'UNI_nombre' => $dato->UNI_nombre,
 			'UNI_responsable' => $dato->UNI_responsable,
 			'UNI_horaentrega' => $dato->UNI_horaentrega,
@@ -143,6 +145,10 @@ class BusquedasController extends BaseController {
 
 	public function unidades(){
 		return Unidad::activos();
+	}
+
+	public function unidadesItem(){
+		return UnidadItem::activos();
 	}
 
 }
