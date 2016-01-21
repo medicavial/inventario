@@ -1,18 +1,18 @@
 "use strict"
 
 app.controller('unidadItemCtrl',unidadItemCtrl)
-app.controller('unidadesItemCtrl',unidadesItemCtrl)
+app.controller('equivalenciasCtrl',equivalenciasCtrl)
 app.controller('unidadItemEditCtrl',unidadItemEditCtrl)
 
-unidadesItemCtrl.$inject = ['$rootScope','$mdDialog','datos','unidadesItem','mensajes'];
+equivalenciasCtrl.$inject = ['$rootScope','$mdDialog','datos','unidadesItem','mensajes'];
 unidadItemCtrl.$inject = ['$scope','$mdDialog','unidadesItem','mensajes'];
 unidadItemEditCtrl.$inject = ['$scope','$mdDialog','unidadesItem','mensajes','informacion'];
 
-function unidadesItemCtrl($rootScope,$mdDialog,datos,unidadesItem,mensajes){
+function equivalenciasCtrl($rootScope,$mdDialog,datos,unidadesItem,mensajes){
 
 	var scope = this;
 	$rootScope.tema = 'theme1';
-	$rootScope.titulo = 'Tipos de Item Registrados';
+	$rootScope.titulo = 'Unidades de Item Registrados';
 	scope.info = datos;
 	scope.total = 0;
 	scope.limit = 10;

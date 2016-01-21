@@ -131,6 +131,10 @@ md-tooltip{
   padding: 2em;
 }
 
+.padding-right{
+  padding: 0 2em 0 0;
+}
+
 .text-center{
   text-align: center !important;
 }
@@ -153,25 +157,27 @@ md-tooltip{
   color:white !important;
 }
 
-.info{
+md-toast.info md-toast-content{
 
   background-color: #323232 !important;
   color: rgb(250,250,250);
 }
 
+ 
 
 
-.error{
+
+md-toast.error .md-toast-content {
   background-color: #ef5350 !important;
   color:rgba(255,255,255,0.87);
 }
 
-.success{
+md-toast.success .md-toast-content {
   background-color: #66BB6A !important;
   color:rgba(255,255,255,0.87);
 }
 
-.warning{
+md-toast.warning .md-toast-content {
   background-color: #FF9800 !important;
   color:rgba(255,255,255,1);
 }

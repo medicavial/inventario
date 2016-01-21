@@ -3,10 +3,12 @@
 app.controller('ordenCompraCtrl',ordenCompraCtrl)
 app.controller('ordenesCompraCtrl',ordenesCompraCtrl)
 app.controller('correoCtrl',correoCtrl)
+app.controller('completaCtrl',completaCtrl)
 
 ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','pdf','$window','api','operacion'];
 ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog'];
 correoCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
+completaCtrl.$inject = ['$scope','$mdDialog','informacion','operacion','mensajes','$rootScope'];
 
 
 function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf,$window,api,operacion){
@@ -51,36 +53,38 @@ function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf,$win
 	    
 	};
 
-	scope.completar = function(ev,$index) {
+	scope.completar = function(ev,index) {
 
 		var orden = scope.info[index];
 
+		console.log(orden);
 
 	    $mdDialog.show({
-	      controller: ordenCompraCtrl,
+	      controller: completaCtrl,
 	      templateUrl: 'views/movimientoorden.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
-	      locals: { info: itemSurtido },
 	      resolve:{
-            informacion:function(busqueda,$q){
-            	scope.loading = true;
-                var promesa 		= $q.defer(),
-            		items 			= busqueda.items(),
-            		tiposMovimiento = busqueda.tiposMovimiento(),
-            		almacenes 		= busqueda.almacenes(),
-            		tiposajuste 	= busqueda.tiposAjuste();
+            informacion:function(operacion,$q){
+            	
+                var promesa = $q.defer(),
+            		items 	= operacion.verificaFaltantes(orden.OCM_clave);
 
-            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
-            		console.log(data);
-            		promesa.resolve(data);
-            		scope.loading = false;
+            	$q.when(items).then(function (data){
+            		// console.log(data);
+            		var datos = {
+            			items:data.data,
+            			orden:orden
+            		}
+
+            		promesa.resolve(datos);
+            		// scope.loading = false;
             	});
 
                 return promesa.promise;
             }
           },
-	      clickOutsideToClose:false
+	      clickOutsideToClose:true
 	    }).then(function(){
 	    	busqueda.ordenescompra().success(function (data){
 	    		scope.info = data;
@@ -477,6 +481,40 @@ function correoCtrl($scope, $mdDialog, info, operacion, mensajes){
 			mensajes.alerta(data.respuesta,'success','top right','done_all');
 		}).error(function (data){
 			mensajes.alerta('No se logro enviar el correo favor de intentarlo nuevamente','error','top right','done_all');
+		});
+
+	}
+
+	$scope.cancel = function() {
+		$mdDialog.hide();
+	};
+	
+}
+
+
+function completaCtrl($scope, $mdDialog, informacion, operacion, mensajes,$rootScope){
+
+	console.log(informacion);
+
+	$scope.inicio = function(){
+		
+		$scope.guardando = false;
+
+		$scope.datos = {
+			orden:informacion.orden.OCM_clave,
+			unidad:informacion.orden.UNI_clave,
+			items:informacion.items,
+			usuario:$rootScope.id
+		}
+	}
+
+	$scope.guardar = function(){
+
+		$scope.guardando = true;
+		operacion.completaOrden($scope.datos).success( function (data){
+			$scope.guardando = false;
+			mensajes.alerta(data.respuesta,'success','top right','done_all');
+			$mdDialog.hide();
 		});
 
 	}

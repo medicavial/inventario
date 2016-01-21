@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.0-rc7-master-2ab3075
+ * v1.0.1
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -2973,7 +2973,7 @@ function InterimElementProvider() {
   var SUFFIXES = /(-gt)?-(sm|md|lg)/g;
   var WHITESPACE = /\s+/g;
 
-  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink'];
+  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink', 'nogrow' ];
   var LAYOUT_OPTIONS = ['row', 'column'];
   var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
   var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
@@ -3392,7 +3392,9 @@ function InterimElementProvider() {
   function buildUpdateFn(element, className, attrs) {
     return function updateAttrValue(fallback) {
       if (!needsInterpolation(fallback)) {
-        element.attr(className, fallback);
+        // Do not modify the element's attribute value; so
+        // uses '<ui-layout layout="/api/sidebar.html" />' will not
+        // be affected. Just update the attrs value.
         attrs[attrs.$normalize(className)] = fallback;
       }
     };

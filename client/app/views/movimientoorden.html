@@ -2,7 +2,7 @@
 
   <md-toolbar class="md-warn">
     <div class="md-toolbar-tools">
-      <h2>Nuevo Movimiento</h2>
+      <h2>Completa orden</h2>
       <span flex></span>
       <md-button  class="md-icon-button" ng-click="cancel()">
         <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
@@ -17,40 +17,18 @@
       
       <md-content layout="column">
 
-          <div layout-gt-sm="row" layout="column">
-            
-            <md-input-container flex>
-              <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" required >
-                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
-              </md-select>
-              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
-            </md-input-container>
-
-            <md-input-container flex>
-              <label>Cantidad</label>
-              <input type="number" name="cantidad" ng-model="datos.cantidad" required>
-              <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
-            </md-input-container>
-            
-            <md-input-container flex>
-              <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
-                <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
-              </md-select>
-              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
-            </md-input-container>
-
-          </div>
+          <md-list>
+            <md-list-item>
+                <p> Item </p>
+                <p> Cantidad </p>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item  ng-repeat="item in datos.items">
+                <p> {{ item.ITE_nombre }} </p>
+                <p> {{ item.OIT_cantidadPedida - OIT_cantidadSurtida }} </p>
+            </md-list-item>
+          </md-list>
         
-          <md-input-container flex>
-            <label>Observaciones</label>
-            <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>
-          </md-input-container>
 
           <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -65,8 +43,8 @@
     <md-button type="button" ng-click="cancel()">
         Salir
     </md-button>
-    <md-button type="submit" ng-disabled="verificaForm()">
-        Guardar
+    <md-button ng-disabled="guardando" type="submit">
+        Ingresar
     </md-button>
   </div>
 

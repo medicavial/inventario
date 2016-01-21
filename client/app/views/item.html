@@ -19,7 +19,7 @@
       
       <div layout-gt-sm="row" layout="column" class="no-padding">
         
-        <md-input-container flex flex-gt-sm="15">
+        <md-input-container flex flex-gt-sm="20">
           <label>Codigo</label>
           <input  name="clave" ng-model="datos.codigo" required mayusculas> 
           <div ng-messages="itemForm.clave.$error" ng-if="itemForm.$submitted">
@@ -27,12 +27,12 @@
           </div>
         </md-input-container>
 
-        <md-input-container flex flex-gt-sm="15">
+        <md-input-container flex flex-gt-sm="20">
           <label>Codigo EAN</label>
           <input  name="clave" ng-model="datos.codigoean" mayusculas> 
         </md-input-container>
 
-        <md-input-container flex flex-gt-sm="70">
+        <md-input-container flex flex-gt-sm="60">
           <label>Nombre</label>
           <input required name="nombre" ng-model="datos.nombre">
           <div ng-messages="itemForm.nombre.$error" ng-if="itemForm.$submitted">
@@ -98,6 +98,12 @@
                   <span ng-show="datos.segmentado">Item Segmentable</span>
                   <span ng-hide="datos.segmentado">Item No Segmentable</span>
           </md-switch>
+
+
+          <md-switch ng-model="datos.talla" aria-label="Item con Talla" flex>
+                  <span ng-show="datos.talla">Item Con Talla</span>
+                  <span ng-hide="datos.talla">Item Sin Talla</span>
+          </md-switch>
         
       </div>
 
@@ -134,26 +140,31 @@
 
       <md-content layout-padding>
         
-        <div layout="column" >
+        <div layout="column" class="noppading" >
           
             <md-chips ng-model="sustancias"  
+                md-separator-keys="keys"
                 placeholder="Ingresa Otra Sustancias"
                 delete-button-label="Remove Tag"
-                delete-hint="Press delete to remove tag"
+                delete-hint="Presiona para remover"
                 secondary-placeholder="Agrega Sustancia" 
                 readonly="false" flex>
-            </md-chips>
-            
+            </md-chips>  
+            <br>
             <md-input-container flex>
-              <label>Posologia</label>
-              <textarea ng-model="datos.posologia" name="posologia" columns="1"></textarea>
+              <label>Presentación</label>
+              <input  name="presentacion" ng-model="datos.presentacionDesc">
             </md-input-container>
 
             <md-input-container flex>
               <label>Clasificacion</label>
-              <input  name="nombre" ng-model="datos.clasificacion">
+              <input  name="clasif" ng-model="datos.clasificacion">
             </md-input-container>
           
+            <md-input-container flex>
+              <label>Posologia</label>
+              <textarea ng-model="datos.posologia" name="posologia" columns="1"></textarea>
+            </md-input-container>
         </div>
 
       </md-content>
@@ -190,10 +201,6 @@
       </md-list>
       
     </md-content>
-
-    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
-      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-    </div>
 
 
     <div layout="row" layout-align="center center">

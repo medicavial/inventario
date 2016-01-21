@@ -23,36 +23,52 @@ class OperacionController extends BaseController {
 
 	}
 
-	public function cerrarOrden($orden){
+	public function cerrarOrden(){
+
+		$orden = Input::get('orden');
+		$usuario = Input::get('usuario');
 
 		$orden = OrdenCompra::find($orden);
 
-		$orden->OCM_incompleta = 0;
+		$orden->OCM_cerrada = 1;
+		$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
+		$orden->USU_cerro = $usuario;	
 		$orden->save();
 
 		return Response::json(array('respuesta' => 'Orden Cerrada Correctamente'));
 
 	}
 
-	public function completaOrden($orden){
+	public function completaOrden(){
 
-		$datos = OrdenItem::where('OCM_clave',$orden)->get();
-		$respuesta = array();
+		$cveOrden = Input::get('orden');
+		$items = Input::get('items');
+		$unidad = Input::get('unidad');
+		$usuario = Input::get('usuario');
 
-		foreach ($datos as $item) {
+		//obtenemos el almacen principal de esa unidad
+		$resultado = Almacen::where('UNI_clave',$unidad)->where('TAL_clave',1)->first();
+		$almacen = $resultado->ALM_clave;
+
+		$orden = OrdenCompra::find($cveOrden);
+
+		foreach ($items as $item) {
 			
-			$pedido = $item['OIT_cantidadPedida'];
-			$surtido = $item['OIT_cantidadSurtida'];
 
-			if ($surtido == 0) {
-				array_push($respuesta,$item);
-			}elseif ($surtido < $pedido) {
-				array_push($respuesta,$item);
-			}
+			$cantidad = $item['OIT_cantidadPedida'] - $item['OIT_cantidadSurtida'];
+			$claveItem = $item['ITE_clave'];
+
+			helpers::ingresaTotal($claveItem,$cantidad,$almacen,$cveOrden,$usuario,'Se Completó Orden');
 
 		}
 
-		return $respuesta;
+		$orden->OCM_cerrada = 1;
+		$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
+		$orden->USU_cerro = $usuario;
+		$orden->save();
+
+		return Response::json(array('respuesta' => 'Orden Completada Correctamente'));
+		
 
 	}
 
@@ -287,7 +303,7 @@ class OperacionController extends BaseController {
 		}
 
 
-		// //si es un ajuste no importa las cantidades en el item exitentes se resetean
+		// si es un ajuste no importa las cantidades en el item exitentes se resetean
 		if ($tipomovimiento == 1) {
 			
 			$existencia->ITE_clave = $item;
@@ -302,7 +318,7 @@ class OperacionController extends BaseController {
 			$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $cantidadActual + $cantidad;
 			$itemactualiza->save();
 
-		//en este se toma que es una alta de item
+		// en este se toma que es una alta de item
 		}else if($tipomovimiento == 2){
 
 			$existencia->ITE_clave = $item;
@@ -318,7 +334,7 @@ class OperacionController extends BaseController {
 			$itemactualiza->save();
 			
 
-		//en este se toma que es una baja de item
+		// en este se toma que es una baja de item
 		}else if ($tipomovimiento == 3) {
 
 			$existencia->ITE_clave = $item;
@@ -571,8 +587,18 @@ class OperacionController extends BaseController {
 		$orden->OCM_entrega = Input::get('tipoEntrega');
 		$orden->OCM_verificacion = Input::get('verificacion');
 		$orden->OCM_importeFinal = Input::get('total');
-		$orden->OCM_cerrada = true;
-		$orden->USU_cerro = $usuario;	
+
+		if (!Input::get('incompleta') ) {
+
+			$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
+			$orden->USU_cerro = $usuario;	
+			$orden->OCM_cerrada = true;
+
+		}
+
+		$orden->OCM_fechaSurtida =  date('Y-m-d H:i:s');
+		$orden->USU_surtio = $usuario;
+		$orden->OCM_surtida = true;
 
 		$orden->save();
 
@@ -591,7 +617,7 @@ class OperacionController extends BaseController {
 			$item->OIT_precioFinal = $ultimoCosto;
 			$item->save();
 
-			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,$proveedor,$ultimoCosto);
+			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
 
 			helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
 		
@@ -602,6 +628,30 @@ class OperacionController extends BaseController {
 
 
 		
+	}
+
+	public function verificaOrden($orden){
+
+		$datos = OrdenItem::join('ordenCompra','ordenCompra.OCM_clave','=','ordenItems.OCM_clave')
+					->join('items','items.ITE_clave','=','ordenItems.ITE_clave')
+					->where('ordenCompra.OCM_clave',$orden)->get();
+		$respuesta = array();
+
+		foreach ($datos as $item) {
+			
+			$pedido = $item['OIT_cantidadPedida'];
+			$surtido = $item['OIT_cantidadSurtida'];
+
+			if ($surtido == 0) {
+				array_push($respuesta,$item);
+			}elseif ($surtido < $pedido) {
+				array_push($respuesta,$item);
+			}
+
+		}
+
+		return $respuesta;
+
 	}
 
 

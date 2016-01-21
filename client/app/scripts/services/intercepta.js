@@ -6,7 +6,7 @@ function testInterceptor($q,$rootScope){
 	    },
 
 	    requestError: function(config) {
-	    	alert('hubo un error de conexión intentalo nuevamente');
+	    	// alert('hubo un error de conexión intentalo nuevamente');
 	    	return config;
 	    },
 
@@ -15,7 +15,7 @@ function testInterceptor($q,$rootScope){
 	    },
 
 	    responseError: function(res) {
-	    	alert('hubo un error de conexión intentalo nuevamente');
+	    	// alert('hubo un error de conexión intentalo nuevamente');
 	    	return res;
 	    }
     }

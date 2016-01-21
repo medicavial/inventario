@@ -40,8 +40,8 @@ class helpers {
 
 	}
 
-	//helper para crear todo el ingreso del item a nivel global y de existencia modificando el costo del mismo
-	public static function ingresaTotal($item,$cantidad,$almacen,$orden,$usuario,$provedor,$costo){
+	//helper para crear todo el ingreso del item a nivel global y de existencia modificando el costo del mismmo
+	public static function ingresaTotal($item,$cantidad,$almacen,$orden,$usuario,$observaciones){
 
 		//verificamos existencia
 		$consulta = Existencia::busca($item,$almacen);
@@ -76,11 +76,6 @@ class helpers {
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal + $cantidad;
 		$itemactualiza->save();
 
-		//actualizamos el costo del item con el provedor
-		ItemProveedor::where('PRO_clave',$provedor)
-					 ->where('ITE_clave',$item)
-					 ->update(array('IPR_ultimoCosto' => $costo));
-
 		//creamos el registro que se realizo con el surtido
 		$movimiento = new Movimiento;
 
@@ -90,7 +85,7 @@ class helpers {
 		$movimiento->TIM_clave = 2;
 		$movimiento->USU_clave = $usuario;
 		$movimiento->MOV_cantidad = $cantidad;
-		$movimiento->MOV_observaciones = 'Surtido Orden';
+		$movimiento->MOV_observaciones = $observaciones;
 
 		$movimiento->save();
 

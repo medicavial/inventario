@@ -1,4 +1,4 @@
-<div layout="column" >
+<div layout="column">
     
 
     <md-data-table-toolbar class="md-whiteframe-z1">
@@ -15,7 +15,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
-        <thead md-order="unidadesItem.order" md-trigger="unidadesItem.onOrderChange">
+        <thead md-order="equivalencias.order" md-trigger="equivalencias.onOrderChange">
           <tr>
             <th name="ID"  order-by="UTI_clave"></th>
             <th name="Nombre" order-by="UTI_nombre"></th>
@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="unidad in unidadesItem.info |filter:query | orderBy: unidadesItem.order | limitTo: unidadesItem.limit: (unidadesItem.page - 1) * unidadesItem.limit">
+          <tr ng-repeat="unidad in equivalencias.info |filter:query | orderBy: equivalencias.order | limitTo: equivalencias.limit: (equivalencias.page - 1) * equivalencias.limit">
             <td>{{unidad.UTI_clave}}</td>
             <td>{{unidad.UTI_nombre}}</td>
             <td>{{unidad.created_at}}</td>
@@ -41,12 +41,12 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="unidadesItem.editaunidad($event,$index)">
+                      <md-button ng-click="equivalencias.editaunidad($event,$index)">
                         <p>Modificar</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="unidadesItem.confirmacion($event,$index)">
+                      <md-button ng-click="equivalencias.confirmacion($event,$index)">
                         <p ng-show="unidad.UTI_activo" >Desactivar</p>
                         <p ng-hide="unidad.UTI_activo" >Activar</p>
                       </md-button>
@@ -59,12 +59,12 @@
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-label="unidadesItem.texto" md-row-select="unidadesItem.paginacion" md-limit="unidadesItem.limit" md-page="unidadesItem.page" md-total="{{unidadesItem.info.length}}"></md-data-table-pagination>
+    <md-data-table-pagination md-label="equivalencias.texto" md-row-select="equivalencias.paginacion" md-limit="equivalencias.limit" md-page="equivalencias.page" md-total="{{equivalencias.info.length}}"></md-data-table-pagination>
 
 
 </div>
 
-<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="unidadesItem.nuevaUnidad($event)" aria-label="Nuevo Estado">
+<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="equivalencias.nuevaUnidad($event)" aria-label="Nuevo Estado">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>

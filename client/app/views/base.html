@@ -80,7 +80,7 @@
             <p> SubTipos item </p>
             <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
-          <md-list-item ng-click="ir('index.unidadesitem')">
+          <md-list-item ng-click="ir('index.equivalencias')">
             <p> Unidad Item </p>
             <ng-md-icon icon="toc" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
@@ -144,10 +144,10 @@
             <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
-          <!-- <md-list-item ng-click="ir('index.existencias')">
-            <p> Existencias </p>
-            <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item> -->
+          <md-list-item ng-click="ir('index.receta')">
+            <p> Surtir Receta </p>
+            <ng-md-icon icon="assignment_returned" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
           
           <md-list-item ng-click="ir('index.traspaso')">
             <p> Traspasos </p>
@@ -160,10 +160,6 @@
             <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
-          <md-list-item ng-click="ir('index.lotes')">
-            <p> Lotes </p>
-            <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
-          </md-list-item>
 
 
           <md-list-item ng-click="ir('index.facturas')">
@@ -180,6 +176,10 @@
         </md-subheader>
         <div ng-show="reportes">
 
+          <md-list-item ng-click="ir('index.lotes')">
+            <p> Lotes </p>
+            <ng-md-icon icon="event_note" style="fill:#3F51B5"></ng-md-icon> 
+          </md-list-item>
           <md-list-item ng-click="ir('index.reporteExistencias')">
             <p> Existencias </p>
             <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('TipoOrdenTableSeeder');
 		$this->call('UnidadesTableSeeder');
 		$this->call('SubTipoItemTableSeeder');
+		$this->call('UnidadItemTableSeeder');
 		
 	}
 

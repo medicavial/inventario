@@ -28,14 +28,14 @@ var app = angular.module('app', [
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
 app.run(['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api', run]);
-app.constant('api', 'http://localhost/inventario/server/public/api/');
-// app.constant('api', 'http://api.medicavial.mx/api/');
+// app.constant('api', 'http://localhost/inventario/server/public/api/');
+app.constant('api', 'http://api.medicavial.mx/api/');
 
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
 
 
-  	$httpProvider.interceptors.push(testInterceptor);
+  	// $httpProvider.interceptors.push(testInterceptor);
 
 	$urlRouterProvider.otherwise("/home");
 
@@ -82,6 +82,62 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		controller 	: function($rootScope){
 			$rootScope.titulo = 'Conexiones';
 		}
+	})
+
+	.state('index.configuracion',{
+		url:'configuracion',
+		templateUrl :'views/configuracion.html',
+		controller:'configuracionCtrl',
+		controllerAs: "configuracion",
+		resolve:{
+            datos:function(busqueda){
+                return busqueda.unidades();
+            }
+        }
+	})
+
+	.state('index.completar',{
+		url:'completar?ordenId',
+		templateUrl :'views/completar.html',
+		controller 	: 'completarCtrl',
+		resolve:{
+            datos:function($stateParams,operacion){
+                return operacion.verificaFaltantes($stateParams.ordenId);
+            }
+        },
+		reload:true
+	})
+
+	.state('index.detalleItem',{
+		url:'detalleItem?itemId',
+		templateUrl :'views/item.html',
+		controller:'itemEditCtrl',
+		resolve:{
+            datos:function(busqueda,$q,$stateParams,items){
+                var promesa = $q.defer(),
+            		tipoitems = busqueda.tiposItem(),
+            		subtipoitems = busqueda.SubTiposItem(),
+            		presentaciones = busqueda.presentaciones(),
+            		unidadesitem = busqueda.unidadesItem(),
+            		item =  items.get({item:$stateParams.itemId}).$promise;
+            	$q.all([tipoitems,subtipoitems,presentaciones,item,unidadesitem]).then(function (data){
+            		promesa.resolve(data);
+            	});
+
+                return promesa.promise;
+            }
+        }
+	})
+
+	.state('index.detalleProveedor',{
+		url:'detalleProveedor?proveedorId',
+		templateUrl :'views/proveedor.html',
+		controller:'proveedorEditCtrl',
+		resolve:{
+            datos:function($q,$stateParams,proveedores){
+                return proveedores.get({proveedor:$stateParams.proveedorId}).$promise;;
+            }
+        }
 	})
 
 	.state('index.existencias',{
@@ -134,38 +190,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
             }
         }
 	})
-
-	.state('index.detalleItem',{
-		url:'detalleItem?itemId',
-		templateUrl :'views/item.html',
-		controller:'itemEditCtrl',
-		resolve:{
-            datos:function(busqueda,$q,$stateParams,items){
-                var promesa = $q.defer(),
-            		tipoitems = busqueda.tiposItem(),
-            		subtipoitems = busqueda.SubTiposItem(),
-            		presentaciones = busqueda.presentaciones(),
-            		unidadesitem = busqueda.unidadesItem(),
-            		item =  items.get({item:$stateParams.itemId}).$promise;
-            	$q.all([tipoitems,subtipoitems,presentaciones,item,unidadesitem]).then(function (data){
-            		promesa.resolve(data);
-            	});
-
-                return promesa.promise;
-            }
-        }
-	})
-
-	.state('index.detalleProveedor',{
-		url:'detalleProveedor?proveedorId',
-		templateUrl :'views/proveedor.html',
-		controller:'proveedorEditCtrl',
-		resolve:{
-            datos:function($q,$stateParams,proveedores){
-                return proveedores.get({proveedor:$stateParams.proveedorId}).$promise;;
-            }
-        }
-	})
 	
 	.state('index.itempro',{
 		url:'itempro',
@@ -191,6 +215,17 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
+	.state('index.nuevaorden',{
+		url:'nuevaorden',
+		templateUrl :'views/ordencompra.html',
+		controller:'ordenCompraCtrl',
+		resolve:{
+            datos:function(busqueda,$rootScope){
+                return busqueda.unidades();
+            }
+        }
+	})
+
 	.state('index.ordenescompra',{
 		url:'ordenescompra',
 		templateUrl :'views/ordenescompra.html',
@@ -199,17 +234,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		resolve:{
             datos:function(busqueda,$rootScope){
                 return busqueda.ordenescompra();
-            }
-        }
-	})
-
-	.state('index.nuevaorden',{
-		url:'nuevaorden',
-		templateUrl :'views/ordencompra.html',
-		controller:'ordenCompraCtrl',
-		resolve:{
-            datos:function(busqueda,$rootScope){
-                return busqueda.unidades();
             }
         }
 	})
@@ -352,11 +376,11 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-	.state('index.unidadesitem',{
-		url:'unidadesitem',
-		templateUrl :'views/unidadesitem.html',
-		controller:'unidadesItemCtrl',
-		controllerAs: "unidadesItem",
+	.state('index.equivalencias',{
+		url:'equivalencias',
+		templateUrl :'views/equivalencias.html',
+		controller:'equivalenciasCtrl',
+		controllerAs: "equivalencias",
 		resolve:{
             datos:function(unidadesItem){
                 return unidadesItem.query().$promise;
@@ -400,16 +424,11 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
         }
 	})
 
-	.state('index.configuracion',{
-		url:'configuracion',
-		templateUrl :'views/configuracion.html',
-		controller:'configuracionCtrl',
-		controllerAs: "configuracion",
-		resolve:{
-            datos:function(busqueda){
-                return busqueda.unidades();
-            }
-        }
+	.state('index.receta',{
+		url:'receta',
+		templateUrl :'views/receta.html',
+		controller:'recetaCtrl',
+		controllerAs: "receta"
 	})
 
 	.state('index.reporteExistencias',{
@@ -530,7 +549,10 @@ function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$windo
 	}
 
 	$rootScope.ir = function(ruta){
-		$mdSidenav('left').toggle();
+
+		if ($mdSidenav('left').isOpen()) {
+			$mdSidenav('left').toggle();
+		};
 		$state.go(ruta);
 	}
 

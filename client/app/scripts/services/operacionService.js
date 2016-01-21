@@ -62,6 +62,9 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
         correo: function(datos){
             return $http.post(api + 'operacion/correo',datos);
         },
+        completaOrden : function(datos){
+            return $http.post(api + 'operacion/completa/orden',datos);
+        },
         economicoXitem :function(item,items){
 
             var promesa = $q.defer(),
@@ -471,63 +474,8 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
         surtirOrden : function(datos){
             return $http.post(api + 'operacion/surtir/orden',datos);
         },
-        verificaFaltantes : function(itemsOriginales,itemsSeleccionados,proveedor,unidad,almacenes){
-
-            var promesa = $q.defer(),
-                faltantes = [];
-
-            var orden = {
-                provedor: proveedor,
-                unidad:unidad,
-                almacenes:almacenes,
-                total:0,
-                usuario:$rootScope.id,
-                items: faltantes
-            }
-
-            angular.forEach(itemsOriginales,function (value,key){
-
-                // busca el indice del valor dentro de nuestra seleccion que se surtio 
-                var idx = itemsSeleccionados.indexOf(value);
-                
-                var item = {
-                    ITE_clave:value.ITE_clave,
-                    ITE_nombre:value.ITE_nombre,
-                    cantidad:0,
-                    IPR_ultimoCosto: (value.OIT_precioEsperado == value.OIT_precioFinal) ? value.OIT_precioFinal : value.OIT_precioEsperado
-                }
-
-                // en caso de que no se haya ingresado
-                if (idx == -1) {
-
-                    item.cantidad = value.OIT_cantidadPedida;
-                    orden.total += Number(value.OIT_precioEsperado * item.cantidad);
-
-                    faltantes.push(item);
-
-                }else{
-                    
-
-                    var itemMuestra = itemsSeleccionados[idx];
-
-                    if ( (itemMuestra.OIT_cantidadSurtida < value.OIT_cantidadPedida) && itemMuestra.OIT_cantidadSurtida > 0 ) {
-
-                        item.cantidad = value.OIT_cantidadPedida - itemMuestra.OIT_cantidadSurtida;
-                        var totalMuestra = item.cantidad  * item.IPR_ultimoCosto;
-                        orden.total +=  Number(totalMuestra);
-                        faltantes.push(item);
-
-                    };
-                }
-
-            });
-
-            $q.when(faltantes).then(function (data){
-                promesa.resolve(orden);
-            });
-
-            return promesa.promise;
-
+        verificaFaltantes : function(orden){
+            return $http.get(api + 'operacion/completa/orden/' + orden);
         },
         verificaItems : function(items){
 

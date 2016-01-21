@@ -643,8 +643,8 @@ input {
     display: -ms-flexbox;
     display: flex;
   }
-  .layout#{$name}-column {  flex-direction: column;  }
-  .layout#{$name}-row    {  flex-direction: row;     }
+  .layout#{$name}-column {  flex-direction: column;     }
+  .layout#{$name}-row    {  flex-direction: row;        }
 }
 
 @mixin flex-properties-for-name($name: null) {
@@ -657,11 +657,25 @@ input {
   }
 
   .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+
+  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+  // Details:
+  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
+  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
+  @media screen\0 {
+      .#{$flexName} {
+        flex: 1 1 0%;
+      }
+  }
+
+
   .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
   .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
   .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
   .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
   .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
@@ -1041,6 +1055,7 @@ input {
   }
 
 }
+
 
 $autocomplete-option-height: 48px;
 $input-container-padding: 2px !default;
@@ -1824,7 +1839,7 @@ md-card {
     }
   }
 
-  md-card img,
+  > img,
   > :not(md-card-content) img {
     box-sizing: border-box;
     display: flex;
@@ -2983,9 +2998,22 @@ md-fab-speed-dial {
   /*
    * Handle the animations
    */
-  &.md-scale {
+  &.md-fling {
+    .md-fab-action-item {
+      opacity: 1;
+    }
+  }
+
+  // For the initial animation, set the duration to be instant
+  &.md-fling.md-animations-waiting {
     .md-fab-action-item {
       opacity: 0;
+      transition-duration: 0s;
+    }
+  }
+
+  &.md-scale {
+    .md-fab-action-item {
       transform: scale(0.1);
       transition: $swift-ease-in;
 
@@ -3301,11 +3329,6 @@ md-input-container {
     min-width: 1px;
   }
 
-  // Move the element after the spacer (likely an ng-messages container), on top of the spacer
-  .md-errors-spacer + * {
-    margin-top: -$input-error-height;
-  }
-
   > md-icon {
     position: absolute;
     top: 5px;
@@ -3371,8 +3394,8 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    @include rtl(padding-left, $input-container-padding, 0);
-    @include rtl(padding-right, 0, $input-container-padding);
+    @include rtl(padding-left, $input-container-padding + 1px, 0);
+    @include rtl(padding-right, 0, $input-container-padding + 1px);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
@@ -3466,7 +3489,6 @@ md-input-container {
     position: relative;
     order: 4;
     overflow: hidden;
-    min-height: $input-error-height;
     @include rtl(clear, left, right);
 
     &.ng-enter {
@@ -3514,8 +3536,18 @@ md-input-container {
     }
   }
 
+  // Note: This is a workaround to fix an ng-enter flicker bug
+  .md-auto-hide {
+    .md-input-message-animation {
+      &:not(.ng-animate) {
+        opacity: 0;
+        margin-top: -100px;
+      }
+    }
+  }
+
   .md-input-message-animation {
-    &.ng-enter, &:not(.ng-animate) {
+    &.ng-enter {
       opacity: 0;
       margin-top: -100px;
     }
@@ -5754,7 +5786,7 @@ md-tab-content {
   &.ng-leave, &.md-no-transition {
     transition: none;
   }
-  &.md-left {
+  &.md-left:not(.md-active) {
     transform: translateX(-100%);
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     opacity: 0;
@@ -5764,7 +5796,7 @@ md-tab-content {
       visibility: hidden;
     }
   }
-  &.md-right {
+  &.md-right:not(.md-active) {
     transform: translateX(100%);
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     opacity: 0;
@@ -6271,7 +6303,7 @@ md-tooltip {
   &.md-show {
     transition: $swift-ease-out;
     pointer-events: auto;
-    transform: translate3d(0,0,0);
+    will-change: opacity, height, width;
   }
 }
 

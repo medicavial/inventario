@@ -117,6 +117,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('almacenes', 'BusquedasController@almacenes');
         Route::get('almacenes/{usuario}', 'BusquedasController@almacenesUsuario');
         Route::get('almacenes/unidad/{unidad}', 'BusquedasController@almacenesUnidad');
+        Route::get('existencias/unidad/{unidad}/{tipo}', 'BusquedasController@existenciasUnidad');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
         Route::get('item/unidad/{item}/{unidad}', 'BusquedasController@itemUnidad');
         Route::get('items', 'BusquedasController@items');
@@ -140,8 +141,9 @@ Route::group(array('prefix' => 'api'), function()
 
     Route::group(array('prefix' => 'operacion'), function()
     {
-        Route::get('cerrarorden/{orden}', 'OperacionController@cerrarOrden');
-        Route::get('completa/orden/{orden}', 'OperacionController@completaOrden');
+        Route::post('cerrarorden', 'OperacionController@cerrarOrden');
+        Route::get('completa/orden/{orden}', 'OperacionController@verificaOrden');
+        Route::post('completa/orden', 'OperacionController@completaOrden');
         Route::get('configuracion/unidad/{unidad}', 'OperacionController@configuracionUnidad');
         Route::post('configuraciones', 'OperacionController@configuraciones');
         Route::put('configuraciones/{id}', 'OperacionController@actualizaConfiguracion');

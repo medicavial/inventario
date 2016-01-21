@@ -5,8 +5,8 @@ app.controller('itemsCtrl',itemsCtrl)
 app.controller('itemEditCtrl',itemEditCtrl)
 
 itemsCtrl.$inject = ['$rootScope','$mdDialog','datos','items','mensajes'];
-itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos'];
-itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos'];
+itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
+itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
 
 
 function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
@@ -99,13 +99,14 @@ function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
 }
 
-function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos){
+function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos,$mdConstant){
 
 	$rootScope.titulo = 'Nuevo Item';
 	$scope.tipoitems = datos[0].data;
 	$scope.subtipoitems = datos[1].data;
 	$scope.presentaciones = datos[2].data;
 	$scope.unidades = datos[3].data;
+	$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
 
 	$rootScope.atras = true;
 
@@ -127,8 +128,10 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,arc
 			clasificacion:'',
 			sustancia:$scope.sustancias,
 			posologia:'',
+			presentacionDesc:'',
 			agranel:false,
 			segmentado:false,
+			talla:false,
 			unidad:'',
 			cantidadCaja :'',
 			activo:true
@@ -201,7 +204,7 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,arc
 
 }
 
-function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos){
+function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos,$mdConstant){
 
 	$rootScope.titulo = 'Detalle de Item';
 
@@ -211,6 +214,7 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 	$scope.subtipoitems = datos[1].data;
 	$scope.presentaciones = datos[2].data;
 	$scope.unidades = datos[4].data;
+	$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
 
 	$scope.sustancias = datos[3].datos.ITE_sustancia ? datos[3].datos.ITE_sustancia.split(","):'';
 	$scope.clave = datos[3].datos.ITE_clave;
@@ -219,16 +223,18 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 		codigo:datos[3].datos.ITE_codigo,
 		precio:datos[3].datos.ITE_precioventa,
 		cantidad:datos[3].datos.ITE_cantidadtotal,
+		presentacionDesc:datos[3].datos.ITE_presentacion,
 		tipo:datos[3].datos.TIT_clave,
 		subtipo:datos[3].datos.STI_clave,
 		sustancia: $scope.sustancias,
 		posologia:datos[3].datos.ITE_posologia,
 		presentacion:datos[3].datos.PRE_clave,
-		agranel:datos[3].datos.ITE_agranel ? true:false,
-		segmentado:datos[3].datos.ITE_segmentable ? true:false,
+		agranel:Number(datos[3].datos.ITE_agranel) ? true:false,
+		segmentado:Number(datos[3].datos.ITE_segmentable) ? true:false,
+		talla:Number(datos[3].datos.ITE_talla) ? true:false,
 		unidad:datos[3].datos.UTI_clave,
-		cantidadCaja :datos[3].datos.ITE_cantidadCaja,
-		activo:datos[3].datos.ITE_activo ? true:false
+		cantidadCaja :Number(datos[3].datos.ITE_cantidadCaja),
+		activo:Number(datos[3].datos.ITE_activo) ? true:false
 	}
 	
 	$scope.imagenesguardadas = datos[3].archivos ? datos[3].archivos : [];

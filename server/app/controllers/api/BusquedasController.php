@@ -55,6 +55,21 @@ class BusquedasController extends BaseController {
 		
 	}
 
+	public function existenciasUnidad($unidad,$tipo){
+		
+		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+	                     ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+	                     ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+	                     ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
+	                     ->select(DB::raw('EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad as Stock,ITE_posologia as posologia'))
+	                     ->groupBy('existencias.ITE_clave')
+	                     ->where('almacenes.UNI_clave', $unidad)
+	                     ->where('almacenes.TAL_clave', 2)
+	                     ->where('items.TIT_clave', $tipo)
+	                     ->get();
+		
+	}
+
 	public function movimientos(){
 
         return Movimiento::todos();

@@ -273,21 +273,6 @@ function surtirCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialog, $s
 			mensajes.alerta(data.respuesta,'success','top right','done_all');
 			$scope.guardando = false;
 			
-			// $scope.inavilitado = true;
-
-			// operacion.verificaFaltantes($scope.info.items,$scope.seleccionItems,proveedor,unidad,almacenes).then(function (datos){
-
-			// 	if (datos.items.length > 0) {
-			// 		// console.log(datos);
-			// 		$scope.datos.incompleta = true;
-			// 		$scope.faltantes = datos.items;
-			// 		$scope.ordenTotal = datos.total;
-			// 		$scope.step4block = false;
-			// 		$scope.ordenNueva = datos;
-			// 		$scope.siguiente($scope.selectedIndex);
-			// 	};
-						
-			// });
 
 		})
 		.error(function (data){

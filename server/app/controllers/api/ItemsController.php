@@ -44,14 +44,17 @@ class ItemsController extends \BaseController {
 			$item->ITE_sustancia = implode("," , Input::get('sustancia'));			
 		}
 
+		$item->ITE_presentacion = Input::get('presentacionDesc');
 		$item->ITE_posologia = Input::get('posologia');
 		$item->PRE_clave = Input::get('presentacion');
 		$item->ITE_clasificacion = Input::get('clasificacion');
 		$item->ITE_codigoean = Input::get('codigoean');
 		$item->ITE_agranel = Input::get('agranel');
 		$item->ITE_segmentable = Input::get('segmentado');
+		$item->ITE_talla = Input::get('talla');
 		$item->ITE_cantidadCaja = Input::get('cantidadCaja');
 		$item->UTI_clave = Input::get('unidad');
+		$item->ITE_agranel = Input::get('agranel');
 
 		$item->save();
 
@@ -120,9 +123,16 @@ class ItemsController extends \BaseController {
 			$item->ITE_sustancia = implode("," , Input::get('sustancia'));			
 		}
 		$item->ITE_posologia = Input::get('posologia');
+		$item->ITE_presentacion = Input::get('presentacionDesc');
 		$item->PRE_clave = Input::get('presentacion');
 		$item->ITE_clasificacion = Input::get('clasificacion');
 		$item->ITE_codigoean = Input::get('codigoean');
+		$item->ITE_segmentable = Input::get('segmentado');
+		$item->ITE_talla = Input::get('talla');
+		$item->ITE_cantidadCaja = Input::get('cantidadCaja');
+		$item->UTI_clave = Input::get('unidad');
+		$item->ITE_agranel = Input::get('agranel');
+		
 		
 		$item->save();
 
