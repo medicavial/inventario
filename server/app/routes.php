@@ -160,7 +160,6 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('traspaso', 'OperacionController@traspaso');
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
-
     });
 
 
@@ -169,6 +168,12 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('existencias', 'ReportesController@existencias');
         Route::post('ordenes', 'ReportesController@ordenes');
         Route::get('pdf/ordencompra/{id}','ReportesController@ordenCompraPDF');
+
+    });
+
+    Route::group(array('prefix' => 'mv'), function()
+    {
+        Route::get('tabulador/{claveLesion}/{folio}', 'MedicaController@tabulador');
 
     });
 

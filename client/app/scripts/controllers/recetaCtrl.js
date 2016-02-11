@@ -7,6 +7,7 @@ function recetaCtrl($scope, $rootScope){
 	var scope = this;
 	$rootScope.cargando = false;
 	$rootScope.tema = 'theme1';
+	$rootScope.titulo = 'Surtir receta';
 
 	scope.inicio = function(){
 		scope.datos = {

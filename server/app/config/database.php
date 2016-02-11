@@ -63,6 +63,17 @@ return array(
 			'prefix'    => '',
 		),
 
+		'mv' => array(
+			'driver'    => 'mysql',
+			'host'      => 'www.medicavial.net',
+			'database'  => 'medica_registromv',
+			'username'  => 'medica_webusr',
+			'password'  => 'tosnav50',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
