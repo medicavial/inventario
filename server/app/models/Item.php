@@ -8,7 +8,8 @@ class Item extends Eloquent {
 
     public function scopeActivos($query)
     {
-        return $query->where('ITE_activo',true)->get();
+        return $query->join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')
+                     ->where('ITE_activo',true)->get();
     }
 
     public function scopeTodos($query)

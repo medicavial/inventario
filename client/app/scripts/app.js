@@ -428,7 +428,19 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
 		url:'receta',
 		templateUrl :'views/receta.html',
 		controller:'recetaCtrl',
-		controllerAs: "receta"
+		controllerAs: "receta",
+		resolve:{
+			datos:function(busqueda,$q){
+				var promesa = $q.defer(),
+            		tipoitems = busqueda.tiposItem(),
+					items = busqueda.items();
+            	$q.all([tipoitems,items]).then(function (data){
+            		promesa.resolve(data);
+            	});
+                return promesa.promise;
+
+			}
+		}
 	})
 
 	.state('index.reporteExistencias',{
@@ -511,6 +523,10 @@ function config($stateProvider, $urlRouterProvider, $locationProvider,$mdTheming
     $mdThemingProvider.theme('theme10')
 	.primaryPalette('light-green')
     .accentPalette('indigo');
+
+    $mdThemingProvider.theme('docs-dark')
+	.primaryPalette('red')
+	.dark();
 
 
 

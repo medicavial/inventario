@@ -13,7 +13,7 @@ class Existencia extends Eloquent {
 
     public function scopeItems($query,$almacen)
     {
-        return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+        return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave','EXI_clave')
                      ->select('ITE_nombre','EXI_cantidad','EXI_ultimoMovimiento', 'existencias.updated_at','existencias.ITE_clave')
                      ->where('ALM_clave',$almacen)
                      ->get();

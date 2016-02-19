@@ -33,6 +33,15 @@ class BusquedasController extends BaseController {
 		
 	}
 
+	public function itemAlmacen($almacen,$item){
+
+		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+	                     ->select('ITE_nombre','EXI_cantidad','EXI_ultimoMovimiento', 'existencias.updated_at','existencias.ITE_clave','EXI_clave')
+	                     ->where('ALM_clave',$almacen)
+	                     ->where('existencias.ITE_clave',$item)
+	                     ->first();
+	}
+
 	public function itemUnidad($item,$unidad){
 		return Item::unidad($item,$unidad);
 	}
@@ -57,11 +66,17 @@ class BusquedasController extends BaseController {
 
 	public function existenciasUnidad($unidad,$tipo){
 		
+		if ($tipo == 1) {
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia';
+		}else{
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia';
+		}
+
 		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
 	                     ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
 	                     ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
 	                     ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
-	                     ->select(DB::raw('EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad as Stock,ITE_posologia as posologia'))
+	                     ->select(DB::raw($sql))
 	                     ->groupBy('existencias.ITE_clave')
 	                     ->where('almacenes.UNI_clave', $unidad)
 	                     ->where('almacenes.TAL_clave', 2)
@@ -132,6 +147,40 @@ class BusquedasController extends BaseController {
 
 	public function proveedores(){
 		return Proveedor::activos();
+	}
+
+	public function receta($id){
+
+		//obtenemos la receta de la base de MV
+		$datos = Receta::where('id_receta',$id)->where('NS_surtida',0)->get();
+		$respuesta = array();
+
+
+		//recorremos item por item de la receta para obtener los datos del item en inventario
+		foreach ($datos as $dato) {
+
+			$item = $dato['id_item'];
+
+			//buscamos el item y con esto decimo si sera editable en caso de ser ortesis
+			$valoresItem = Item::find($item);
+			$modificable = $valoresItem->ITE_talla;
+			$familia = $valoresItem->TIT_clave;
+			
+			$respuesta[] = array(
+				'receta' => $dato['NS_id'],
+				'item' => $item,
+				'familia' => $familia,
+				'cantidad' => $dato['NS_cantidad'],
+				'editable' => $modificable,
+				'existencia' => $dato['id_existencia'],
+				'reserva' => $dato['id_reserva'],
+				'almacen' => $dato['id_almacen'],
+				'surtido' => false
+			);
+			
+		}
+
+		return $respuesta;
 	}
 
 	public function subtipositem(){

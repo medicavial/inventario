@@ -26,12 +26,18 @@ md-input-container{
 
 md-input-container label, md-input-container .md-placeholder,md-select .md-select-value.md-select-placeholder {
   color: rgba(0,0,0,0.70) !important;
-  /*color:#000 !important;*/
 }
 
 .transparent{
   background-color: transparent !important;
 }
+
+
+md-select.md-theme1-theme[disabled] .md-select-value{
+  color: rgba(0,0,0,0.87);
+  cursor: not-allowed;
+}
+
 /*
 md-select .md-select-value.md-select-placeholder{
   color:#ABABAB !important;*/

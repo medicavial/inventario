@@ -21,6 +21,31 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
         bajaAlmacen : function(almacen,usuario){
             return $http.get(api + 'operacion/elimina/almacen/'+almacen+'/'+usuario);
         },
+        cambiaItem: function(datos){
+            var defer   = $q.defer(),
+                reserva = datos.reserva,
+                item    = datos.item,
+                almacen = datos.almacen;
+
+            $http.get(api + 'busquedas/item/existencia/' + almacen + '/' + item)
+            .then(function (data){
+
+                var existenciaItem = data.data;
+
+                if (existenciaItem.EXI_cantidad == 0 || existenciaItem.length == 0) {
+                    defer.reject('No hay Stock disponible de este item intenta generar traspasos del almacen principal');
+                }else{
+                    defer.resolve(existenciaItem);
+                }
+
+            })
+            .catch(function (error){
+                defer.reject('Existio un error de conexion intentalo nuevamente');
+            });
+            
+            return defer.promise;
+
+        },
         cerrarOrden : function(orden){
             return $http.get(api+'operacion/cerrarorden/'+orden);
         },
@@ -470,6 +495,9 @@ function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
         },
         proveedoresItems : function(items){
             return $http.post(api + 'operacion/proveedores/items',items);
+        },
+        surtirItem : function(datos){
+            return $http.post(api + 'operacion/surtir/item/' + $rootScope.id,datos);
         },
         surtirOrden : function(datos){
             return $http.post(api + 'operacion/surtir/orden',datos);

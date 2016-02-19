@@ -119,6 +119,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('almacenes/unidad/{unidad}', 'BusquedasController@almacenesUnidad');
         Route::get('existencias/unidad/{unidad}/{tipo}', 'BusquedasController@existenciasUnidad');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
+        Route::get('item/existencia/{almacen}/{item}', 'BusquedasController@itemAlmacen');
         Route::get('item/unidad/{item}/{unidad}', 'BusquedasController@itemUnidad');
         Route::get('items', 'BusquedasController@items');
         Route::get('items/existencias/{almacen}', 'BusquedasController@itemsAlmacen');
@@ -133,6 +134,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('permisos', 'BusquedasController@permisos');
         Route::get('presentaciones', 'BusquedasController@presentaciones');
         Route::get('proveedores', 'BusquedasController@proveedores');
+        Route::get('receta/{id}', 'BusquedasController@receta');
         Route::get('subtipositem', 'BusquedasController@subtipositem');
         Route::get('unidades', 'BusquedasController@unidades');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
@@ -156,7 +158,10 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('movimiento', 'OperacionController@movimiento');
         Route::post('ordencompra', 'OperacionController@ordencompra');
         Route::post('proveedores/items', 'OperacionController@proveedoresItems');
+        Route::post('reserva/item', 'OperacionController@reservaItem');
+        Route::delete('reserva/{id}', 'OperacionController@eliminaReserva');
         Route::post('surtir/orden', 'OperacionController@surtirOrden');
+        Route::post('surtir/item/{usuario}', 'OperacionController@surtirItem');
         Route::post('traspaso', 'OperacionController@traspaso');
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');

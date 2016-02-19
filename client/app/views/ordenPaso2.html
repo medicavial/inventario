@@ -7,7 +7,6 @@
         
         <div ng-repeat="(item, value) in ordenItems | groupBy: 'ITE_nombre'">
 
-          
           <md-toolbar class="md-warn">
             <div class="md-toolbar-tools">
               <samll class="md-flex">{{ item }}</samll>
@@ -27,7 +26,6 @@
           </md-content>
           <md-list>
             <md-list-item ng-repeat="proveedor in value" >
-              <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
               <p>{{proveedor.PRO_nombrecorto}}</p>
               <p class="right">Costo: {{ proveedor.IPR_ultimoCosto | currency }}</p>
               <p>

@@ -1,4 +1,4 @@
-function mensajes($mdToast,$mdDialog){
+function mensajes($mdToast,$mdDialog,$q){
     return{
         confirmacion:function(titulo,mensaje,ev){
             var confirm = $mdDialog.confirm()

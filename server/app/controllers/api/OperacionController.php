@@ -104,6 +104,15 @@ class OperacionController extends BaseController {
 
 	}
 
+	public function eliminaReserva($id){
+		
+		$reserva = Reserva::find($id);
+		$reserva->delete();
+		
+		return Response::json(array('respuesta' => 'Reserva removida Correctamente'));
+		
+	}
+
 	public function enviaCorreo(){
 
      	$datos = Input::all();
@@ -427,6 +436,137 @@ class OperacionController extends BaseController {
 		
 	}
 
+	public function reservaItem(){
+		
+		$item = Input::get('id_item');
+		$almacen = Input::get('id_almacen');
+		$cantidad = Input::get('NS_cantidad');
+		
+		$reserva = new Reserva;
+		$reserva->RES_cantidad = $cantidad;
+		$reserva->ITE_clave = $item;
+		$reserva->ALM_clave = $almacen;
+		$reserva->save();
+		
+		return $reserva->RES_clave;
+		
+	}
+
+	public function surtirItem($usuario){
+
+		$claveExistencia = Input::get('existencia');
+		$claveReserva = Input::get('reserva');
+		$item = Input::get('item');
+		$cantidad = Input::get('cantidad');
+		$receta = Input::get('receta');
+		$almacen = Input::get('almacen');
+
+
+		//actualizamos en la tabla mv el item surtido
+		$recetaMV = Receta::find($receta);
+		$recetaMV->NS_surtida = $item;
+		$recetaMV->save();
+
+		//eliminamos reserva 
+
+		$reserva = Reserva::find($claveReserva);
+		$reserva->delete();
+
+		// quitamos de existencia 
+		$existencia = Existencia::find($claveExistencia);
+		$cantidadActual = $existencia->EXI_cantidad;
+
+		$existencia->EXI_cantidad = $cantidadActual - $cantidad;
+		$existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
+		$existencia->save();
+
+		//quitamos del total de ese item
+		$cantidadTotal = Item::find($item)->ITE_cantidadtotal;
+		
+		$itemactualiza = Item::find($item);
+		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $cantidad;
+		$itemactualiza->save();
+
+		//generamos movimiento
+
+		$movimiento = new Movimiento;
+
+		$movimiento->ITE_clave = $item;
+		$movimiento->ALM_clave = $almacen;
+		$movimiento->TIM_clave = 3;
+		$movimiento->USU_clave = $usuario;
+		$movimiento->MOV_cantidad = $cantidad;
+		$movimiento->MOV_observaciones = 'Surtido Receta MV con numero: ' . $receta;
+		$movimiento->save();
+
+		return Response::json(array('respuesta' => 'Item Surtido Correctamente'));
+		
+	}
+
+	public function surtirOrden(){
+
+
+		$ordenClave = Input::get('orden');
+		$usuario = Input::get('usuario');
+
+		$unidad = OrdenCompra::find($ordenClave)->UNI_clave;
+		$proveedor = OrdenCompra::find($ordenClave)->PRO_clave;
+
+		$resultado = Almacen::where('UNI_clave',$unidad)->where('TAL_clave',1)->first();
+		$almacen = $resultado->ALM_clave;
+
+		$orden = OrdenCompra::find($ordenClave);
+
+		$orden->OCM_bolsas = Input::get('bolsas');
+		$orden->OCM_bultos = Input::get('bultos');
+		$orden->OCM_cajas = Input::get('cajas');
+		$orden->OCM_guia = Input::get('guia');
+		$orden->OCM_incompleta = Input::get('incompleta');
+		$orden->OCM_observacionEntrega = Input::get('observacionEntrega');
+		$orden->OCM_observacionesVerificacion = Input::get('observacionesVerificacion');
+		$orden->OCM_incompleta = Input::get('incompleta');
+		$orden->OCM_entrega = Input::get('tipoEntrega');
+		$orden->OCM_verificacion = Input::get('verificacion');
+		$orden->OCM_importeFinal = Input::get('total');
+
+		if (!Input::get('incompleta') ) {
+
+			$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
+			$orden->USU_cerro = $usuario;	
+			$orden->OCM_cerrada = true;
+
+		}
+
+		$orden->OCM_fechaSurtida =  date('Y-m-d H:i:s');
+		$orden->USU_surtio = $usuario;
+		$orden->OCM_surtida = true;
+
+		$orden->save();
+
+		$items = Input::get('surtidos');
+
+		foreach ($items as $valor) {
+
+			$clave = $valor['OIT_clave'];
+			$cantidadSurtida = ($valor['OIT_cantidadSurtida'] > 0) ? $valor['OIT_cantidadSurtida']  : $valor['OIT_cantidadPedida'];
+			$ultimoCosto = ($valor['OIT_precioFinal'] > 0) ? $valor['OIT_precioFinal'] : $valor['OIT_precioEsperado'];
+			$claveItem = $valor['ITE_clave'];
+			$lotes = $valor['lotes'];
+
+			$item = ordenItem::find($clave);
+			$item->OIT_cantidadSurtida = $cantidadSurtida;
+			$item->OIT_precioFinal = $ultimoCosto;
+			$item->save();
+
+			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
+
+			helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+		
+		}	
+
+		return Response::json(array('respuesta' => 'Orden Surtida Correctamente'));
+
+	}
 
 	// agrega unnuevo movminiento
 	public function traspaso(){
@@ -538,6 +678,7 @@ class OperacionController extends BaseController {
 		return Response::json(array('respuesta' => 'Almacenes Asignados Correctamente'));
 
 	}
+	
 
 	public function usuariosAlm(){
 		$usuarios = User::activos();
@@ -562,73 +703,6 @@ class OperacionController extends BaseController {
 
 	}
 
-	public function surtirOrden(){
-
-
-		$ordenClave = Input::get('orden');
-		$usuario = Input::get('usuario');
-
-		$unidad = OrdenCompra::find($ordenClave)->UNI_clave;
-		$proveedor = OrdenCompra::find($ordenClave)->PRO_clave;
-
-		$resultado = Almacen::where('UNI_clave',$unidad)->where('TAL_clave',1)->first();
-		$almacen = $resultado->ALM_clave;
-
-		$orden = OrdenCompra::find($ordenClave);
-
-		$orden->OCM_bolsas = Input::get('bolsas');
-		$orden->OCM_bultos = Input::get('bultos');
-		$orden->OCM_cajas = Input::get('cajas');
-		$orden->OCM_guia = Input::get('guia');
-		$orden->OCM_incompleta = Input::get('incompleta');
-		$orden->OCM_observacionEntrega = Input::get('observacionEntrega');
-		$orden->OCM_observacionesVerificacion = Input::get('observacionesVerificacion');
-		$orden->OCM_incompleta = Input::get('incompleta');
-		$orden->OCM_entrega = Input::get('tipoEntrega');
-		$orden->OCM_verificacion = Input::get('verificacion');
-		$orden->OCM_importeFinal = Input::get('total');
-
-		if (!Input::get('incompleta') ) {
-
-			$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
-			$orden->USU_cerro = $usuario;	
-			$orden->OCM_cerrada = true;
-
-		}
-
-		$orden->OCM_fechaSurtida =  date('Y-m-d H:i:s');
-		$orden->USU_surtio = $usuario;
-		$orden->OCM_surtida = true;
-
-		$orden->save();
-
-		$items = Input::get('surtidos');
-
-		foreach ($items as $valor) {
-
-			$clave = $valor['OIT_clave'];
-			$cantidadSurtida = ($valor['OIT_cantidadSurtida'] > 0) ? $valor['OIT_cantidadSurtida']  : $valor['OIT_cantidadPedida'];
-			$ultimoCosto = ($valor['OIT_precioFinal'] > 0) ? $valor['OIT_precioFinal'] : $valor['OIT_precioEsperado'];
-			$claveItem = $valor['ITE_clave'];
-			$lotes = $valor['lotes'];
-
-			$item = ordenItem::find($clave);
-			$item->OIT_cantidadSurtida = $cantidadSurtida;
-			$item->OIT_precioFinal = $ultimoCosto;
-			$item->save();
-
-			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
-
-			helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
-		
-		}	
-
-		return Response::json(array('respuesta' => 'Orden Surtida Correctamente Correctamente'));
-
-
-
-		
-	}
 
 	public function verificaOrden($orden){
 

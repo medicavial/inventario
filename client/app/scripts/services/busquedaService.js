@@ -93,6 +93,10 @@ function busqueda($http, api){
         {
             return $http.post(api + 'operacion/proveedores/items',items);
         },
+        receta : function(receta)
+        {
+            return $http.get(api + 'busquedas/receta/'+receta);
+        },
         unidades : function()
         {
             return $http.get(api + 'busquedas/unidades');
