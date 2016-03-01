@@ -26,7 +26,7 @@
 		<md-list>
 			<md-list-item ng-repeat="recetaItem in receta.datos" >
 				<p flex flex-gt-sm="40">
-			        <md-select md-on-open="receta.valorAnterior = recetaItem.item" md-on-close="receta.verificaExistencia($index,$event)" placeholder="Selecciona Item" ng-model="recetaItem.item" ng-disabled="!recetaItem.editable">
+			        <md-select md-on-open="receta.valorAnterior = recetaItem.item" md-on-close="receta.verificaExistencia($index,$event)" placeholder="Selecciona Item" ng-model="recetaItem.item" ng-disabled="recetaItem.editable == 0">
 						<md-optgroup label="{{ tipoItem.TIT_nombre }}" ng-repeat="tipoItem in receta.tipoItems | filter:{ TIT_clave: recetaItem.familia }">
 				            <md-option ng-value="item.ITE_clave" ng-repeat="item in receta.items | filter:{ TIT_clave: tipoItem.TIT_clave }">{{item.ITE_nombre}}</md-option>
 				        </md-optgroup>

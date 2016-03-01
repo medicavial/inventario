@@ -209,13 +209,16 @@ function ordenCompraCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialo
 	$scope.ir2 = function(selecciones){
 
 		operacion.preparaOrden(selecciones).then(function (data){
-			$scope.ordenItems = data.datos;
-			$scope.totalItems = data.info;
-			$scope.proveedores = data.proveedores;
 
-			$scope.selectedIndex = 1;
-
-			$scope.step2block = false;
+			if (data.proveedores.length > 0) {
+				$scope.ordenItems = data.datos;
+				$scope.totalItems = data.info;
+				$scope.proveedores = data.proveedores;
+				$scope.selectedIndex = 1;
+				$scope.step2block = false;
+			}else{
+				mensajes.alerta('No hay proveedores disponibles para surtir este item agregalos desde conexión','error','top right','error');
+			}
 		});
 	}
 

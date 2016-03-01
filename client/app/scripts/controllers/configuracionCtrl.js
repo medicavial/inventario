@@ -61,6 +61,7 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 		var item = scope.items[index];
 
 		scope.datos.item = item.ITE_clave;
+		scope.itemNombre = item.ITE_nombre;
 
 		busqueda.itemUnidad(item.ITE_clave,item.UNI_clave).success(function (data){
 
@@ -80,7 +81,6 @@ function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, da
 			scope.edicion = false;
 
 		});
-
 
 	}
 

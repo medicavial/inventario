@@ -164,6 +164,13 @@ function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,arc
 					console.log('Estatus: ' + data);
 				}
 			);
+		},function (error){
+			if (error.status == 500) {
+				mensajes.alerta('El Codigo de Item ya existe','error','top right','error');
+			}else{
+				mensajes.alerta('Ocurrio un error con su conexion a internet','error','top right','error');
+			}
+			$scope.guardando = false;
 		});
 		// console.log($scope.datos);
 		// console.log($scope.imagenes);

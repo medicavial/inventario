@@ -28,8 +28,8 @@ var app = angular.module('app', [
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider', config]);
 app.run(['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api', run]);
-// app.constant('api', 'http://localhost/inventario/server/public/api/');
-app.constant('api', 'http://api.medicavial.mx/api/');
+app.constant('api', 'http://localhost/inventario/server/public/api/');
+// app.constant('api', 'http://api.medicavial.mx/api/');
 
 
 function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider) {
