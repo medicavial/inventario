@@ -1,305 +1,155 @@
-"use strict"
+(function(){
 
-app.controller('itemCtrl',itemCtrl)
-app.controller('itemsCtrl',itemsCtrl)
-app.controller('itemEditCtrl',itemEditCtrl)
+	"use strict"
 
-itemsCtrl.$inject = ['$rootScope','$mdDialog','datos','items','mensajes'];
-itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
-itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
+	angular.module('app')
+	.controller('itemCtrl',itemCtrl)
+	.controller('itemsCtrl',itemsCtrl)
+	.controller('itemEditCtrl',itemEditCtrl)
+
+	itemsCtrl.$inject = ['$rootScope','$mdDialog','datos','items','mensajes'];
+	itemCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
+	itemEditCtrl.$inject = ['$scope','$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
 
 
-function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
+	function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
-	var scope = this;
-	$rootScope.tema = 'theme1';
-	$rootScope.titulo = 'Items Registrados';
-	scope.info = datos;
-	scope.total = 0;
-	scope.limit = 10;
-	scope.page = 1;
+		var scope = this;
+		$rootScope.tema = 'theme1';
+		$rootScope.titulo = 'Items Registrados';
+		scope.info = datos;
+		scope.total = 0;
+		scope.limit = 10;
+		scope.page = 1;
 
-	scope.onPaginationChange = function (page, limit) {
-	    console.log(page);
-	    console.log(limit);
-	};
+		scope.onPaginationChange = function (page, limit) {
+		    console.log(page);
+		    console.log(limit);
+		};
 
-	scope.onOrderChange = function (order) {
-		console.log(scope.query);
-	    //return $nutrition.desserts.get(scope.query, success).$promise; 
-	};
+		scope.onOrderChange = function (order) {
+			console.log(scope.query);
+		    //return $nutrition.desserts.get(scope.query, success).$promise; 
+		};
 
-	scope.nuevo = function(ev) {
-	    $mdDialog.show({
-	      controller: itemCtrl,
-	      templateUrl: 'views/item.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      clickOutsideToClose:false
-	    }).then(function(){
-	    	scope.info = items.query();
-	    });
-	};
+		scope.nuevo = function(ev) {
+		    $mdDialog.show({
+		      controller: itemCtrl,
+		      templateUrl: 'views/item.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:false
+		    }).then(function(){
+		    	scope.info = items.query();
+		    });
+		};
 
-	scope.edita = function(ev,index) {
+		scope.edita = function(ev,index) {
 
-		var usuario = scope.info[index];
+			var usuario = scope.info[index];
 
-	    $mdDialog.show({
-	      controller: itemEditCtrl,
-	      templateUrl: 'views/item.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      locals: {informacion: usuario }
-	    }).then(function(){
-	    	scope.info = items.query();
-	    });
-	};
+		    $mdDialog.show({
+		      controller: itemEditCtrl,
+		      templateUrl: 'views/item.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      locals: {informacion: usuario }
+		    }).then(function(){
+		    	scope.info = items.query();
+		    });
+		};
 
-	scope.confirmacion = function(ev,index) {
-	    // Abre ventana de confirmacion
+		scope.confirmacion = function(ev,index) {
+		    // Abre ventana de confirmacion
 
-	    // console.log(index);
-	    var item = scope.info[index];
+		    // console.log(index);
+		    var item = scope.info[index];
 
-	    var confirm = $mdDialog.confirm()
-	          .title('¿Desactivar el item?')
-	          .content('Puedes activarlo cuando lo necesites nuevamente')
-	          .ariaLabel('Desactivar item')
-	          .ok('Si')
-	          .cancel('No')
-	          .targetEvent(ev);
+		    var confirm = $mdDialog.confirm()
+		          .title('¿Desactivar el item?')
+		          .content('Puedes activarlo cuando lo necesites nuevamente')
+		          .ariaLabel('Desactivar item')
+		          .ok('Si')
+		          .cancel('No')
+		          .targetEvent(ev);
 
-	    $mdDialog.show(confirm).then(function() {
+		    $mdDialog.show(confirm).then(function() {
 
-	    	//en caso de decir SI
-	    	if (item.ITE_activo) {
-	      		item.ITE_activo = 0;
-	    	}else{
-	    		item.ITE_activo = 1;
-	    	}
+		    	//en caso de decir SI
+		    	if (item.ITE_activo) {
+		      		item.ITE_activo = 0;
+		    	}else{
+		    		item.ITE_activo = 1;
+		    	}
 
-	      	var datos = {
-				nombre:item.ITE_nombre,
-				precio:item.ITE_precioventa,
-				cantidad:item.ITE_cantidadtotal,
-				tipo:item.TIT_clave,
-				subtipo:item.STI_clave,
-				activo:item.ITE_activo
-			}
-
-	      	items.update({item:item.ITE_clave},datos,
-	      		function (data){
-	      			mensajes.alerta(data.respuesta,'success','top right','done_all');
-	      		}
-	      	);
-
-	    });
-	};
-
-}
-
-function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos,$mdConstant){
-
-	$rootScope.titulo = 'Nuevo Item';
-	$scope.tipoitems = datos[0].data;
-	$scope.subtipoitems = datos[1].data;
-	$scope.presentaciones = datos[2].data;
-	$scope.unidades = datos[3].data;
-	$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
-
-	$rootScope.atras = true;
-
-	$scope.inicio = function(){
-		
-		$scope.sustancias = [];
-		$scope.imagenes = [];
-		$scope.guardando = false;
-
-		$scope.datos = {
-			nombre:'',
-			precio:'',
-			cantidad:'',
-			codigo:'',
-			codigoean:'',
-			tipo:'',
-			subtipo:'',
-			presentacion:'',
-			clasificacion:'',
-			sustancia:$scope.sustancias,
-			posologia:'',
-			presentacionDesc:'',
-			agranel:false,
-			segmentado:false,
-			talla:false,
-			unidad:'',
-			cantidadCaja :'',
-			activo:true
-		}
-
-	}
-
-	$scope.guardar = function(){
-
-		$scope.guardando = true;
-
-		items.save($scope.datos,function (data){
-			var respuesta = data.respuesta;
-
-			archivos.items($scope.imagenes,data.clave).then(
-				function(data){
-					console.log('Imagenes: ' + data)
-					mensajes.alerta(respuesta,'success','top right','done_all');
-					$scope.guardando = false;
-					$scope.itemForm.$setPristine();
-					$scope.inicio();
-				},
-				function(data){
-					mensajes.alerta('Ocurrio un error al subir las imagenes intentelo nuevamente editando el proveedor','error','top right','done_all');
-					$scope.guardando = false;
-					$scope.itemForm.$setPristine();
-					$scope.inicio();
-				},
-				function(data){
-					console.log('Estatus: ' + data);
+		      	var datos = {
+					nombre:item.ITE_nombre,
+					precio:item.ITE_precioventa,
+					cantidad:item.ITE_cantidadtotal,
+					tipo:item.TIT_clave,
+					subtipo:item.STI_clave,
+					activo:item.ITE_activo
 				}
-			);
-		},function (error){
-			if (error.status == 500) {
-				mensajes.alerta('El Codigo de Item ya existe','error','top right','error');
-			}else{
-				mensajes.alerta('Ocurrio un error con su conexion a internet','error','top right','error');
-			}
+
+		      	items.update({item:item.ITE_clave},datos,
+		      		function (data){
+		      			mensajes.alerta(data.respuesta,'success','top right','done_all');
+		      		}
+		      	);
+
+		    });
+		};
+
+	}
+
+	function itemCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos,$mdConstant){
+
+		$rootScope.titulo = 'Nuevo Item';
+		$scope.tipoitems = datos[0].data;
+		$scope.subtipoitems = datos[1].data;
+		$scope.presentaciones = datos[2].data;
+		$scope.unidades = datos[3].data;
+		$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
+
+		$rootScope.atras = true;
+
+		$scope.inicio = function(){
+			
+			$scope.sustancias = [];
+			$scope.imagenes = [];
 			$scope.guardando = false;
-		});
-		// console.log($scope.datos);
-		// console.log($scope.imagenes);
-	}
 
-
-	$scope.verificador = function(){
-
-		if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
-			return false;
-		}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
-			if ($scope.sustancias && $scope.datos.posologia) {
-				return false;
-			}else{
-				return true;
+			$scope.datos = {
+				nombre:'',
+				precio:'',
+				cantidad:'',
+				codigo:'',
+				codigoean:'',
+				tipo:'',
+				subtipo:'',
+				presentacion:'',
+				clasificacion:'',
+				sustancia:$scope.sustancias,
+				posologia:'',
+				presentacionDesc:'',
+				agranel:false,
+				segmentado:false,
+				talla:false,
+				unidad:'',
+				cantidadCaja :'',
+				activo:true
 			}
-		}else{
-			return true;
+
 		}
-	}
 
-	$scope.upload = function(files,file,event){
-		if (files && files.length) {
-			for (var i = 0; i < files.length; i++) {
-	        	$scope.imagenes.push(files[i]);
-	        }
-	    }
-	}
-
-	$scope.eliminaImagen = function(index){
-		$scope.imagenes.splice(index,1);
-	}
-
-
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
-
-}
-
-function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos,$mdConstant){
-
-	$rootScope.titulo = 'Detalle de Item';
-
-	$rootScope.atras = true;
-
-	$scope.tipoitems = datos[0].data;
-	$scope.subtipoitems = datos[1].data;
-	$scope.presentaciones = datos[2].data;
-	$scope.unidades = datos[4].data;
-	$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
-
-	$scope.sustancias = datos[3].datos.ITE_sustancia ? datos[3].datos.ITE_sustancia.split(","):'';
-	$scope.clave = datos[3].datos.ITE_clave;
-	$scope.datos = {
-		nombre:datos[3].datos.ITE_nombre,
-		codigo:datos[3].datos.ITE_codigo,
-		precio:datos[3].datos.ITE_precioventa,
-		cantidad:datos[3].datos.ITE_cantidadtotal,
-		presentacionDesc:datos[3].datos.ITE_presentacion,
-		tipo:datos[3].datos.TIT_clave,
-		subtipo:datos[3].datos.STI_clave,
-		sustancia: $scope.sustancias,
-		posologia:datos[3].datos.ITE_posologia,
-		presentacion:datos[3].datos.PRE_clave,
-		agranel:Number(datos[3].datos.ITE_agranel) ? true:false,
-		segmentado:Number(datos[3].datos.ITE_segmentable) ? true:false,
-		talla:Number(datos[3].datos.ITE_talla) ? true:false,
-		unidad:datos[3].datos.UTI_clave,
-		cantidadCaja :Number(datos[3].datos.ITE_cantidadCaja),
-		activo:Number(datos[3].datos.ITE_activo) ? true:false
-	}
-	
-	$scope.imagenesguardadas = datos[3].archivos ? datos[3].archivos : [];
-
-	$scope.inicio = function(){
-
-		$scope.imagenes = [];
-		$scope.guardando = false;
-	}
-
-
-	$scope.verificador = function(){
-
-		if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
-			return false;
-		}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
-			if ($scope.sustancias && $scope.datos.posologia) {
-				return false;
-			}else{
-				return true;
-			}
-		}else{
-			return true;
-		}
-	}
-
-	$scope.upload = function(files,file,event){
-		if (files && files.length) {
-			for (var i = 0; i < files.length; i++) {
-	        	$scope.imagenes.push(files[i]);
-	        }
-	    }
-	}
-
-	$scope.eliminaImagen = function(index){
-		$scope.imagenes.splice(index,1);
-	}
-
-	$scope.eliminaImagenGuardada = function(index){
-
-		mensajes.alerta('Eliminando imagen','','top right','');
-		var imagen = $scope.imagenesguardadas[index];
-		console.log(imagen);
-		archivos.eliminaItem(imagen,$scope.clave).success(function (data){
-			$scope.imagenesguardadas.splice(index,1);
-		});
-	}
-
-	$scope.guardar = function(){
-
-
-		if ($scope.itemForm.$valid) {
+		$scope.guardar = function(){
 
 			$scope.guardando = true;
-			items.update({item:$scope.clave},$scope.datos,function (data){
+
+			items.save($scope.datos,function (data){
 				var respuesta = data.respuesta;
 
-				archivos.items($scope.imagenes,$scope.clave).then(
+				archivos.items($scope.imagenes,data.clave).then(
 					function(data){
 						console.log('Imagenes: ' + data)
 						mensajes.alerta(respuesta,'success','top right','done_all');
@@ -308,16 +158,171 @@ function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos
 						$scope.inicio();
 					},
 					function(data){
-						mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','done_all');
+						mensajes.alerta('Ocurrio un error al subir las imagenes intentelo nuevamente editando el proveedor','error','top right','done_all');
+						$scope.guardando = false;
+						$scope.itemForm.$setPristine();
+						$scope.inicio();
 					},
 					function(data){
 						console.log('Estatus: ' + data);
 					}
 				);
+			},function (error){
+				if (error.status == 500) {
+					mensajes.alerta('El Codigo de Item ya existe','error','top right','error');
+				}else{
+					mensajes.alerta('Ocurrio un error con su conexion a internet','error','top right','error');
+				}
+				$scope.guardando = false;
 			});
+			// console.log($scope.datos);
+			// console.log($scope.imagenes);
+		}
 
+
+		$scope.verificador = function(){
+
+			if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
+				return false;
+			}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
+				if ($scope.sustancias && $scope.datos.posologia) {
+					return false;
+				}else{
+					return true;
+				}
+			}else{
+				return true;
+			}
+		}
+
+		$scope.upload = function(files,file,event){
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+		        	$scope.imagenes.push(files[i]);
+		        }
+		    }
+		}
+
+		$scope.eliminaImagen = function(index){
+			$scope.imagenes.splice(index,1);
+		}
+
+
+		$scope.cancel = function() {
+			$mdDialog.hide();
 		};
-		
+
 	}
 
-}
+	function itemEditCtrl($scope,$mdDialog,busqueda,items,mensajes, $rootScope,datos,archivos,$mdConstant){
+
+		$rootScope.titulo = 'Detalle de Item';
+
+		$rootScope.atras = true;
+
+		$scope.tipoitems = datos[0].data;
+		$scope.subtipoitems = datos[1].data;
+		$scope.presentaciones = datos[2].data;
+		$scope.unidades = datos[4].data;
+		$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
+
+		$scope.sustancias = datos[3].datos.ITE_sustancia ? datos[3].datos.ITE_sustancia.split(","):'';
+		$scope.clave = datos[3].datos.ITE_clave;
+		$scope.datos = {
+			nombre:datos[3].datos.ITE_nombre,
+			codigo:datos[3].datos.ITE_codigo,
+			precio:datos[3].datos.ITE_precioventa,
+			cantidad:datos[3].datos.ITE_cantidadtotal,
+			presentacionDesc:datos[3].datos.ITE_presentacion,
+			tipo:datos[3].datos.TIT_clave,
+			subtipo:datos[3].datos.STI_clave,
+			sustancia: $scope.sustancias,
+			posologia:datos[3].datos.ITE_posologia,
+			presentacion:datos[3].datos.PRE_clave,
+			agranel:Number(datos[3].datos.ITE_agranel) ? true:false,
+			segmentado:Number(datos[3].datos.ITE_segmentable) ? true:false,
+			talla:Number(datos[3].datos.ITE_talla) ? true:false,
+			unidad:datos[3].datos.UTI_clave,
+			cantidadCaja :Number(datos[3].datos.ITE_cantidadCaja),
+			activo:Number(datos[3].datos.ITE_activo) ? true:false
+		}
+		
+		$scope.imagenesguardadas = datos[3].archivos ? datos[3].archivos : [];
+
+		$scope.inicio = function(){
+
+			$scope.imagenes = [];
+			$scope.guardando = false;
+		}
+
+
+		$scope.verificador = function(){
+
+			if ($scope.itemForm.$valid && $scope.datos.tipo != 1) {
+				return false;
+			}else if($scope.itemForm.$valid && $scope.datos.tipo == 1){
+				if ($scope.sustancias && $scope.datos.posologia) {
+					return false;
+				}else{
+					return true;
+				}
+			}else{
+				return true;
+			}
+		}
+
+		$scope.upload = function(files,file,event){
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+		        	$scope.imagenes.push(files[i]);
+		        }
+		    }
+		}
+
+		$scope.eliminaImagen = function(index){
+			$scope.imagenes.splice(index,1);
+		}
+
+		$scope.eliminaImagenGuardada = function(index){
+
+			mensajes.alerta('Eliminando imagen','','top right','');
+			var imagen = $scope.imagenesguardadas[index];
+			console.log(imagen);
+			archivos.eliminaItem(imagen,$scope.clave).success(function (data){
+				$scope.imagenesguardadas.splice(index,1);
+			});
+		}
+
+		$scope.guardar = function(){
+
+
+			if ($scope.itemForm.$valid) {
+
+				$scope.guardando = true;
+				items.update({item:$scope.clave},$scope.datos,function (data){
+					var respuesta = data.respuesta;
+
+					archivos.items($scope.imagenes,$scope.clave).then(
+						function(data){
+							console.log('Imagenes: ' + data)
+							mensajes.alerta(respuesta,'success','top right','done_all');
+							$scope.guardando = false;
+							$scope.itemForm.$setPristine();
+							$scope.inicio();
+						},
+						function(data){
+							mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','done_all');
+						},
+						function(data){
+							console.log('Estatus: ' + data);
+						}
+					);
+				});
+
+			};
+			
+		}
+
+	}
+
+})();

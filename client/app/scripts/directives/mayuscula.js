@@ -1,23 +1,31 @@
 //funcion para convertir mayusculas
-app.directive('mayusculas', function() {
-    return {
-        require: 'ngModel',
-        link: function(scope, element, attrs, modelCtrl) {
+(function(){
 
-            element.bind('blur', function () {
-              var inputValue = modelCtrl.$modelValue;
-              if (inputValue) {
-                var capitalized = inputValue.toUpperCase();
-                if(capitalized !== inputValue) {
-                    modelCtrl.$setViewValue(capitalized);
-                    modelCtrl.$render();
-                }
-              }
-            });
+    "use strict"
+    
+    angular
+    .module('app')
+    .directive('mayusculas', function() {
+        return {
+            require: 'ngModel',
+            link: function(scope, element, attrs, modelCtrl) {
 
-            element.css("text-transform","uppercase");
+                element.bind('blur', function () {
+                  var inputValue = modelCtrl.$modelValue;
+                  if (inputValue) {
+                    var capitalized = inputValue.toUpperCase();
+                    if(capitalized !== inputValue) {
+                        modelCtrl.$setViewValue(capitalized);
+                        modelCtrl.$render();
+                    }
+                  }
+                });
 
-        }
-   };
-   
-});
+                element.css("text-transform","uppercase");
+
+            }
+       };
+       
+    });
+
+})();

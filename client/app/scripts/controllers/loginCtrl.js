@@ -1,26 +1,33 @@
-app.controller('loginCtrl',loginCtrl)
+(function(){
 
-loginCtrl.$inject = ['auth','$rootScope'];
+	"use strict"
+	
+	angular.module('app')
+	.controller('loginCtrl',loginCtrl)
 
-function loginCtrl(auth, $rootScope){
+	loginCtrl.$inject = ['auth','$rootScope'];
 
-	var sesion = this;
-	$rootScope.cargando = false;
-	$rootScope.tema = 'theme1';
+	function loginCtrl(auth, $rootScope){
 
-	sesion.inicio = function(){
-		sesion.datos = {
-			usuario:'',
-			psw:'',
-			guardar:false
+		var sesion = this;
+		$rootScope.cargando = false;
+		$rootScope.tema = 'theme1';
+
+		sesion.inicio = function(){
+			sesion.datos = {
+				usuario:'',
+				psw:'',
+				guardar:false
+			}
 		}
+
+		sesion.login = function(){
+			if (sesion.loginForm.$valid) {
+				$rootScope.cargando = true;
+				auth.login(sesion.datos);
+			};
+		}
+
 	}
 
-	sesion.login = function(){
-		if (sesion.loginForm.$valid) {
-			$rootScope.cargando = true;
-			auth.login(sesion.datos);
-		};
-	}
-
-}
+})();

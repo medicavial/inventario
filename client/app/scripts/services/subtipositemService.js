@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function subtipositem($resource,api){
+    "use strict"
+    
+    angular
+    .module('app')
+    .factory("subtipositem",subtipositem);
 
-    var TipoItem = $resource(api + 'subtipositem/:subtipoitem', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function subtipositem($resource,api){
 
-    return TipoItem;
-}
+	    var TipoItem = $resource(api + 'subtipositem/:subtipoitem', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("subtipositem",subtipositem);
+	    return TipoItem;
+	}
+
+})();

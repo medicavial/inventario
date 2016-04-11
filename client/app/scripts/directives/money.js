@@ -1,109 +1,118 @@
-app.directive('dinero', function () {
 
-  var NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))\s*$/;
+(function(){
 
-  function link(scope, el, attrs, ngModelCtrl) {
-    var min = parseFloat(attrs.min || 0);
-    var precision = parseFloat(attrs.precision || 2);
-    var lastValidValue;
+  "use strict"
+    
+  angular
+  .module('app')
+  .directive('dinero', function () {
 
-    function round(num) {
-      var d = Math.pow(10, precision);
-      return Math.round(num * d) / d;
-    }
+    var NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))\s*$/;
 
-    function formatPrecision(value) {
-      return parseFloat(value).toFixed(precision);
-    }
+    function link(scope, el, attrs, ngModelCtrl) {
+      var min = parseFloat(attrs.min || 0);
+      var precision = parseFloat(attrs.precision || 2);
+      var lastValidValue;
 
-    function formatViewValue(value) {
-      return ngModelCtrl.$isEmpty(value) ? '' : '' + value;
-    }
-
-
-    ngModelCtrl.$parsers.push(function (value) {
-      // Handle leading decimal point, like ".5"
-      if (value.indexOf('.') === 0) {
-        value = '0' + value;
+      function round(num) {
+        var d = Math.pow(10, precision);
+        return Math.round(num * d) / d;
       }
 
-      // Allow "-" inputs only when min < 0
-      if (value.indexOf('-') === 0) {
-        if (min >= 0) {
-          value = null;
-          ngModelCtrl.$setViewValue('');
-          ngModelCtrl.$render();
-        } else if (value === '-') {
-          value = '';
+      function formatPrecision(value) {
+        return parseFloat(value).toFixed(precision);
+      }
+
+      function formatViewValue(value) {
+        return ngModelCtrl.$isEmpty(value) ? '' : '' + value;
+      }
+
+
+      ngModelCtrl.$parsers.push(function (value) {
+        // Handle leading decimal point, like ".5"
+        if (value.indexOf('.') === 0) {
+          value = '0' + value;
         }
-      }
 
-      var empty = ngModelCtrl.$isEmpty(value);
-      if (empty || NUMBER_REGEXP.test(value)) {
-        lastValidValue = (value === '')
-          ? null
-          : (empty ? value : parseFloat(value));
-      } else {
-        // Render the last valid input in the field
-        ngModelCtrl.$setViewValue(formatViewValue(lastValidValue));
-        ngModelCtrl.$render();
-      }
+        // Allow "-" inputs only when min < 0
+        if (value.indexOf('-') === 0) {
+          if (min >= 0) {
+            value = null;
+            ngModelCtrl.$setViewValue('');
+            ngModelCtrl.$render();
+          } else if (value === '-') {
+            value = '';
+          }
+        }
 
-      ngModelCtrl.$setValidity('number', true);
-      return lastValidValue;
-    });
-    ngModelCtrl.$formatters.push(formatViewValue);
+        var empty = ngModelCtrl.$isEmpty(value);
+        if (empty || NUMBER_REGEXP.test(value)) {
+          lastValidValue = (value === '')
+            ? null
+            : (empty ? value : parseFloat(value));
+        } else {
+          // Render the last valid input in the field
+          ngModelCtrl.$setViewValue(formatViewValue(lastValidValue));
+          ngModelCtrl.$render();
+        }
 
-    var minValidator = function(value) {
-      if (!ngModelCtrl.$isEmpty(value) && value < min) {
-        ngModelCtrl.$setValidity('min', false);
-        return undefined;
-      } else {
-        ngModelCtrl.$setValidity('min', true);
-        return value;
-      }
-    };
-    ngModelCtrl.$parsers.push(minValidator);
-    ngModelCtrl.$formatters.push(minValidator);
+        ngModelCtrl.$setValidity('number', true);
+        return lastValidValue;
+      });
+      ngModelCtrl.$formatters.push(formatViewValue);
 
-    if (attrs.max) {
-      var max = parseFloat(attrs.max);
-      var maxValidator = function(value) {
-        if (!ngModelCtrl.$isEmpty(value) && value > max) {
-          ngModelCtrl.$setValidity('max', false);
+      var minValidator = function(value) {
+        if (!ngModelCtrl.$isEmpty(value) && value < min) {
+          ngModelCtrl.$setValidity('min', false);
           return undefined;
         } else {
-          ngModelCtrl.$setValidity('max', true);
+          ngModelCtrl.$setValidity('min', true);
           return value;
         }
       };
+      ngModelCtrl.$parsers.push(minValidator);
+      ngModelCtrl.$formatters.push(minValidator);
 
-      ngModelCtrl.$parsers.push(maxValidator);
-      ngModelCtrl.$formatters.push(maxValidator);
-    }
+      if (attrs.max) {
+        var max = parseFloat(attrs.max);
+        var maxValidator = function(value) {
+          if (!ngModelCtrl.$isEmpty(value) && value > max) {
+            ngModelCtrl.$setValidity('max', false);
+            return undefined;
+          } else {
+            ngModelCtrl.$setValidity('max', true);
+            return value;
+          }
+        };
 
-    // Round off
-    if (precision > -1) {
-      ngModelCtrl.$parsers.push(function (value) {
-        return value ? round(value) : value;
-      });
-      ngModelCtrl.$formatters.push(function (value) {
-        return value ? formatPrecision(value) : value;
-      });
-    }
-
-    el.bind('blur', function () {
-      var value = ngModelCtrl.$modelValue;
-      if (value) {
-        ngModelCtrl.$viewValue = formatPrecision(value);
-        ngModelCtrl.$render();
+        ngModelCtrl.$parsers.push(maxValidator);
+        ngModelCtrl.$formatters.push(maxValidator);
       }
-    });
-  }
 
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    link: link
-  };
-});
+      // Round off
+      if (precision > -1) {
+        ngModelCtrl.$parsers.push(function (value) {
+          return value ? round(value) : value;
+        });
+        ngModelCtrl.$formatters.push(function (value) {
+          return value ? formatPrecision(value) : value;
+        });
+      }
+
+      el.bind('blur', function () {
+        var value = ngModelCtrl.$modelValue;
+        if (value) {
+          ngModelCtrl.$viewValue = formatPrecision(value);
+          ngModelCtrl.$render();
+        }
+      });
+    }
+
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: link
+    };
+  });
+
+})();

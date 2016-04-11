@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function tiposalmacen($resource,api){
+	"use strict"
+	
+	angular
+	.module('app')
+	.factory("tiposalmacen",tiposalmacen);
 
-    var TipoItem = $resource(api + 'tiposalmacen/:tipoalmacen', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function tiposalmacen($resource,api){
 
-    return TipoItem;
-}
+	    var TipoItem = $resource(api + 'tiposalmacen/:tipoalmacen', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("tiposalmacen",tiposalmacen);
+	    return TipoItem;
+	}
+
+})();

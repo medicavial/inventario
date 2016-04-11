@@ -1,16 +1,21 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function almacenes($resource,api){
+    "use strict"
+    
+    angular.module('app')
+	.factory("almacenes",almacenes);
 
-    var Almacen = $resource(api + 'almacenes/:almacen', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function almacenes($resource,api){
 
-    return Almacen;
-}
+	    var Almacen = $resource(api + 'almacenes/:almacen', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("almacenes",almacenes);
+	    return Almacen;
+	}
+
+})();

@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function tiposajuste($resource,api){
+    "use strict"
+    
+    angular
+    .module('app')
+    .factory("tiposajuste",tiposajuste);
 
-    var tipoajuste = $resource(api + 'tiposajuste/:tipo', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function tiposajuste($resource,api){
 
-    return tipoajuste;
-}
+	    var tipoajuste = $resource(api + 'tiposajuste/:tipo', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("tiposajuste",tiposajuste);
+	    return tipoajuste;
+	}
+
+})();

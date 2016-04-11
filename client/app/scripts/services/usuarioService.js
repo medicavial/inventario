@@ -1,16 +1,22 @@
-'use strict';
+(function(){
 
-//servicio para usuarios
-function usuarios($resource,api){
+	"use strict"
+	
+	angular
+	.module('app')
+	.factory('usuarios',usuarios);
 
-    var User = $resource(api + 'usuarios/:usuario', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para usuarios
+	function usuarios($resource,api){
 
-    return User;
-}
+	    var User = $resource(api + 'usuarios/:usuario', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory('usuarios',usuarios);
+	    return User;
+	}
+
+})();

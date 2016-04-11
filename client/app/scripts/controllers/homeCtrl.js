@@ -1,10 +1,17 @@
-app.controller('homeCtrl',homeCtrl)
+(function(){
 
-homeCtrl.$inject = ['$rootScope'];
+	"use strict"
 
-function homeCtrl($rootScope){
+	angular.module('app')
+	.controller('homeCtrl',homeCtrl)
 
-	$rootScope.tema = 'theme1';
-	$rootScope.titulo = 'Bienvenido';
+	homeCtrl.$inject = ['$rootScope'];
 
-}
+	function homeCtrl($rootScope){
+
+		$rootScope.tema = 'theme1';
+		$rootScope.titulo = 'Bienvenido';
+
+	}
+
+})();

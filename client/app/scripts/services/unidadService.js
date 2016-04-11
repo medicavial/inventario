@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function unidades($resource,api){
+	"use strict"
+	
+	angular
+	.module('app')
+	.factory("unidades",unidades);
 
-    var unidad = $resource(api + 'unidades/:unidad', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function unidades($resource,api){
 
-    return unidad;
-}
+	    var unidad = $resource(api + 'unidades/:unidad', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("unidades",unidades);
+	    return unidad;
+	}
+
+})();

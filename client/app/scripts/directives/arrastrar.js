@@ -1,28 +1,37 @@
 //directiva que detecta cuando se deja de arrastrar un elemento
 
-app.directive('dragEnd', function() {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, element, attrs, modelCtrl) {
+(function(){
 
-        	var functionToCall = scope.$eval(attrs.dragEnd);
 
-            // element.on('$md.dragstart', function() {
-            // })
+    "use strict"
 
-            // element.on('$md.drag', function() {
-            // })
+    angular
+    .module('app')
+    .directive('dragEnd', function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, element, attrs, modelCtrl) {
 
-            element.on('$md.dragend', function() {
-                functionToCall(modelCtrl.$viewValue);
-                // console.log(modelCtrl.$viewValue);
-            })
+            	var functionToCall = scope.$eval(attrs.dragEnd);
 
-            element.on('click', function() {
-                functionToCall(modelCtrl.$viewValue);
-                // console.log(modelCtrl.$viewValue);
-            })
+                // element.on('$md.dragstart', function() {
+                // })
+
+                // element.on('$md.drag', function() {
+                // })
+
+                element.on('$md.dragend', function() {
+                    functionToCall(modelCtrl.$viewValue);
+                    // console.log(modelCtrl.$viewValue);
+                })
+
+                element.on('click', function() {
+                    functionToCall(modelCtrl.$viewValue);
+                    // console.log(modelCtrl.$viewValue);
+                })
+            }
         }
-    }
-})
+    })
+
+})();

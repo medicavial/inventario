@@ -1,46 +1,53 @@
 //servicio que verifica sesiones de usuario
-function auth($http, api, $state, webStorage,$rootScope,mensajes){
-    return{
-        login : function(credenciales)
-        {   
+(function(){
 
-            $http.post(api+'login',credenciales)
-            .success(function (data){
+    "use strict"
+    
+    angular.module('app')
+    .factory("auth",auth);
 
-                $rootScope.cargando = false;
+    function auth($http, api, $state, webStorage,$rootScope,mensajes){
+        return{
+            login : function(credenciales)
+            {   
 
-                webStorage.session.add('username',data.USU_login);
-                webStorage.session.add('nombre',data.USU_nombrecompleto);
-                webStorage.session.add('id',data.USU_clave);
+                $http.post(api+'login',credenciales)
+                .success(function (data){
 
-                $rootScope.username = webStorage.session.get('username');
-                $rootScope.nombre = webStorage.session.get('nombre');
-                $rootScope.id = webStorage.session.get('id');
+                    $rootScope.cargando = false;
 
-                if (credenciales.guardar) {
-                    webStorage.local.add('usuario',JSON.stringify(data));
-                }
+                    webStorage.session.add('username',data.USU_login);
+                    webStorage.session.add('nombre',data.USU_nombrecompleto);
+                    webStorage.session.add('id',data.USU_clave);
 
-                $state.go('index.home');
+                    $rootScope.username = webStorage.session.get('username');
+                    $rootScope.nombre = webStorage.session.get('nombre');
+                    $rootScope.id = webStorage.session.get('id');
 
-            }).error(function (data){
+                    if (credenciales.guardar) {
+                        webStorage.local.add('usuario',JSON.stringify(data));
+                    }
 
-                mensajes.alerta(data.flash,'error center-dialog','top','error');
-                $rootScope.cargando = false;
-            });
+                    $state.go('index.home');
 
-        },
-        logout : function()
-        {	
-        	webStorage.session.clear();
-            $http.get(api+'logout');
-        	$state.go('login');
-        },
-        verify : function(api)
-        {
-            
+                }).error(function (data){
+
+                    mensajes.alerta(data.flash,'error center-dialog','top','error');
+                    $rootScope.cargando = false;
+                });
+
+            },
+            logout : function()
+            {	
+            	webStorage.session.clear();
+                $http.get(api+'logout');
+            	$state.go('login');
+            },
+            verify : function(api)
+            {
+                
+            }
         }
     }
-}
 
-app.factory("auth",auth);
+})();

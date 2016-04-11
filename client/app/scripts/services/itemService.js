@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function items($resource,api){
+    "use strict"
+    
+    angular
+    .module('app')
+    .factory("items",items);
 
-    var Item = $resource(api + 'items/:item', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function items($resource,api){
 
-    return Item;
-}
+	    var Item = $resource(api + 'items/:item', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("items",items);
+	    return Item;
+	}
+
+})();

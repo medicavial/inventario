@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function tiposmovimiento($resource,api){
+	"use strict"
+	
+	angular
+	.module('app')
+	.factory("tiposmovimiento",tiposmovimiento);
 
-    var tipomovimietno = $resource(api + 'tiposmovimiento/:tipo', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function tiposmovimiento($resource,api){
 
-    return tipomovimietno;
-}
+	    var tipomovimietno = $resource(api + 'tiposmovimiento/:tipo', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("tiposmovimiento",tiposmovimiento);
+	    return tipomovimietno;
+	}
+
+})();

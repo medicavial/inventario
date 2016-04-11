@@ -9,7 +9,7 @@ class MedicaController extends BaseController {
 		$datoLesion =  DB::connection('mv')->select($queryLesion)[0];
         $lesionCia  = $datoLesion->Clave_lesionCia;
 
-        $queryFolio = "SELECT PRO_clave, LOC_claveint, Cia_clave, Esc_clave, Exp_fecreg from Expediente
+        $queryFolio = "SELECT PRO_clave, LOC_claveint, Cia_clave, Esc_clave, Exp_fecreg,Unidad.Uni_clave from Expediente
 		          INNER JOIN Unidad on Expediente.Uni_clave = Unidad.Uni_clave 
 		          WHERE Exp_folio='".$folio."'";
 
@@ -20,28 +20,36 @@ class MedicaController extends BaseController {
         $compania       = $datos->Cia_clave;
         $escolaridad    = $datos->Esc_clave;
         $fechaRegistro  = $datos->Exp_fecreg;
+        $unidad         = $datos->Uni_clave;
         
         if($compania==7){
 
             if($producto==1){
 
-                if ($localidad == 169) {
+                if($unidad == 5){
                     $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 6 AND LES_clave='".$lesionCia."'";
                     $clave = 28;
-                }
-                elseif($localidad == 167 || $localidad == 61  || $localidad == 41  || $localidad == 47){
-                    
-                    $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 1 AND LES_clave='".$lesionCia."'";
-                    $clave = 86;
                 }else{
-
-                    if($localidad != 29 && $localidad!=18){
-
-                        $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 2 AND LES_clave='".$lesionCia."'";
-                        $clave = 87;
-                    }   
-
+                    $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 7 AND LES_clave='".$lesionCia."'";
+                    $clave = 52;
                 }
+                // if ($localidad == 169) {
+                //     $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 6 AND LES_clave='".$lesionCia."'";
+                //     $clave = 28;
+                // }
+                // elseif($localidad == 167 || $localidad == 61  || $localidad == 41  || $localidad == 47){
+                    
+                //     $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 1 AND LES_clave='".$lesionCia."'";
+                //     $clave = 86;
+                // }else{
+
+                //     if($localidad != 29 && $localidad!=18){
+
+                //         $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 2 AND LES_clave='".$lesionCia."'";
+                //         $clave = 87;
+                //     }   
+
+                // }
             }elseif($producto==2){ 
 
                 if($escolaridad==1||$escolaridad==2||$escolaridad==3){
@@ -56,7 +64,7 @@ class MedicaController extends BaseController {
 
                 }
                     
-            }elseif($producto==12&&($localidad == 29 || $localidad==18)){   
+            }elseif($producto==12 &&($localidad == 29 || $localidad==18) ){   
 
                     $query="SELECT TAD_importe FROM TabuladorDetalle WHERE TAB_clave = 5 AND LES_clave='".$lesionCia."'";
                     $clave = 95;

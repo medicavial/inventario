@@ -1,16 +1,22 @@
-"use strict"
+(function(){
 
-//servicio para permisos
-function tiposorden($resource,api){
+	"use strict"
+	
+	angular
+	.module('app')
+	.factory("tiposorden",tiposorden);
 
-    var TipoOrden = $resource(api + 'tiposorden/:tipoorden', {}, {
-                'get':    {method:'GET'},
-                'save':   {method:'POST'},
-                'query':  {method:'GET', isArray:true},
-                'update': { method:'PUT' }
-            });
+	//servicio para permisos
+	function tiposorden($resource,api){
 
-    return TipoOrden;
-}
+	    var TipoOrden = $resource(api + 'tiposorden/:tipoorden', {}, {
+	                'get':    {method:'GET'},
+	                'save':   {method:'POST'},
+	                'query':  {method:'GET', isArray:true},
+	                'update': { method:'PUT' }
+	            });
 
-app.factory("tiposorden",tiposorden);
+	    return TipoOrden;
+	}
+
+})();

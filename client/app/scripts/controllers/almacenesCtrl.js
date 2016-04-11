@@ -1,199 +1,205 @@
-"use strict"
+(function(){
 
-app.controller('almacenCtrl',almacenCtrl)
-app.controller('almacenesCtrl',almacenesCtrl)
-app.controller('almacenEditCtrl',almacenEditCtrl)
 
-almacenesCtrl.$inject = ['$rootScope','$mdDialog','datos','almacenes','mensajes'];
-almacenCtrl.$inject = ['$scope','$mdDialog','busqueda','almacenes','mensajes'];
-almacenEditCtrl.$inject = ['$scope','$mdDialog','almacenes','mensajes','informacion','busqueda'];
+	"use strict"
 
-function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
+	angular.module('app')
+	.controller('almacenCtrl',almacenCtrl)
+	.controller('almacenesCtrl',almacenesCtrl)
+	.controller('almacenEditCtrl',almacenEditCtrl)
 
-	var scope = this;
-	$rootScope.tema = 'theme1';
-	$rootScope.titulo = 'Almacenes Registrados';
-	scope.info = datos;
-	scope.total = 0;
-	scope.limit = 10;
-	scope.page = 1;
-	scope.texto = {
-      text: 'Almacenes por pagina:',
-      of: 'de'
-    };
-	scope.paginacion = [10,20,30,40];
+	almacenesCtrl.$inject = ['$rootScope','$mdDialog','datos','almacenes','mensajes'];
+	almacenCtrl.$inject = ['$scope','$mdDialog','busqueda','almacenes','mensajes'];
+	almacenEditCtrl.$inject = ['$scope','$mdDialog','almacenes','mensajes','informacion','busqueda'];
 
-	scope.onPaginationChange = function (page, limit) {
-	    console.log(page);
-	    console.log(limit);
-	};
+	function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 
-	scope.onOrderChange = function (order) {
-		console.log(scope.query);
-	    //return $nutrition.desserts.get(scope.query, success).$promise; 
-	};
+		var scope = this;
+		$rootScope.tema = 'theme1';
+		$rootScope.titulo = 'Almacenes Registrados';
+		scope.info = datos;
+		scope.total = 0;
+		scope.limit = 10;
+		scope.page = 1;
+		scope.texto = {
+	      text: 'Almacenes por pagina:',
+	      of: 'de'
+	    };
+		scope.paginacion = [10,20,30,40];
 
-	scope.nuevo = function(ev) {
-	    $mdDialog.show({
-	      controller: almacenCtrl,
-	      templateUrl: 'views/almacen.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      clickOutsideToClose:false
-	    }).then(function(){
-	    	scope.info = almacenes.query();
-	    });
-	};
+		scope.onPaginationChange = function (page, limit) {
+		    console.log(page);
+		    console.log(limit);
+		};
 
-	scope.edita = function(ev,index) {
+		scope.onOrderChange = function (order) {
+			console.log(scope.query);
+		    //return $nutrition.desserts.get(scope.query, success).$promise; 
+		};
 
-		var usuario = scope.info[index];
+		scope.nuevo = function(ev) {
+		    $mdDialog.show({
+		      controller: almacenCtrl,
+		      templateUrl: 'views/almacen.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:false
+		    }).then(function(){
+		    	scope.info = almacenes.query();
+		    });
+		};
 
-	    $mdDialog.show({
-	      controller: almacenEditCtrl,
-	      templateUrl: 'views/almacen.html',
-	      parent: angular.element(document.body),
-	      targetEvent: ev,
-	      locals: {informacion: usuario },
-	      closeTo:{bottom: 1500}
-	    }).then(function(){
-	    	scope.info = almacenes.query();
-	    });
-	};
+		scope.edita = function(ev,index) {
 
-	scope.confirmacion = function(ev,index) {
-	    // Abre ventana de confirmacion
+			var usuario = scope.info[index];
 
-	    // console.log(index);
-	    var almacen = scope.info[index];
+		    $mdDialog.show({
+		      controller: almacenEditCtrl,
+		      templateUrl: 'views/almacen.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      locals: {informacion: usuario },
+		      closeTo:{bottom: 1500}
+		    }).then(function(){
+		    	scope.info = almacenes.query();
+		    });
+		};
 
-	    var confirm = $mdDialog.confirm()
-	          .title('¿Desactivar el almacen?')
-	          .content('Puedes activarlo cuando lo necesites nuevamente')
-	          .ariaLabel('Desactivar almacen')
-	          .ok('Si')
-	          .cancel('No')
-	          .targetEvent(ev)
-	          .closeTo({
-				bottom: 1500
-			   });
+		scope.confirmacion = function(ev,index) {
+		    // Abre ventana de confirmacion
 
-	    $mdDialog.show(confirm).then(function() {
+		    // console.log(index);
+		    var almacen = scope.info[index];
 
-	    	//en caso de decir SI
-	    	if (almacen.ALM_activo) {
-	      		almacen.ALM_activo = 0;
-	    	}else{
-	    		almacen.ALM_activo = 1;
-	    	}
+		    var confirm = $mdDialog.confirm()
+		          .title('¿Desactivar el almacen?')
+		          .content('Puedes activarlo cuando lo necesites nuevamente')
+		          .ariaLabel('Desactivar almacen')
+		          .ok('Si')
+		          .cancel('No')
+		          .targetEvent(ev)
+		          .closeTo({
+					bottom: 1500
+				   });
 
-	      	var datos = {
-				nombre:almacen.ALM_nombre,
-				observaciones:almacen.ALM_observaciones,
-				ubicacion:almacen.ALM_ubicacion,
-				tipo:almacen.TAL_clave,
-				unidad:almacen.UNI_clave,
-				activo:almacen.ALM_activo
+		    $mdDialog.show(confirm).then(function() {
+
+		    	//en caso de decir SI
+		    	if (almacen.ALM_activo) {
+		      		almacen.ALM_activo = 0;
+		    	}else{
+		    		almacen.ALM_activo = 1;
+		    	}
+
+		      	var datos = {
+					nombre:almacen.ALM_nombre,
+					observaciones:almacen.ALM_observaciones,
+					ubicacion:almacen.ALM_ubicacion,
+					tipo:almacen.TAL_clave,
+					unidad:almacen.UNI_clave,
+					activo:almacen.ALM_activo
+				}
+
+		      	almacenes.update({almacen:almacen.ALM_clave},datos,
+		      		function (data){
+		      			mensajes.alerta(data.respuesta,'success','top right','done_all');
+		      		}
+		      	);
+
+		    });
+		};
+
+	}
+
+	function almacenCtrl($scope,$mdDialog,busqueda,almacenes,mensajes){
+
+		busqueda.unidades().then(function (info){
+			$scope.unidades = info.data;
+		});
+
+		busqueda.tiposAlmacen().then(function (info){
+			$scope.tiposalmacen = info.data;
+		});
+
+		$scope.inicio = function(){
+			$scope.datos = {
+				nombre:'',
+				observaciones:'',
+				ubicacion:'',
+				tipo:'',
+				unidad:'',
+				activo:true
 			}
 
-	      	almacenes.update({almacen:almacen.ALM_clave},datos,
-	      		function (data){
-	      			mensajes.alerta(data.respuesta,'success','top right','done_all');
-	      		}
-	      	);
-
-	    });
-	};
-
-}
-
-function almacenCtrl($scope,$mdDialog,busqueda,almacenes,mensajes){
-
-	busqueda.unidades().then(function (info){
-		$scope.unidades = info.data;
-	});
-
-	busqueda.tiposAlmacen().then(function (info){
-		$scope.tiposalmacen = info.data;
-	});
-
-	$scope.inicio = function(){
-		$scope.datos = {
-			nombre:'',
-			observaciones:'',
-			ubicacion:'',
-			tipo:'',
-			unidad:'',
-			activo:true
+			$scope.guardando = false;
 		}
 
-		$scope.guardando = false;
-	}
+		$scope.guardar = function(){
 
-	$scope.guardar = function(){
+			if ($scope.almacenForm.$valid) {
 
-		if ($scope.almacenForm.$valid) {
+				$scope.guardando = true;
+				almacenes.save($scope.datos,function (data){
+					mensajes.alerta(data.respuesta,'success','top right','done_all');
+					$scope.guardando = false;
+					$scope.almacenForm.$setPristine();
+					$scope.inicio();
+				});
 
-			$scope.guardando = true;
-			almacenes.save($scope.datos,function (data){
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				$scope.guardando = false;
-				$scope.almacenForm.$setPristine();
-				$scope.inicio();
-			});
-
-		};
-		
-	}
-
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
-
-}
-
-function almacenEditCtrl($scope,$mdDialog,almacenes,mensajes,informacion,busqueda){
-
-	busqueda.unidades().then(function (info){
-		$scope.unidades = info.data;
-	});
-
-	busqueda.tiposAlmacen().then(function (info){
-		$scope.tiposalmacen = info.data;
-	});
-
-	$scope.inicio = function(){
-
-		$scope.datos = {
-			nombre:informacion.ALM_nombre,
-			observaciones:informacion.ALM_observaciones,
-			ubicacion:informacion.ALM_ubicacion,
-			tipo:informacion.TAL_clave,
-			unidad:informacion.UNI_clave,
-			activo:informacion.ALM_activo ? true:false
+			};
+			
 		}
 
-		$scope.guardando = false;
-	}
-
-	$scope.guardar = function(){
-
-
-		if ($scope.almacenForm.$valid) {
-
-			$scope.guardando = true;
-			almacenes.update({almacen:informacion.ALM_clave},$scope.datos,function (data){
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				$scope.guardando = false;
-				$scope.almacenForm.$setPristine();
-			});
-
+		$scope.cancel = function() {
+			$mdDialog.hide();
 		};
-		
+
 	}
 
-	$scope.cancel = function() {
-		$mdDialog.hide();
-	};
+	function almacenEditCtrl($scope,$mdDialog,almacenes,mensajes,informacion,busqueda){
 
-}
+		busqueda.unidades().then(function (info){
+			$scope.unidades = info.data;
+		});
+
+		busqueda.tiposAlmacen().then(function (info){
+			$scope.tiposalmacen = info.data;
+		});
+
+		$scope.inicio = function(){
+
+			$scope.datos = {
+				nombre:informacion.ALM_nombre,
+				observaciones:informacion.ALM_observaciones,
+				ubicacion:informacion.ALM_ubicacion,
+				tipo:informacion.TAL_clave,
+				unidad:informacion.UNI_clave,
+				activo:informacion.ALM_activo ? true:false
+			}
+
+			$scope.guardando = false;
+		}
+
+		$scope.guardar = function(){
+
+
+			if ($scope.almacenForm.$valid) {
+
+				$scope.guardando = true;
+				almacenes.update({almacen:informacion.ALM_clave},$scope.datos,function (data){
+					mensajes.alerta(data.respuesta,'success','top right','done_all');
+					$scope.guardando = false;
+					$scope.almacenForm.$setPristine();
+				});
+
+			};
+			
+		}
+
+		$scope.cancel = function() {
+			$mdDialog.hide();
+		};
+
+	}
+
+})();
