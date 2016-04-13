@@ -7,7 +7,7 @@
     
     <md-content layout-padding>
 
-      <md-select ng-model="configuracion.datos.unidad" placeholder="Selecciona Unidad" md-on-close="configuracion.verificaUnidad(configuracion.datos.unidad)" flex required>
+      <md-select ng-model="configuracion.datos.unidad" placeholder="Selecciona Unidad" md-on-close="configuracion.verificaUnidad(configuracion.datos.unidad)" flex-gt-sm="40" required>
         <md-option ng-repeat="unidad in configuracion.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
       </md-select>
 
@@ -19,16 +19,23 @@
 
     <md-content layout-padding layout-gt-sm="row" layout="column" layout-xs="column">
       <div flex>
-          <md-list>
+          <md-select ng-model="configuracion.itemSeleccionado" placeholder="Selecciona Item" md-on-close="configuracion.verDetalle(configuracion.itemSeleccionado)" flex required>
+            <md-option ng-repeat="item in configuracion.items" ng-value="{{ item }}">{{ item.ITE_nombre }}</md-option>
+          </md-select>
+
+          <md-progress-circular md-mode="indeterminate" ng-show="configuracion.consultando" flex></md-progress-circular>
+          
+          <!-- <h3> {{ configuracion.itemNombre }} </h3> -->
+
+          <!-- <md-list>
               <md-list-item ng-click="configuracion.verDetalle($index)" ng-repeat="item in configuracion.items">
                 <p>{{item.ITE_nombre}}</p>
               </md-list-item>
-          </md-list>
+          </md-list> -->
       </div>
       <div flex>
 
         <div layout="row">
-          <h3> {{ configuracion.itemNombre }} </h3>
           <br>
           <div flex-gt-sm="20" flex layout layout-align="center center">
             <span class="md-body-1">Nivel Maximo (#)</span>
@@ -68,11 +75,12 @@
             <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.compra" aria-label="compra" aria-controls="compra-slider">
           </div>
         </div>
+        
+        <div layout="row" layout-align="center center" ng-if="configuracion.guardando">
+          <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+        </div>
 
-
-        <div layout="row" layout-align="center center" ng-hide="configuracion.guardando">
-          
-          <md-progress-circular md-mode="indeterminate" ng-show="configuracion.guardando"></md-progress-circular>
+        <div layout="row" layout-align="center center" ng-if="!configuracion.guardando">
 
           <md-button id="nuevo" class="md-fab boton" ng-click="configuracion.guardar()" aria-label="Guardar" type="button" ng-disabled="configuracion.valida()" ng-hide="configuracion.existe">
               <md-tooltip md-direction="top">

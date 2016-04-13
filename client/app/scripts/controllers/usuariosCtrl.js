@@ -3,7 +3,8 @@
 
 	"use strict"
 
-	angular.module('app')
+	angular
+	.module('app')
 	.controller('usuarioCtrl',usuarioCtrl)
 	.controller('usuariosCtrl',usuariosCtrl)
 	.controller('usuarioEditCtrl',usuarioEditCtrl)
@@ -164,8 +165,7 @@
 		}
 
 		$scope.guardar = function(){
-
-
+			
 			if ($scope.usuarioForm.$valid) {
 
 				$scope.guardando = true;

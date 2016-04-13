@@ -31,25 +31,12 @@
               No se encontro "{{busqueda}}".
             </md-not-found>
           </md-autocomplete>
+          
+      </md-content>
 
+      <md-content layout="column">
+          
           <div layout-gt-sm="row" layout="column">
-            
-            <md-input-container flex>
-              <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" required >
-                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
-              </md-select>
-              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
-            </md-input-container>
-
-            <md-input-container flex>
-              <label>Cantidad</label>
-              <input type="number" name="cantidad" ng-model="datos.cantidad" required>
-              <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
-            </md-input-container>
             
             <md-input-container flex>
               <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
@@ -60,18 +47,41 @@
               </div>
             </md-input-container>
 
-          </div>
-
-          <div layout="row" layout-sm="column" ng-if="datos.tipomov == 1">
-            
-            <md-input-container flex flex-gt-sm="40">
+            <md-input-container flex ng-if="datos.tipomov == 1">
               <md-select placeholder="Tipo de Ajuste" ng-model="datos.tipoa" name="tipo">
                 <md-option ng-repeat="tipoajuste in tiposajuste" value="{{tipoajuste.TIA_clave}}">{{tipoajuste.TIA_nombre}}</md-option>
               </md-select>
             </md-input-container>
 
           </div>
-        
+
+          <div layout-gt-sm="row" layout="column">
+            
+            <md-input-container flex>
+              <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" md-on-close="verificaExistencia(datos.almacen)" required >
+                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+              </md-select>
+              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+              </div>
+            </md-input-container>
+            
+            <md-input-container flex>
+              <label>Cantidad Actual</label>
+              <input type="number" name="cantidad" ng-model="disponible" disabled>
+            </md-input-container>
+
+            <md-input-container flex>
+              <label>Cantidad</label>
+              <input type="number" name="cantidad" ng-model="datos.cantidad" min="1" required>
+              <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
+                <div ng-message="required">Campo obligatorio.</div>
+                <div ng-message="min">La cantidad no puede ser menor que 1</div>
+              </div>
+            </md-input-container>
+            
+          </div>
+
           <md-input-container flex>
             <label>Observaciones</label>
             <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>
@@ -81,7 +91,8 @@
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
 
-      </md-content>
+      </md-content>  
+
     
   </md-dialog-content>
   <div class="md-actions" layout="row">

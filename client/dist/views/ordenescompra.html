@@ -59,17 +59,17 @@
                     </md-icon>
                   </md-button>
                   <md-menu-content width="2">
-                    <md-menu-item ng-if="orden.OCM_cancelada == 0 && orden.OCM_cerrada == 0">
+                    <md-menu-item ng-if="orden.OCM_cancelada == 0 && orden.OCM_cerrada == 0 && orden.OCM_surtida == 0">
                       <md-button ui-sref="index.surtir({ordenId:orden.OCM_clave})">
                         Surtir
                       </md-button>
                     </md-menu-item>
-                    <md-menu-item ng-if="orden.OCM_cerrada == 1  && orden.OCM_incompleta == 1">
+                    <md-menu-item ng-if="orden.OCM_surtida == 1  && orden.OCM_incompleta == 1 && orden.OCM_cerrada == 0">
                       <md-button ng-click="ordenescompra.completar($event,$index)">
                         Completar
                       </md-button>
                     </md-menu-item>
-                    <md-menu-item ng-if="orden.OCM_cerrada == 1  && orden.OCM_incompleta == 1">
+                    <md-menu-item ng-if="orden.OCM_surtida == 1  && orden.OCM_incompleta == 1 && orden.OCM_cerrada == 0">
                       <md-button ng-click="ordenescompra.cerrar($event,$index)">
                         Cerrar Orden
                       </md-button>

@@ -10,10 +10,12 @@
         return{
             almacenes : function()
             {
+                //consulta de almacenes general
                 return $http.get(api + 'busquedas/almacenes');
             },
             almacenesUsuario : function(usuario)
             {
+                // busca los almacenes de un usuario
                 return $http.get(api + 'busquedas/almacenes/'+usuario);
             },
             almacenUsuario : function(usuario)
@@ -38,6 +40,7 @@
             },
             itemsAlmacen : function(almacen)
             {
+                // consulta los items existentes en el almacen
                 return $http.get(api + 'busquedas/items/existencias/' + almacen);
             },
             itemsProveedor : function()
@@ -47,6 +50,11 @@
             itemsUnidad : function(unidad)
             {
                 return $http.get(api + 'operacion/items/unidad/' + unidad);
+            },
+            itemAlmacen : function(almacen,item)
+            {
+                //busca la existencia de un item en un almacen 
+                return $http.get(api + 'busquedas/item/existencia/' + almacen + '/' + item);
             },
             itemUnidad : function(item,unidad)
             {

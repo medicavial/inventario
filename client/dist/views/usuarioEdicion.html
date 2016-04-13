@@ -13,7 +13,9 @@
 
   <form name="usuarioForm" novalidate ng-submit="guardar()">
 
-  <md-dialog-content layout="column" layout-padding>
+  <md-dialog-content layout-padding>
+      
+    <md-content layout="column">
 
       <md-input-container>
         <label>Nombre</label>
@@ -24,7 +26,7 @@
       </md-input-container>
 
       
-      <div layout="row" layout-sm="column">
+      <div layout-gt-sm="row" layout="column">
         
         <md-input-container flex>
           <label>Usuario</label>
@@ -62,7 +64,7 @@
         
       </div>
 
-      <div layout="row" layout-sm="column" layout-fill>
+      <div layout-gt-sm="row" layout="column" layout-fill>
         
         <md-select placeholder="Perfil de Usuario" ng-model="datos.perfil" required flex>
           <md-option ng-repeat="permiso in permisos" value="{{permiso.PER_clave}}">{{permiso.PER_nombre}}</md-option>
@@ -80,6 +82,8 @@
       </div>
 
       <br>
+
+    </md-content>
     
   </md-dialog-content>
   <div class="md-actions" layout="row">

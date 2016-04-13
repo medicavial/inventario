@@ -2,7 +2,8 @@
 
 	"use strict"
 	
-	angular.module('app')
+	angular
+	.module('app')
 	.controller('ordenCompraCtrl',ordenCompraCtrl)
 	.controller('ordenesCompraCtrl',ordenesCompraCtrl)
 	.controller('correoCtrl',correoCtrl)
@@ -32,12 +33,12 @@
 		scope.paginacion = [10,20,30,40];
 
 		scope.onPaginationChange = function (page, limit) {
-		    console.log(page);
-		    console.log(limit);
+		    // console.log(page);
+		    // console.log(limit);
 		};
 
 		scope.onOrderChange = function (order) {
-			console.log(scope.query);
+			// console.log(scope.query);
 		};
 
 		scope.nuevo = function(ev) {
@@ -56,11 +57,11 @@
 		    
 		};
 
-		scope.completar = function(ev,index) {
+		scope.completar = function(ev,orden) {
 
-			var orden = scope.info[index];
+			// var orden = scope.info[index];
 
-			console.log(orden);
+			// console.log(orden);
 
 		    $mdDialog.show({
 		      controller: completaCtrl,
@@ -113,7 +114,7 @@
 				   });
 
 		    $mdDialog.show(confirm).then(function() {
-		    	console.log(orden);
+		    	// console.log(orden);
 		    	operacion.cerrarOrden(orden.OCM_clave).success( function (data){
 		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
 		    		orden.OCM_incompleta = 0;
@@ -161,7 +162,7 @@
 
 		$scope.info = function(unidad){
 
-			console.log(unidad);
+			// console.log(unidad);
 			$scope.selected = [];
 			$scope.items = [];
 			$scope.almacenes = '';
@@ -210,9 +211,9 @@
 
 
 		$scope.ir2 = function(selecciones){
-
+			// console.log(selecciones);
 			operacion.preparaOrden(selecciones).then(function (data){
-
+				// console.log(data);
 				if (data.proveedores.length > 0) {
 					$scope.ordenItems = data.datos;
 					$scope.totalItems = data.info;
@@ -367,10 +368,11 @@
 			operacion.generaOrdenes($scope.seleccionOrden,$scope.proveedores,$scope.unidad,$scope.almacenes).then(
 				function (data){
 
+					// ya que guardo los datos en base de datos
+					// mandamos un correo al proveedor registrado
 					angular.forEach(data.ordenes,function (value,key){
 						pdf.enviaOrden(value);
 					});
-
 
 					$scope.ordenes = data.ordenes;
 					$scope.selectedIndex = 3;
@@ -386,14 +388,14 @@
 
 		}
 
-		//se generan las ordenes en cada proveedor 
+		//se generan las orden de compra por proveedor 
 		$scope.confirmaOrdenProveedor = function(proveedor){
 			
 			$scope.todos = false;
 
 			operacion.ordenXproveedor(proveedor,$scope.unidad,$scope.almacenes,$scope.seleccionOrden).then(
 				function (data){
-					console.log(data);
+					// console.log(data);
 					mensajes.alerta('Orden generada satisfactoriamente','success','top right','done_all');
 
 					var idOrden = data.ordenes[0];
@@ -500,7 +502,7 @@
 
 	function completaCtrl($scope, $mdDialog, informacion, operacion, mensajes,$rootScope){
 
-		console.log(informacion);
+		// console.log(informacion);
 
 		$scope.inicio = function(){
 			

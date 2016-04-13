@@ -16,6 +16,7 @@ class Existencia extends Eloquent {
         return $query->join('items', 'items.ITE_clave', '=', 'existencias.ITE_clave')
                      ->select('ITE_nombre','EXI_cantidad','EXI_ultimoMovimiento', 'existencias.updated_at','existencias.ITE_clave')
                      ->where('ALM_clave',$almacen)
+                     ->orderBy('ITE_nombre')
                      ->get();
 
     }

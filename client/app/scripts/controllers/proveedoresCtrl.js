@@ -2,7 +2,8 @@
 
 	"use strict"
 	
-	angular.module('app')
+	angular
+	.module('app')
 	.controller('proveedorCtrl',proveedorCtrl)
 	.controller('proveedoresCtrl',proveedoresCtrl)
 	.controller('proveedorEditCtrl',proveedorEditCtrl)
@@ -161,6 +162,7 @@
 	function proveedorEditCtrl($scope,$mdDialog,proveedores,mensajes,datos, archivos ,Upload, $rootScope){
 
 		$rootScope.titulo = 'Edita Proveedor';
+		$rootScope.atras = true;
 
 		$scope.inicio = function(){
 

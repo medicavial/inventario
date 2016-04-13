@@ -2,12 +2,13 @@
 
 	"use strict"
 	
-	angular.module('app')
+	angular
+	.module('app')
 	.controller('movimientoCtrl',movimientoCtrl)
 	.controller('movimientosCtrl',movimientosCtrl)
 
 	movimientosCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
-	movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter'];
+	movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda'];
 
 
 	function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
@@ -20,19 +21,19 @@
 		scope.limit = 10;
 		scope.page = 1;
 		scope.texto = {
-	      text: 'Movimientos por pagina:',
-	      of: 'de'
+			text: 'Movimientos por pagina:',
+			of: 'de'
 	    };
 	    
 		scope.paginacion = [10,20,30,40];
 
 		scope.onPaginationChange = function (page, limit) {
-		    console.log(page);
-		    console.log(limit);
+		    // console.log(page);
+		    // console.log(limit);
 		};
 
 		scope.onOrderChange = function (order) {
-			console.log(scope.query);
+			// console.log(scope.query);
 		    //return $nutrition.desserts.get(scope.query, success).$promise; 
 		};
 
@@ -53,7 +54,7 @@
 	            		tiposajuste 	= busqueda.tiposAjuste();
 
 	            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
-	            		console.log(data);
+	            		// console.log(data);
 	            		promesa.resolve(data);
 	            		scope.loading = false;
 	            	});
@@ -72,19 +73,21 @@
 	}
 
 
-	function movimientoCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter){
+	function movimientoCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter,busqueda){
 
 		$scope.items = informacion[0].data;
 		$scope.tiposmovimiento = informacion[1].data;
 		$scope.almacenes = informacion[2].data;
 		$scope.tiposajuste = informacion[3].data;
 
+		// console.log($scope.items);
 
 		$scope.inicio = function(){
 
 			$scope.busqueda = null;
 		    $scope.consultado = consultado;
 		    $scope.item = '';
+		    $scope.disponible = '';
 
 			$scope.datos = {
 				item:'',
@@ -99,30 +102,54 @@
 			$scope.guardando = false;
 		}
 
+		$scope.verificaExistencia = function(almacen){
+
+			mensajes.alerta('verificando existencias','','top right','search');
+
+			busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
+				// console.log(data);
+				if ($scope.datos.tipomov == 3 && data == '') {
+					mensajes.alerta('No hay cantdad disponible en este almacen para salida','error','top right','error');
+					$scope.disponible = 0;
+				}else{
+					$scope.disponible = data.EXI_cantidad;
+				}
+			}).error(function (data){
+				mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+			});
+		}
+
 		$scope.guardar = function(){
 
 			if ($scope.movimientoForm.$valid && $scope.item) {
 			
 				$scope.datos.item = $scope.item.ITE_clave;
 
-				console.log($scope.datos);
+				// console.log($scope.datos);
 				$scope.guardando = true;
 				operacion.altaMovimiento($scope.datos).success(function (data){
 					mensajes.alerta(data.respuesta,'success','top right','done_all');
 					$scope.guardando = false;
 					$scope.movimientoForm.$setPristine();
 					$scope.inicio();
-				});
+				}).error(function (data){
+					mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+					$scope.guardando = false;
+				})
 
 			};
 			
+		}
+
+		$scope.detalleItem = function(item){
+			// console.log(item);
 		}
 
 		$scope.verificaForm = function(){
 
 			if ($scope.datos.tipomov == 1 && $scope.datos.tipoa == '') {
 				return true;
-			}else if($scope.movimientoForm.$invalid){
+			}else if($scope.datos.tipomov == 3 && $scope.disponible < $scope.datos.cantidad){
 				return true;
 			}else if ($scope.guardando) {
 				return true;
@@ -139,6 +166,8 @@
 
 			return q.promise;
 	    }
+
+
 
 
 		$scope.cancel = function() {

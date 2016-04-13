@@ -151,13 +151,15 @@ class OperacionController extends BaseController {
 
 	}
 
+	// funcion que ayuda a mandar correo al proveedor de la orden creada
 	public function enviaCorreoOrden($orden){
+
 
 		if(Input::has('data')) {
 
             $datos = OrdenCompra::find($orden);
 
-            Mail::send('emails.orden', array('key' => $datos), function($message) use ($orden)
+            Mail::send('emails.orden', $datos , function($message) use ($orden)
             {
 
             	$clave = OrdenCompra::find($orden)->UNI_clave;
@@ -168,7 +170,7 @@ class OperacionController extends BaseController {
                 $pdf = helpers::ordenPDF($orden);
                 $pdf->save($archivo);
 
-                $message->from('sistemasrep2@medicavial.com.mx', 'Sistema de Inventario MV');
+                $message->from('inventarios@medicavial.com.mx', 'Sistema de Inventario MV');
                 $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
                 $message->to('salcala@medicavial.com.mx');
                 // ->cc('bar@example.com');
@@ -369,15 +371,19 @@ class OperacionController extends BaseController {
 		$datos = Input::all();
 		$ordenes = array();
 
+		// recorremos todoas las ordenes procesadas
 		foreach ($datos as $valor) {
 
 			$items = $valor['items'];
 
 			$almacenes = array();
+
+			// el arreglo de almacenes para que quede en un solo array unico para guardar en bd
 			foreach ($valor['almacenes'] as $almacen) {
 				array_push($almacenes, $almacen['ALM_clave']);
 			}
 
+			//guardamos una nueva orden
 			$orden = new OrdenCompra;
 			
 			$orden->OCM_fechaReg = date('Y-m-d H:i:s');
@@ -392,6 +398,7 @@ class OperacionController extends BaseController {
 
 			$claveOrden = $orden->OCM_clave;
 
+			// guardamos que items se guardaron en esta orden 
 			foreach ($items as $item) {
 				
 				$ordenItem = new OrdenItem;

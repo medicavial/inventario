@@ -107,7 +107,7 @@
                 datos = $filter('filter')(items, item);
 
                 //generamos datos de los filtrados
-                var cantidad = datos[0].porsurtir;
+                var cantidad = datos[0].porsurtir,
                     proveedores = datos.length;
 
                 angular.forEach(datos, function(value, key) {
@@ -155,7 +155,7 @@
 
                 angular.forEach(items, function(value, key) {
 
-                    var cantidad = value.Cantidad;
+                    var cantidad = value.Cantidad,
                         proveedores = value.proveedores.length;
 
 
@@ -228,6 +228,7 @@
                     ordenes   = [],
                     items;
 
+                //filtramos los resultados de ese proveedor
                 items = $filter('filter')(catalogo, proveedor);
 
                 var proveedor = items[0].PRO_clave, //obtenemos el la vlave del proveedor que debe ser la misma para todos
@@ -327,7 +328,8 @@
 
 
                 });
-
+                
+                // aqui termina el procesado de las ordenes para mandarlas al server
                 $q.when(ordenes).then(function (data){
 
 
@@ -335,7 +337,8 @@
                         promesa.resolve(datos);
                     }).error(function (data){
                         promesa.reject('Se encontro un error intentalo nuevamente');
-                    })
+                    });
+
                 });
 
 
@@ -467,7 +470,7 @@
                 datos = $filter('filter')(items, item);
 
                 //generamos datos de los filtrados
-                var cantidad = datos[0].porsurtir;
+                var cantidad = datos[0].porsurtir,
                     proveedores = datos.length;
 
                 angular.forEach(datos, function(value, key) {

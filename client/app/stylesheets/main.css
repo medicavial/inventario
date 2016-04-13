@@ -38,6 +38,10 @@ md-select.md-theme1-theme[disabled] .md-select-value{
   cursor: not-allowed;
 }
 
+md-input-container.md-theme1-theme .md-input[disabled], md-input-container.md-theme1-theme .md-input [disabled]{
+  color: rgba(0,0,0,0.87);
+}
+
 /*
 md-select .md-select-value.md-select-placeholder{
   color:#ABABAB !important;*/

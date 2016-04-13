@@ -3,14 +3,15 @@
 
 	"use strict"
 
-	angular.module('app')
+	angular
+	.module('app')
 	.controller('configuracionCtrl',configuracionCtrl)
 
 	configuracionCtrl.$inject = ['$rootScope','$mdDialog','busqueda','operacion', 'mensajes', 'datos'];
 
 	function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, datos){
 
-		console.log(datos);
+		// console.log(datos);
 		var scope = this;
 
 		$rootScope.titulo = 'Configuración';
@@ -19,9 +20,11 @@
 		$rootScope.tema = 'theme1';
 
 		scope.guardando = false;
+		scope.consultando = false;
 		scope.unidades = datos.data;
 		scope.edicion = true;
 		scope.correos = [];
+		scope.itemSeleccionado = '';
 
 		scope.datos = {
 			minimo : 0,
@@ -59,32 +62,39 @@
 			});
 		}
 
-		scope.verDetalle = function(index){
+		scope.verDetalle = function(item){
 
-			scope.inicio();
-			var item = scope.items[index];
 
-			scope.datos.item = item.ITE_clave;
-			scope.itemNombre = item.ITE_nombre;
+			if(item){
+				
+				scope.inicio();
+				scope.consultando = true;
+				// console.log(item);
+				// var item = scope.items[index];
 
-			busqueda.itemUnidad(item.ITE_clave,item.UNI_clave).success(function (data){
+				scope.datos.item = item.ITE_clave;
+				scope.itemNombre = item.ITE_nombre;
 
-				console.log(data);
+				busqueda.itemUnidad(item.ITE_clave,item.UNI_clave).success(function (data){
 
-				if (data.length > 0) {
-					scope.datos.compra = Number(data[0].CON_nivelCompra);
-					scope.datos.minimo = Number(data[0].CON_nivelMinimo);
-					scope.datos.maxima = Number(data[0].CON_nivelMaximo);
-					scope.id = data[0].id;
-					scope.existe = true;
-				}
+					console.log(data);
 
-				scope.minimo = Number( (scope.datos.minimo * 100)/scope.datos.maxima );
-				scope.compra = Number( (scope.datos.compra * 100)/scope.datos.maxima );
+					if (data.length > 0) {
+						scope.datos.compra = Number(data[0].CON_nivelCompra);
+						scope.datos.minimo = Number(data[0].CON_nivelMinimo);
+						scope.datos.maxima = Number(data[0].CON_nivelMaximo);
+						scope.id = data[0].id;
+						scope.existe = true;
+					}
 
-				scope.edicion = false;
+					scope.minimo = Number( (scope.datos.minimo * 100)/scope.datos.maxima );
+					scope.compra = Number( (scope.datos.compra * 100)/scope.datos.maxima );
 
-			});
+					scope.edicion = false;
+					scope.consultando = false;
+
+				});
+			}
 
 		}
 

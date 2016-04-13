@@ -3,7 +3,7 @@
   <div layout="column" layout-margin>
         <h3>Verifica Orden(es) de compra Total: {{ total() | currency }} </h3>  
 
-        <md-button class="md-raised md-primary" ng-if="todos" ng-click="confirmaOrden()">Confirmar Orden(es)</md-button>
+        <md-button class="md-raised md-primary" ng-if="todos" ng-click="confirmaOrden()">Confirmar Todo </md-button>
         <br>
 
         <div ng-repeat="(proveedor, value) in seleccionOrden | groupBy: 'PRO_nombrecorto'">

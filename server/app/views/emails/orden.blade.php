@@ -7,7 +7,7 @@
 		<h2>Orden de compra</h2>
 
 		<div>
-			Se anexa orden de compra correspondiente al numero {{ $key->OCM_clave }} por la cantidad de {{ $key->OCM_importeEsperado }} mas detalles en el archivo adjunto.
+			Se anexa orden de compra correspondiente al numero {{ OCM_clave }} por la cantidad de {{ OCM_importeEsperado }} mas detalles en el archivo adjunto.
 
 
 			Envio automático.
