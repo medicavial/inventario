@@ -7,7 +7,6 @@
   "description": "librerias necesarias para la app",
   "license": "MIT",
   "dependencies": {
-    "angular-filter": "~0.5.7",
     "angular-material": "~1.0",
     "angular-material-data-table": "~0.8.0",
     "angular-material-icons": "~0.5.0",
@@ -15,6 +14,7 @@
     "angular-resource": "~1.4.3",
     "angular-ui-router": "~0.2.15",
     "angular-webstorage": "~0.11.0",
+    "angular-filter": "~0.5.7",
     "animate.css": "~3.4.0",
     "jspdf": "1.0.272",
     "mdPickers": "~0.3.0",

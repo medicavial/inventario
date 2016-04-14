@@ -10,7 +10,7 @@
 
 	function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider,$compileProvider) {
 
-
+		$compileProvider.debugInfoEnabled(false);
 	  	// $httpProvider.interceptors.push(testInterceptor);
 
 		$urlRouterProvider.otherwise("/home");
