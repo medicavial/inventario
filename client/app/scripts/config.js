@@ -1,6 +1,6 @@
 (function(){
 
-	"use strict"
+	'use strict';
 
 	angular
 	.module('app')
@@ -10,7 +10,7 @@
 
 	function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider,$compileProvider) {
 
-		$compileProvider.debugInfoEnabled(false);
+		$compileProvider.debugInfoEnabled(true);
 	  	// $httpProvider.interceptors.push(testInterceptor);
 
 		$urlRouterProvider.otherwise("/home");

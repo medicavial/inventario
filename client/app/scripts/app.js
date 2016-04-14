@@ -1,6 +1,6 @@
 (function(){
 
-	"use strict"
+	'use strict';
 
 	var hoy = new Date(); 
 	var dd = hoy.getDate(); 
