@@ -26,6 +26,18 @@ gulp.task('server', function() {
 	}); 
 });
 
+gulp.task('server-producccion', function() {  
+	connect.server({    
+		root: './dist',    
+		hostname: '0.0.0.0',    
+		port: 3000,    
+		livereload: true,    
+		middleware: function(connect, opt) {      
+			return [ historyApiFallback ];    
+		}  
+	}); 
+});
+
 
 // Busca errores en el JS y nos los muestra en el terminal 
 gulp.task('jshint', function() {  
@@ -87,6 +99,6 @@ gulp.task('copy', function() {
 	.pipe(gulp.dest('./dist/img'));
 });
 
-gulp.task('produccion', ['compress','copy']);
+gulp.task('produccion', ['compress','copy','server-producccion']);
 
 gulp.task('default', ['server','inject','wiredep', 'watch']);

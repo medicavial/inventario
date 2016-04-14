@@ -25,7 +25,7 @@
             <md-divider></md-divider>
             <md-list-item  ng-repeat="item in datos.items">
                 <p> {{ item.ITE_nombre }} </p>
-                <p> {{ item.OIT_cantidadPedida - OIT_cantidadSurtida }} </p>
+                <p> {{ item.OIT_cantidadPedida - item.OIT_cantidadSurtida }} </p>
             </md-list-item>
           </md-list>
         

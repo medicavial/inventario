@@ -65,7 +65,7 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item ng-if="orden.OCM_surtida == 1  && orden.OCM_incompleta == 1 && orden.OCM_cerrada == 0">
-                      <md-button ng-click="ordenescompra.completar($event,$index)">
+                      <md-button ng-click="ordenescompra.completar($event,orden)">
                         Completar
                       </md-button>
                     </md-menu-item>
