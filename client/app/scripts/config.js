@@ -12,8 +12,7 @@
 
 
 	  	// $httpProvider.interceptors.push(testInterceptor);
-	  	$compileProvider.debugInfoEnabled(false);
-	  	
+
 		$urlRouterProvider.otherwise("/home");
 
 		$stateProvider
