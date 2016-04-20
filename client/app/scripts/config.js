@@ -13,6 +13,32 @@
 		$compileProvider.debugInfoEnabled(true);
 	  	// $httpProvider.interceptors.push(testInterceptor);
 
+	  	// pickerProvider.setMassagePath("test ddd");
+	  	// pickerProvider.setOkLabel('OK');      
+	  	// pickerProvider.setCancelLabel('cancelar');
+	  	// pickerProvider.setDayHeader('single');
+	  	// pickerProvider.setDaysNames([
+	  	// 	{'single':'D','shortName':'Do','fullName':'Domingo'},       
+	  	// 	{'single':'L','shortName':'Lu','fullName':'Lunes'},       
+	  	// 	{'single':'M','shortName':'Ma','fullName':'Martes'},       
+	  	// 	{'single':'M','shortName':'Mi','fullName':'Miercoles'},       
+	  	// 	{'single':'J','shortName':'Ju','fullName':'Jueves'},       
+	  	// 	{'single':'V','shortName':'Vi','fullName':'Viernes'},       
+	  	// 	{'single':'S','shortName':'Sa','fullName':'Sabado'}      
+	  	// ]);
+
+		// picker.setDivider('a');
+		// picker.setMonthNames(["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
+		// picker.setRangeDefaultList(['Hoy',
+		//         'Ultimos 7 Dias',
+		//         'Este Mes',
+		//         'Ultimo Mes',
+		//         'Esta Quincena',
+		//         'del año al dia',
+		//         'Este Año', 
+		//         'Manual']);
+		// picker.setRangeCustomStartEnd(['Fecha Ini', 'fecha Fin']);      
+
 		$urlRouterProvider.otherwise("/home");
 
 		$stateProvider

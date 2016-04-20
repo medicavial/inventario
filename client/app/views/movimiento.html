@@ -82,6 +82,29 @@
             
           </div>
 
+          <div layout-gt-sm="row" layout="column" class="no-margin">  
+
+            <md-input-container flex>
+              <label>Lote</label>
+              <input type="text" name="lote" ng-model="datos.lote" ng-blur="verificaLote()">
+            </md-input-container>
+
+            <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required ng-if="nuevoLote" flex></md-datepicker>
+            
+            <span flex></span>
+            <!-- <sm-date-time-picker 
+                fname="Fecha de caducidad" 
+                lable="Caducidad"
+                form="movimientoForm" 
+                value="datos.caducidad"                         
+                is-required="true" 
+                format="YYYY-MM-DD"
+                mode=""
+                flex>
+            </sm-date-time-picker> -->
+          </div>
+      
+
           <md-input-container flex>
             <label>Observaciones</label>
             <textarea  columns="1" name="observaciones" ng-model="datos.observaciones"></textarea>

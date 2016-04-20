@@ -275,6 +275,7 @@ class OperacionController extends BaseController {
 		$cantidad = Input::get('cantidad');
 		$tipoajuste = Input::get('tipoa');
 
+		
 		$movimiento = new Movimiento;
 
 		$movimiento->ITE_clave = $item;
@@ -285,6 +286,10 @@ class OperacionController extends BaseController {
 		
 		if ( Input::has('orden') ) {
 			$movimiento->OCM_clave = Input::get('orden');
+		}
+
+		if ( Input::has('idLote') ) {
+			$movimiento->LOT_clave = Input::get('idLote');
 		}
 
 		$movimiento->MOV_cantidad = $cantidad;
@@ -361,6 +366,15 @@ class OperacionController extends BaseController {
 			$itemactualiza->save();
 			
 		}
+
+		// $lote = new Lote;
+
+		// $lote->EXI_clave = $existencia;
+		// $lote->ITE_clave = $existencia;
+		// $lote->LOT_numero = $valor['lote'];
+		// $lote->LOT_cantidad = $valor['cantidad'];
+		// $lote->LOT_caducidad = $valor['caducidad'];
+		// $lote->save();
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
 
@@ -470,6 +484,7 @@ class OperacionController extends BaseController {
 
 
 		//actualizamos en la tabla mv el item surtido
+		//en caso de que se haya cambiado las ortesis
 		$recetaMV = Receta::find($receta);
 		$recetaMV->NS_surtida = $item;
 		$recetaMV->save();
@@ -494,8 +509,9 @@ class OperacionController extends BaseController {
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $cantidad;
 		$itemactualiza->save();
 
-		//generamos movimiento
+		//insertamos tambien el lote
 
+		//generamos movimiento de baja de articulos
 		$movimiento = new Movimiento;
 
 		$movimiento->ITE_clave = $item;

@@ -1,7 +1,7 @@
 (function(){
 
 
-	"use strict"
+	'use strict';
 
 	angular
 	.module('app')
@@ -21,6 +21,7 @@
 
 		scope.guardando = false;
 		scope.consultando = false;
+		scope.consultaUnidad = false;
 		scope.unidades = datos.data;
 		scope.edicion = true;
 		scope.correos = [];
@@ -50,7 +51,7 @@
 		scope.verificaUnidad = function(unidad){
 
 			scope.items = [];
-			
+			scope.consultaUnidad = true;
 			busqueda.configuracion(unidad).success(function (data){
 
 				if (data.length > 0) {
@@ -59,6 +60,8 @@
 				}else{
 					mensajes.alerta('Esta Unidad no tiene items en stock','info','top right','info');
 				}
+				scope.consultaUnidad = false;
+
 			});
 		}
 

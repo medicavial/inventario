@@ -54,7 +54,7 @@
           <ng-md-icon ng-if="!admin" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
           <ng-md-icon ng-if="admin" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon> 
         </md-subheader>
-        <div ng-show="admin">
+        <div ng-show="admin" class="sub-menu">
 
           <md-list-item ng-click="ir('index.usuarios')">
             <p> Usuarios </p>
@@ -93,7 +93,7 @@
           <ng-md-icon ng-if="!catalogos" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
           <ng-md-icon ng-if="catalogos" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
         </md-subheader>
-        <div ng-show="catalogos">
+        <div ng-show="catalogos" class="sub-menu">
 
           <md-list-item ng-click="ir('index.unidades')">
             <p> Unidades </p>
@@ -128,7 +128,7 @@
           <ng-md-icon ng-if="!almacen" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
           <ng-md-icon ng-if="almacen" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
         </md-subheader>
-        <div ng-show="almacen">
+        <div ng-show="almacen" class="sub-menu">
           <md-list-item ng-click="ir('index.configuracion')">
             <p> Configuraciones </p>
             <ng-md-icon icon="settings" style="fill:#3F51B5"></ng-md-icon> 
@@ -174,7 +174,7 @@
           <ng-md-icon ng-if="!reportes" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
           <ng-md-icon ng-if="reportes" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
         </md-subheader>
-        <div ng-show="reportes">
+        <div ng-show="reportes" class="sub-menu">
 
           <md-list-item ng-click="ir('index.lotes')">
             <p> Lotes </p>

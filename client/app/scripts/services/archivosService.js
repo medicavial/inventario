@@ -10,8 +10,9 @@
         return{
             items: function(archivos,clave)
             {
-                var promesa = $q.defer();
+                var promesa = $q.defer(),
                     imagenes = [];
+
                 for (var i = 0; i < archivos.length; i++) {
 
                     Upload.upload({
@@ -44,7 +45,7 @@
             },
             proveedores: function(archivos,clave)
             {
-                var promesa = $q.defer();
+                var promesa = $q.defer(),
                     imagenes = [];
                 for (var i = 0; i < archivos.length; i++) {
 

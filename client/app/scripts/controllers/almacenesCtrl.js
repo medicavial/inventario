@@ -1,9 +1,10 @@
 (function(){
 
 
-	"use strict"
+	'use strict';
 
-	angular.module('app')
+	angular
+	.module('app')
 	.controller('almacenCtrl',almacenCtrl)
 	.controller('almacenesCtrl',almacenesCtrl)
 	.controller('almacenEditCtrl',almacenEditCtrl)

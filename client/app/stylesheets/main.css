@@ -16,6 +16,12 @@ h1,h2,h3,h4{
   font-weight: 300;
 }
 
+.sub-menu{
+  background-color: rgba(212, 215, 217, 0.58);
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
 .content{
   position: relative;
 }
@@ -42,15 +48,9 @@ md-input-container.md-theme1-theme .md-input[disabled], md-input-container.md-th
   color: rgba(0,0,0,0.87);
 }
 
-/*
-md-select .md-select-value.md-select-placeholder{
-  color:#ABABAB !important;*/
+.sm-calender-pane {
+    z-index: 80 !important;
 }
-
-/*.md-list-item, .md-list-item .md-list-item-inner {
-    height: 54px !important; 
-}*/
-
 
 .md-sidenav-left {
    -webkit-transition: all 1s linear;

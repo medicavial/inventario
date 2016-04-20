@@ -1,7 +1,7 @@
 //servicio que verifica sesiones de usuario
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular.module('app')
     .factory("busqueda",busqueda);
@@ -43,6 +43,11 @@
                 // consulta los items existentes en el almacen
                 return $http.get(api + 'busquedas/items/existencias/' + almacen);
             },
+            itemsAlmacenReceta : function(almacen)
+            {
+                // consulta los items existentes en el almacen disponibles para agregar en receta MV
+                return $http.get(api + 'busquedas/items/existencias/' + almacen);
+            },
             itemsProveedor : function()
             {
                 return $http.get(api + 'busquedas/items/proveedor');
@@ -59,6 +64,10 @@
             itemUnidad : function(item,unidad)
             {
                 return $http.get(api + 'busquedas/item/unidad/' + item + '/' + unidad);
+            },
+            lote : function(lote)
+            {
+                return $http.get(api + 'busquedas/lote/'+lote);
             },
             movimientos : function()
             {

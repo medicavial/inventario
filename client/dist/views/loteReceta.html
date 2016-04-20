@@ -1,0 +1,61 @@
+<md-dialog aria-label="Modifica Item" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
+
+  <form name="modificaForm" novalidate>
+
+    <md-dialog-content>
+    <md-subheader class="md-no-sticky">Este Item a que lote pertence</md-subheader>
+
+      <md-content layout-gt-sm="row" layout="column" layout-padding>  
+
+        <md-input-container flex>
+          <label>Lote</label>
+          <input type="text" name="lote" ng-model="datos.lote" required>
+        </md-input-container>
+
+        
+        <md-input-container flex>
+          <label>Cantidad</label>
+          <input type="number" name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required>
+        </md-input-container>
+
+      </md-content>
+      
+      <div layout-gt-sm="row" layout="column"  layout-padding>
+        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required flex></md-datepicker>
+        <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button" flex>Agregar Lote</md-button>
+      </div>
+
+      <md-content>
+
+        <md-list>
+          <md-list-item>
+              <p> Lote </p>
+              <p> Cantidad </p>
+              <p> Caducidad </p>
+          </md-list-item>
+          <md-divider></md-divider>
+          <md-list-item  ng-repeat="lote in lotes">
+              <p> {{ lote.lote }} </p>
+              <p> {{ lote.cantidad }} </p>
+              <p> {{ lote.caducidad | date:'dd/MM/yyyy'}} </p>
+          </md-list-item>
+        </md-list>
+        
+        <br>
+      </md-content>
+
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+
+      <span flex></span>
+      <md-button type="button" ng-click="cancel()">
+          Salir
+      </md-button>
+      <md-button type="button" ng-click="ingresa()">
+          Ingresar
+      </md-button>
+
+    </div>
+
+  </form>
+</md-dialog>

@@ -67,9 +67,9 @@ class BusquedasController extends BaseController {
 	public function existenciasUnidad($unidad,$tipo){
 		
 		if ($tipo == 1) {
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia';
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja';
 		}else{
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia';
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja';
 		}
 
 		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
@@ -79,10 +79,16 @@ class BusquedasController extends BaseController {
 	                     ->select(DB::raw($sql))
 	                     ->groupBy('existencias.ITE_clave')
 	                     ->where('almacenes.UNI_clave', $unidad)
+	                     // este condicional solo filtra el botiquin 
 	                     ->where('almacenes.TAL_clave', 2)
 	                     ->where('items.TIT_clave', $tipo)
 	                     ->get();
 		
+	}
+
+	public function lote($lote){
+
+        return Lote::where('LOT_numero',$lote)->first();
 	}
 
 	public function movimientos(){
@@ -165,17 +171,20 @@ class BusquedasController extends BaseController {
 			$valoresItem = Item::find($item);
 			$modificable = $valoresItem->ITE_talla;
 			$familia = $valoresItem->TIT_clave;
+			$caja = $valoresItem->ITE_cantidadCaja;
 			
 			$respuesta[] = array(
 				'receta' => $dato['NS_id'],
 				'item' => $item,
 				'familia' => $familia,
 				'cantidad' => $dato['NS_cantidad'],
+				'caja' => $caja,
 				'editable' => $modificable,
 				'existencia' => $dato['id_existencia'],
 				'reserva' => $dato['id_reserva'],
 				'almacen' => $dato['id_almacen'],
-				'surtido' => false
+				'surtido' => false,
+				'lote' => ''
 			);
 			
 		}

@@ -24,12 +24,11 @@
 		'ngAnimate',
 		'md.data.table',
 		'ngFileUpload',
-		'angular.filter',
-		'mdPickers'
+		'angular.filter'
 	])
 	
-	// .constant('api', 'http://localhost/inventario/server/public/api/');
-	.constant('api', 'http://api.medicavial.mx/api/');
+	.constant('api', 'http://localhost/inventario/server/public/api/');
+	// .constant('api', 'http://api.medicavial.mx/api/');
 
 })();
 

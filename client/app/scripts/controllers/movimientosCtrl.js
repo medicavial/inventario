@@ -1,6 +1,6 @@
 (function(){
 
-	"use strict"
+	'use strict';
 	
 	angular
 	.module('app')
@@ -79,6 +79,7 @@
 		$scope.tiposmovimiento = informacion[1].data;
 		$scope.almacenes = informacion[2].data;
 		$scope.tiposajuste = informacion[3].data;
+		$scope.nuevoLote = false;
 
 		// console.log($scope.items);
 
@@ -95,11 +96,40 @@
 				tipomov:'',
 				tipoa:'',
 				orden:'',
+				lote:'',
+				idLote:'',
+				caducidad:'',
 				usuario:$rootScope.id,
 				observaciones:''
 			}
 
 			$scope.guardando = false;
+		}
+
+		$scope.mensajeError = function(){
+			mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+		}
+
+		$scope.verificaLote = function(){
+			var lote = $scope.datos.lote;
+			
+			if (lote != '') {
+				
+				busqueda.lote(lote).success(function (data){
+
+					if (data) {
+						mensajes.alerta('lote existente','','top right','done');
+						$scope.datos.idLote = data.LOT_clave;
+					}else{
+						mensajes.alerta('lote no existente ingresa caducidad','','top right','alert');
+						$scope.nuevoLote = true;
+					}
+
+				}).error(function (data){
+					$scope.mensajeError();
+				});
+
+			};
 		}
 
 		$scope.verificaExistencia = function(almacen){
@@ -115,7 +145,7 @@
 					$scope.disponible = data.EXI_cantidad;
 				}
 			}).error(function (data){
-				mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+				$scope.mensajeError();
 			});
 		}
 
@@ -133,7 +163,7 @@
 					$scope.movimientoForm.$setPristine();
 					$scope.inicio();
 				}).error(function (data){
-					mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+					$scope.mensajeError();
 					$scope.guardando = false;
 				})
 

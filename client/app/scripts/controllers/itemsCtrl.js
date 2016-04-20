@@ -1,6 +1,6 @@
 (function(){
 
-	"use strict"
+	'use strict';
 
 	angular.module('app')
 	.controller('itemCtrl',itemCtrl)
@@ -134,6 +134,7 @@
 				presentacionDesc:'',
 				agranel:false,
 				segmentado:false,
+				receta:false,
 				talla:false,
 				unidad:'',
 				cantidadCaja :'',
@@ -242,6 +243,7 @@
 			agranel:Number(datos[3].datos.ITE_agranel) ? true:false,
 			segmentado:Number(datos[3].datos.ITE_segmentable) ? true:false,
 			talla:Number(datos[3].datos.ITE_talla) ? true:false,
+			receta:Number(datos[3].datos.ITE_receta) ? true:false,
 			unidad:datos[3].datos.UTI_clave,
 			cantidadCaja :Number(datos[3].datos.ITE_cantidadCaja),
 			activo:Number(datos[3].datos.ITE_activo) ? true:false

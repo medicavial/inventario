@@ -19,13 +19,12 @@
 
 		<h3>Detalles de Receta</h3>		
 
-		<md-content layout="row" layout-margin flex>
-			<div flex flex-gt-sm="40">ITEMS</div>
-			<div class="text-center" flex flex-gt-sm="20">CANTIDAD</div>
+		<md-content layout="row" flex>
+			<div flex flex-gt-sm="35">ITEMS</div>
 		</md-content>
 		<md-list>
 			<md-list-item ng-repeat="recetaItem in receta.datos" >
-				<p flex flex-gt-sm="40">
+				<p flex flex-gt-sm="35">
 			        <md-select md-on-open="receta.valorAnterior = recetaItem.item" md-on-close="receta.verificaExistencia($index,$event)" placeholder="Selecciona Item" ng-model="recetaItem.item" ng-disabled="recetaItem.editable == 0">
 						<md-optgroup label="{{ tipoItem.TIT_nombre }}" ng-repeat="tipoItem in receta.tipoItems | filter:{ TIT_clave: recetaItem.familia }">
 				            <md-option ng-value="item.ITE_clave" ng-repeat="item in receta.items | filter:{ TIT_clave: tipoItem.TIT_clave }">{{item.ITE_nombre}}</md-option>
@@ -33,9 +32,15 @@
 			        </md-select>
 				</p>
 				<p class="text-center" flex flex-gt-sm="20">
-					{{ recetaItem.cantidad }}
+					Cantidad: <strong>{{ recetaItem.cantidad }} <span ng-if="recetaItem.caja > 0"> X {{ recetaItem.caja }}</span> </strong>	
 				</p>
-				<p flex flex-gt-sm="20">
+				<p class="text-center" flex flex-gt-sm="20">
+					<md-input-container>
+		          		<label>Lote</label>
+		          		<input name="nombre" ng-model="recetaItem.lote">
+			        </md-input-container>
+				</p>
+				<p flex flex-gt-sm="40">
 					<md-progress-circular md-mode='indeterminate' ng-if="receta.surtiendo && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
 					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.surtido" class="md-raised md-warm" ng-click="receta.surtirItem(recetaItem)">Surtir</md-button>
 				</p>
@@ -44,8 +49,17 @@
 
 	</md-whiteframe>
 
-	<div ng-show="receta.cargando" flex layout layout-align="center center">
+	<div ng-if="receta.cargando" flex layout layout-align="center center">
         <md-progress-circular class="md-accent" md-mode="indeterminate"  md-diameter="96"></md-progress-circular>
 	</div>
 
 </div>
+
+
+<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-click="receta.nuevoItem($event)" aria-label="Nuevo Item" ng-if="receta.datos.length > 0">
+    <md-tooltip md-direction="top">
+      Agregar Item
+    </md-tooltip>
+    <ng-md-icon icon="add" style="fill:white" ng-hide="movimientos.loading"></ng-md-icon> 
+    <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="movimientos.loading"></md-progress-circular>
+</md-button>

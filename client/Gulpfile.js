@@ -99,6 +99,6 @@ gulp.task('copy', function() {
 	.pipe(gulp.dest('./dist/img'));
 });
 
-gulp.task('produccion', ['compress','copy','server-producccion']);
+gulp.task('produccion', ['compress','copy']);
 
 gulp.task('default', ['server','inject','wiredep', 'watch']);

@@ -1,10 +1,12 @@
 (function(){
 
-	"use strict"
+	'use strict';
 	
 	angular
 	.module('app')
 	.controller('recetaCtrl',recetaCtrl)
+	.controller('loteRecetaCtrl',loteRecetaCtrl)
+	.controller('itemRecetaCtrl',itemRecetaCtrl)
 
 	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes'];
 
@@ -25,20 +27,23 @@
 
 		scope.surtirItem = function(valor){
 
-			scope.surtiendo = true;
 
 			// console.log(valor);
+			if (valor.lote == '') {
+				mensajes.alerta('Debes ingresar un lote para surtir item','error','top right','error');
+			}else{
+				scope.surtiendo = true;
+				operacion.surtirItem(valor).success(function (data){
 
-			operacion.surtirItem(valor).success(function (data){
+					scope.surtiendo = false;
+					mensajes.alerta(data.respuesta,'success','top right','done_all');
+					valor.surtido = true;
 
-				scope.surtiendo = false;
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				valor.surtido = true;
-
-			}).error(function (data){
-				scope.surtiendo = false;
-				mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
-			});
+				}).error(function (data){
+					scope.surtiendo = false;
+					mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
+				});
+			}
 		}
 
 		scope.verificaExistencia = function(index,ev){
@@ -78,6 +83,29 @@
 			};
 		}
 
+
+		scope.ingresaLote = function(index,ev) {
+		    $mdDialog.show({
+		      controller: loteRecetaCtrl,
+		      templateUrl: 'views/loteReceta.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:false
+		    }).then(function(){
+		    });
+		};
+
+		scope.ingresaItem = function(index,ev) {
+		    $mdDialog.show({
+		      controller: itemRecetaCtrl,
+		      templateUrl: 'views/itemReceta.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:false
+		    }).then(function(){
+		    });
+		};
+
 		scope.buscaReceta = function(){
 
 			scope.cargando = true;
@@ -91,6 +119,14 @@
 				scope.cargando = false;
 			});
 		}
+
+	}
+
+	function loteRecetaCtrl($scope){
+
+	}
+
+	function itemRecetaCtrl($scope){
 
 	}
 

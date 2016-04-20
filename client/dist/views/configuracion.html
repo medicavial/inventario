@@ -11,6 +11,8 @@
         <md-option ng-repeat="unidad in configuracion.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
       </md-select>
 
+      <md-progress-circular md-mode="indeterminate" ng-if="configuracion.consultaUnidad" flex></md-progress-circular>
+
     </md-content>
 
     <md-subheader class="c-bluegray">Configuracion de Alertas según el stock</md-subheader>  
@@ -23,7 +25,7 @@
             <md-option ng-repeat="item in configuracion.items" ng-value="{{ item }}">{{ item.ITE_nombre }}</md-option>
           </md-select>
 
-          <md-progress-circular md-mode="indeterminate" ng-show="configuracion.consultando" flex></md-progress-circular>
+          <md-progress-circular md-mode="indeterminate" ng-if="configuracion.consultando" flex></md-progress-circular>
           
           <!-- <h3> {{ configuracion.itemNombre }} </h3> -->
 

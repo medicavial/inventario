@@ -117,6 +117,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('almacenes', 'BusquedasController@almacenes');
         Route::get('almacenes/{usuario}', 'BusquedasController@almacenesUsuario');
         Route::get('almacenes/unidad/{unidad}', 'BusquedasController@almacenesUnidad');
+        //ruta que manda la orden al sistema MV
         Route::get('existencias/unidad/{unidad}/{tipo}', 'BusquedasController@existenciasUnidad');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
         Route::get('item/existencia/{almacen}/{item}', 'BusquedasController@itemAlmacen');
@@ -124,6 +125,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items', 'BusquedasController@items');
         Route::get('items/existencias/{almacen}', 'BusquedasController@itemsAlmacen');
         Route::get('items/proveedor', 'BusquedasController@itemsProveedor');
+        Route::get('lote/{lote}', 'BusquedasController@lote');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');
         Route::get('ordencompra/{id}', 'BusquedasController@ordencompra');

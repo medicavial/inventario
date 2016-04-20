@@ -85,26 +85,29 @@
       <div layout-gt-sm="row" layout="column" class="no-padding">
         
           <md-switch ng-model="datos.activo" aria-label="Item Activo" flex>
-                  <span ng-show="datos.activo">Item Activo</span>
-                  <span ng-hide="datos.activo">Item Inactivo</span>
+                  <span ng-if="datos.activo">Item Activo</span>
+                  <span ng-if="!datos.activo">Item Inactivo</span>
           </md-switch>
 
           <md-switch ng-model="datos.agranel" aria-label="Item agranel" flex>
-                  <span ng-show="datos.agranel">Item a granel</span>
-                  <span ng-hide="datos.agranel">Item no agranel</span>
+                  <span ng-if="datos.agranel">Item a granel</span>
+                  <span ng-if="!datos.agranel">Item no agranel</span>
           </md-switch>
 
           <md-switch ng-model="datos.segmentado" aria-label="Item segmentable" flex>
-                  <span ng-show="datos.segmentado">Item Segmentable</span>
-                  <span ng-hide="datos.segmentado">Item No Segmentable</span>
+                  <span ng-if="datos.segmentado">Item Segmentable</span>
+                  <span ng-if="!datos.segmentado">Item No Segmentable</span>
           </md-switch>
-
-
+          
           <md-switch ng-model="datos.talla" aria-label="Item con Talla" flex>
-                  <span ng-show="datos.talla">Item Con Talla</span>
-                  <span ng-hide="datos.talla">Item Sin Talla</span>
+                  <span ng-if="datos.talla">Item Con Talla</span>
+                  <span ng-if="!datos.talla">Item Sin Talla</span>
           </md-switch>
         
+          <md-switch ng-model="datos.receta" aria-label="Seleccionable Receta" flex>
+                  <span ng-if="datos.receta">Seleccionable Receta</span>
+                  <span ng-if="!datos.receta">No Seleccionable Receta</span>
+          </md-switch>
       </div>
 
 
@@ -205,7 +208,7 @@
 
     <div layout="row" layout-align="center center">
       <md-progress-circular md-mode="indeterminate" ng-show="guardando"></md-progress-circular>
-      <md-button id="nuevo" class="md-fab boton" ng-click="" aria-label="Guardar" type="submit" ng-hide="guardando" ng-disabled="itemForm.$invalid">
+      <md-button id="nuevo" class="md-fab boton" aria-label="Guardar" type="submit" ng-hide="guardando" ng-disabled="itemForm.$invalid">
           <md-tooltip md-direction="top">
             Guardar
           </md-tooltip>

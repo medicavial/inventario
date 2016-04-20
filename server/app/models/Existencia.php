@@ -68,8 +68,9 @@ class Existencia extends Eloquent {
                      ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
                      ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
                      ->select('ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave')
-                     ->groupBy('ITE_clave')
                      ->where('almacenes.UNI_clave', $unidad)
+                     ->groupBy('ITE_clave')
+                     ->orderBy('ITE_nombre')
                      ->get();
 
     }

@@ -1,6 +1,6 @@
 (function(){
 
-	"use strict"
+	'use strict';
 	
 	angular.module('app')
 	.controller('surtirCtrl',surtirCtrl)
@@ -203,7 +203,7 @@
 
 			var itemSurtido = $scope.seleccionItems[index];
 
-			console.log(itemSurtido);
+			// console.log(itemSurtido);
 
 			$mdDialog.show({
 				controller: lotesCtrl,
@@ -219,7 +219,7 @@
 	        	$scope.datos.items = $scope.items;
 
 	        	webStorage.local.add(clave,JSON.stringify($scope.datos));
-		    	console.log($scope.datos);
+		    	// console.log($scope.datos);
 
 		    }, function() {
 
