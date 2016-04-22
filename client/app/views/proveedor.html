@@ -20,7 +20,7 @@
         
         <md-input-container>
           <label>Nombre</label>
-          <input required name="nombre" ng-model="datos.nombre">
+          <input required name="nombre" ng-model="datos.nombre" mayusculas>
           <div ng-messages="proveedorForm.nombre.$error" ng-if="proveedorForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
@@ -28,7 +28,7 @@
 
         <md-input-container>
           <label>Razon Social</label>
-          <input name="razon" ng-model="datos.razon">
+          <input name="razon" ng-model="datos.razon" mayusculas>
           <div ng-messages="proveedorForm.razon.$error" ng-if="proveedorForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
@@ -40,7 +40,7 @@
         
         <md-input-container flex>
           <label>Nombre Corto</label>
-          <input  name="nombrecorto" ng-model="datos.nombrecorto" required> 
+          <input  name="nombrecorto" ng-model="datos.nombrecorto" required mayusculas> 
           <div ng-messages="proveedorForm.nombrecorto.$error" ng-if="proveedorForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div>

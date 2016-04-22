@@ -3,7 +3,7 @@
     <md-button ng-click="toggleSidenav('left')" hide-gt-md class="md-icon-button" ng-if="!atras">
       <ng-md-icon icon="menu" style="fill:white" aria-label="Menu"></ng-md-icon> 
     </md-button>
-    <md-button class="md-icon-button" aria-label="atras" ng-show="atras" back-button>
+    <md-button class="md-icon-button" aria-label="atras" ng-if="atras" back-button>
         <ng-md-icon icon="arrow_back" style="fill:white" aria-label="regresar"></ng-md-icon> 
     </md-button>
     <h1>{{ titulo }}</h1>
@@ -44,153 +44,227 @@
 
         <md-divider></md-divider>
         <md-list-item ng-click="ir('index.home')">
+          <md-icon>
+            <ng-md-icon icon="home" style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
           <p> Inicio </p>
-          <ng-md-icon icon="home" style="fill:#3F51B5"></ng-md-icon>
         </md-list-item>
 
         <md-divider></md-divider>
-        <md-subheader ng-click="admin = !admin" class="categoria md-no-sticky" md-ink-ripple>
-          Administrador
-          <ng-md-icon ng-if="!admin" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-          <ng-md-icon ng-if="admin" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon> 
-        </md-subheader>
-        <div ng-show="admin" class="sub-menu">
 
+        <md-list-item ng-click="abrirMenu(1)">
+          <md-icon>
+            <ng-md-icon icon="dashboard" style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+          <p> Administrador </p>
+          <md-icon>
+            <ng-md-icon icon="{{iconoAdmin}}" options='{"duration": 375,"rotation": "none"}' style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+        </md-list-item>
+        <div ng-if="admin" class="sub-menu">
           <md-list-item ng-click="ir('index.usuarios')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Usuarios </p>
-            <ng-md-icon icon="group" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.perfiles')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Perfiles </p>
-            <ng-md-icon icon="label" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.tiposmovimiento')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Tipos Movimiento </p>
-            <ng-md-icon icon="album" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.tiposajuste')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Tipos Ajuste </p>
-            <ng-md-icon icon="shuffle" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.tiposorden')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Tipos Orden </p>
-            <ng-md-icon icon="description" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.subtipositem')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> SubTipos item </p>
-            <ng-md-icon icon="more" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.equivalencias')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Unidad Item </p>
-            <ng-md-icon icon="toc" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
         
         </div>
 
         <md-divider></md-divider>
-        <md-subheader ng-click="catalogos = !catalogos" class="categoria md-no-sticky" md-ink-ripple>
-          Catalogos
-          <ng-md-icon ng-if="!catalogos" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-          <ng-md-icon ng-if="catalogos" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-        </md-subheader>
-        <div ng-show="catalogos" class="sub-menu">
+
+        <md-list-item ng-click="abrirMenu(2)">
+          <md-icon>
+            <ng-md-icon icon="list" style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+          <p> Catalogos </p>
+          <md-icon>
+            <ng-md-icon icon="{{iconoCatalogos}}" options='{"duration": 375,"rotation": "none"}' style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+        </md-list-item>
+
+        <div ng-if="catalogos" class="sub-menu">
 
           <md-list-item ng-click="ir('index.unidades')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Unidades </p>
-            <ng-md-icon icon="business" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.proveedores')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Proveedores </p>
-            <ng-md-icon icon="store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.tipositem')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Tipos item </p>
-            <ng-md-icon icon="style" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.items')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Items </p>
-            <ng-md-icon icon="shopping_basket" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
            <md-list-item ng-click="ir('index.tiposalmacen')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Tipos de Almacen </p>
-            <ng-md-icon icon="class" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.almacenes')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Almacenes </p>
-            <ng-md-icon icon="layers" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           
         </div>
 
         <md-divider></md-divider>
-        <md-subheader ng-click="almacen = !almacen" class="categoria md-no-sticky" md-ink-ripple>
-          Almacen
-          <ng-md-icon ng-if="!almacen" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-          <ng-md-icon ng-if="almacen" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-        </md-subheader>
-        <div ng-show="almacen" class="sub-menu">
+
+
+        <md-list-item ng-click="abrirMenu(3)">
+          <md-icon>
+            <ng-md-icon icon="assignment" style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+          <p> Almacen </p>
+          <md-icon>
+            <ng-md-icon icon="{{iconoAlmacen}}" options='{"duration": 375,"rotation": "none"}' style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+        </md-list-item>
+
+        <div ng-if="almacen" class="sub-menu">
           <md-list-item ng-click="ir('index.configuracion')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Configuraciones </p>
-            <ng-md-icon icon="settings" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
           <md-list-item ng-click="ir('index.conexiones')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Conexiones </p>
-            <ng-md-icon icon="settings_ethernet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
           <md-list-item ng-click="ir('index.movimientos')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Movimientos </p>
-            <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
           <md-list-item ng-click="ir('index.receta')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Surtir Receta </p>
-            <ng-md-icon icon="assignment_returned" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           
           <md-list-item ng-click="ir('index.traspaso')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Traspasos </p>
-            <ng-md-icon icon="repeat" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
 
           <md-list-item ng-click="ir('index.ordenescompra')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Ordenes de Compra </p>
-            <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
 
 
           <md-list-item ng-click="ir('index.facturas')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Facturas </p>
-            <ng-md-icon icon="crop_square" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
         </div>
 
         <md-divider></md-divider>
-        <md-subheader ng-click="reportes = !reportes" class="categoria md-no-sticky" md-ink-ripple>
-          Reportes
-          <ng-md-icon ng-if="!reportes" icon="keyboard_arrow_right" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-          <ng-md-icon ng-if="reportes" icon="keyboard_arrow_down" style="fill:#3F51B5" class="iconmenu"></ng-md-icon>
-        </md-subheader>
-        <div ng-show="reportes" class="sub-menu">
+
+
+        <md-list-item ng-click="abrirMenu(4)">
+          <md-icon>
+            <ng-md-icon icon="insert_chart" style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+          <p> Reportes </p>
+          <md-icon>
+            <ng-md-icon icon="{{iconoReportes}}" options='{"duration": 375,"rotation": "none"}' style="fill:#3F51B5"></ng-md-icon>
+          </md-icon>
+        </md-list-item>
+
+        <div ng-if="reportes" class="sub-menu">
 
           <md-list-item ng-click="ir('index.lotes')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Lotes </p>
-            <ng-md-icon icon="event_note" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.reporteExistencias')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Existencias </p>
-            <ng-md-icon icon="local_mall" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.reporteOrdenes')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Ordenes de Compra </p>
-            <ng-md-icon icon="local_grocery_store" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
           <md-list-item ng-click="ir('index.movimientos')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
             <p> Movimientos </p>
-            <ng-md-icon icon="account_balance_wallet" style="fill:#3F51B5"></ng-md-icon> 
           </md-list-item>
 
         </div>

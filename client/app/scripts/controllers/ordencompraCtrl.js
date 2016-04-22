@@ -115,7 +115,12 @@
 
 		    $mdDialog.show(confirm).then(function() {
 		    	// console.log(orden);
-		    	operacion.cerrarOrden(orden.OCM_clave).success( function (data){
+		    	var info = {
+		    		usuario:$rootScope.id,
+		    		orden:orden.OCM_clave
+		    	}
+		    	
+		    	operacion.cerrarOrden(info).success( function (data){
 		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
 		    		orden.OCM_incompleta = 0;
 		    	})

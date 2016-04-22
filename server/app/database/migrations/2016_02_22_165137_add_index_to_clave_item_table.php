@@ -27,7 +27,7 @@ class AddIndexToClaveItemTable extends Migration {
 	{
 		Schema::table('items', function(Blueprint $table)
 		{
-			$table->dropUnique('ITE_codigo');
+			$table->dropUnique('items_ITE_codigo_unique');
 		});
 	}
 

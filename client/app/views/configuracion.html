@@ -43,7 +43,7 @@
             <span class="md-body-1">Nivel Maximo (#)</span>
           </div>
           <div flex-gt-sm="20" flex layout layout-align="center center">
-            <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.maxima" aria-label="maxima" aria-controls="maxima-slider">
+            <input flex type="number" ng-disabled="configuracion.edicion" ng-model="configuracion.datos.maxima" aria-label="maxima" aria-controls="maxima-slider" numero>
           </div>
           
         </div>
@@ -55,10 +55,10 @@
           </div>
 
 
-          <md-slider ng-model="configuracion.minimo" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-warn" drag-end="configuracion.verificaMinimo" flex="60"></md-slider>
+          <md-slider ng-model="configuracion.minimo" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-warn" drag-end="configuracion.verificaMinimo" flex-gt-sm="60"></md-slider>
 
           <div flex-gt-sm="20" layout layout-align="start center">
-            <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.minimo" aria-label="minimo" aria-controls="minimo-slider">
+            <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.minimo" aria-label="minimo" aria-controls="minimo-slider" numero>
           </div>
 
         </div>
@@ -70,11 +70,11 @@
             <span class="md-body-1">Nivel Compra (%)</span>
           </div>
 
-          <md-slider ng-model="configuracion.compra" drag-end="configuracion.verificaCompra" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-primary" flex="60"></md-slider>
+          <md-slider ng-model="configuracion.compra" drag-end="configuracion.verificaCompra" ng-disabled="configuracion.datos.maxima == 0" step="5" md-discrete min="0" max="100" aria-label="Porcentaje Minimo" class="md-primary" flex-gt-sm="60"></md-slider>
 
 
           <div flex-gt-sm="20" layout layout-align="center center">
-            <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.compra" aria-label="compra" aria-controls="compra-slider">
+            <input flex type="number" ng-disabled="configuracion.datos.maxima == 0" ng-model="configuracion.datos.compra" aria-label="compra" aria-controls="compra-slider" numero>
           </div>
         </div>
         

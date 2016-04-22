@@ -19,6 +19,7 @@
 
           <md-autocomplete
               md-selected-item="item"
+              md-selected-item-change="selectedItemChange()"
               md-search-text="busqueda"
               md-items="item in consultado(busqueda)"
               md-item-text="item.ITE_nombre"
@@ -73,7 +74,7 @@
 
             <md-input-container flex>
               <label>Cantidad</label>
-              <input type="number" name="cantidad" ng-model="datos.cantidad" min="1" required>
+              <input type="number" name="cantidad" ng-model="datos.cantidad" min="1" numero required>
               <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
                 <div ng-message="required">Campo obligatorio.</div>
                 <div ng-message="min">La cantidad no puede ser menor que 1</div>
@@ -82,26 +83,16 @@
             
           </div>
 
-          <div layout-gt-sm="row" layout="column" class="no-margin">  
+          <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="item.TIT_forzoso">  
 
             <md-input-container flex>
               <label>Lote</label>
-              <input type="text" name="lote" ng-model="datos.lote" ng-blur="verificaLote()">
+              <input type="text" name="lote" ng-model="datos.lote" ng-blur="verificaLote()" mayusculas>
             </md-input-container>
 
             <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required ng-if="nuevoLote" flex></md-datepicker>
             
             <span flex></span>
-            <!-- <sm-date-time-picker 
-                fname="Fecha de caducidad" 
-                lable="Caducidad"
-                form="movimientoForm" 
-                value="datos.caducidad"                         
-                is-required="true" 
-                format="YYYY-MM-DD"
-                mode=""
-                flex>
-            </sm-date-time-picker> -->
           </div>
       
 

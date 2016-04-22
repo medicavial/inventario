@@ -10,7 +10,65 @@
 
 	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api) {
 
+		//seteo inicial de la app
 		var url = '';
+		$rootScope.iconoAdmin = 'add';
+		$rootScope.iconoCatalogos = 'add';
+		$rootScope.iconoAlmacen = 'add';
+		$rootScope.iconoReportes = 'add';
+
+		//parametros globales tomados del localStorage
+		$rootScope.username = webStorage.session.get('username');
+		$rootScope.nombre = webStorage.session.get('nombre');
+		$rootScope.id = webStorage.session.get('id');
+
+		// interaccion del menu
+		$rootScope.abrirMenu = function(index){
+
+			if (index == 1) {
+
+				if ($rootScope.admin) {
+					$rootScope.iconoAdmin = 'add';
+				}else{
+					$rootScope.iconoAdmin = 'remove';
+				}
+
+				$rootScope.admin = !$rootScope.admin;
+			};
+
+			if (index == 2) {
+
+				if ($rootScope.catalogos) {
+					$rootScope.iconoCatalogos = 'add';
+				}else{
+					$rootScope.iconoCatalogos = 'remove';
+				}
+
+				$rootScope.catalogos = !$rootScope.catalogos;
+			};
+
+			if (index == 3) {
+
+				if ($rootScope.almacen) {
+					$rootScope.iconoAlmacen = 'add';
+				}else{
+					$rootScope.iconoAlmacen = 'remove';
+				}
+
+				$rootScope.almacen = !$rootScope.almacen;
+			};
+
+			if (index == 4) {
+
+				if ($rootScope.reportes) {
+					$rootScope.iconoReportes = 'add';
+				}else{
+					$rootScope.iconoReportes = 'remove';
+				}
+
+				$rootScope.reportes = !$rootScope.reportes;
+			};
+		}
 
 		$rootScope.toggleSidenav = function(menuId) {
 			$mdSidenav(menuId).toggle();
@@ -68,32 +126,12 @@
 	        $rootScope.cargando = false;
 		});
 
-		$rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
-	            if (handlingRouteChangeError) { return; }
-	            handlingRouteChangeError = true;
-	            var destination = (current && (current.title ||
-	                current.name || current.loadedTemplateUrl)) ||
-	                'unknown target';
-	            var msg = 'Error routing to ' + destination + '. ' +
-	                (rejection.msg || '');
-
-	            /**
-	             * Optionally log using a custom service or $log.
-	             * (Don't forget to inject custom service)
-	             */
-	            logger.warning(msg, [current]);
-
-	            /**
-	             * On routing error, go to another route/state.
-	             */
-	            $location.path('/');
-
-	        }
-	    );
-
-		$rootScope.username = webStorage.session.get('username');
-		$rootScope.nombre = webStorage.session.get('nombre');
-		$rootScope.id = webStorage.session.get('id');
+		$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+			event.preventDefault();
+			$state.get('error').error = { code: 123, description: 'Exception stack trace' }
+			mensajes.alerta('Problemas de conexión intentalo nuevamente por favor','error','top right','error');
+			return $state.go('index.home');
+		});
 
 	};
 

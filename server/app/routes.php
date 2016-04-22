@@ -12,6 +12,7 @@
 */
 
 include(app_path() . '/classes/helpers.php');
+include(app_path() . '/classes/Operacion.php');
 
 
 Route::get('/', function()

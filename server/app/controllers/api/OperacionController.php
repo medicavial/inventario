@@ -274,8 +274,10 @@ class OperacionController extends BaseController {
 		$almacen = Input::get('almacen');
 		$cantidad = Input::get('cantidad');
 		$tipoajuste = Input::get('tipoa');
+		$idLote = Input::get('idLote');
+		$lote = Input::get('lote');
+		$caducidad = Input::get('caducidad');
 
-		
 		$movimiento = new Movimiento;
 
 		$movimiento->ITE_clave = $item;
@@ -297,84 +299,25 @@ class OperacionController extends BaseController {
 
 		$movimiento->save();
 
-		//verificamos si existe algo registrado como exstencia del item en el almacen
-		$consulta = Existencia::busca($item,$almacen);
-		//si existe manda true si no false
-		$existe = ($consulta->count() > 0) ? true : false;
-
-		if ($existe) {
-			//si existe consulta la clave de existencia que relaciona el item con el almacen
-			//para obtener la clave y la cantidad que existe actualmente
-			foreach ($consulta->get() as $dato) {
-				$clave = $dato->EXI_clave;
-				$cantidadActual = $dato->EXI_cantidad;
-			}
-
-			$existencia = Existencia::find($clave);
-
-		}else{
-			//si no existe la cantidad es 0 por que no hay nada registrado aun
-			$existencia = new Existencia;
-			$cantidadActual = 0;
-		}
-
-
 		// si es un ajuste no importa las cantidades en el item exitentes se resetean
 		if ($tipomovimiento == 1) {
-			
-			$existencia->ITE_clave = $item;
-			$existencia->ALM_clave = $almacen;
-			$existencia->EXI_cantidad = $cantidad;
-			$existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-			$existencia->save();
 
-			$cantidadTotal = Item::find($item)->ITE_cantidadtotal;
-			
-			$itemactualiza = Item::find($item);
-			$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $cantidadActual + $cantidad;
-			$itemactualiza->save();
+			$operacion = new Operacion($cantidad,$item,$almacen,$idLote,$lote,$caducidad);
+			$operacion->alta();
 
 		// en este se toma que es una alta de item
 		}else if($tipomovimiento == 2){
 
-			$existencia->ITE_clave = $item;
-			$existencia->ALM_clave = $almacen;
-			$existencia->EXI_cantidad = $cantidadActual + $cantidad;
-			$existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-			$existencia->save();
-
-			$cantidadTotal = Item::find($item)->ITE_cantidadtotal;
+			$operacion = new Operacion($cantidad,$item,$almacen,$idLote,$lote,$caducidad);
+			$operacion->entrada();
 			
-			$itemactualiza = Item::find($item);
-			$itemactualiza->ITE_cantidadtotal = $cantidadTotal + $cantidad;
-			$itemactualiza->save();
-			
-
 		// en este se toma que es una baja de item
 		}else if ($tipomovimiento == 3) {
 
-			$existencia->ITE_clave = $item;
-			$existencia->ALM_clave = $almacen;
-			$existencia->EXI_cantidad = $cantidadActual - $cantidad;
-			$existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-			$existencia->save();
-
-			$cantidadTotal = Item::find($item)->ITE_cantidadtotal;
-			
-			$itemactualiza = Item::find($item);
-			$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $cantidad;
-			$itemactualiza->save();
+			$operacion = new Operacion($cantidad,$item,$almacen,$idLote,$lote,$caducidad);
+			$operacion->salida();
 			
 		}
-
-		// $lote = new Lote;
-
-		// $lote->EXI_clave = $existencia;
-		// $lote->ITE_clave = $existencia;
-		// $lote->LOT_numero = $valor['lote'];
-		// $lote->LOT_cantidad = $valor['cantidad'];
-		// $lote->LOT_caducidad = $valor['caducidad'];
-		// $lote->save();
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
 

@@ -10,9 +10,12 @@
             require: 'ngModel',
             link: function(scope, element, attrs, modelCtrl) {
 
+
                 element.on('keydown', function(e){
 
-                    if (e.keyCode >= 65 && e.keyCode <= 90) {
+                    console.log(e.keyCode);
+
+                    if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 110 || e.keyCode == 190 || e.keyCode == 189 ) {
                         e.preventDefault();
                     }    
 

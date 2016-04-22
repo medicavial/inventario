@@ -45,6 +45,7 @@ class TipoItemController extends \BaseController {
 		$tipoitem = new TipoItem;
 
 		$tipoitem->TIT_nombre = Input::get('nombre');
+		$tipoitem->TIT_forzoso = Input::get('forzoso');
 		$tipoitem->save();
 
 		return Response::json(array('respuesta' => 'Tipo Item Guardado Correctamente'));
@@ -87,6 +88,7 @@ class TipoItemController extends \BaseController {
 		$tipoitem =  TipoItem::find($id);
 
 		$tipoitem->TIT_nombre = Input::get('nombre');
+		$tipoitem->TIT_forzoso = Input::get('forzoso');
 		$tipoitem->TIT_activo = Input::get('activo');
 		$tipoitem->save();
 

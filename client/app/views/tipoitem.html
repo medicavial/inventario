@@ -27,9 +27,14 @@
 
       <div layout="row" layout-sm="column" layout-fill>
 
-        <md-switch ng-model="datos.activo" aria-label="Usuario Activo" flex>
-              <span ng-show="datos.activo">Tipo Activo</span>
-              <span ng-hide="datos.activo">Tipo Inactivo</span>
+        <md-switch ng-model="datos.activo" aria-label="Tipo Item Activo" flex>
+              <span ng-if="datos.activo">Tipo Activo</span>
+              <span ng-if="!datos.activo">Tipo Inactivo</span>
+        </md-switch>
+
+        <md-switch ng-model="datos.forzoso" aria-label="Lote Forzoso Activo" flex>
+              <span ng-if="datos.forzoso">Lote Forzoso</span>
+              <span ng-if="!datos.forzoso">Lote no Forzoso</span>
         </md-switch>
         
       </div>

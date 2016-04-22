@@ -30,7 +30,7 @@
               <p class="right">Costo: {{ proveedor.IPR_ultimoCosto | currency }}</p>
               <p>
                 <md-input-container md-no-float class="lista">
-                  <input type="number" ng-model="proveedor.cantidad" ng-change="verificaCantidad(item,proveedor)" min="0" max="{{ cantidad(item) }}" placeholder="Cantidad">
+                  <input type="number" ng-model="proveedor.cantidad" ng-change="verificaCantidad(item,proveedor)" min="0" max="{{ cantidad(item) }}" placeholder="Cantidad" numero>
                 </md-input-container>
               </p>
             </md-list-item>

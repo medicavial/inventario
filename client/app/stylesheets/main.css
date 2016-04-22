@@ -16,11 +16,15 @@ h1,h2,h3,h4{
   font-weight: 300;
 }
 
-.sub-menu{
+/*.sub-menu{
   background-color: rgba(212, 215, 217, 0.58);
   border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
-}
+
+}*/
+
+/*.sub-menu md-list-item p{
+  margin-left: 15px;
+}*/
 
 .content{
   position: relative;
@@ -189,6 +193,11 @@ md-toast.success .md-toast-content {
 
 md-toast.warning .md-toast-content {
   background-color: #FF9800 !important;
+  color:rgba(255,255,255,1);
+}
+
+md-toast.info .md-toast-content {
+  background-color: rgb(33, 150, 243) !important;
   color:rgba(255,255,255,1);
 }
 

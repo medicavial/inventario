@@ -9,13 +9,13 @@
 
         <md-input-container flex>
           <label>Lote</label>
-          <input type="text" name="lote" ng-model="datos.lote" required>
+          <input type="text" name="lote" ng-model="datos.lote" required mayusculas>
         </md-input-container>
 
         
         <md-input-container flex>
           <label>Cantidad</label>
-          <input type="number" name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required>
+          <input type="number" name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required numero>
         </md-input-container>
 
       </md-content>

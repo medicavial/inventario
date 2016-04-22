@@ -6,38 +6,25 @@
 	.module('app')
 	.config(config);
 
-	config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider','$compileProvider'];
+	config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider','$mdThemingProvider','$httpProvider','$compileProvider', '$mdDateLocaleProvider'];
 
-	function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider,$compileProvider) {
+	function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider,$compileProvider, $mdDateLocaleProvider) {
 
 		$compileProvider.debugInfoEnabled(true);
-	  	// $httpProvider.interceptors.push(testInterceptor);
 
-	  	// pickerProvider.setMassagePath("test ddd");
-	  	// pickerProvider.setOkLabel('OK');      
-	  	// pickerProvider.setCancelLabel('cancelar');
-	  	// pickerProvider.setDayHeader('single');
-	  	// pickerProvider.setDaysNames([
-	  	// 	{'single':'D','shortName':'Do','fullName':'Domingo'},       
-	  	// 	{'single':'L','shortName':'Lu','fullName':'Lunes'},       
-	  	// 	{'single':'M','shortName':'Ma','fullName':'Martes'},       
-	  	// 	{'single':'M','shortName':'Mi','fullName':'Miercoles'},       
-	  	// 	{'single':'J','shortName':'Ju','fullName':'Jueves'},       
-	  	// 	{'single':'V','shortName':'Vi','fullName':'Viernes'},       
-	  	// 	{'single':'S','shortName':'Sa','fullName':'Sabado'}      
-	  	// ]);
+		$mdDateLocaleProvider.months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+		$mdDateLocaleProvider.shortMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul', 'Ago','Sep','Oct','Nov','Dic'];
+		$mdDateLocaleProvider.days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes','Sabado'];
+		$mdDateLocaleProvider.shortDays = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi' ,'Sa'];
 
-		// picker.setDivider('a');
-		// picker.setMonthNames(["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]);
-		// picker.setRangeDefaultList(['Hoy',
-		//         'Ultimos 7 Dias',
-		//         'Este Mes',
-		//         'Ultimo Mes',
-		//         'Esta Quincena',
-		//         'del año al dia',
-		//         'Este Año', 
-		//         'Manual']);
-		// picker.setRangeCustomStartEnd(['Fecha Ini', 'fecha Fin']);      
+	  	$mdDateLocaleProvider.formatDate = function(date) {
+		    return date ? moment(date).format('DD/MM/YYYY') : '';
+		};
+		  
+		$mdDateLocaleProvider.parseDate = function(dateString) {
+		    var m = moment(dateString, 'DD/MM/YYYY', true);
+		    return m.isValid() ? m.toDate() : new Date(NaN);
+		};      
 
 		$urlRouterProvider.otherwise("/home");
 

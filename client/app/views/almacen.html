@@ -19,7 +19,7 @@
 
         <md-input-container>
           <label>Nombre</label>
-          <input name="nombre" ng-model="datos.nombre" required>
+          <input name="nombre" ng-model="datos.nombre" required mayusculas>
           <div ng-messages="almacenForm.nombre.$error" ng-if="almacenForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
@@ -27,12 +27,12 @@
 
         <md-input-container>
           <label>Observaciones</label>
-          <input name="observaciones" ng-model="datos.observaciones">
+          <input name="observaciones" ng-model="datos.observaciones" mayusculas>
         </md-input-container>
 
         <md-input-container>
           <label>Ubicación</label>
-          <input name="ubicacion" ng-model="datos.ubicacion">
+          <input name="ubicacion" ng-model="datos.ubicacion" mayusculas>
         </md-input-container>
 
         <div layout-gt-sm="row" layout="column" layout-fill flex>

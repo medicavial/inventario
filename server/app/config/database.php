@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => 'local',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -58,6 +58,17 @@ return array(
 			'database'  => 'medica2_inventario',
 			'username'  => 'medica2_webusr',
 			'password'  => 'tosnav50',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
+		'local' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'medica2_inventario',
+			'username'  => 'root',
+			'password'  => 'root',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

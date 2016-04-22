@@ -106,22 +106,36 @@
 			$scope.guardando = false;
 		}
 
+		$scope.selectedItemChange= function(){
+
+			if ($scope.datos.almacen && $scope.item) {
+				$scope.datos.lote = '';
+				$scope.datos.idLote = '';
+				$scope.verificaExistencia();
+				$scope.datos.caducidad = '';
+			};
+
+        };
+
 		$scope.mensajeError = function(){
 			mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
 		}
 
 		$scope.verificaLote = function(){
+			
+
 			var lote = $scope.datos.lote;
 			
 			if (lote != '') {
 				
+				mensajes.alerta('Verificando Lote','info','top right','search');
 				busqueda.lote(lote).success(function (data){
 
 					if (data) {
-						mensajes.alerta('lote existente','','top right','done');
+						mensajes.alerta('Lote Existente','success','top right','done');
 						$scope.datos.idLote = data.LOT_clave;
 					}else{
-						mensajes.alerta('lote no existente ingresa caducidad','','top right','alert');
+						mensajes.alerta('Lote No Existente Ingresa Caducidad','error','top right','alert');
 						$scope.nuevoLote = true;
 					}
 
@@ -134,15 +148,19 @@
 
 		$scope.verificaExistencia = function(almacen){
 
-			mensajes.alerta('verificando existencias','','top right','search');
+			// mensajes.alerta('Verificando Existencias','info','top right','search');
 
 			busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
 				// console.log(data);
 				if ($scope.datos.tipomov == 3 && data == '') {
-					mensajes.alerta('No hay cantdad disponible en este almacen para salida','error','top right','error');
+					mensajes.alerta('No hay Cantdad Disponible En Este Almacen Para Salida','error','top right','error');
 					$scope.disponible = 0;
 				}else{
-					$scope.disponible = data.EXI_cantidad;
+					if (data == '') {
+						$scope.disponible = 0;
+					}else{
+						$scope.disponible = data.EXI_cantidad;
+					}
 				}
 			}).error(function (data){
 				$scope.mensajeError();

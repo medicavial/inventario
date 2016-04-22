@@ -34,7 +34,7 @@
 
         <md-input-container flex flex-gt-sm="60">
           <label>Nombre</label>
-          <input required name="nombre" ng-model="datos.nombre">
+          <input required name="nombre" ng-model="datos.nombre" mayusculas>
           <div ng-messages="itemForm.nombre.$error" ng-if="itemForm.$submitted">
             <div ng-message="required">Campo obligatorio.</div>
           </div>
@@ -105,8 +105,8 @@
           </md-switch>
         
           <md-switch ng-model="datos.receta" aria-label="Seleccionable Receta" flex>
-                  <span ng-if="datos.receta">Seleccionable Receta</span>
-                  <span ng-if="!datos.receta">No Seleccionable Receta</span>
+                  <span ng-if="datos.receta">Adicionable a Receta</span>
+                  <span ng-if="!datos.receta">No Adicionable a Receta</span>
           </md-switch>
       </div>
 
@@ -128,7 +128,7 @@
             </md-input-container>
             <md-input-container flex>
               <label>Cantidad</label>
-              <input type="number" min="0" name="cantidadCaja" ng-model="datos.cantidadCaja">
+              <input type="number" numero min="0" name="cantidadCaja" ng-model="datos.cantidadCaja">
             </md-input-container>
           
         </div>
@@ -156,17 +156,17 @@
             <br>
             <md-input-container flex>
               <label>Presentación</label>
-              <input  name="presentacion" ng-model="datos.presentacionDesc">
+              <input  name="presentacion" ng-model="datos.presentacionDesc" mayusculas>
             </md-input-container>
 
             <md-input-container flex>
               <label>Clasificacion</label>
-              <input  name="clasif" ng-model="datos.clasificacion">
+              <input  name="clasif" ng-model="datos.clasificacion" mayusculas>
             </md-input-container>
           
             <md-input-container flex>
               <label>Posologia</label>
-              <textarea ng-model="datos.posologia" name="posologia" columns="1"></textarea>
+              <textarea ng-model="datos.posologia" name="posologia" columns="1" mayusculas></textarea>
             </md-input-container>
         </div>
 

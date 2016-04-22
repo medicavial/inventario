@@ -58,7 +58,7 @@
 					scope.edicion = true;
 					scope.items = data;
 				}else{
-					mensajes.alerta('Esta Unidad no tiene items en stock','info','top right','info');
+					mensajes.alerta('Esta Unidad no tiene items en stock','','top right','info_outline');
 				}
 				scope.consultaUnidad = false;
 
@@ -80,7 +80,7 @@
 
 				busqueda.itemUnidad(item.ITE_clave,item.UNI_clave).success(function (data){
 
-					console.log(data);
+					// console.log(data);
 
 					if (data.length > 0) {
 						scope.datos.compra = Number(data[0].CON_nivelCompra);

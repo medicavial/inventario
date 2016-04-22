@@ -18,7 +18,7 @@
       <md-content layout="column">
         <md-input-container>
           <label>Nombre</label>
-          <input required name="nombre" ng-model="datos.nombre">
+          <input required name="nombre" ng-model="datos.nombre" mayusculas>
           <div ng-messages="perfilForm.nombre.$dirty && perfilForm.nombre.$error">
             <div ng-message="required">Campo obligatorio.</div>
           </div>

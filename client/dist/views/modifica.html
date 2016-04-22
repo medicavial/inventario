@@ -8,12 +8,12 @@
 
         <md-input-container flex>
           <label>Costo</label>
-          <input type="text" name="correo" ng-model="datos.costo" disabled>
+          <input type="text" name="correo" ng-model="datos.costo" disabled dinero>
         </md-input-container>
 
         <md-input-container flex>
           <label>Cantidad</label>
-          <input type="number" name="asunto" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required>
+          <input type="number" name="asunto" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required numero>
         </md-input-container>
 
       </md-content>

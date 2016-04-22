@@ -105,6 +105,7 @@
 		$scope.inicio = function(){
 			$scope.datos = {
 				nombre:'',
+				forzoso:'',
 				activo:true
 			}
 
@@ -139,6 +140,7 @@
 
 			$scope.datos = {
 				nombre : informacion.TIT_nombre,
+				forzoso : informacion.TIT_forzoso ? true:false,
 				activo : informacion.TIT_activo ? true:false
 			}
 
