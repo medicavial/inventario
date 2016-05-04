@@ -3,26 +3,29 @@
   <form name="modificaForm" novalidate>
 
     <md-dialog-content>
-    <md-subheader class="md-no-sticky">Este Item a que lote pertence</md-subheader>
+    <md-subheader class="md-no-sticky">Este Item a que lote(s) pertence | Disponibles {{maximo}}</md-subheader>
 
       <md-content layout-gt-sm="row" layout="column" layout-padding>  
 
         <md-input-container flex>
           <label>Lote</label>
-          <input type="text" name="lote" ng-model="datos.lote" required mayusculas>
+          <input type="text" name="lote" ng-model="datos.lote" required mayusculas ng-blur="verificaLote()">
         </md-input-container>
 
+        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required flex disabled></md-datepicker>
+
+        <span flex></span>
         
+      </md-content>
+      
+      <div layout-gt-sm="row" layout="column"  layout-padding>
+
         <md-input-container flex>
           <label>Cantidad</label>
           <input type="number" numero name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required>
         </md-input-container>
 
-      </md-content>
-      
-      <div layout-gt-sm="row" layout="column"  layout-padding>
-        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required flex></md-datepicker>
-        <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button" flex>Agregar Lote</md-button>
+        <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button">Agregar Lote</md-button>
       </div>
 
       <md-content>

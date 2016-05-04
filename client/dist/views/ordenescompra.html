@@ -70,7 +70,7 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item ng-if="orden.OCM_surtida == 1  && orden.OCM_incompleta == 1 && orden.OCM_cerrada == 0">
-                      <md-button ng-click="ordenescompra.cerrar($event,$index)">
+                      <md-button ng-click="ordenescompra.cerrar($event,orden)">
                         Cerrar Orden
                       </md-button>
                     </md-menu-item>
@@ -80,7 +80,7 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item ng-if="orden.OCM_surtida == 0">
-                      <md-button ng-click="ordenescompra.edita($event,$index)">
+                      <md-button ng-click="ordenescompra.edita($event,orden)">
                         <p>Cancelar</p>
                       </md-button>
                     </md-menu-item>

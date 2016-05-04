@@ -9,12 +9,10 @@
 
 	reporteExistenciasCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes'];
 
-
-
 	function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme4';
 		$rootScope.titulo = 'Existencias';
 		scope.unidades = datos[0].data;
 		scope.total = 0;
@@ -79,7 +77,6 @@
 			})
 		}
 
-		
 	}
 
 })();

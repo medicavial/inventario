@@ -8,9 +8,10 @@
 	.controller('loteRecetaCtrl',loteRecetaCtrl)
 	.controller('itemRecetaCtrl',itemRecetaCtrl)
 
-	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes'];
+	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q'];
+	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda']
 
-	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes){
+	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes, $q){
 
 		var scope = this;
 		$rootScope.cargando = false;
@@ -19,6 +20,9 @@
 		scope.items = datos[1].data;
 		scope.tipoItems = datos[0].data;
 		scope.surtiendo = false;
+		scope.datosReceta = false;
+		scope.loading = false;
+		scope.itemssurtidos = [];
 
 		scope.inicio = function(){
 			scope.receta = '';
@@ -28,8 +32,8 @@
 		scope.surtirItem = function(valor){
 
 
-			// console.log(valor);
-			if (valor.lote == '') {
+			console.log(valor);
+			if (valor.lotes == undefined && valor.forzoso == 1) {
 				mensajes.alerta('Debes ingresar un lote para surtir item','error','top right','error');
 			}else{
 				scope.surtiendo = true;
@@ -46,9 +50,9 @@
 			}
 		}
 
-		scope.verificaExistencia = function(index,ev){
+		scope.verificaExistencia = function(item,ev){
 
-			var item = scope.datos[index];
+			// var item = scope.datos[index];
 
 			console.log(item);
 
@@ -65,8 +69,10 @@
 		            .cancel('NO');
 		        $mdDialog.show(confirm).then(function() {
 		            
+		            mensajes.alerta('Verificando Existencia','','top right','search');
 		            operacion.cambiaItem(item).then(
 	            	function (data){
+	            		mensajes.alerta('Existencia disponible','success','top right','done_all');
 	            		item.existencia = data.EXI_clave;
 	            		item.surtido = false;
 	            	},function (error){
@@ -84,37 +90,71 @@
 		}
 
 
-		scope.ingresaLote = function(index,ev) {
+		scope.ingresaLote = function(item,ev) {
+
 		    $mdDialog.show({
 		      controller: loteRecetaCtrl,
 		      templateUrl: 'views/loteReceta.html',
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
+		      locals: { info: item },
 		      clickOutsideToClose:false
-		    }).then(function(){
+		    }).then(function(lotes){
+		    	item.lotes = lotes;
 		    });
 		};
 
-		scope.ingresaItem = function(index,ev) {
+		scope.ingresaItem = function(ev) {
+
+			var item = scope.datos.items[0];
+
 		    $mdDialog.show({
-		      controller: itemRecetaCtrl,
-		      templateUrl: 'views/itemReceta.html',
-		      parent: angular.element(document.body),
-		      targetEvent: ev,
+				controller: itemRecetaCtrl,
+				templateUrl: 'views/itemReceta.html',
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				locals: { info: item },
+				resolve:{
+					informacion:function(busqueda,$q){
+						scope.loading = true;
+					    var promesa 		= $q.defer(),
+							items 			= busqueda.itemsReceta(),
+							tiposMovimiento = busqueda.tiposMovimiento(),
+		            		almacenes 		= busqueda.almacenes(),
+		            		tiposajuste 	= busqueda.tiposAjuste();
+
+						$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+							// console.log(data);
+							promesa.resolve(data);
+							scope.loading = false;
+						});
+
+					    return promesa.promise;
+					}
+				},
 		      clickOutsideToClose:false
 		    }).then(function(){
+		    	scope.surtidos();
 		    });
 		};
+
+		scope.surtidos = function(){
+			busqueda.itemsRecetaSurtidas(scope.receta).success(function (data){
+	    		scope.itemsSurtidos = data;
+	    	});
+		}
 
 		scope.buscaReceta = function(){
 
 			scope.cargando = true;
+			scope.datosReceta = false;
 			scope.datos = [];
 
 			busqueda.receta(scope.receta).success(function (data){
 				scope.datos = data;
-				console.log(data)
 				scope.cargando = false;
+				scope.datosReceta = true;
+				scope.surtidos();
 			}).error(function (data){
 				scope.cargando = false;
 			});
@@ -122,11 +162,240 @@
 
 	}
 
-	function loteRecetaCtrl($scope){
+	function loteRecetaCtrl($scope, $mdDialog, info, mensajes,busqueda){
 
+		console.log(info);
+		$scope.lotes = info.lotes ? info.lotes : [];
+		$scope.maximo = info.caja > 0 ? Number(info.caja) * Number(info.cantidad) : info.cantidad ;
+
+		if ($scope.lotes.length > 0) {
+
+			angular.forEach($scope.lotes, function (value,key){
+				$scope.maximo -= value.cantidad;
+			});
+
+		}
+
+		$scope.inicio = function(){
+
+			$scope.datos = {
+				cantidad :'',
+				idLote : '',
+				lote : '',
+				caducidad : ''
+			}
+		};
+
+		$scope.verificaLote = function(){
+			var lote = $scope.datos.lote;
+			
+			if (lote != '') {
+				
+				mensajes.alerta('Verificando Lote','info','top right','search');
+				busqueda.lote(lote).success(function (data){
+
+					if (data) {
+						mensajes.alerta('Lote Existente','success','top right','done');
+						$scope.datos.idLote = data.LOT_clave;
+						$scope.datos.caducidad = new Date(data.LOT_caducidad);
+					}else{
+						$scope.datos.caducidad = '';
+						mensajes.alerta('Lote No Existente Verificalo nuevamente','error','top right','alert');
+					}
+
+				}).error(function (data){
+					$scope.mensajeError();
+				});
+
+			};
+		}
+
+		$scope.agrega = function(){
+
+			if ($scope.modificaForm.$valid) {
+				$scope.maximo -= $scope.datos.cantidad;
+
+				$scope.lotes.push($scope.datos);
+				$scope.inicio();
+			};
+		}
+
+		$scope.ingresa = function(){
+
+			if ($scope.maximo == 0) {
+				$mdDialog.hide($scope.lotes);
+			}else{
+				mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
+			}
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+		
 	}
 
-	function itemRecetaCtrl($scope){
+	function itemRecetaCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter,busqueda,info){
+
+		$scope.items = informacion[0].data;
+		$scope.tiposmovimiento = informacion[1].data;
+		$scope.almacenes = informacion[2].data;
+		$scope.tiposajuste = informacion[3].data;
+		$scope.existeLote = false;
+
+		console.log(informacion);
+		console.log(info);
+
+		$scope.inicio = function(){
+
+			$scope.busqueda = null;
+		    $scope.consultado = consultado;
+		    $scope.item = '';
+		    $scope.disponible = '';
+
+			$scope.datos = {
+				almacen:info.almacen,
+				item:'',
+				cantidad:'',
+				tipomov:3,
+				tipoa:'',
+				orden:'',
+				lote:'',
+				idLote:'',
+				caducidad:'',
+				receta:info.receta,
+				usuario:$rootScope.id,
+				observaciones:''
+			}
+
+			$scope.guardando = false;
+		}
+
+		$scope.selectedItemChange= function(){
+
+			console.log($scope.item);
+
+			if ($scope.datos.almacen && $scope.item) {
+				$scope.datos.lote = '';
+				$scope.datos.idLote = '';
+				$scope.datos.caducidad = '';
+				$scope.verificaExistenciaAlmacen($scope.datos.almacen);
+			};
+
+        };
+
+		$scope.mensajeError = function(){
+			mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+		}
+
+		$scope.verificaLote = function(){
+			
+
+			var lote = $scope.datos.lote;
+			
+			if (lote != '') {
+				
+				mensajes.alerta('Verificando Lote','info','top right','search');
+				busqueda.lote(lote).success(function (data){
+
+					if (data) {
+						mensajes.alerta('Lote Existente','success','top right','done');
+						$scope.datos.idLote = data.LOT_clave;
+						$scope.datos.caducidad = new Date(data.LOT_caducidad);
+						$scope.existeLote = true;
+					}else{
+						mensajes.alerta('Lote No Existente Ingresa Caducidad','error','top right','alert');
+					}
+
+				}).error(function (data){
+					$scope.mensajeError();
+				});
+
+			};
+		}
+
+		$scope.verificaExistenciaAlmacen = function(almacen){
+
+			// mensajes.alerta('Verificando Existencias','info','top right','search');
+			if (almacen) {
+
+				busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
+					// console.log(data);
+					if ($scope.datos.tipomov == 3 && data == '') {
+						mensajes.alerta('No hay Cantdad Disponible En Este Almacen Para Salida','error','top right','error');
+						$scope.disponible = 0;
+					}else{
+						if (data == '') {
+							$scope.disponible = 0;
+						}else{
+							$scope.disponible = data.EXI_cantidad;
+						}
+					}
+				}).error(function (data){
+					$scope.mensajeError();
+				});
+
+			};
+		}
+
+		$scope.guardar = function(){
+
+			if ($scope.movimientoForm.$valid && $scope.item) {
+			
+				$scope.datos.item = $scope.item.ITE_clave;
+
+				// console.log($scope.datos);
+				$scope.guardando = true;
+				operacion.altaMovimiento($scope.datos).success(function (data){
+
+					mensajes.alerta(data.respuesta,'success','top right','done_all');
+					$scope.guardando = false;
+					$scope.movimientoForm.$setPristine();
+					$scope.inicio();
+
+				}).error(function (data){
+					$scope.mensajeError();
+					$scope.guardando = false;
+				})
+
+			};
+			
+		}
+
+		$scope.detalleItem = function(item){
+			// console.log(item);
+		}
+
+		$scope.verificaForm = function(){
+
+			if ($scope.datos.tipomov == 1 && $scope.datos.tipoa == '') {
+				return true;
+			}else if($scope.datos.tipomov == 3 && $scope.disponible < $scope.datos.cantidad){
+				return true;
+			}else if($scope.datos.tipomov == 3 && $scope.item.TIT_forzoso == 1 && $scope.datos.idLote == ''){
+				return true;
+			}else if ($scope.guardando) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+	    function consultado(query) {
+
+			var q = $q.defer(),
+				response = query ? $filter( 'filter' )( $scope.items, query ) : $scope.items;
+				q.resolve( response );
+
+			return q.promise;
+	    }
+
+
+
+
+		$scope.cancel = function() {
+			$mdDialog.hide();
+		};
 
 	}
 

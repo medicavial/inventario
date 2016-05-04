@@ -126,6 +126,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items', 'BusquedasController@items');
         Route::get('items/existencias/{almacen}', 'BusquedasController@itemsAlmacen');
         Route::get('items/proveedor', 'BusquedasController@itemsProveedor');
+        Route::get('items/receta', 'BusquedasController@itemsReceta');
+        Route::get('items/receta/{id}', 'BusquedasController@itemsRecetaExistentes');
         Route::get('lote/{lote}', 'BusquedasController@lote');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');

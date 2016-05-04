@@ -13,7 +13,7 @@
 
                 element.on('keydown', function(e){
 
-                    console.log(e.keyCode);
+                    // console.log(e.keyCode);
 
                     if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 110 || e.keyCode == 190 || e.keyCode == 189 ) {
                         e.preventDefault();

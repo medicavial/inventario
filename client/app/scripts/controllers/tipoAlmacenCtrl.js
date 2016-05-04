@@ -14,7 +14,7 @@
 	function tiposAlmacenCtrl($rootScope,$mdDialog,datos,tiposalmacen,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme3';
 		$rootScope.titulo = 'Tipos de Almacen Registrados';
 		scope.info = datos;
 		scope.total = 0;

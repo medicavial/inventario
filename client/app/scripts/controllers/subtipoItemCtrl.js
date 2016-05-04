@@ -14,7 +14,7 @@
 	function subTiposItemCtrl($rootScope,$mdDialog,datos,subtipositem,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'SubTipos de Item Registrados';
 		scope.info = datos;
 		scope.total = 0;

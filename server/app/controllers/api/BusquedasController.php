@@ -58,6 +58,16 @@ class BusquedasController extends BaseController {
 		return Item::proveedor();
 	}
 
+	public function itemsReceta(){
+		return Item::Join('tiposItem','items.TIT_clave', '=' ,'tiposItem.TIT_clave')
+        			 ->Join('subTiposItem','items.STI_clave', '=' ,'subTiposItem.STI_clave')
+        			 ->where('ITE_receta',1)->get();
+	}
+
+	public function itemsRecetaExistentes($id){
+		return Movimiento::where('id_receta',$id)->get();
+	}
+
 	public function existencias($usuario){
 		
 		return Existencia::usuario($usuario);
@@ -111,6 +121,7 @@ class BusquedasController extends BaseController {
 
 		$orden = array(
 			'OCM_clave' => $dato->OCM_clave,
+			'OCM_surtida' => $dato->OCM_surtida,
 			'PRO_clave' => $dato->PRO_clave,
 			'PRO_nombrecorto' => $dato->PRO_nombrecorto,
 			'PRO_nombre' => $dato->PRO_nombre,
@@ -158,9 +169,10 @@ class BusquedasController extends BaseController {
 	public function receta($id){
 
 		//obtenemos la receta de la base de MV
-		$datos = Receta::where('id_receta',$id)->where('NS_surtida',0)->get();
-		$respuesta = array();
-
+		$datosReceta = Receta::find($id);
+		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
+		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->get();
+		$items = array();
 
 		//recorremos item por item de la receta para obtener los datos del item en inventario
 		foreach ($datos as $dato) {
@@ -171,11 +183,16 @@ class BusquedasController extends BaseController {
 			$valoresItem = Item::find($item);
 			$modificable = $valoresItem->ITE_talla;
 			$familia = $valoresItem->TIT_clave;
+
+			$forzoso = TipoItem::find($familia)->TIT_forzoso;
+
 			$caja = $valoresItem->ITE_cantidadCaja;
 			
-			$respuesta[] = array(
-				'receta' => $dato['NS_id'],
+			$items[] = array(
+				'receta' => $id,
+				'recetaItem' => $dato['NS_id'],
 				'item' => $item,
+				'forzoso' => $forzoso,
 				'familia' => $familia,
 				'cantidad' => $dato['NS_cantidad'],
 				'caja' => $caja,
@@ -188,6 +205,14 @@ class BusquedasController extends BaseController {
 			);
 			
 		}
+
+		$respuesta = array(
+			'receta' 	=> $id,
+			'fecha' 	=> $datosReceta->RM_fecreg,
+			'folio' 	=> $datosReceta->Exp_folio,
+			'lesionado' => $lesionado,
+			'items' 	=> $items
+		);
 
 		return $respuesta;
 	}

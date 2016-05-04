@@ -2,8 +2,8 @@
 
 class Receta extends Eloquent {
 
-    protected $table = 'NotaSuministros';
-    protected $primaryKey ='NS_id';
+    protected $table = 'RecetaMedica';
+    protected $primaryKey ='id_receta';
     protected $connection = 'mv';
     protected $guarded = []; 
     public $timestamps = false;

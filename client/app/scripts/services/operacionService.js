@@ -54,8 +54,8 @@
                 return defer.promise;
 
             },
-            cerrarOrden : function(orden){
-                return $http.get(api+'operacion/cerrarorden/'+orden);
+            cerrarOrden : function(datos){
+                return $http.post(api+'operacion/cerrarorden',datos);
             },
             cambioXproveedor :function(poveedor,item,items){
 

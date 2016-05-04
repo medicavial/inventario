@@ -15,7 +15,7 @@
 	function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme3';
 		$rootScope.titulo = 'Items Registrados';
 		scope.info = datos;
 		scope.total = 0;

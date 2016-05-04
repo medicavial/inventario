@@ -16,7 +16,7 @@
 	function almacenesCtrl($rootScope,$mdDialog,datos,almacenes,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme3';
 		$rootScope.titulo = 'Almacenes Registrados';
 		scope.info = datos;
 		scope.total = 0;

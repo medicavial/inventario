@@ -20,6 +20,7 @@
             },
             almacenUsuario : function(usuario)
             {
+                // 
                 return $http.get(api + 'busquedas/almacen/'+usuario);
             },
             almacenesUnidad : function(unidad)
@@ -51,6 +52,12 @@
             itemsProveedor : function()
             {
                 return $http.get(api + 'busquedas/items/proveedor');
+            },
+            itemsReceta : function(){
+                return $http.get(api + 'busquedas/items/receta');
+            },
+            itemsRecetaSurtidas : function(receta){
+                return $http.get(api + 'busquedas/items/receta/' + receta);
             },
             itemsUnidad : function(unidad)
             {

@@ -14,7 +14,7 @@
 	function tiposItemCtrl($rootScope,$mdDialog,datos,tipositem,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme3';
 		$rootScope.titulo = 'Tipos de Item Registrados';
 		scope.info = datos;
 		scope.total = 0;

@@ -14,7 +14,7 @@
 	function tiposOrdenCtrl($rootScope,$mdDialog,datos,tiposorden,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Tipos de Orden Registrados';
 		scope.info = datos;
 		scope.total = 0;

@@ -3,6 +3,8 @@
 	<div layout="column" layout-margin layout-align="center center">
         <h3>Se Generó la Orden Correctamente</h3>  
         
+        <h4 ng-repeat="respuesta in respuestasCorreos">{{ respuesta }}</h4>
+        
         <div layout="row" layout-sm="column">
           <!-- <md-button class="md-raised" ng-click="muestraOrdenes()">Enviar Correo</md-button> -->
           <md-button class="md-raised" ng-click="inicio()">Nueva Orden</md-button>

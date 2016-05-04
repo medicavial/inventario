@@ -97,10 +97,10 @@
 		    
 		};
 
-		scope.cerrar = function(ev,index) {
+		scope.cerrar = function(ev,orden) {
 		    // Abre ventana de confirmacion
 
-		    var orden = scope.info[index];
+		    // var orden = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar cerrar la orden?')
@@ -123,6 +123,7 @@
 		    	operacion.cerrarOrden(info).success( function (data){
 		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
 		    		orden.OCM_incompleta = 0;
+		    		orden.OCM_cerrada = 1;
 		    	})
 		    });
 		};
@@ -141,6 +142,9 @@
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Nueva Orden';
 		$scope.unidades = datos.data;
+		$scope.consultaUnidad = false;
+		$scope.prepara2 = false;
+		$scope.generandoTodas = false;
 
 		$scope.inicio = function(){
 			
@@ -153,6 +157,7 @@
 			$scope.selectedIndex = 0;
 			$scope.unidad = '';
 
+			$scope.respuestasCorreos = [];
 			$scope.seleccionItems = [];
 			$scope.seleccionOrden = [];
 			$scope.ordenItems = [];
@@ -167,33 +172,41 @@
 
 		$scope.info = function(unidad){
 
-			// console.log(unidad);
-			$scope.selected = [];
-			$scope.items = [];
-			$scope.almacenes = '';
-			$scope.unidad = unidad.UNI_clave;
-			$scope.nombreUnidad = unidad.UNI_nombre;
+			if (unidad) {
 
-			operacion.infoUnidad(unidad.UNI_clave).then(
-				function (data){
+				// console.log(unidad);
+				$scope.selected = [];
+				$scope.items = [];
+				$scope.almacenes = '';
+				$scope.unidad = unidad.UNI_clave;
+				$scope.nombreUnidad = unidad.UNI_nombre;
+				$scope.consultaUnidad = true;
 
-					if (data[1].data.length > 0) {
+				operacion.infoUnidad(unidad.UNI_clave).then(
+					function (data){
 
-						$scope.almacenes = data[0].data;
-						$scope.items = data[1].data;
+						if (data[1].data.length > 0) {
 
-						angular.forEach(data[0].data, function(value, key) {
-							$scope.selected.push(value);
-						});
+							$scope.almacenes = data[0].data;
+							$scope.items = data[1].data;
 
-					}else{
-						mensajes.alerta('No hay items en este almacen','info','top right','info');
+							angular.forEach(data[0].data, function(value, key) {
+								$scope.selected.push(value);
+							});
+
+						}else{
+							mensajes.alerta('No hay items en este almacen','info','top right','info');
+						}
+
+						$scope.consultaUnidad = false;
+					},
+					function (error){
+						alert(error);
+						$scope.consultaUnidad = false;
 					}
-				},
-				function (error){
-					alert(error);
-				}
-			);
+				);
+				
+			};
 		};
 
 
@@ -217,6 +230,7 @@
 
 		$scope.ir2 = function(selecciones){
 			// console.log(selecciones);
+			$scope.prepara2 = true;
 			operacion.preparaOrden(selecciones).then(function (data){
 				// console.log(data);
 				if (data.proveedores.length > 0) {
@@ -228,6 +242,8 @@
 				}else{
 					mensajes.alerta('No hay proveedores disponibles para surtir este item agregalos desde conexión','error','top right','error');
 				}
+
+				$scope.prepara2 = false;
 			});
 		}
 
@@ -369,14 +385,21 @@
 		//se generan todas las ordenes aqui 
 		$scope.confirmaOrden = function(){
 
-
+			$scope.generandoTodas = true;
 			operacion.generaOrdenes($scope.seleccionOrden,$scope.proveedores,$scope.unidad,$scope.almacenes).then(
 				function (data){
 
 					// ya que guardo los datos en base de datos
 					// mandamos un correo al proveedor registrado
 					angular.forEach(data.ordenes,function (value,key){
-						pdf.enviaOrden(value);
+						// console.log(value);
+						// console.log(key);
+						pdf.enviaOrden(value).success(function (data){
+							$scope.respuestasCorreos.push(data.respuesta);
+						}).error(function (error){
+							$scope.respuestasCorreos.push(error.respuesta);
+						});
+
 					});
 
 					$scope.ordenes = data.ordenes;
@@ -386,8 +409,11 @@
 					$scope.step3block = true;
 					$scope.step4block = false;
 
+					$scope.generandoTodas = false;
+
 				},function (error){
 					alert(error);
+					$scope.generandoTodas = false;
 				}
 			);
 
@@ -406,7 +432,11 @@
 					var idOrden = data.ordenes[0];
 					$scope.ordenes.push(idOrden);
 					
-					pdf.enviaOrden(idOrden);
+					pdf.enviaOrden(idOrden).success(function (data){
+						$scope.respuestasCorreos.push(data.respuesta);
+					}).error(function (error){
+						$scope.respuestasCorreos.push(error.respuesta);
+					});
 
 					$scope.step2block = true;
 					$scope.step4block = false;

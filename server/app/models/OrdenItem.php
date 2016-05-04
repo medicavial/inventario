@@ -8,6 +8,7 @@ class OrdenItem extends Eloquent {
     public function scopeOrden($query,$id)
     {
         return $query->join('items', 'ordenItems.ITE_clave', '=', 'items.ITE_clave')
+        			 ->join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')
         			 ->where('OCM_clave',$id)->get();
     }
 }		

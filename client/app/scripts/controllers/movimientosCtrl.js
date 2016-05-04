@@ -79,7 +79,7 @@
 		$scope.tiposmovimiento = informacion[1].data;
 		$scope.almacenes = informacion[2].data;
 		$scope.tiposajuste = informacion[3].data;
-		$scope.nuevoLote = false;
+		$scope.existeLote = false;
 
 		// console.log($scope.items);
 
@@ -91,6 +91,7 @@
 		    $scope.disponible = '';
 
 			$scope.datos = {
+				almacen:'',
 				item:'',
 				cantidad:'',
 				tipomov:'',
@@ -134,9 +135,10 @@
 					if (data) {
 						mensajes.alerta('Lote Existente','success','top right','done');
 						$scope.datos.idLote = data.LOT_clave;
+						$scope.datos.caducidad = new Date(data.LOT_caducidad);
+						$scope.existeLote = true;
 					}else{
 						mensajes.alerta('Lote No Existente Ingresa Caducidad','error','top right','alert');
-						$scope.nuevoLote = true;
 					}
 
 				}).error(function (data){
@@ -149,22 +151,25 @@
 		$scope.verificaExistencia = function(almacen){
 
 			// mensajes.alerta('Verificando Existencias','info','top right','search');
+			if (almacen) {
 
-			busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
-				// console.log(data);
-				if ($scope.datos.tipomov == 3 && data == '') {
-					mensajes.alerta('No hay Cantdad Disponible En Este Almacen Para Salida','error','top right','error');
-					$scope.disponible = 0;
-				}else{
-					if (data == '') {
+				busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
+					// console.log(data);
+					if ($scope.datos.tipomov == 3 && data == '') {
+						mensajes.alerta('No hay Cantdad Disponible En Este Almacen Para Salida','error','top right','error');
 						$scope.disponible = 0;
 					}else{
-						$scope.disponible = data.EXI_cantidad;
+						if (data == '') {
+							$scope.disponible = 0;
+						}else{
+							$scope.disponible = data.EXI_cantidad;
+						}
 					}
-				}
-			}).error(function (data){
-				$scope.mensajeError();
-			});
+				}).error(function (data){
+					$scope.mensajeError();
+				});
+
+			};
 		}
 
 		$scope.guardar = function(){
@@ -198,6 +203,8 @@
 			if ($scope.datos.tipomov == 1 && $scope.datos.tipoa == '') {
 				return true;
 			}else if($scope.datos.tipomov == 3 && $scope.disponible < $scope.datos.cantidad){
+				return true;
+			}else if($scope.datos.tipomov == 3 && $scope.item.TIT_forzoso == 1 && $scope.datos.idLote == ''){
 				return true;
 			}else if ($scope.guardando) {
 				return true;

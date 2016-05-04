@@ -2,8 +2,14 @@
 
   <div layout="column" layout-margin>
         <h3>Verifica Orden(es) de compra Total: {{ total() | currency }} </h3>  
+        
+        <div layout-align="center center">
+          <md-button class="md-raised md-primary" ng-if="todos" ng-click="confirmaOrden()" ng-disabled="generandoTodas">Confirmar Todo </md-button>
+          
+          <md-progress-circular md-mode="indeterminate" ng-if="generandoTodas"></md-progress-circular>
+        </div>
 
-        <md-button class="md-raised md-primary" ng-if="todos" ng-click="confirmaOrden()">Confirmar Todo </md-button>
+
         <br>
 
         <div ng-repeat="(proveedor, value) in seleccionOrden | groupBy: 'PRO_nombrecorto'">

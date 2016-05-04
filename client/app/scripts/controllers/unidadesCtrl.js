@@ -14,7 +14,7 @@
 	function unidadesCtrl($rootScope,$mdDialog,datos,unidades,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme3';
 		$rootScope.titulo = 'Unidades Registradas';
 		scope.info = datos;
 		scope.total = 0;

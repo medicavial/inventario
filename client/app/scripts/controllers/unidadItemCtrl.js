@@ -14,7 +14,7 @@
 	function equivalenciasCtrl($rootScope,$mdDialog,datos,unidadesItem,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Unidades de Item Registrados';
 		scope.info = datos;
 		scope.total = 0;

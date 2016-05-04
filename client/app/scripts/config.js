@@ -478,44 +478,40 @@
 	    .accentPalette('red');
 
 	    $mdThemingProvider.theme('theme2')
-		.primaryPalette('red')
-	    .accentPalette('deep-purple');
+		.primaryPalette('deep-orange')
+	    .accentPalette('red');
 
 	    $mdThemingProvider.theme('theme3')
-		.primaryPalette('purple')
-	    .accentPalette('deep-orange');
+		.primaryPalette('neonBlue')
+	    .accentPalette('red');
 
 	    $mdThemingProvider.theme('theme4')
 		.primaryPalette('blue-grey')
-	    .accentPalette('deep-purple');
-
-	    $mdThemingProvider.theme('theme5')
-		.primaryPalette('teal')
-	    .accentPalette('indigo');
-
-	    $mdThemingProvider.theme('theme6')
-		.primaryPalette('green')
-	    .accentPalette('deep-purple');
-
-	    $mdThemingProvider.theme('theme7')
-		.primaryPalette('amber')
-	    .accentPalette('blue');
-
-	    $mdThemingProvider.theme('theme8')
-		.primaryPalette('orange')
-	    .accentPalette('cyan');
-
-	    $mdThemingProvider.theme('theme9')
-		.primaryPalette('blue')
 	    .accentPalette('red');
 
-	    $mdThemingProvider.theme('theme10')
-		.primaryPalette('light-green')
-	    .accentPalette('indigo');
+	    $mdThemingProvider.theme('theme5')
+		.primaryPalette('neonGreen')
+	    .accentPalette('red');
 
 	    $mdThemingProvider.theme('docs-dark')
 		.primaryPalette('red')
 		.dark();
+
+		var neonBlueMap = $mdThemingProvider.extendPalette('blue', {
+			'500': '#3175E7',
+			'contrastDefaultColor': 'light'
+		});
+
+		var neonGreenMap = $mdThemingProvider.extendPalette('green', {
+			'500': '#259B24',
+			'contrastDefaultColor': 'light'
+		});
+
+		
+		// Register the new color palette map with the name <code>neonRed</code>
+		$mdThemingProvider.definePalette('neonBlue', neonBlueMap);
+		$mdThemingProvider.definePalette('neonGreen', neonGreenMap);
+		
 
 
 

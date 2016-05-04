@@ -15,7 +15,7 @@
 	function tiposMovimientoCtrl($rootScope,$mdDialog,datos,tiposmovimiento,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Tipos de Movmiento';
 		scope.info = datos;
 		scope.total = 0;

@@ -16,7 +16,7 @@
 	function tiposAjusteCtrl($rootScope,$mdDialog,datos,tiposajuste,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Tipos de Ajuste';
 		scope.info = datos;
 		scope.total = 0;

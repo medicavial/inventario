@@ -154,33 +154,74 @@ class OperacionController extends BaseController {
 	// funcion que ayuda a mandar correo al proveedor de la orden creada
 	public function enviaCorreoOrden($orden){
 
+        $datos = OrdenCompra::find($orden);
 
-		if(Input::has('data')) {
+        // con esta funcion preparamos el cuerpo del correo 
 
-            $datos = OrdenCompra::find($orden);
+        try{
 
-            Mail::send('emails.orden', $datos , function($message) use ($orden)
-            {
+	        Mail::send('emails.orden', $datos , function($message) use ($orden)
+	        {
 
-            	$clave = OrdenCompra::find($orden)->UNI_clave;
-            	$nombreUnidad = Unidad::find($clave)->UNI_nombrecorto;
+	        	//generamos lo necesario para el envio
+	        	$datosOrden = OrdenCompra::find($orden);
+	        	$unidad = $datosOrden->UNI_clave;
+	        	$proveedor = $datosOrden->PRO_clave;
 
-            	$archivo =  public_path().'/ordenesCompra/'.$orden.'.pdf';
+	        	$nombreUnidad = Unidad::find($unidad)->UNI_nombrecorto;
 
-                $pdf = helpers::ordenPDF($orden);
-                $pdf->save($archivo);
+	        	//generamos el pdf adjunto
+	        	$archivo =  public_path().'/ordenesCompra/'.$orden.'.pdf';
 
-                $message->from('inventarios@medicavial.com.mx', 'Sistema de Inventario MV');
-                $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
-                $message->to('salcala@medicavial.com.mx');
-                // ->cc('bar@example.com');
-                $message->attach($archivo);
+	            $pdf = helpers::ordenPDF($orden);
+	            $pdf->save($archivo);
 
-            });
 
-            return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
+	            $correoParametro = Parametro::find(1)->PAR_correoOrden;
 
+	            // preparamos el correo a enviar
+	            $correoProveedor = Proveedor::find($proveedor)->PRO_correo1;
+
+	            if ($correoProveedor != '') {
+	            	$correo = $correoProveedor;
+	            	$correoCopia = $correoParametro;
+	            }else{
+	            	$correo = $correoParametro;
+	            }
+
+	            $message->from('salcala@medicavial.com.mx', 'Sistema de Inventario MV');
+	            $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
+	            $message->to($correo);
+	            if ($correoCopia != '') {
+	            	$message->cc($correoCopia);
+	            }
+	            $message->attach($archivo);
+
+	        });
+
+        	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));
+        	
+        }catch(Exception $e){
+
+        	$datosOrden = OrdenCompra::find($orden);
+        	$unidad = $datosOrden->UNI_clave;
+        	$proveedor = $datosOrden->PRO_clave;
+
+    		$correoParametro = Parametro::find(1)->PAR_correoOrden;
+
+            // preparamos el correo a enviar
+            $correoProveedor = Proveedor::find($proveedor)->PRO_correo1;
+
+            if ($correoProveedor != '') {
+            	$correo = $correoProveedor;
+            }else{
+            	$correo = $correoParametro;
+            }
+
+        	return Response::json(array('respuesta' => 'Correo no se logro mandar a '. $correo),500);
+        
         }
+
 
 	}
 
@@ -268,56 +309,41 @@ class OperacionController extends BaseController {
 	public function movimiento(){
 
 		//preparamos los movimientos del item
+		$operacion = new Operacion;
 
-		$tipomovimiento = Input::get('tipomov');
-		$item = Input::get('item');
-		$almacen = Input::get('almacen');
-		$cantidad = Input::get('cantidad');
-		$tipoajuste = Input::get('tipoa');
-		$idLote = Input::get('idLote');
-		$lote = Input::get('lote');
-		$caducidad = Input::get('caducidad');
+		$operacion->tipomovimiento = Input::get('tipomov');
+		$operacion->item = Input::get('item');
+		$operacion->almacen = Input::get('almacen');
+		$operacion->cantidad = Input::get('cantidad');
+		$operacion->tipoajuste = Input::get('tipoa');
+		$operacion->idLote = Input::get('idLote');
+		$operacion->lote = Input::get('lote');
+		$operacion->orden = Input::get('orden');
+		$operacion->caducidad = Input::get('caducidad');
+		$operacion->usuario = Input::get('usuario');
+		$operacion->observaciones = Input::get('observaciones');
+		$operacion->receta = Input::has('receta') ? Input::get('receta') : '';
 
-		$movimiento = new Movimiento;
-
-		$movimiento->ITE_clave = $item;
-		$movimiento->ALM_clave = $almacen;
-		$movimiento->TIM_clave = $tipomovimiento;
-		$movimiento->TIA_clave = $tipoajuste;
-		$movimiento->USU_clave = Input::get('usuario');
-		
-		if ( Input::has('orden') ) {
-			$movimiento->OCM_clave = Input::get('orden');
-		}
-
-		if ( Input::has('idLote') ) {
-			$movimiento->LOT_clave = Input::get('idLote');
-		}
-
-		$movimiento->MOV_cantidad = $cantidad;
-		$movimiento->MOV_observaciones = Input::get('observaciones');
-
-		$movimiento->save();
+		$operacion->altaMovimiento();
 
 		// si es un ajuste no importa las cantidades en el item exitentes se resetean
-		if ($tipomovimiento == 1) {
+		if ($operacion->tipomovimiento == 1) {
 
-			$operacion = new Operacion($cantidad,$item,$almacen,$idLote,$lote,$caducidad);
 			$operacion->alta();
 
 		// en este se toma que es una alta de item
-		}else if($tipomovimiento == 2){
+		}else if($operacion->tipomovimiento == 2){
 
-			$operacion = new Operacion($cantidad,$item,$almacen,$idLote,$lote,$caducidad);
 			$operacion->entrada();
 			
 		// en este se toma que es una baja de item
-		}else if ($tipomovimiento == 3) {
+		}else if ($operacion->tipomovimiento == 3) {
 
-			$operacion = new Operacion($cantidad,$item,$almacen,$idLote,$lote,$caducidad);
 			$operacion->salida();
 			
 		}
+
+		$operacion->verificaLote();
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
 
@@ -418,52 +444,48 @@ class OperacionController extends BaseController {
 
 	public function surtirItem($usuario){
 
+
+		$operacion = new Operacion;
+
 		$claveExistencia = Input::get('existencia');
 		$claveReserva = Input::get('reserva');
-		$item = Input::get('item');
-		$cantidad = Input::get('cantidad');
-		$receta = Input::get('receta');
-		$almacen = Input::get('almacen');
+		$recetaItem = Input::get('recetaItem');
+		$lotes = Input::has('lotes') ? Input::get('lotes') : array();
 
+		$operacion->tipomovimiento = 3;
+		$operacion->item = Input::get('item');
+		$operacion->almacen = Input::get('almacen');
+		$operacion->cantidad = Input::get('cantidad');
+		$operacion->receta = Input::get('receta');
+		$operacion->tipoajuste = '';
+		$operacion->orden = '';
+		$operacion->idLote = '';
+		$operacion->usuario = $usuario;
+		$operacion->observaciones = 'Surtido Receta MV con numero: ' . Input::get('receta');
 
 		//actualizamos en la tabla mv el item surtido
 		//en caso de que se haya cambiado las ortesis
-		$recetaMV = Receta::find($receta);
-		$recetaMV->NS_surtida = $item;
+		$recetaMV = Suministros::find($recetaItem);
+		$recetaMV->NS_surtida = $operacion->item;
 		$recetaMV->save();
 
 		//eliminamos reserva 
-
 		$reserva = Reserva::find($claveReserva);
 		$reserva->delete();
 
-		// quitamos de existencia 
-		$existencia = Existencia::find($claveExistencia);
-		$cantidadActual = $existencia->EXI_cantidad;
+		//registramos el movimiento
+		$operacion->altaMovimiento();
+		//damos salida al item surtido
+		$operacion->salida();
 
-		$existencia->EXI_cantidad = $cantidadActual - $cantidad;
-		$existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-		$existencia->save();
+		foreach ($lotes as $lote) {
 
-		//quitamos del total de ese item
-		$cantidadTotal = Item::find($item)->ITE_cantidadtotal;
-		
-		$itemactualiza = Item::find($item);
-		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $cantidad;
-		$itemactualiza->save();
-
-		//insertamos tambien el lote
-
-		//generamos movimiento de baja de articulos
-		$movimiento = new Movimiento;
-
-		$movimiento->ITE_clave = $item;
-		$movimiento->ALM_clave = $almacen;
-		$movimiento->TIM_clave = 3;
-		$movimiento->USU_clave = $usuario;
-		$movimiento->MOV_cantidad = $cantidad;
-		$movimiento->MOV_observaciones = 'Surtido Receta MV con numero: ' . $receta;
-		$movimiento->save();
+			$operacion->idLote 		= $lote['idLote'];
+			$operacion->lote 		= $lote['lote'];
+			$operacion->caducidad 	= $lote['caducidad'];
+			$operacion->cantidad 	= $lote['cantidad'];
+			$operacion->verificaLote();
+		}
 
 		return Response::json(array('respuesta' => 'Item Surtido Correctamente'));
 		
@@ -517,7 +539,8 @@ class OperacionController extends BaseController {
 			$cantidadSurtida = ($valor['OIT_cantidadSurtida'] > 0) ? $valor['OIT_cantidadSurtida']  : $valor['OIT_cantidadPedida'];
 			$ultimoCosto = ($valor['OIT_precioFinal'] > 0) ? $valor['OIT_precioFinal'] : $valor['OIT_precioEsperado'];
 			$claveItem = $valor['ITE_clave'];
-			$lotes = $valor['lotes'];
+			$lotes = isset($valor['lotes']) ? $valor['lotes'] : array();
+			$loteForzoso = $valor['TIT_forzoso'];
 
 			$item = ordenItem::find($clave);
 			$item->OIT_cantidadSurtida = $cantidadSurtida;
@@ -526,7 +549,11 @@ class OperacionController extends BaseController {
 
 			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
 
-			helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+			if ($loteForzoso == 1 && count($lotes) > 0) {
+				helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+			}elseif (count($lotes) > 0) {
+				helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+			}
 		
 		}	
 

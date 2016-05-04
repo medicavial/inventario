@@ -23,7 +23,7 @@
 		$rootScope.id = webStorage.session.get('id');
 
 		// interaccion del menu
-		$rootScope.abrirMenu = function(index){
+		$rootScope.abrirMenu = function(index){			
 
 			if (index == 1) {
 

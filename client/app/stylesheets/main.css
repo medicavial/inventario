@@ -359,9 +359,9 @@ md-toast.info .md-toast-content {
     border-radius: 0 10px 10px 0;
 }
 .md-button:not([disabled]):hover {
-    background-color: rgba(193, 193, 193, 0.96);
+    /*background-color: rgba(193, 193, 193, 0.96);
     color: rgba(44, 65, 164, 0.96);
-    transition: 0.3s;
+    transition: 0.3s;*/
 }
 
 .categoria{

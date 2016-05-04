@@ -50,19 +50,23 @@
 
 		scope.verificaUnidad = function(unidad){
 
-			scope.items = [];
-			scope.consultaUnidad = true;
-			busqueda.configuracion(unidad).success(function (data){
+			if (unidad) {
 
-				if (data.length > 0) {
-					scope.edicion = true;
-					scope.items = data;
-				}else{
-					mensajes.alerta('Esta Unidad no tiene items en stock','','top right','info_outline');
-				}
-				scope.consultaUnidad = false;
+				scope.items = [];
+				scope.consultaUnidad = true;
+				busqueda.configuracion(unidad).success(function (data){
 
-			});
+					if (data.length > 0) {
+						scope.edicion = true;
+						scope.items = data;
+					}else{
+						mensajes.alerta('Esta Unidad no tiene items en stock','','top right','info_outline');
+					}
+					scope.consultaUnidad = false;
+
+				});
+				
+			};
 		}
 
 		scope.verDetalle = function(item){

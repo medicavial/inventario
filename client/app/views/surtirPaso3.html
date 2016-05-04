@@ -1,10 +1,8 @@
 <md-content layout-padding>
 
 	<div layout="row">
-		<h4 flex>Alta de lotes por items surtidos</h4>
-		<div flex>
-	    	<md-button class="md-raised md-primary" ng-disabled="seleccionItems.length == 0" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
-		</div>
+		<h4>Alta de lotes por items surtidos</h4>
+	    <md-button class="md-raised md-primary" ng-disabled="!lotesCompletos" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
 	</div>
 	
 	<md-list>

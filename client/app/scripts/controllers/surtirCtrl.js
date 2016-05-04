@@ -13,6 +13,11 @@
 
 	function surtirCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialog, $stateParams, webStorage, $filter){
 
+
+		if (datos.data.OCM_surtida == 1 ) {
+			$rootScope.ir('index.ordenescompra');
+			mensajes.alerta('Esta orden ya fue surtida','error','top right','error');
+		};
 		$scope.paso1 = 'views/surtirPaso1.html';
 		$scope.paso2 = 'views/surtirPaso2.html';
 		$scope.paso3 = 'views/surtirPaso3.html';
@@ -21,6 +26,7 @@
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Surtir Orden';
 		$rootScope.atras = true;
+		$scope.lotesCompletos = false;
 
 		$scope.descripcion = datos.data.PRO_nombrecorto;
 		$scope.costo = datos.data.OCM_importeEsperado;
@@ -29,6 +35,8 @@
 
 		$scope.seleccionItems = [];
 		$scope.lotes = [];
+
+		console.log(datos.data);
 
 		var unidad = datos.data.UNI_clave;
 		var almacenes = datos.data.OCM_almacenes;
@@ -126,6 +134,7 @@
 					$scope.step2block = true;
 					$scope.step3block = false;
 					$scope.seleccionItems = datos.surtidos;
+					$scope.verificaLotes();
 
 				}else if (datos.indice == 3) {
 
@@ -141,6 +150,44 @@
 
 		$scope.calculaTotal = function(){
 			$scope.total();
+		}
+
+
+		// funcion que bloquea el boton de siguiente segun sea el caso
+		$scope.verificaLotes = function(){
+
+			var items = $scope.seleccionItems.length;
+			var actual = 1;
+
+			angular.forEach($scope.seleccionItems, function (value,key){
+
+				if (value.lotes != undefined) {
+
+					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
+
+						if (actual == items) {
+							$scope.lotesCompletos = true;
+						};
+
+					};
+
+				}else{
+
+					if (value.TIT_forzoso == 0) {
+
+						if (actual == items) {
+							$scope.lotesCompletos = true;
+						};
+						
+					}else{
+						$scope.lotesCompletos = false;
+					}
+				}
+
+				actual++;
+
+			});
+
 		}
 
 
@@ -219,10 +266,12 @@
 	        	$scope.datos.items = $scope.items;
 
 	        	webStorage.local.add(clave,JSON.stringify($scope.datos));
-		    	// console.log($scope.datos);
+		    	console.log($scope.datos);
+
+		    	$scope.verificaLotes();
 
 		    }, function() {
-
+		    	$scope.verificaLotes();
 	        });
 
 		}
@@ -275,13 +324,15 @@
 
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
 				$scope.guardando = false;
-				
+				$scope.surtido = true;
+				webStorage.local.remove(clave);
 
 			})
 			.error(function (data){
 
 				$scope.guardando = false;
-				mensajes.alerta('hubo un error intentalo nuevamente','error','top right','error');
+				mensajes.alerta('hubo un error reportalo al area de sistemas','error','top right','error');
+				$scope.surtido = true;
 
 			});
 
@@ -363,7 +414,7 @@
 			if ($scope.maximo == 0) {
 				$mdDialog.hide($scope.lotes);
 			}else{
-				alert('No has ingresado todos los items a lotes');
+				mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
 			}
 		};
 

@@ -90,7 +90,7 @@
               <input type="text" name="lote" ng-model="datos.lote" ng-blur="verificaLote()" mayusculas>
             </md-input-container>
 
-            <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required ng-if="nuevoLote" flex></md-datepicker>
+            <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required ng-disabled="existeLote" flex></md-datepicker>
             
             <span flex></span>
           </div>
@@ -109,7 +109,7 @@
 
     
   </md-dialog-content>
-  <div class="md-actions" layout="row">
+  <md-dialog-actions layout="row">
 
     <span flex></span>
     <md-button type="button" ng-click="cancel()">
@@ -118,7 +118,8 @@
     <md-button type="submit" ng-disabled="verificaForm()">
         Guardar
     </md-button>
-  </div>
+
+  </md-dialog-actions>
 
   </form>
 </md-dialog>

@@ -9,6 +9,8 @@
           </md-select>
       </div>
 
+      <md-progress-circular md-mode="indeterminate" ng-if="consultaUnidad"></md-progress-circular>
+
   </div>
 
   <div flex>
@@ -73,7 +75,8 @@
   <br> -->
   
   <div layout="row" layout-align="center center">
-    <md-button ng-disabled="seleccionItems.length == 0" class="md-raised md-primary" ng-click="ir2(seleccionItems)" type="submit">Ir a la Orden</md-button>
+    <md-button ng-disabled="seleccionItems.length == 0" class="md-raised md-primary" ng-click="ir2(seleccionItems)" type="submit" ng-if="!prepara2">Ir a la Orden</md-button>
+    <md-progress-circular md-mode="indeterminate" ng-if="prepara2"></md-progress-circular>
   </div>
 
   <br>

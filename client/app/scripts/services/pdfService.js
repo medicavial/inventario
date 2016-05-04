@@ -71,10 +71,8 @@
 
 	    	enviaOrden:function(orden){
 
-	    			console.log(orden);
-	                $http.get(api+'operacion/envia/orden/'+orden.OCM_clave).success(function (data){
-	                	return data;
-	                });
+	    			// console.log(orden);
+	                return $http.get(api+'operacion/envia/orden/'+orden);
 
 	   		},
 	   		imprimeOrden:function(id){

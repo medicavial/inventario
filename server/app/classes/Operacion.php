@@ -2,30 +2,26 @@
 
 class Operacion {
 
-	var $cantidad;
-	var $item;
-	var $almacen;
-	var $idLote;
-	var $lote;
-	var $caducidad;
+	public $tipomovimiento;
+	public $item;
+	public $almacen;
+	public $cantidad;
+	public $tipoajuste;
+	public $idLote;
+	public $lote;
+	public $orden;
+	public $caducidad;
+	public $usuario;
+	public $observaciones;
+	public $receta;
 
-	var $existencia;
-	var $cantidadActual;
-	var $idExistencia;
-
-	function __construct($cantidad,$item,$almacen,$idLote,$lote,$caducidad){
-		// inicializamos los valores
-		$this->cantidad = $cantidad;
-		$this->item = $item;
-		$this->almacen = $almacen;
-		$this->idLote = $idLote;
-		$this->lote = $lote;
-		$this->caducidad = $caducidad;
-	}
+	private $existencia;
+	private $cantidadActual;
+	private $idExistencia;
 
 
 	//funcion para verificar existencia 
-	function existenciaAlmacen(){
+	private function existenciaAlmacen(){
 
 		//verificamos si existe algo registrado como exstencia del item en el almacen
 		$consulta = Existencia::busca($this->item,$this->almacen);
@@ -55,7 +51,7 @@ class Operacion {
 	}
 
 	//funccion para dar de alta lote
-	function altaLote(){
+	private function altaLote(){
 
 		$datosLote = new Lote;
 		$datosLote->EXI_clave = $this->idExistencia;
@@ -67,7 +63,7 @@ class Operacion {
 
 	}
 
-	function actualizaLote($tipo){
+	private function actualizaLote($tipo){
 
 		$catidadActualLote = Lote::find($this->idLote)->LOT_cantidad;
 		//ajuste
@@ -88,6 +84,35 @@ class Operacion {
 		$datosLote->LOT_cantidad = $catidadIngresada;
 		$datosLote->LOT_caducidad = $this->caducidad;
 		$datosLote->save();
+
+	}
+
+	public function verificaLote(){
+
+		if ($this->idLote == '' && $this->lote != '') {
+			$this->altaLote();
+		}elseif ($this->idLote != '') {
+			//decimos que el tipo 3 es una salida
+			$this->actualizaLote($this->tipomovimiento);
+		}
+	}
+
+	public function altaMovimiento(){
+
+		$movimiento = new Movimiento;
+
+		$movimiento->ITE_clave = $this->item;
+		$movimiento->ALM_clave = $this->almacen;
+		$movimiento->TIM_clave = $this->tipomovimiento;
+		$movimiento->TIA_clave = $this->tipoajuste;
+		$movimiento->USU_clave = $this->usuario;
+		$movimiento->MOV_cantidad = $this->cantidad;
+		$movimiento->MOV_observaciones = $this->observaciones;
+		$movimiento->OCM_clave = $this->orden;
+		$movimiento->LOT_clave = $this->idLote;
+		$movimiento->id_receta = $this->receta;
+
+		$movimiento->save();
 
 	}
 
@@ -116,14 +141,6 @@ class Operacion {
 		$itemActualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidadActual + $this->cantidad;
 		$itemActualiza->save();
 
-		if ($this->idLote == '' && $this->lote != '') {
-			$this->altaLote();
-		}elseif ($this->idLote != '') {
-			//decimos que el tipo 1 es un ajuste
-			$this->actualizaLote(1);
-		}
-
-
 	}
 
 	// se da una entrada de un item existente
@@ -140,15 +157,8 @@ class Operacion {
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
 		
 		$itemactualiza = Item::find($this->item);
-		$itemactualiza->ITE_cantidadtotal = $cantidadTotal + $cantidad;
+		$itemactualiza->ITE_cantidadtotal = $cantidadTotal + $this->cantidad;
 		$itemactualiza->save();
-
-		if ($this->idLote == '' && $this->lote != '') {
-			$this->altaLote();
-		}elseif ($this->idLote != '') {
-			//decimos que el tipo 2 es una entrada
-			$this->actualizaLote(2);
-		}
 
 	}
 
@@ -166,15 +176,8 @@ class Operacion {
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
 		
 		$itemactualiza = Item::find($this->item);
-		$itemactualiza->ITE_cantidadtotal = $this->cantidadTotal - $this->cantidad;
+		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidad;
 		$itemactualiza->save();
-
-		if ($this->idLote == '' && $this->lote != '') {
-			$this->altaLote();
-		}elseif ($this->idLote != '') {
-			//decimos que el tipo 3 es una salida
-			$this->actualizaLote(3);
-		}
 
 	}
 

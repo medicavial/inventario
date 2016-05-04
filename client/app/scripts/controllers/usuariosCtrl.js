@@ -17,7 +17,7 @@
 	function usuariosCtrl($rootScope,$mdDialog,datos,usuarios,mensajes){
 
 		var scope = this;
-		$rootScope.tema = 'theme1';
+		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Usuarios Registrados';
 		scope.info = datos;
 		scope.info = datos;
