@@ -79,8 +79,8 @@
 			controller:'configuracionCtrl',
 			controllerAs: "configuracion",
 			resolve:{
-	            datos:function(busqueda){
-	                return busqueda.unidades();
+	            datos:function(busqueda,$rootScope){
+	                return busqueda.unidadesUsuario($rootScope.id);
 	            }
 	        }
 		})
@@ -210,7 +210,7 @@
 			controller:'ordenCompraCtrl',
 			resolve:{
 	            datos:function(busqueda,$rootScope){
-	                return busqueda.unidades();
+	                return busqueda.unidadesUsuario($rootScope.id);
 	            }
 	        }
 		})

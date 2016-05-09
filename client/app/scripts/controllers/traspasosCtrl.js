@@ -1,6 +1,5 @@
 (function(){
 
-
 	'use strict';
 
 	angular.module('app')
@@ -23,17 +22,39 @@
 		    $scope.item = '';
 		    $scope.disponible = '';
 		    $scope.itemsAlmacen = [];
+		    $scope.lotes = [];
+		    $scope.cantidadLote = 0;
 
 			$scope.datos = {
 				almacenOrigen:'',
 				almacenDestino:'',
 				item:'',
 				cantidad:'',
+				lote:'',
 				usuario:$rootScope.id
 			}
 
 			$scope.guardando = false;
 
+		}
+
+		$scope.datosLote = function(lote){
+			if (lote) {
+				var dato = JSON.parse(lote);
+				$scope.datos.lote = dato.LOT_clave;
+				$scope.cantidadLote = dato.LOT_cantidad;
+				$scope.verificaCantidadLote();
+			};
+		}
+
+		$scope.verificaCantidadLote = function(){
+
+			if ($scope.cantidadLote > 0 && $scope.cantidadLote < $scope.datos.cantidad && $scope.datos.lote != '') {
+				mensajes.alerta('El lote solo tiene ' + $scope.cantidadLote + ' disponible(s)','error','top right','error');
+				$scope.datos.cantidad = 0;
+			}else if ($scope.cantidadLote == 0 && $scope.datos.cantidad > 0 && $scope.datos.lote != '') {
+				mensajes.alerta('Este lote no tiene cantidad disponible','error','top right','error');
+			};
 		}
 
 		$scope.guardar = function(){
@@ -74,12 +95,15 @@
 			if (item) {
 				$scope.datos.item = item.ITE_clave;
 				$scope.disponible = Number(item.EXI_cantidad);
+				busqueda.lotesAlmacenXitem($scope.datos.almacenOrigen,item.ITE_clave).success(function (data){
+					$scope.lotes = data;
+				});
 			};
 		}
 
 		$scope.verificaAlmacen = function(ev){
 			if ($scope.datos.almacenDestino == $scope.datos.almacenOrigen) {
-				alert('No puedes seleccionar el mismo almacen');
+				mensajes.alerta('No puedes seleccionar el mismo almacen','error','top right','error');
 				$scope.datos.almacenDestino = '';
 			};
 		}

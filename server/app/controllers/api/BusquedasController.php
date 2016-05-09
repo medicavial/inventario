@@ -10,6 +10,8 @@ class BusquedasController extends BaseController {
 		return Almacen::existencia($usuario);
 	}
 
+
+	//consulta los almacenes que tiene el usuario disponibles para ver
 	public function almacenUsuario($usuario){
 
 		$almacenes = array();
@@ -99,6 +101,21 @@ class BusquedasController extends BaseController {
 	public function lote($lote){
 
         return Lote::where('LOT_numero',$lote)->first();
+	}
+
+	public function lotesAlmacenXitem($almacen,$item){
+		$clave = Existencia::where( array('ITE_clave'=>$item,'ALM_clave'=>$almacen) )->first()->EXI_clave;
+
+		return Lote::where( array('EXI_clave'=>$clave,'ITE_clave' => $item) )->get();
+	}
+
+	public function lotesUnidadXitem($unidad,$item){
+		return Lote::join('existencias','existencias.EXI_clave','=','lote.EXI_clave')
+					 ->join('almacenes','almacenes.ALM_clave','=','existencias.ALM_clave')
+					 ->where('UNI_clave',$unidad)
+					 ->select('lote.*')
+					 ->groupBy('UNI_clave')
+					 ->get();
 	}
 
 	public function movimientos(){
@@ -243,6 +260,15 @@ class BusquedasController extends BaseController {
 
 	public function unidades(){
 		return Unidad::activos();
+	}
+
+	public function unidadesUsuario($id){
+		return UsuarioAlmacen::join('almacenes','almacenes.ALM_clave','=','usuarioalmacen.ALM_clave')
+							 ->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
+							 ->where( array('UNI_activo' => true ,'USU_clave' => $id ) )
+							 ->select('unidades.*')
+							 ->groupBy('almacenes.UNI_clave')
+							 ->get();
 	}
 
 	public function unidadesItem(){

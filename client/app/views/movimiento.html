@@ -74,7 +74,7 @@
 
             <md-input-container flex>
               <label>Cantidad</label>
-              <input type="number" name="cantidad" ng-model="datos.cantidad" min="1" numero required>
+              <input type="number" name="cantidad" ng-model="datos.cantidad" min="1" ng-change="verificaCantidadLote()" numero required>
               <div ng-messages="movimientoForm.cantidad.$dirty && movimientoForm.cantidad.$error">
                 <div ng-message="required">Campo obligatorio.</div>
                 <div ng-message="min">La cantidad no puede ser menor que 1</div>
@@ -85,9 +85,16 @@
 
           <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="item.TIT_forzoso">  
 
-            <md-input-container flex>
+            <md-input-container flex ng-if="lotes.length == 0">
               <label>Lote</label>
               <input type="text" name="lote" ng-model="datos.lote" ng-blur="verificaLote()" mayusculas>
+            </md-input-container>
+
+            <md-input-container flex ng-if="lotes.length > 0">
+              <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)">
+                <md-option ng-repeat="lote in lotes" value="{{lote}}">{{lote.LOT_numero}}</md-option>
+                <md-option value="0" ng-click="lotes.length = []; datos.lote= ''; existeLote = false; " ng-if="datos.tipomov == 2 || datos.tipoa == 2">Nuevo Lote</md-option>
+              </md-select>
             </md-input-container>
 
             <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required ng-disabled="existeLote" flex></md-datepicker>

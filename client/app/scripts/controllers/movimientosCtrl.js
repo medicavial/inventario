@@ -50,7 +50,7 @@
 	                var promesa 		= $q.defer(),
 	            		items 			= busqueda.items(),
 	            		tiposMovimiento = busqueda.tiposMovimiento(),
-	            		almacenes 		= busqueda.almacenes(),
+	            		almacenes 		= busqueda.almacenesUsuario($rootScope.id),
 	            		tiposajuste 	= busqueda.tiposAjuste();
 
 	            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
@@ -87,8 +87,12 @@
 
 			$scope.busqueda = null;
 		    $scope.consultado = consultado;
+		    $scope.consultaLote = consultaLote;
 		    $scope.item = '';
 		    $scope.disponible = '';
+		    $scope.cantidadLote = 0;
+			$scope.lote = '';
+			$scope.lotes = [];
 
 			$scope.datos = {
 				almacen:'',
@@ -122,6 +126,21 @@
 			mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
 		}
 
+		$scope.datosLote = function(lote){
+			if (lote) {
+				var dato = JSON.parse(lote);
+
+				console.log(dato);
+				$scope.datos.idLote = dato.LOT_clave;
+				$scope.datos.lote = dato.LOT_numero;
+				$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+				$scope.cantidadLote = dato.LOT_cantidad;
+				$scope.existeLote = true;
+
+				$scope.verificaCantidadLote();
+			};
+		}
+
 		$scope.verificaLote = function(){
 			
 
@@ -148,10 +167,31 @@
 			};
 		}
 
+		$scope.verificaCantidadLote = function(){
+
+			if ($scope.cantidadLote > 0 && $scope.cantidadLote < $scope.datos.cantidad && $scope.datos.tipomov == 3) {
+				mensajes.alerta('El lote solo tiene ' + $scope.cantidadLote + ' disponible(s)','error','top right','error');
+				$scope.datos.cantidad = 0;
+			}else if ($scope.cantidadLote == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '' && $scope.datos.tipomov == 3) {
+				mensajes.alerta('Este lote no tiene cantidad disponible','error','top right','error');
+			};
+		}
+
+
+		//verificamos la existencia actual del item en el almacen
 		$scope.verificaExistencia = function(almacen){
 
-			// mensajes.alerta('Verificando Existencias','info','top right','search');
 			if (almacen) {
+
+				mensajes.alerta('Verificando Datos de Almacen','info','top right','search');
+				//en caso de que el item sea forzoso buscamos los lotes existentes
+				if ($scope.item.TIT_forzoso == 1) {
+
+					busqueda.lotesAlmacenXitem(almacen,$scope.item.ITE_clave).success(function (data){
+						$scope.lotes = data;
+					});
+
+				};
 
 				busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
 					// console.log(data);
@@ -220,6 +260,15 @@
 				q.resolve( response );
 
 			return q.promise;
+	    }
+
+	    function consultaLote(query) {
+
+			var q2 = $q.defer(),
+				response2 = query ? $filter( 'filter' )( $scope.lotes, query ) : $scope.lotes;
+				q2.resolve( response2 );
+
+			return q2.promise;
 	    }
 
 

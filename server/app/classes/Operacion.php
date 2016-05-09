@@ -6,14 +6,15 @@ class Operacion {
 	public $item;
 	public $almacen;
 	public $cantidad;
-	public $tipoajuste;
-	public $idLote;
-	public $lote;
-	public $orden;
-	public $caducidad;
+	public $tipoajuste = '';
+	public $idLote = '';
+	public $lote = '';
+	public $orden = '';
+	public $caducidad = '';
 	public $usuario;
-	public $observaciones;
-	public $receta;
+	public $observaciones = '';
+	public $receta = '';
+	public $traspaso = 0;
 
 	private $existencia;
 	private $cantidadActual;
@@ -50,8 +51,29 @@ class Operacion {
 		$this->cantidadActual = $cantidadActual;
 	}
 
+
+	// en caso de ajuste se resetean los lotes registrados
+	private function reseteaLotes(){
+
+		//consultamos si hay lote el id de existenia y el item
+		$parametros = array(
+			'EXI_clave'=>$this->idExistencia,
+			'ITE_clave'=>$this->item
+		);
+
+
+		//actualizamos los lotes encontrados a cero
+		$lotes = Lote::where( $parametros )->update(array('LOT_cantidad' => 0));	
+
+	}
+
 	//funccion para dar de alta lote
 	private function altaLote(){
+
+		// si es ajuste de cualquier tipo
+		if ($this->tipomovimiento == 1) {
+			$this->reseteaLotes();
+		}
 
 		$datosLote = new Lote;
 		$datosLote->EXI_clave = $this->idExistencia;
@@ -63,17 +85,18 @@ class Operacion {
 
 	}
 
-	private function actualizaLote($tipo){
+	private function actualizaLote(){
 
 		$catidadActualLote = Lote::find($this->idLote)->LOT_cantidad;
 		//ajuste
-		if ($tipo == 1) {
+		if ($this->tipomovimiento == 1) {
+			$this->reseteaLotes();
 			$catidadIngresada = $this->cantidad;
 		//entrada
-		}elseif ($tipo == 2) {
+		}elseif ($this->tipomovimiento == 2) {
 			$catidadIngresada = $catidadActualLote  + $this->cantidad;
 		//salida
-		}elseif ($tipo == 3) {
+		}elseif ($this->tipomovimiento == 3) {
 			$catidadIngresada = $catidadActualLote  - $this->cantidad;
 		}
 
@@ -87,17 +110,79 @@ class Operacion {
 
 	}
 
+
+	private function traspasoLote(){
+
+		
+
+		//entrada
+		if ($this->tipomovimiento == 2) {
+
+			//tomamos datos del lote anterior
+			$loteDato = Lote::find($this->idLote);
+
+			$this->lote = $loteDato->LOT_numero;
+			$this->caducidad = $loteDato->LOT_caducidad;
+
+			//consultamos si existe numero de lote con el almacen y el item 
+			$parametros = array(
+				'EXI_clave'	=> $this->idExistencia,
+				'ITE_clave'	=> $this->item,
+				'LOT_numero'=> $this->lote
+			);
+
+			$lote = Lote::where( $parametros );
+
+			//si existe un lote con las caracteristicas solo actualizamos
+			if ( $lote->count() > 0 ) {
+				//obtenermos la clave del lote existente
+				$claveLote = $lote->first()->LOT_clave;
+				$catidadActualLote = Lote::find($claveLote)->LOT_cantidad;
+				$datosLote = Lote::find($claveLote);
+			//en caso contrario creamo uno nuevo registro
+			}else{
+				$catidadActualLote = 0;
+				$datosLote = new Lote;
+			}
+
+			$catidadIngresada = $catidadActualLote  + $this->cantidad;
+		//salida
+		}elseif ($this->tipomovimiento == 3) {
+
+			$loteDato = Lote::find($this->idLote);
+
+			$this->lote = $loteDato->LOT_numero;
+			$this->caducidad = $loteDato->LOT_caducidad;
+			$catidadActualLote = $loteDato->LOT_cantidad;
+			$catidadIngresada = $catidadActualLote  - $this->cantidad;
+			$datosLote = Lote::find($this->idLote);	
+
+		}
+
+		$datosLote->EXI_clave = $this->idExistencia;
+		$datosLote->ITE_clave = $this->item;
+		$datosLote->LOT_numero = $this->lote;
+		$datosLote->LOT_cantidad = $catidadIngresada;
+		$datosLote->LOT_caducidad = $this->caducidad;
+		$datosLote->save();
+
+	}
+
 	public function verificaLote(){
 
-		if ($this->idLote == '' && $this->lote != '') {
-			$this->altaLote();
-		}elseif ($this->idLote != '') {
-			//decimos que el tipo 3 es una salida
-			$this->actualizaLote($this->tipomovimiento);
+		// si no hay id de item pero esta escrito un lote lo tomamos como nuevo
+		if ($this->traspaso == 1 && $this->idLote != '') {
+			$this->traspasoLote();
+		}else{
+			if ($this->idLote == '' && $this->lote != '') {
+				$this->altaLote();
+			}elseif ($this->idLote != '') {
+				$this->actualizaLote();
+			}
 		}
 	}
 
-	public function altaMovimiento(){
+	private function altaMovimiento(){
 
 		$movimiento = new Movimiento;
 
@@ -111,6 +196,7 @@ class Operacion {
 		$movimiento->OCM_clave = $this->orden;
 		$movimiento->LOT_clave = $this->idLote;
 		$movimiento->id_receta = $this->receta;
+		$movimiento->MOV_traspaso = $this->traspaso;
 
 		$movimiento->save();
 
@@ -119,8 +205,9 @@ class Operacion {
 	//se crea el alta de existencia de un item / o ajuste forzoso
 	public function alta(){
 
-
-		// verificamos las existencias de almacen y lote
+		//guardamos el movimiento realizado
+		$this->altaMovimiento();
+		// verificamos las existencias de almacen
 		$this->existenciaAlmacen();
 
 		$this->existencia->ITE_clave = $this->item;
@@ -146,6 +233,9 @@ class Operacion {
 	// se da una entrada de un item existente
 	public function entrada(){
 
+		//guardamos el movimiento realizado
+		$this->altaMovimiento();
+		// verificamos las existencias de almacen
 		$this->existenciaAlmacen();
 
 		$this->existencia->ITE_clave = $this->item;
@@ -153,6 +243,9 @@ class Operacion {
 		$this->existencia->EXI_cantidad = $this->cantidadActual + $this->cantidad;
 		$this->existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
 		$this->existencia->save();
+
+		//aqui guardamos el id actualizado o modificado
+		$this->idExistencia = $this->existencia->EXI_clave;
 
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
 		
@@ -165,6 +258,9 @@ class Operacion {
 	// se da una salida de un item existente
 	public function salida(){
 
+		//guardamos el movimiento realizado
+		$this->altaMovimiento();
+		// verificamos las existencias de almacen
 		$this->existenciaAlmacen();
 
 		$this->existencia->ITE_clave = $this->item;
@@ -172,6 +268,9 @@ class Operacion {
 		$this->existencia->EXI_cantidad = $this->cantidadActual - $this->cantidad;
 		$this->existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
 		$this->existencia->save();
+
+		//aqui guardamos el id actualizado o modificado
+		$this->idExistencia = $this->existencia->EXI_clave;
 
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
 		

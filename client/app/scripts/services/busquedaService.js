@@ -76,6 +76,14 @@
             {
                 return $http.get(api + 'busquedas/lote/'+lote);
             },
+            lotesAlmacenXitem : function(almacen,item)
+            {
+                return $http.get(api + 'busquedas/lotes/almacen/'+ almacen + '/item/' + item);
+            },
+            lotesUnidadXitem : function(unidad,item)
+            {
+                return $http.get(api + 'busquedas/lotes/unidad/'+ unidad + '/item/' + item);
+            },
             movimientos : function()
             {
                 return $http.get(api + 'busquedas/movimientos');
@@ -138,6 +146,9 @@
             },
             unidadesItem : function(){
                 return $http.get(api + 'busquedas/unidadesItem');
+            },
+            unidadesUsuario : function(usuario){
+                return $http.get(api + 'busquedas/unidades/usuario/' + usuario);
             },
             usuariosAlmacen : function(){
                 return $http.get(api + 'operacion/usuarios/almacen');

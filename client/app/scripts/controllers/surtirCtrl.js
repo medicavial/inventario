@@ -9,7 +9,7 @@
 
 	surtirCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog','$stateParams', 'webStorage', '$filter'];
 	modificaCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
-	lotesCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
+	lotesCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes','informacion'];
 
 	function surtirCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialog, $stateParams, webStorage, $filter){
 
@@ -36,7 +36,7 @@
 		$scope.seleccionItems = [];
 		$scope.lotes = [];
 
-		console.log(datos.data);
+		// console.log(datos.data);
 
 		var unidad = datos.data.UNI_clave;
 		var almacenes = datos.data.OCM_almacenes;
@@ -63,7 +63,6 @@
 
 			$scope.datos = {
 				orden:$stateParams.ordenId,
-				tipoEntrega : '',
 				guia:'',
 				cajas:0,
 				bultos:0,
@@ -211,7 +210,7 @@
 
 			webStorage.local.add(clave,JSON.stringify($scope.datos));
 
-			console.log($scope.datos);
+			// console.log($scope.datos);
 
 		}
 
@@ -250,7 +249,8 @@
 
 			var itemSurtido = $scope.seleccionItems[index];
 
-			// console.log(itemSurtido);
+			console.log(itemSurtido);
+			console.log($scope.datos);
 
 			$mdDialog.show({
 				controller: lotesCtrl,
@@ -258,6 +258,11 @@
 				parent: angular.element(document.body),
 				targetEvent: ev,
 				clickOutsideToClose:true,
+				resolve:{
+					informacion:function(busqueda){
+						return busqueda.lotesUnidadXitem(unidad,itemSurtido.ITE_clave);
+					}
+				},
 				locals: { info: itemSurtido }
 		    }).then(function(lotes){
 
@@ -376,9 +381,9 @@
 		
 	}
 
-	function lotesCtrl($scope, $mdDialog, info, operacion, mensajes){
-
-		// console.log(info);
+	function lotesCtrl($scope, $mdDialog, info, operacion, mensajes,informacion){
+		
+		
 		$scope.lotes = info.lotes ? info.lotes : [];
 		$scope.maximo = info.OIT_cantidadSurtida > 0 ? info.OIT_cantidadSurtida : info.OIT_cantidadPedida ;
 
@@ -389,14 +394,44 @@
 			});
 
 		}
+		
+		$scope.datosLote = function(lote){
+			if (lote) {
+				
+				if(lote == 0){
+					$scope.existeLote = false;
+					$scope.datos.lote = '';
+				}else{
+					var dato = JSON.parse(lote);
+
+					console.log(dato);
+					$scope.datos.idLote = dato.LOT_clave;
+					$scope.datos.lote = dato.LOT_numero;
+					$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+					$scope.cantidadLote = dato.LOT_cantidad;
+					$scope.existeLote = true;
+				}
+				
+			};
+		}
 
 		$scope.inicio = function(){
 
 			$scope.datos = {
+				idLote:'',
 				cantidad :'',
 				lote : '',
 				caducidad : ''
 			}
+			
+			if(informacion.data.length > 0){
+				$scope.lotesUnidad = informacion.data;
+				$scope.existeLote = true;
+			}else{
+				$scope.lotesUnidad = [];
+				$scope.existeLote = false;
+			}
+			
 		};
 
 		$scope.agrega = function(){

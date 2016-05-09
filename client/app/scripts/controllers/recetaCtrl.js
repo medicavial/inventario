@@ -10,6 +10,7 @@
 
 	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q'];
 	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda']
+	itemRecetaCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda','info'];
 
 	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes, $q){
 

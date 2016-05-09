@@ -129,6 +129,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items/receta', 'BusquedasController@itemsReceta');
         Route::get('items/receta/{id}', 'BusquedasController@itemsRecetaExistentes');
         Route::get('lote/{lote}', 'BusquedasController@lote');
+        Route::get('lotes/almacen/{almacen}/item/{item}', 'BusquedasController@lotesAlmacenXitem');
+        Route::get('lotes/unidad/{unidad}/item/{item}', 'BusquedasController@lotesUnidadXitem');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');
         Route::get('ordencompra/{id}', 'BusquedasController@ordencompra');
@@ -142,6 +144,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('receta/{id}', 'BusquedasController@receta');
         Route::get('subtipositem', 'BusquedasController@subtipositem');
         Route::get('unidades', 'BusquedasController@unidades');
+        Route::get('unidades/usuario/{id}', 'BusquedasController@unidadesUsuario');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
     });

@@ -324,8 +324,6 @@ class OperacionController extends BaseController {
 		$operacion->observaciones = Input::get('observaciones');
 		$operacion->receta = Input::has('receta') ? Input::get('receta') : '';
 
-		$operacion->altaMovimiento();
-
 		// si es un ajuste no importa las cantidades en el item exitentes se resetean
 		if ($operacion->tipomovimiento == 1) {
 
@@ -473,8 +471,6 @@ class OperacionController extends BaseController {
 		$reserva = Reserva::find($claveReserva);
 		$reserva->delete();
 
-		//registramos el movimiento
-		$operacion->altaMovimiento();
 		//damos salida al item surtido
 		$operacion->salida();
 
@@ -491,9 +487,11 @@ class OperacionController extends BaseController {
 		
 	}
 
+
+	//funcion que surte la orden de compra
 	public function surtirOrden(){
 
-
+		//obtenemos los datos
 		$ordenClave = Input::get('orden');
 		$usuario = Input::get('usuario');
 
@@ -517,6 +515,11 @@ class OperacionController extends BaseController {
 		$orden->OCM_verificacion = Input::get('verificacion');
 		$orden->OCM_importeFinal = Input::get('total');
 
+		$orden->OCM_fechaSurtida =  date('Y-m-d H:i:s');
+		$orden->USU_surtio = $usuario;
+		$orden->OCM_surtida = true;
+
+		// si no esta incompleta cerramos la orden de compra
 		if (!Input::get('incompleta') ) {
 
 			$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
@@ -525,35 +528,35 @@ class OperacionController extends BaseController {
 
 		}
 
-		$orden->OCM_fechaSurtida =  date('Y-m-d H:i:s');
-		$orden->USU_surtio = $usuario;
-		$orden->OCM_surtida = true;
-
 		$orden->save();
 
+		//obtenemos los items surtidos
 		$items = Input::get('surtidos');
 
 		foreach ($items as $valor) {
 
-			$clave = $valor['OIT_clave'];
+			$claveOrdenitem = $valor['OIT_clave'];
 			$cantidadSurtida = ($valor['OIT_cantidadSurtida'] > 0) ? $valor['OIT_cantidadSurtida']  : $valor['OIT_cantidadPedida'];
 			$ultimoCosto = ($valor['OIT_precioFinal'] > 0) ? $valor['OIT_precioFinal'] : $valor['OIT_precioEsperado'];
 			$claveItem = $valor['ITE_clave'];
 			$lotes = isset($valor['lotes']) ? $valor['lotes'] : array();
 			$loteForzoso = $valor['TIT_forzoso'];
 
-			$item = ordenItem::find($clave);
-			$item->OIT_cantidadSurtida = $cantidadSurtida;
-			$item->OIT_precioFinal = $ultimoCosto;
-			$item->save();
 
-			$claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
+			helpers::surteItem($claveItem,$cantidadSurtida,$ultimoCosto,$almacen,$ordenClave,$usuario,'Surtido Orden',$loteForzoso,$lotes,$claveOrdenitem);
 
-			if ($loteForzoso == 1 && count($lotes) > 0) {
-				helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
-			}elseif (count($lotes) > 0) {
-				helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
-			}
+			// $item = ordenItem::find($clave);
+			// $item->OIT_cantidadSurtida = $cantidadSurtida;
+			// $item->OIT_precioFinal = $ultimoCosto;
+			// $item->save();
+
+			// $claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
+
+			// if ($loteForzoso == 1 && count($lotes) > 0) {
+			// 	helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+			// }elseif (count($lotes) > 0) {
+			// 	helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
+			// }
 		
 		}	
 
@@ -568,80 +571,42 @@ class OperacionController extends BaseController {
 
 		$almacenOrigen = Input::get('almacenOrigen');
 		$almacenDestino = Input::get('almacenDestino');
+		$idLote = Input::get('lote');
 		$item = Input::get('item');
 		$cantidad = Input::get('cantidad');
 
 
 		//baja de cantidad en almacenOrigen
-		$movimiento = new Movimiento;
+		$operacion1 = new Operacion;
 
-		$movimiento->ITE_clave = $item;
-		$movimiento->ALM_clave = $almacenOrigen;
-		$movimiento->TIM_clave = 5;
-		$movimiento->USU_clave = Input::get('usuario');
-		$movimiento->MOV_cantidad = $cantidad;
-		$movimiento->MOV_observaciones = 'Disminución por traspaso';
+		$operacion1->tipomovimiento = 3;
+		$operacion1->item = Input::get('item');
+		$operacion1->almacen = Input::get('almacenOrigen');
+		$operacion1->cantidad = Input::get('cantidad');
+		$operacion1->idLote = Input::get('lote');
+		$operacion1->usuario = Input::get('usuario');
+		$operacion1->traspaso = 1;
+		$operacion1->observaciones = 'Disminución por traspaso';
 
-		$movimiento->save();
+		$operacion1->salida();
 
-		//obtenemos datos de existencia del item y almacen
-		$consulta = Existencia::busca($item,$almacenOrigen)->get();
-		foreach ($consulta as $dato) {
-			$clave = $dato->EXI_clave;
-			$cantidadActual = $dato->EXI_cantidad;
-		}
-
-		//preparamos edicion de datos
-		$existenciaSalida = Existencia::find($clave);
-
-		$existenciaSalida->ITE_clave = $item;
-		$existenciaSalida->ALM_clave = $almacenOrigen;
-		$existenciaSalida->EXI_cantidad = $cantidadActual - $cantidad;//se resta la cantidad a traspasar
-		$existenciaSalida->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-		$existenciaSalida->save();
+		$operacion1->verificaLote();
 
 		//incremento de cantidad en almacenDestino
+		$operacion2 = new Operacion;
 
-		$movimiento = new Movimiento;
+		$operacion2->tipomovimiento = 2;
+		$operacion2->item = Input::get('item');
+		$operacion2->almacen = Input::get('almacenDestino');
+		$operacion2->cantidad = Input::get('cantidad');
+		$operacion2->idLote = Input::get('lote');
+		$operacion2->usuario = Input::get('usuario');
+		$operacion2->traspaso = 1;
+		$operacion2->observaciones = 'Incremento por traspaso';
 
-		$movimiento->ITE_clave = $item;
-		$movimiento->ALM_clave = $almacenDestino;
-		$movimiento->TIM_clave = 4;
-		$movimiento->USU_clave = Input::get('usuario');
-		$movimiento->MOV_cantidad = $cantidad;
-		$movimiento->MOV_observaciones = 'Incremento por traspaso';
+		$operacion2->entrada();
 
-		$movimiento->save();
-
-
-		//obtenemos datos de existencia del item y almacen
-		$consulta = Existencia::busca($item,$almacenDestino);
-		//si existe cantidades registradas manda true si no false
-		$existe = ($consulta->count() > 0) ? true : false;
-
-		if ($existe) {
-			//si existe consulta la clave de existencia que relaciona el item con el almacen
-			//para obtener la clave y la cantidad que existe actualmente
-			foreach ($consulta->get() as $dato) {
-				$clave = $dato->EXI_clave;
-				$cantidadActual = $dato->EXI_cantidad;
-			}
-
-			$existenciaEntrada = Existencia::find($clave);
-
-		}else{
-			//si no existe la cantidad es 0 por que no hay nada registrado aun
-			$existenciaEntrada = new Existencia;
-			$cantidadActual = 0;
-		}
-
-		//modificamos el numero de existencia
-
-		$existenciaEntrada->ITE_clave = $item;
-		$existenciaEntrada->ALM_clave = $almacenDestino;
-		$existenciaEntrada->EXI_cantidad = $cantidadActual + $cantidad;
-		$existenciaEntrada->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-		$existenciaEntrada->save();
+		$operacion2->verificaLote();
 
 
 		return Response::json(array('respuesta' => 'Traspaso efectuado Correctamente'));

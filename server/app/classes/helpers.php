@@ -116,6 +116,36 @@ class helpers {
 	}
 
 
+	public static function surteItem($item,$cantidad,$costo,$almacen,$orden,$usuario,$observaciones,$loteForzoso,$lotes,$claveOrdenItem){
+
+		$datoItem = ordenItem::find($claveOrdenItem);
+		$datoItem->OIT_cantidadSurtida = $cantidad;
+		$datoItem->OIT_precioFinal = $costo;
+		$datoItem->save();
+
+		$operacion = new Operacion;
+
+		$operacion->tipomovimiento = 2;
+		$operacion->item = $item;
+		$operacion->almacen = $almacen;
+		$operacion->cantidad = $cantidad;
+		$operacion->usuario = $usuario;
+		$operacion->orden = $orden;
+		$operacion->observaciones = $observaciones;
+
+		$operacion->entrada();
+
+		foreach ($lotes as $lote) {
+			$operacion->idLote 		= $lote['idLote'];
+			$operacion->lote 		= $lote['lote'];
+			$operacion->caducidad 	= $lote['caducidad'];
+			$operacion->cantidad 	= $lote['cantidad'];
+			$operacion->verificaLote();
+		}
+
+	}
+
+
 }
 
 ?>
