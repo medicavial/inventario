@@ -89,6 +89,7 @@
 			url:'completar?ordenId',
 			templateUrl :'views/completar.html',
 			controller 	: 'completarCtrl',
+			controllerAs: 'completa',
 			resolve:{
 	            datos:function($stateParams,operacion){
 	                return operacion.verificaFaltantes($stateParams.ordenId);
