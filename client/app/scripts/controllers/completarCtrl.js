@@ -6,27 +6,83 @@
     .controller('completarCtrl', completarCtrl)
     .controller('lotesItemCtrl',lotesItemCtrl);
 
-	lotesItemCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda'];
-    completarCtrl.$inject = ['$rootScope','datos','$mdDialog'];
+    completarCtrl.$inject = ['$rootScope','info','$mdDialog','$stateParams'];
+	lotesItemCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion'];
     
-    function completarCtrl($rootScope, datos,$mdDialog) {
+    function completarCtrl($rootScope,info,$mdDialog,$stateParams) {
         var vm = this;
         $rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Completar Orden';
 		$rootScope.atras = true;
-        console.log(datos);
-        vm.items = datos.data;
+        vm.items = info.data;
+
         vm.inicio = function(){
 			
+			vm.lotesCompletos = false;
 			vm.guardando = false;
 
 			vm.datos = {
-				orden:informacion.orden.OCM_clave,
-				unidad:informacion.orden.UNI_clave,
-				items:informacion.items,
-				usuario:$rootScope.id,
-                lotes:''
+				orden:$stateParams.ordenId,
+				unidad:info.data[0].UNI_clave,
+				items:vm.items,
+				usuario:$rootScope.id
 			}
+		}   
+        
+        vm.ingresaLote = function(item,ev) {
+
+		    $mdDialog.show({
+		      	controller: lotesItemCtrl,
+		      	templateUrl: 'views/lotes.html',
+		      	parent: angular.element(document.body),
+		      	targetEvent: ev,
+		      	locals: { info: item },
+		      	resolve:{
+					informacion:function(busqueda){
+						return busqueda.lotesUnidadXitem(item.UNI_clave,item.ITE_clave);
+					}
+				},
+		      	clickOutsideToClose:false
+		    }).then(function(lotes){
+		    	item.lotes = lotes;
+		    	vm.verificaLotes();
+		    });
+		}; 
+
+		vm.verificaLotes = function(){
+
+			var items = vm.items.length;
+			var actual = 1;
+
+			angular.forEach(vm.items, function (value,key){
+
+				if (value.lotes != undefined) {
+
+					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
+
+						if (actual == items) {
+							vm.lotesCompletos = true;
+						};
+
+					};
+
+				}else{
+
+					if (value.TIT_forzoso == 0) {
+
+						if (actual == items) {
+							vm.lotesCompletos = true;
+						};
+						
+					}else{
+						vm.lotesCompletos = false;
+					}
+				}
+
+				actual++;
+
+			});
+
 		}
 
 		vm.guardar = function(){
@@ -34,33 +90,23 @@
 			vm.guardando = true;
 			operacion.completaOrden(vm.datos).success( function (data){
 				vm.guardando = false;
+				vm.lotesCompletos = false;
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
+			}).error(function (data){
+				vm.guardando = false;
+				mensajes.alerta('Ocurrio un error de conexión intenta nuevamnete','error','top right','error');
 			});
 
-		}    
-        
-        vm.ingresaLote = function(item,ev) {
-
-		    $mdDialog.show({
-		      controller: lotesItemCtrl,
-		      templateUrl: 'views/loteReceta.html',
-		      parent: angular.element(document.body),
-		      targetEvent: ev,
-		      locals: { info: item },
-		      clickOutsideToClose:false
-		    }).then(function(lotes){
-		    	item.lotes = lotes;
-		    });
-		}; 
+		} 
             
             
     }
 	
-	function lotesItemCtrl($scope, $mdDialog, info, mensajes,busqueda){
-
-		console.log(info);
+	function lotesItemCtrl($scope, $mdDialog, info, operacion, mensajes,informacion){
+		
+		
 		$scope.lotes = info.lotes ? info.lotes : [];
-		$scope.maximo = info.caja > 0 ? Number(info.caja) * Number(info.cantidad) : info.cantidad ;
+		$scope.maximo = info.OIT_cantidadSurtida > 0 ? info.OIT_cantidadSurtida : info.OIT_cantidadPedida ;
 
 		if ($scope.lotes.length > 0) {
 
@@ -69,40 +115,45 @@
 			});
 
 		}
+		
+		$scope.datosLote = function(lote){
+			if (lote) {
+				
+				if(lote == 0){
+					$scope.existeLote = false;
+					$scope.datos.lote = '';
+				}else{
+					var dato = JSON.parse(lote);
+
+					console.log(dato);
+					$scope.datos.idLote = dato.LOT_clave;
+					$scope.datos.lote = dato.LOT_numero;
+					$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+					$scope.cantidadLote = dato.LOT_cantidad;
+					$scope.existeLote = true;
+				}
+				
+			};
+		}
 
 		$scope.inicio = function(){
 
 			$scope.datos = {
+				idLote:'',
 				cantidad :'',
-				idLote : '',
 				lote : '',
 				caducidad : ''
 			}
-		};
-
-		$scope.verificaLote = function(){
-			var lote = $scope.datos.lote;
 			
-			if (lote != '') {
-				
-				mensajes.alerta('Verificando Lote','info','top right','search');
-				busqueda.lote(lote).success(function (data){
-
-					if (data) {
-						mensajes.alerta('Lote Existente','success','top right','done');
-						$scope.datos.idLote = data.LOT_clave;
-						$scope.datos.caducidad = new Date(data.LOT_caducidad);
-					}else{
-						$scope.datos.caducidad = '';
-						mensajes.alerta('Lote No Existente Verificalo nuevamente','error','top right','alert');
-					}
-
-				}).error(function (data){
-					$scope.mensajeError();
-				});
-
-			};
-		}
+			if(informacion.data.length > 0){
+				$scope.lotesUnidad = informacion.data;
+				$scope.existeLote = true;
+			}else{
+				$scope.lotesUnidad = [];
+				$scope.existeLote = false;
+			}
+			
+		};
 
 		$scope.agrega = function(){
 
@@ -128,5 +179,6 @@
 		};
 		
 	}
+
     
 })();

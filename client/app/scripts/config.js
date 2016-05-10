@@ -91,7 +91,7 @@
 			controller 	: 'completarCtrl',
 			controllerAs: 'completa',
 			resolve:{
-	            datos:function($stateParams,operacion){
+	            info:function($stateParams,operacion){
 	                return operacion.verificaFaltantes($stateParams.ordenId);
 	            }
 	        },

@@ -8,11 +8,12 @@
       <md-content layout-gt-sm="row" layout="column" layout-padding>  
 
         <md-input-container flex>
-          <label>Lote</label>
-          <input type="text" name="lote" ng-model="datos.lote" required mayusculas ng-blur="verificaLote()">
+          <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)">
+            <md-option ng-repeat="lote in lotesUnidad" value="{{lote}}">{{lote.LOT_numero}}</md-option>
+          </md-select>
         </md-input-container>
 
-        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required flex disabled></md-datepicker>
+        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" ng-disabled="existeLote" required flex></md-datepicker>
 
         <span flex></span>
         

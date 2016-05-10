@@ -1,4 +1,4 @@
-<div layout="column" >
+<div layout="column" ng-init="completa.inicio()">
 
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
@@ -6,7 +6,6 @@
           <tr>
             <th name="Item"></th>
             <th name="Cantidad"></th>
-            <th name="Lotes"></th>
           </tr>
         </thead>
         <tbody>
@@ -14,7 +13,7 @@
             <td>{{item.ITE_nombre}}</td>
             <td>{{ item.OIT_cantidadPedida - item.OIT_cantidadSurtida }}</td>
             <td>
-                <md-button  ng-disabled="item.lotes.length > 0" class="md-raised md-warm" ng-click="completa.ingresaLote(item,$event)">Agregar Lote(s)</md-button>
+                <md-button  ng-disabled="item.lotes.length > 0" ng-click="completa.ingresaLote(item,$event)">Agregar Lote(s)</md-button>
             </td>
           </tr>
         </tbody>
@@ -25,10 +24,10 @@
 </div>
 
 
-<md-button id="nuevo" class="md-fab md-fab-bottom-right"  ng-click="completa.guardar()" aria-label="Completa Orden">
+<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-disabled="!completa.lotesCompletos"  ng-click="completa.guardar()" aria-label="Completa Orden">
     <md-tooltip md-direction="top">
       Completar
     </md-tooltip>
-    <ng-md-icon icon="save" style="fill:white" ng-hide="completa.loading"></ng-md-icon> 
-    <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="completa.loading"></md-progress-circular>
+    <ng-md-icon icon="save" style="fill:white" ng-hide="completa.guardando"></ng-md-icon> 
+    <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="completa.guardando"></md-progress-circular>
 </md-button>

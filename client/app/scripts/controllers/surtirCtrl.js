@@ -249,9 +249,6 @@
 
 			var itemSurtido = $scope.seleccionItems[index];
 
-			console.log(itemSurtido);
-			console.log($scope.datos);
-
 			$mdDialog.show({
 				controller: lotesCtrl,
 				templateUrl: 'views/lotes.html',

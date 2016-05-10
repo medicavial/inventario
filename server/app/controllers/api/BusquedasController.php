@@ -113,6 +113,7 @@ class BusquedasController extends BaseController {
 		return Lote::join('existencias','existencias.EXI_clave','=','lote.EXI_clave')
 					 ->join('almacenes','almacenes.ALM_clave','=','existencias.ALM_clave')
 					 ->where('UNI_clave',$unidad)
+					 ->where('lote.ITE_clave',$item)
 					 ->select('lote.*')
 					 ->groupBy('UNI_clave')
 					 ->get();

@@ -145,6 +145,30 @@ class helpers {
 
 	}
 
+	public static function completaItem($item,$cantidad,$almacen,$orden,$usuario,$observaciones,$loteForzoso,$lotes,$claveOrdenItem){
+
+		$operacion = new Operacion;
+
+		$operacion->tipomovimiento = 2;
+		$operacion->item = $item;
+		$operacion->almacen = $almacen;
+		$operacion->cantidad = $cantidad;
+		$operacion->usuario = $usuario;
+		$operacion->orden = $orden;
+		$operacion->observaciones = $observaciones;
+
+		$operacion->entrada();
+
+		foreach ($lotes as $lote) {
+			$operacion->idLote 		= $lote['idLote'];
+			$operacion->lote 		= $lote['lote'];
+			$operacion->caducidad 	= $lote['caducidad'];
+			$operacion->cantidad 	= $lote['cantidad'];
+			$operacion->verificaLote();
+		}
+
+	}
+
 
 }
 
