@@ -18,14 +18,16 @@ include(app_path() . '/classes/Operacion.php');
 Route::get('/', function()
 {
 
-    require '../vendor/autoload.php';
+    // require '../vendor/autoload.php';
 
-    // dump the database to backup/test.sql
-    $shellProcessor = new McCool\DatabaseBackup\Processors\ShellProcessor(new Symfony\Component\Process\Process(''));
-    $dumper = new McCool\DatabaseBackup\Dumpers\MysqlDumper($shellProcessor, 'www.medicavial.mx', 3306, 'medica2_webusr', 'tosnav50', 'medica2_inventario', 'medicavialmx.sql');
+    // // dump the database to backup/test.sql
+    // $shellProcessor = new McCool\DatabaseBackup\Processors\ShellProcessor(new Symfony\Component\Process\Process(''));
+    // $dumper = new McCool\DatabaseBackup\Dumpers\MysqlDumper($shellProcessor, 'www.medicavial.mx', 3306, 'medica2_webusr', 'tosnav50', 'medica2_inventario', 'medicavialmx.sql');
 
-    $backup = new McCool\DatabaseBackup\BackupProcedure($dumper);
-    $backup->backup();
+    // $backup = new McCool\DatabaseBackup\BackupProcedure($dumper);
+    // $backup->backup();
+
+    return ordenItem::find(20);
 });
 
 

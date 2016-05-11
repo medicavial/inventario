@@ -113,11 +113,13 @@
 
 		$scope.selectedItemChange= function(){
 
-			if ($scope.datos.almacen && $scope.item) {
+			console.log($scope.datos.almacen);
+			console.log($scope.item);
+			if ($scope.datos.almacen != '' && $scope.item) {
 				$scope.datos.lote = '';
 				$scope.datos.idLote = '';
-				$scope.verificaExistencia();
 				$scope.datos.caducidad = '';
+				$scope.verificaExistencia($scope.datos.almacen);
 			};
 
         };

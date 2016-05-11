@@ -39,7 +39,7 @@
 				<p class="text-center" flex flex-gt-sm="20">
 					Cantidad:  <strong> X <span ng-if="recetaItem.caja == 0">{{ recetaItem.cantidad }}</span> <span ng-if="recetaItem.caja > 0"> {{ recetaItem.caja }}</span> </strong>	
 				</p>
-				<p class="text-center" flex flex-gt-sm="20" ng-if="recetaItem.forzoso">
+				<p class="text-center" flex flex-gt-sm="20" ng-if="recetaItem.forzoso == 1 ">
 					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.lotes.length > 0" class="md-raised md-warm" ng-click="receta.ingresaLote(recetaItem)">Agregar Lote(s)</md-button>
 				</p>
 				<p flex flex-gt-sm="40">

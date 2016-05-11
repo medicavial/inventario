@@ -69,7 +69,7 @@
             
             <md-input-container flex>
               <label>Cantidad Actual</label>
-              <input type="number" name="cantidad" ng-model="disponible" disabled>
+              <input type="text" name="cantidad" ng-model="disponible" disabled>
             </md-input-container>
 
             <md-input-container flex>
@@ -83,7 +83,7 @@
             
           </div>
 
-          <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="item.TIT_forzoso">  
+          <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="item.TIT_forzoso == 1">  
 
             <md-input-container flex ng-if="lotes.length == 0">
               <label>Lote</label>

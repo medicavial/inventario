@@ -551,14 +551,14 @@ class OperacionController extends BaseController {
 
 		foreach ($items as $valor) {
 
-			$claveOrdenitem = $valor['OIT_clave'];
+			$clave = $valor['OIT_clave'];
 			$cantidadSurtida = ($valor['OIT_cantidadSurtida'] > 0) ? $valor['OIT_cantidadSurtida']  : $valor['OIT_cantidadPedida'];
 			$ultimoCosto = ($valor['OIT_precioFinal'] > 0) ? $valor['OIT_precioFinal'] : $valor['OIT_precioEsperado'];
 			$claveItem = $valor['ITE_clave'];
 			$lotes = isset($valor['lotes']) ? $valor['lotes'] : array();
 			$loteForzoso = $valor['TIT_forzoso'];
 
-			$datoItem = ordenItem::find($claveOrdenItem);
+			$datoItem = OrdenItem::find($clave);
 			$datoItem->OIT_cantidadSurtida = $cantidadSurtida;
 			$datoItem->OIT_precioFinal = $ultimoCosto;
 			$datoItem->save();

@@ -130,12 +130,15 @@ class helpers {
 
 		$operacion->entrada();
 
-		foreach ($lotes as $lote) {
-			$operacion->idLote 		= $lote['idLote'];
-			$operacion->lote 		= $lote['lote'];
-			$operacion->caducidad 	= $lote['caducidad'];
-			$operacion->cantidad 	= $lote['cantidad'];
-			$operacion->verificaLote();
+		if ($loteForzoso == 1) {
+			
+			foreach ($lotes as $lote) {
+				$operacion->idLote 		= $lote['idLote'];
+				$operacion->lote 		= $lote['lote'];
+				$operacion->caducidad 	= $lote['caducidad'];
+				$operacion->cantidad 	= $lote['cantidad'];
+				$operacion->verificaLote();
+			}
 		}
 
 	}

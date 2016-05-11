@@ -264,7 +264,7 @@ class BusquedasController extends BaseController {
 	}
 
 	public function unidadesUsuario($id){
-		return UsuarioAlmacen::join('almacenes','almacenes.ALM_clave','=','usuarioalmacen.ALM_clave')
+		return UsuarioAlmacen::join('almacenes','almacenes.ALM_clave','=','usuarioAlmacen.ALM_clave')
 							 ->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
 							 ->where( array('UNI_activo' => true ,'USU_clave' => $id ) )
 							 ->select('unidades.*')

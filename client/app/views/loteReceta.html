@@ -13,7 +13,7 @@
           </md-select>
         </md-input-container>
 
-        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" ng-disabled="existeLote" required flex></md-datepicker>
+        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" disabled required flex></md-datepicker>
 
         <span flex></span>
         
@@ -23,7 +23,7 @@
 
         <md-input-container flex>
           <label>Cantidad</label>
-          <input type="number" numero name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required>
+          <input type="number" numero name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" ng-change="verificaCantidadLote()" required>
         </md-input-container>
 
         <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button">Agregar Lote</md-button>

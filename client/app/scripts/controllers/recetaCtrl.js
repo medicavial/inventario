@@ -9,7 +9,7 @@
 	.controller('itemRecetaCtrl',itemRecetaCtrl)
 
 	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q'];
-	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda']
+	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion']
 	itemRecetaCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda','info'];
 
 	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes, $q){
@@ -24,6 +24,8 @@
 		scope.datosReceta = false;
 		scope.loading = false;
 		scope.itemssurtidos = [];
+
+		console.log(datos);
 
 		scope.inicio = function(){
 			scope.receta = '';
@@ -92,14 +94,19 @@
 
 
 		scope.ingresaLote = function(item,ev) {
-
+			console.log(item);
 		    $mdDialog.show({
-		      controller: loteRecetaCtrl,
-		      templateUrl: 'views/loteReceta.html',
-		      parent: angular.element(document.body),
-		      targetEvent: ev,
-		      locals: { info: item },
-		      clickOutsideToClose:false
+		      	controller: loteRecetaCtrl,
+		      	templateUrl: 'views/loteReceta.html',
+		      	parent: angular.element(document.body),
+		      	targetEvent: ev,
+		      	locals: { info: item },
+		      	resolve:{
+					informacion:function(busqueda){
+						return busqueda.lotesAlmacenXitem(item.almacen,item.item);
+					}
+				},
+		      	clickOutsideToClose:false
 		    }).then(function(lotes){
 		    	item.lotes = lotes;
 		    });
@@ -163,9 +170,11 @@
 
 	}
 
-	function loteRecetaCtrl($scope, $mdDialog, info, mensajes,busqueda){
+	function loteRecetaCtrl($scope, $mdDialog, info, mensajes,busqueda,informacion){
 
-		console.log(info);
+		console.log(informacion);
+
+		$scope.lotesUnidad = informacion.data;
 		$scope.lotes = info.lotes ? info.lotes : [];
 		$scope.maximo = info.caja > 0 ? Number(info.caja) * Number(info.cantidad) : info.cantidad ;
 
@@ -179,6 +188,8 @@
 
 		$scope.inicio = function(){
 
+			$scope.cantidadLote = 0;
+
 			$scope.datos = {
 				cantidad :'',
 				idLote : '',
@@ -186,6 +197,28 @@
 				caducidad : ''
 			}
 		};
+
+		$scope.datosLote = function(lote){
+			if (lote) {
+				
+				var dato = JSON.parse(lote);
+
+				$scope.datos.idLote = dato.LOT_clave;
+				$scope.datos.lote = dato.LOT_numero;
+				$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+				$scope.cantidadLote = dato.LOT_cantidad;
+				
+			};
+		}
+
+		$scope.verificaCantidadLote = function(){
+			if ($scope.cantidadLote > 0 && $scope.cantidadLote < $scope.datos.cantidad) {
+				mensajes.alerta('El lote solo tiene ' + $scope.cantidadLote + ' disponible(s)','error','top right','error');
+				$scope.datos.cantidad = 0;
+			}else if ($scope.cantidadLote == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '') {
+				mensajes.alerta('Este lote no tiene cantidad disponible','error','top right','error');
+			};
+		}
 
 		$scope.verificaLote = function(){
 			var lote = $scope.datos.lote;
@@ -253,6 +286,7 @@
 		    $scope.consultado = consultado;
 		    $scope.item = '';
 		    $scope.disponible = '';
+		    $scope.lotes = [];
 
 			$scope.datos = {
 				almacen:info.almacen,
@@ -274,19 +308,33 @@
 
 		$scope.selectedItemChange= function(){
 
-			console.log($scope.item);
-
-			if ($scope.datos.almacen && $scope.item) {
+			if ($scope.datos.almacen != '' && $scope.item) {
+				console.log('entro');
 				$scope.datos.lote = '';
 				$scope.datos.idLote = '';
 				$scope.datos.caducidad = '';
-				$scope.verificaExistenciaAlmacen($scope.datos.almacen);
+				$scope.verificaExistencia($scope.datos.almacen);
 			};
 
         };
 
 		$scope.mensajeError = function(){
 			mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
+		}
+
+		$scope.datosLote = function(lote){
+			if (lote) {
+				var dato = JSON.parse(lote);
+
+				console.log(dato);
+				$scope.datos.idLote = dato.LOT_clave;
+				$scope.datos.lote = dato.LOT_numero;
+				$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+				$scope.cantidadLote = dato.LOT_cantidad;
+				$scope.existeLote = true;
+
+				$scope.verificaCantidadLote();
+			};
 		}
 
 		$scope.verificaLote = function(){
@@ -315,10 +363,31 @@
 			};
 		}
 
-		$scope.verificaExistenciaAlmacen = function(almacen){
+		$scope.verificaCantidadLote = function(){
 
-			// mensajes.alerta('Verificando Existencias','info','top right','search');
+			if ($scope.cantidadLote > 0 && $scope.cantidadLote < $scope.datos.cantidad && $scope.datos.tipomov == 3) {
+				mensajes.alerta('El lote solo tiene ' + $scope.cantidadLote + ' disponible(s)','error','top right','error');
+				$scope.datos.cantidad = 0;
+			}else if ($scope.cantidadLote == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '' && $scope.datos.tipomov == 3) {
+				mensajes.alerta('Este lote no tiene cantidad disponible','error','top right','error');
+			};
+		}
+
+
+		//verificamos la existencia actual del item en el almacen
+		$scope.verificaExistencia = function(almacen){
+
 			if (almacen) {
+
+				mensajes.alerta('Verificando Datos de Almacen','info','top right','search');
+				//en caso de que el item sea forzoso buscamos los lotes existentes
+				if ($scope.item.TIT_forzoso == 1) {
+
+					busqueda.lotesAlmacenXitem(almacen,$scope.item.ITE_clave).success(function (data){
+						$scope.lotes = data;
+					});
+
+				};
 
 				busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
 					// console.log(data);
@@ -348,12 +417,10 @@
 				// console.log($scope.datos);
 				$scope.guardando = true;
 				operacion.altaMovimiento($scope.datos).success(function (data){
-
 					mensajes.alerta(data.respuesta,'success','top right','done_all');
 					$scope.guardando = false;
 					$scope.movimientoForm.$setPristine();
 					$scope.inicio();
-
 				}).error(function (data){
 					$scope.mensajeError();
 					$scope.guardando = false;
@@ -391,8 +458,14 @@
 			return q.promise;
 	    }
 
+	    function consultaLote(query) {
 
+			var q2 = $q.defer(),
+				response2 = query ? $filter( 'filter' )( $scope.lotes, query ) : $scope.lotes;
+				q2.resolve( response2 );
 
+			return q2.promise;
+	    }
 
 		$scope.cancel = function() {
 			$mdDialog.hide();
