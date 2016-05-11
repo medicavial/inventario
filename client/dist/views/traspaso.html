@@ -45,16 +45,22 @@
                   </md-not-found>
                 </md-autocomplete>
               
-                <md-input-container flex>
+                <md-input-container flex ng-if="item.TIT_forzoso">
+                  <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)">
+                    <md-option ng-repeat="lote in lotes" value="{{lote}}">{{lote.LOT_numero}}</md-option>
+                  </md-select>
+                </md-input-container>
+
+                <md-input-container>
                   <label>Cantidad Disponible</label>
                   <input type="number"  name="disponible" ng-model="disponible" disabled> 
                 </md-input-container>
-    
 
-            </div> 
+
+            </div>
 
         </md-content>
-
+        
         
         <md-subheader class="md-primary">Dastos Destino</md-subheader>
         <md-divider></md-divider>
@@ -74,11 +80,11 @@
 
             <md-input-container flex>
               <label>Cantidad a Traspasar</label>
-              <input required type="number" step="1" name="cantidad" ng-model="datos.cantidad" min="1" max="{{disponible}}" >
+              <input required type="number" step="1" name="cantidad" ng-model="datos.cantidad" min="1" max="{{disponible}}" ng-change="verificaCantidadLote()">
               <div ng-messages="traspasoForm.cantidad.$error" ng-if="traspasoForm.cantidad.$dirty">
                 <div ng-message="required">Cantidad obligatoria</div>
                 <div ng-message="min">La cantidad no puede ser 0</div>
-                <div ng-message="max">La cantidad no debe ser mayor a la disponible</div>
+                <div ng-message="max">La cantidad no debe ser mayor a la disponible en el lote</div>
               </div>
             </md-input-container>
             

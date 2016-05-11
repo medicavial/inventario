@@ -39,6 +39,8 @@ class OperacionController extends BaseController {
 
 	}
 
+
+	//funcion que ayuda a completar lo faltate de la orden de compra
 	public function completaOrden(){
 
 		$cveOrden = Input::get('orden');
@@ -49,16 +51,30 @@ class OperacionController extends BaseController {
 		//obtenemos el almacen principal de esa unidad
 		$resultado = Almacen::where('UNI_clave',$unidad)->where('TAL_clave',1)->first();
 		$almacen = $resultado->ALM_clave;
-
+		//buscamos la orden
 		$orden = OrdenCompra::find($cveOrden);
 
+		// recorremos item por item 
 		foreach ($items as $item) {
 			
+			//clave del item de esta orden
+			$claveOrdenitem = $item['OIT_clave'];
 
+			//la cantidad que se acompleto debe de set la misma que falto por eso la resta  
 			$cantidad = $item['OIT_cantidadPedida'] - $item['OIT_cantidadSurtida'];
 			$claveItem = $item['ITE_clave'];
 
-			helpers::ingresaTotal($claveItem,$cantidad,$almacen,$cveOrden,$usuario,'Se Completó Orden');
+
+			//acompletamos la orden del item 
+			$datoItem = ordenItem::find($claveOrdenitem);
+			$datoItem->OIT_cantidadSurtida = $item['OIT_cantidadPedida'];
+			$datoItem->save();
+
+			// se obtienen los datos del item si es forzoso el lote y los lotes
+			$lotes = isset($item['lotes']) ? $item['lotes'] : array();
+			$loteForzoso = $item['TIT_forzoso'];
+
+			helpers::surteItem($claveItem,$cantidad,$almacen,$cveOrden,$usuario,'Se Completó Orden',$loteForzoso,$lotes);
 
 		}
 
@@ -542,21 +558,12 @@ class OperacionController extends BaseController {
 			$lotes = isset($valor['lotes']) ? $valor['lotes'] : array();
 			$loteForzoso = $valor['TIT_forzoso'];
 
+			$datoItem = ordenItem::find($claveOrdenItem);
+			$datoItem->OIT_cantidadSurtida = $cantidadSurtida;
+			$datoItem->OIT_precioFinal = $ultimoCosto;
+			$datoItem->save();
 
-			helpers::surteItem($claveItem,$cantidadSurtida,$ultimoCosto,$almacen,$ordenClave,$usuario,'Surtido Orden',$loteForzoso,$lotes,$claveOrdenitem);
-
-			// $item = ordenItem::find($clave);
-			// $item->OIT_cantidadSurtida = $cantidadSurtida;
-			// $item->OIT_precioFinal = $ultimoCosto;
-			// $item->save();
-
-			// $claveExistencia =  helpers::ingresaTotal($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden');
-
-			// if ($loteForzoso == 1 && count($lotes) > 0) {
-			// 	helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
-			// }elseif (count($lotes) > 0) {
-			// 	helpers::ingresaLotes($claveItem,$lotes,$ordenClave,$claveExistencia);
-			// }
+			helpers::surteItem($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden',$loteForzoso,$lotes);
 		
 		}	
 
@@ -666,6 +673,7 @@ class OperacionController extends BaseController {
 
 		$datos = OrdenItem::join('ordenCompra','ordenCompra.OCM_clave','=','ordenItems.OCM_clave')
 					->join('items','items.ITE_clave','=','ordenItems.ITE_clave')
+					->join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')
 					->where('ordenCompra.OCM_clave',$orden)->get();
 		$respuesta = array();
 

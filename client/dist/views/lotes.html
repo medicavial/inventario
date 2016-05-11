@@ -7,11 +7,18 @@
 
       <md-content layout-gt-sm="row" layout="column" layout-padding>  
 
-        <md-input-container flex>
-          <label>Lote</label>
-          <input type="text" name="lote" ng-model="datos.lote" required mayusculas>
+        
+        <md-input-container flex ng-if="!existeLote">
+            <label>Lote</label>
+            <input type="text" name="lote" ng-model="datos.lote" mayusculas>
         </md-input-container>
 
+        <md-input-container flex ng-if="existeLote">
+          <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)">
+            <md-option ng-repeat="lote in lotesUnidad" value="{{lote}}">{{lote.LOT_numero}}</md-option>
+            <md-option value="0">Nuevo Lote</md-option>
+          </md-select>
+        </md-input-container>
         
         <md-input-container flex>
           <label>Cantidad</label>
@@ -21,7 +28,7 @@
       </md-content>
       
       <div layout-gt-sm="row" layout="column"  layout-padding>
-        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required flex></md-datepicker>
+        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" ng-disabled="existeLote" required flex></md-datepicker>
         <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button" flex>Agregar Lote</md-button>
       </div>
 

@@ -6,10 +6,10 @@
     .controller('completarCtrl', completarCtrl)
     .controller('lotesItemCtrl',lotesItemCtrl);
 
-    completarCtrl.$inject = ['$rootScope','info','$mdDialog','$stateParams'];
+    completarCtrl.$inject = ['$rootScope','info','$mdDialog','$stateParams','operacion','mensajes'];
 	lotesItemCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion'];
     
-    function completarCtrl($rootScope,info,$mdDialog,$stateParams) {
+    function completarCtrl($rootScope,info,$mdDialog,$stateParams,operacion,mensajes) {
         var vm = this;
         $rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Completar Orden';

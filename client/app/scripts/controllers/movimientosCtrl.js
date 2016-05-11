@@ -79,12 +79,12 @@
 		$scope.tiposmovimiento = informacion[1].data;
 		$scope.almacenes = informacion[2].data;
 		$scope.tiposajuste = informacion[3].data;
-		$scope.existeLote = false;
 
 		// console.log($scope.items);
 
 		$scope.inicio = function(){
 
+			$scope.existeLote = false;
 			$scope.busqueda = null;
 		    $scope.consultado = consultado;
 		    $scope.consultaLote = consultaLote;

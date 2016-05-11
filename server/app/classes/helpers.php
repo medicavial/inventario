@@ -116,12 +116,7 @@ class helpers {
 	}
 
 
-	public static function surteItem($item,$cantidad,$costo,$almacen,$orden,$usuario,$observaciones,$loteForzoso,$lotes,$claveOrdenItem){
-
-		$datoItem = ordenItem::find($claveOrdenItem);
-		$datoItem->OIT_cantidadSurtida = $cantidad;
-		$datoItem->OIT_precioFinal = $costo;
-		$datoItem->save();
+	public static function surteItem($item,$cantidad,$almacen,$orden,$usuario,$observaciones,$loteForzoso,$lotes){
 
 		$operacion = new Operacion;
 
