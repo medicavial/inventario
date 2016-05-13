@@ -79,6 +79,11 @@
                         <p>Descargar PDF</p>
                       </md-button>
                     </md-menu-item>
+                    <md-menu-item ng-if="orden.OCM_surtida == 1">
+                      <md-button ng-click="ordenescompra.correo(orden,$event)">
+                        <p>Enviar por correo</p>
+                      </md-button>
+                    </md-menu-item>
                     <md-menu-item ng-if="orden.OCM_surtida == 0">
                       <md-button ng-click="ordenescompra.edita($event,orden)">
                         <p>Cancelar</p>
@@ -91,7 +96,9 @@
         </tbody>
       </table>
     </md-data-table-container>
+    
     <br>
+    
     <md-data-table-pagination md-label="ordenescompra.texto" md-row-select="ordenescompra.paginacion" md-limit="ordenescompra.limit" md-page="ordenescompra.page" md-total="{{ordenescompra.info.length}}"></md-data-table-pagination>
 
 

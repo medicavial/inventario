@@ -128,6 +128,22 @@
 		    });
 		};
 
+		scope.correo = function(orden,ev) {
+
+			var datos = {data:orden};
+
+		    $mdDialog.show({
+		      controller: correoCtrl,
+		      templateUrl: 'views/correo.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:true,
+		      locals: { info: datos }
+		    }).then(function(){
+		    	
+		    });
+		};
+
 	}
 
 
@@ -507,6 +523,7 @@
 
 	function correoCtrl($scope, $mdDialog, info, operacion, mensajes){
 
+		console.log(info);
 		$scope.inicio = function(){
 			$scope.datos = {
 				orden:info.data.OCM_clave,

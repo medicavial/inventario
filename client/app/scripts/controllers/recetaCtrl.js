@@ -277,9 +277,6 @@
 		$scope.tiposajuste = informacion[3].data;
 		$scope.existeLote = false;
 
-		console.log(informacion);
-		console.log(info);
-
 		$scope.inicio = function(){
 
 			$scope.busqueda = null;
