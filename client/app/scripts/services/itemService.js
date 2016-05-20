@@ -1,10 +1,10 @@
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
-    .factory("items",items);
+    .factory('items',items);
 
 	//servicio para permisos
 	function items($resource,api){
@@ -17,6 +17,6 @@
 	            });
 
 	    return Item;
-	}
+	};
 
 })();

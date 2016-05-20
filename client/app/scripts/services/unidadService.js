@@ -1,10 +1,10 @@
 (function(){
 
-	"use strict"
+	'use strict';
 	
 	angular
 	.module('app')
-	.factory("unidades",unidades);
+	.factory('unidades',unidades);
 
 	//servicio para permisos
 	function unidades($resource,api){

@@ -7,11 +7,11 @@
 	.controller('modificaCtrl',modificaCtrl)
 	.controller('lotesCtrl',lotesCtrl)
 
-	surtirCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog','$stateParams', 'webStorage', '$filter'];
+	surtirCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','$mdDialog','$stateParams', 'webStorage', '$filter'];
 	modificaCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
 	lotesCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes','informacion'];
 
-	function surtirCtrl($scope,$rootScope,operacion,mensajes,datos,pdf,$mdDialog, $stateParams, webStorage, $filter){
+	function surtirCtrl($scope,$rootScope,operacion,mensajes,datos,$mdDialog, $stateParams, webStorage, $filter){
 
 
 		if (datos.data.OCM_surtida == 1 ) {
@@ -404,7 +404,7 @@
 					console.log(dato);
 					$scope.datos.idLote = dato.LOT_clave;
 					$scope.datos.lote = dato.LOT_numero;
-					$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+					$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
 					$scope.cantidadLote = dato.LOT_cantidad;
 					$scope.existeLote = true;
 				}

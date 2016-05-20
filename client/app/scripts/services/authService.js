@@ -1,10 +1,10 @@
 //servicio que verifica sesiones de usuario
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular.module('app')
-    .factory("auth",auth);
+    .factory('auth',auth);
 
     function auth($http, api, $state, webStorage,$rootScope,mensajes){
         return{

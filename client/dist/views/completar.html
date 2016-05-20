@@ -1,4 +1,4 @@
-<div layout="column" ng-init="completa.inicio()">
+<div layout="column" ng-init="completa.inicio()" >
 
     <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
@@ -24,7 +24,7 @@
 </div>
 
 
-<md-button id="nuevo" class="md-fab md-fab-bottom-right" ng-disabled="!completa.lotesCompletos"  ng-click="completa.guardar()" aria-label="Completa Orden">
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-disabled="!completa.lotesCompletos"  ng-click="completa.guardar()" aria-label="Completa Orden">
     <md-tooltip md-direction="top">
       Completar
     </md-tooltip>

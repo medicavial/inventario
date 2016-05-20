@@ -12,18 +12,33 @@
 
 		//seteo inicial de la app
 		var url = '';
-		$rootScope.iconoAdmin = 'add';
-		$rootScope.iconoCatalogos = 'add';
-		$rootScope.iconoAlmacen = 'add';
-		$rootScope.iconoReportes = 'add';
 
 		//parametros globales tomados del localStorage
 		$rootScope.username = webStorage.session.get('username');
 		$rootScope.nombre = webStorage.session.get('nombre');
 		$rootScope.id = webStorage.session.get('id');
 
+		//incia el menu;
+		$rootScope.resetMenu = function(){
+			
+			$rootScope.iconoAdmin = 'add';
+			$rootScope.iconoCatalogos = 'add';
+			$rootScope.iconoAlmacen = 'add';
+			$rootScope.iconoReportes = 'add';
+
+			$rootScope.admin = false;
+			$rootScope.catalogos = false;
+			$rootScope.almacen = false;
+			$rootScope.reportes = false;
+
+		}
+
+		$rootScope.resetMenu();
+
 		// interaccion del menu
 		$rootScope.abrirMenu = function(index){			
+
+			$rootScope.resetMenu();
 
 			if (index == 1) {
 
@@ -94,6 +109,10 @@
 
 			if ($mdSidenav('left').isOpen()) {
 				$mdSidenav('left').toggle();
+			};
+
+			if (ruta == 'index.home') {
+				$rootScope.resetMenu();
 			};
 			$state.go(ruta);
 		}

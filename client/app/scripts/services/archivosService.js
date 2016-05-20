@@ -1,10 +1,10 @@
 //servicio que verifica sesiones de usuario
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular.module('app')
-    .factory("archivos",archivos);
+    .factory('archivos',archivos);
     
     function archivos($http, api,Upload,$q){
         return{

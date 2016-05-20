@@ -9,13 +9,13 @@
 	.controller('correoCtrl',correoCtrl)
 	.controller('completaCtrl',completaCtrl)
 
-	ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','pdf','$window','api','operacion'];
+	ordenesCompraCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','$window','api','operacion'];
 	ordenCompraCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','pdf','$mdDialog'];
 	correoCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
 	completaCtrl.$inject = ['$scope','$mdDialog','informacion','operacion','mensajes','$rootScope'];
 
 
-	function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,pdf,$window,api,operacion){
+	function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,$window,api,operacion){
 
 		var scope = this;
 		$rootScope.tema = 'theme1';
@@ -64,31 +64,31 @@
 			// console.log(orden);
 
 		    $mdDialog.show({
-		      controller: completaCtrl,
-		      templateUrl: 'views/movimientoorden.html',
-		      parent: angular.element(document.body),
-		      targetEvent: ev,
-		      resolve:{
-	            informacion:function(operacion,$q){
-	            	
-	                var promesa = $q.defer(),
-	            		items 	= operacion.verificaFaltantes(orden.OCM_clave);
+				controller: completaCtrl,
+				templateUrl: 'views/movimientoorden.html',
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				resolve:{
+		            informacion:function(operacion,$q){
+		            	
+		                var promesa = $q.defer(),
+		            		items 	= operacion.verificaFaltantes(orden.OCM_clave);
 
-	            	$q.when(items).then(function (data){
-	            		// console.log(data);
-	            		var datos = {
-	            			items:data.data,
-	            			orden:orden
-	            		}
+		            	$q.when(items).then(function (data){
+		            		// console.log(data);
+		            		var datos = {
+		            			items:data.data,
+		            			orden:orden
+		            		}
 
-	            		promesa.resolve(datos);
-	            		// scope.loading = false;
-	            	});
+		            		promesa.resolve(datos);
+		            		// scope.loading = false;
+		            	});
 
-	                return promesa.promise;
-	            }
-	          },
-		      clickOutsideToClose:true
+		                return promesa.promise;
+		            }
+				},
+				clickOutsideToClose:true
 		    }).then(function(){
 		    	busqueda.ordenescompra().success(function (data){
 		    		scope.info = data;
@@ -497,12 +497,6 @@
 			);
 		}
 
-		$scope.generaPDF = function(index){
-
-			var orden = $scope.ordenesListas[index];
-			pdf.ordenCompra(orden.data);
-		}
-
 		$scope.generaCorreo = function(ev,index) {
 
 			var orden = $scope.ordenesListas[index];
@@ -523,7 +517,7 @@
 
 	function correoCtrl($scope, $mdDialog, info, operacion, mensajes){
 
-		console.log(info);
+		// console.log(info);
 		$scope.inicio = function(){
 			$scope.datos = {
 				orden:info.data.OCM_clave,

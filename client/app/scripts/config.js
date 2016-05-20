@@ -205,6 +205,18 @@
 	        }
 		})
 
+		.state('index.agranel',{
+			url:'agranel',
+			templateUrl :'views/agranel.html',
+			controller:'agranelCtrl',
+			controllerAs: "agranel",
+			resolve:{
+	            datos:function(busqueda){
+	                return busqueda.movimientosAgranel();
+	            }
+	        }
+		})
+
 		.state('index.nuevaorden',{
 			url:'nuevaorden',
 			templateUrl :'views/ordencompra.html',
@@ -480,6 +492,7 @@
 
 	    $mdThemingProvider.theme('theme2')
 		.primaryPalette('deep-orange')
+		.warnPalette('indigo')
 	    .accentPalette('red');
 
 	    $mdThemingProvider.theme('theme3')
@@ -492,6 +505,10 @@
 
 	    $mdThemingProvider.theme('theme5')
 		.primaryPalette('neonGreen')
+	    .accentPalette('red');
+
+	    $mdThemingProvider.theme('theme6')
+		.primaryPalette('deep-purple')
 	    .accentPalette('red');
 
 	    $mdThemingProvider.theme('docs-dark')

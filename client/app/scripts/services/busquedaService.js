@@ -4,7 +4,7 @@
     'use strict';
     
     angular.module('app')
-    .factory("busqueda",busqueda);
+    .factory('busqueda',busqueda);
 
     function busqueda($http, api){
         return{
@@ -63,6 +63,9 @@
             {
                 return $http.get(api + 'operacion/items/unidad/' + unidad);
             },
+            itemsAgranel : function(){
+                return $http.get(api + 'busquedas/items/agranel');
+            },
             itemAlmacen : function(almacen,item)
             {
                 //busca la existencia de un item en un almacen 
@@ -87,6 +90,10 @@
             movimientos : function()
             {
                 return $http.get(api + 'busquedas/movimientos');
+            },
+            movimientosAgranel : function()
+            {
+                return $http.get(api + 'busquedas/movimientos/agranel');
             },
             ordenescompra : function()
             {

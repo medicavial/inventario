@@ -4,18 +4,18 @@
 	
 	angular
 	.module('app')
-	.controller('movimientoCtrl',movimientoCtrl)
-	.controller('movimientosCtrl',movimientosCtrl)
+	.controller('agranelCtrl',agranelCtrl)
+	.controller('salidaAgranelCtrl',salidaAgranelCtrl)
 
-	movimientosCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
-	movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda'];
+	agranelCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
+	salidaAgranelCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda'];
 
 
-	function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
+	function agranelCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 
 		var scope = this;
 		$rootScope.tema = 'theme1';
-		$rootScope.titulo = 'Movimientos Registrados';
+		$rootScope.titulo = 'Salidas de a granel';
 		scope.info = datos.data;
 		scope.total = 0;
 		scope.limit = 10;
@@ -40,29 +40,28 @@
 		scope.nuevo = function(ev) {
 
 		    $mdDialog.show({
-		      controller: movimientoCtrl,
-		      templateUrl: 'views/movimiento.html',
-		      parent: angular.element(document.body),
-		      targetEvent: ev,
-		      resolve:{
-	            informacion:function(busqueda,$q){
-	            	scope.loading = true;
-	                var promesa 		= $q.defer(),
-	            		items 			= busqueda.items(),
-	            		tiposMovimiento = busqueda.tiposMovimiento(),
-	            		almacenes 		= busqueda.almacenesUsuario($rootScope.id),
-	            		tiposajuste 	= busqueda.tiposAjuste();
+				controller: salidaAgranelCtrl,
+				templateUrl: 'views/movimiento.html',
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				resolve:{
+					informacion:function(busqueda,$q){
+						scope.loading = true;
+					    var promesa 		= $q.defer(),
+							items 			= busqueda.itemsAgranel(),
+							tiposMovimiento = busqueda.tiposMovimiento(),
+							almacenes 		= busqueda.almacenesUsuario($rootScope.id),
+							tiposajuste 	= busqueda.tiposAjuste();
 
-	            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
-	            		// console.log(data);
-	            		promesa.resolve(data);
-	            		scope.loading = false;
-	            	});
+						$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+							promesa.resolve(data);
+							scope.loading = false;
+						});
 
-	                return promesa.promise;
-	            }
-	          },
-		      clickOutsideToClose:false
+					    return promesa.promise;
+					}
+				},
+				clickOutsideToClose:false
 		    }).then(function(){
 		    	busqueda.movimientos().success(function (data){
 		    		scope.info = data;
@@ -73,15 +72,15 @@
 	}
 
 
-	function movimientoCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter,busqueda){
+	function salidaAgranelCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter,busqueda){
 
 		$scope.items = informacion[0].data;
 		$scope.tiposmovimiento = informacion[1].data;
 		$scope.almacenes = informacion[2].data;
 		$scope.tiposajuste = informacion[3].data;
-		$scope.bloqueoMov = false;
+		$scope.bloqueoMov = true;
 
-		// console.log($scope.items);
+		console.log($scope.items);
 
 		$scope.inicio = function(){
 
@@ -99,7 +98,7 @@
 				almacen:'',
 				item:'',
 				cantidad:'',
-				tipomov:'',
+				tipomov:3,
 				tipoa:'',
 				orden:'',
 				lote:'',
@@ -133,7 +132,7 @@
 			if (lote) {
 				var dato = JSON.parse(lote);
 
-				// console.log(dato);
+				console.log(dato);
 				$scope.datos.idLote = dato.LOT_clave;
 				$scope.datos.lote = dato.LOT_numero;
 				$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();

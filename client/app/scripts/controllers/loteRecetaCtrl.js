@@ -43,7 +43,7 @@
 					if (data) {
 						mensajes.alerta('Lote Existente','success','top right','done');
 						$scope.datos.idLote = data.LOT_clave;
-						$scope.datos.caducidad = new Date(data.LOT_caducidad);
+						$scope.datos.caducidad = moment(data.LOT_caducidad).toDate();
 					}else{
 						$scope.datos.caducidad = '';
 						mensajes.alerta('Lote No Existente Verificalo nuevamente','error','top right','alert');

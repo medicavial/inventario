@@ -1,10 +1,10 @@
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
-    .factory("proveedores",proveedores);
+    .factory('proveedores',proveedores);
     
 	//servicio para permisos
 	function proveedores($resource,api){

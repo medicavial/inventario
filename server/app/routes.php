@@ -126,6 +126,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('item/existencia/{almacen}/{item}', 'BusquedasController@itemAlmacen');
         Route::get('item/unidad/{item}/{unidad}', 'BusquedasController@itemUnidad');
         Route::get('items', 'BusquedasController@items');
+        Route::get('items/agranel', 'BusquedasController@itemsAgranel');
         Route::get('items/existencias/{almacen}', 'BusquedasController@itemsAlmacen');
         Route::get('items/proveedor', 'BusquedasController@itemsProveedor');
         Route::get('items/receta', 'BusquedasController@itemsReceta');
@@ -134,6 +135,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('lotes/almacen/{almacen}/item/{item}', 'BusquedasController@lotesAlmacenXitem');
         Route::get('lotes/unidad/{unidad}/item/{item}', 'BusquedasController@lotesUnidadXitem');
         Route::get('movimientos', 'BusquedasController@movimientos');
+        Route::get('movimientos/agranel', 'BusquedasController@movimientosAgranel');
         Route::get('ordenescompra', 'BusquedasController@ordenescompra');
         Route::get('ordencompra/{id}', 'BusquedasController@ordencompra');
         Route::get('tiposajuste', 'BusquedasController@tiposAjuste');

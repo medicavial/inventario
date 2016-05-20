@@ -11,7 +11,7 @@
     </div>
   </md-toolbar>
 
-  <form name="mailForm" novalidate ng-submit="enviaCorreo()">
+  <form name="mailForm" ng-submit="enviaCorreo()">
 
     <md-dialog-content layout-padding>
       
@@ -53,7 +53,7 @@
       <md-button type="button" ng-click="cancel()">
           Cancelar
       </md-button>
-      <md-button type="submit">
+      <md-button ng-disabled="mailForm.$invalid" type="submit">
           Enviar
       </md-button>
     </div>

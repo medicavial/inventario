@@ -1,9 +1,9 @@
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular.module('app')
-	.factory("almacenes",almacenes);
+	.factory('almacenes',almacenes);
 
 	//servicio para permisos
 	function almacenes($resource,api){

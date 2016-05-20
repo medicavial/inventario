@@ -1,10 +1,10 @@
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
-    .factory("tiposajuste",tiposajuste);
+    .factory('tiposajuste',tiposajuste);
 
 	//servicio para permisos
 	function tiposajuste($resource,api){

@@ -1,10 +1,10 @@
 (function(){
 
-	"use strict"
+	'use strict';
 	
 	angular
 	.module('app')
-	.factory("tiposmovimiento",tiposmovimiento);
+	.factory('tiposmovimiento',tiposmovimiento);
 
 	//servicio para permisos
 	function tiposmovimiento($resource,api){

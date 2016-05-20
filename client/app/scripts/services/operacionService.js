@@ -1,12 +1,12 @@
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
-    .factory("operacion",operacion);
+    .factory('operacion',operacion);
 
-    function operacion($http, api,$q,busqueda,$rootScope,$filter,pdf){
+    function operacion($http, api,$q,busqueda,$rootScope,$filter){
         return{
             altaAlmacenes : function(datos){
                 return $http.post(api + 'operacion/usuario/almacenes',datos);
@@ -31,9 +31,9 @@
             },
             cambiaItem: function(datos){
                 var defer   = $q.defer(),
-                    reserva = datos.reserva,
                     item    = datos.item,
                     almacen = datos.almacen;
+                    // reserva = datos.reserva,
 
                 $http.get(api + 'busquedas/item/existencia/' + almacen + '/' + item)
                 .then(function (data){
@@ -231,7 +231,7 @@
                 //filtramos los resultados de ese proveedor
                 items = $filter('filter')(catalogo, proveedor);
 
-                var proveedor = items[0].PRO_clave, //obtenemos el la vlave del proveedor que debe ser la misma para todos
+                var proveedorClave = items[0].PRO_clave, //obtenemos el la vlave del proveedor que debe ser la misma para todos
                     total = 0, //preparamos el total de esta orden
                     itemsproveedor = []; //items de a orden
 
@@ -254,14 +254,14 @@
 
                     //preparamos el arreglo que se mandara 
                     var preorden = {
-                            proveedor:proveedor,
+                            proveedor:proveedorClave,
                             items:itemsproveedor,
                             total:total,
                             tipo:1,
                             usuario:$rootScope.id,
                             unidad:unidad,
                             almacenes:almacenes
-                    }
+                    };
 
                     //agregamos al arreglo ordenes que mandara cada orden individual del proveedor para ocupar la misma peticion como si fueran varias
                     ordenes.push(preorden);
@@ -305,7 +305,7 @@
                             total += cantidad;
                             // agregamos item al arreglo
                             itemsproveedor.push(value);
-                        };
+                        }
                     });
 
                     // si tenemos items de ese proveedor significa que si tiene registro de items para ese proveedor
@@ -319,12 +319,12 @@
                                 usuario:$rootScope.id,
                                 unidad:unidad,
                                 almacenes:almacenes
-                        }
+                        };
 
                         //agregamos al arreglo ordenes que mandara cada orden individual del proveedor
                         ordenes.push(preorden);
 
-                    };
+                    }
 
 
                 });
@@ -361,7 +361,7 @@
 
                         total += cantidad;
 
-                    };
+                    }
 
                 });
 
@@ -430,7 +430,8 @@
                         angular.forEach(value.proveedores, function(value, key) {
 
                             var existencia = proveedores.indexOf(value.PRO_clave);
-                            if (existencia == -1) proveedores.push(value.PRO_clave);
+
+                            if (existencia == -1){proveedores.push(value.PRO_clave);}
 
                             value.porsurtir = cantidad;
                             value.nivelcompra = nivelcompra;
@@ -456,7 +457,7 @@
                         promesa.resolve(respuesta);
                     });
 
-                })
+                });
 
                 return promesa.promise;
 
@@ -525,7 +526,7 @@
 
                     if (value.cantidad > 0) {
                         validos.push(value);
-                    };
+                    }
 
                 });
 
@@ -537,8 +538,8 @@
                 return promesa.promise;
 
             }
-        }
+        };
 
-    }
+    };
 
 })();

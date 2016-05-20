@@ -205,7 +205,7 @@
 
 				$scope.datos.idLote = dato.LOT_clave;
 				$scope.datos.lote = dato.LOT_numero;
-				$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+				$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
 				$scope.cantidadLote = dato.LOT_cantidad;
 				
 			};
@@ -231,7 +231,7 @@
 					if (data) {
 						mensajes.alerta('Lote Existente','success','top right','done');
 						$scope.datos.idLote = data.LOT_clave;
-						$scope.datos.caducidad = new Date(data.LOT_caducidad);
+						$scope.datos.caducidad = moment(data.LOT_caducidad).toDate();
 					}else{
 						$scope.datos.caducidad = '';
 						mensajes.alerta('Lote No Existente Verificalo nuevamente','error','top right','alert');
@@ -326,7 +326,7 @@
 				console.log(dato);
 				$scope.datos.idLote = dato.LOT_clave;
 				$scope.datos.lote = dato.LOT_numero;
-				$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+				$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
 				$scope.cantidadLote = dato.LOT_cantidad;
 				$scope.existeLote = true;
 
@@ -347,7 +347,7 @@
 					if (data) {
 						mensajes.alerta('Lote Existente','success','top right','done');
 						$scope.datos.idLote = data.LOT_clave;
-						$scope.datos.caducidad = new Date(data.LOT_caducidad);
+						$scope.datos.caducidad = moment(data.LOT_caducidad).toDate();
 						$scope.existeLote = true;
 					}else{
 						mensajes.alerta('Lote No Existente Ingresa Caducidad','error','top right','alert');

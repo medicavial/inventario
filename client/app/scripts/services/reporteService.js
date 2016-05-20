@@ -1,11 +1,11 @@
 
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
-    .factory("reportes",reportes);
+    .factory('reportes',reportes);
     
     function reportes($http, api){
         return{

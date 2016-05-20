@@ -1,10 +1,10 @@
 (function(){
 
-	"use strict"
+	'use strict';
 	
 	angular
 	.module('app')
-	.factory("tiposorden",tiposorden);
+	.factory('tiposorden',tiposorden);
 
 	//servicio para permisos
 	function tiposorden($resource,api){

@@ -52,6 +52,13 @@ class BusquedasController extends BaseController {
 		return Item::activos();
 	}
 
+	public function itemsAgranel(){
+		return Item::join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')                
+					 ->where( array('ITE_activo'=> true,'ITE_agranel'=> true) )
+                     ->orderBy('ITE_nombre')
+                     ->get();
+	}
+
 	public function itemsAlmacen($almacen){
 		return Existencia::items($almacen);
 	}
@@ -122,6 +129,11 @@ class BusquedasController extends BaseController {
 	public function movimientos(){
 
         return Movimiento::todos();
+	}
+
+	public function movimientosAgranel(){
+
+        return Movimiento::agranel();
 	}
 
 	public function ordenescompra(){

@@ -1,11 +1,11 @@
 
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
-    .factory("mensajes",mensajes);
+    .factory('mensajes',mensajes);
 
     function mensajes($mdToast,$mdDialog,$q){
         return{
@@ -47,6 +47,6 @@
                 
             }
         }
-    }
+    };
 
 })();

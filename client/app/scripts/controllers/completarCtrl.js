@@ -128,7 +128,7 @@
 					console.log(dato);
 					$scope.datos.idLote = dato.LOT_clave;
 					$scope.datos.lote = dato.LOT_numero;
-					$scope.datos.caducidad = new Date(dato.LOT_caducidad);
+					$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
 					$scope.cantidadLote = dato.LOT_cantidad;
 					$scope.existeLote = true;
 				}

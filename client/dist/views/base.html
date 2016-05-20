@@ -17,9 +17,9 @@
       </md-button>
       <md-menu-content width="3" >
         <md-menu-item>
-          <md-button ng-click="">
-              <ng-md-icon icon="lock" style="fill:gray"></ng-md-icon>
-              Bloquear
+          <md-button ng-click="ir('index.configuraciones')">
+              <ng-md-icon icon="settings" style="fill:gray"></ng-md-icon>
+              Configuración
           </md-button>
         </md-menu-item>
         <md-menu-item>
@@ -30,9 +30,6 @@
         </md-menu-item>
       </md-menu-content>
     </md-menu>
-<!--     <md-button class="md-icon-button" aria-label="Opciones" ng-click="showGridBottomSheet($event)">
-        <ng-md-icon icon="more_vert" style="fill:white"></ng-md-icon> 
-    </md-button> -->
   </div>
 </md-toolbar>
 
@@ -127,6 +124,18 @@
             </md-icon>
             <p> Unidades </p>
           </md-list-item>
+          <md-list-item ng-click="ir('index.tiposalmacen')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3175E7"></ng-md-icon> 
+            </md-icon>
+            <p> Tipos de Almacen </p>
+          </md-list-item>
+          <md-list-item ng-click="ir('index.almacenes')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3175E7"></ng-md-icon> 
+            </md-icon>
+            <p> Almacenes </p>
+          </md-list-item>
           <md-list-item ng-click="ir('index.proveedores')">
             <md-icon>
               <ng-md-icon icon="keyboard_arrow_right" style="fill:#3175E7"></ng-md-icon> 
@@ -145,18 +154,7 @@
             </md-icon>
             <p> Items </p>
           </md-list-item>
-           <md-list-item ng-click="ir('index.tiposalmacen')">
-            <md-icon>
-              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3175E7"></ng-md-icon> 
-            </md-icon>
-            <p> Tipos de Almacen </p>
-          </md-list-item>
-          <md-list-item ng-click="ir('index.almacenes')">
-            <md-icon>
-              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3175E7"></ng-md-icon> 
-            </md-icon>
-            <p> Almacenes </p>
-          </md-list-item>
+          
           
         </div>
 
@@ -193,6 +191,13 @@
               <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
             </md-icon>
             <p> Movimientos </p>
+          </md-list-item>
+
+          <md-list-item ng-click="ir('index.agranel')">
+            <md-icon>
+              <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
+            <p> Salidas A Granel </p>
           </md-list-item>
 
           <md-list-item ng-click="ir('index.receta')">
@@ -268,16 +273,6 @@
           </md-list-item>
 
         </div>
-        
-        <md-divider></md-divider>
-
-        <md-list-item ng-click="ir('index.configuraciones')">
-          <md-icon>
-            <ng-md-icon icon="settings" style="fill:#3F51B5"></ng-md-icon>
-          </md-icon>
-          <p> Configuración </p>
-        </md-list-item>
-            
 
       </md-list>
     </md-sidenav>

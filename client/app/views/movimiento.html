@@ -40,7 +40,7 @@
           <div layout-gt-sm="row" layout="column">
             
             <md-input-container flex>
-              <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required flex>
+              <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" ng-disabled="bloqueoMov" required flex>
                 <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
               </md-select>
               <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">

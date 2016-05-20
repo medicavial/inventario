@@ -2,10 +2,10 @@
 
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular.module('app')
-    .factory("testInterceptor",testInterceptor);
+    .factory('testInterceptor',testInterceptor);
 
 	function testInterceptor($q,$rootScope){
 	    return{
@@ -27,6 +27,6 @@
 		    	return res;
 		    }
 	    }
-	}
+	};
 
 })();
