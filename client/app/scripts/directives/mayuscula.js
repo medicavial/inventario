@@ -1,7 +1,7 @@
 //funcion para convertir mayusculas
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')

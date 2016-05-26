@@ -1,6 +1,6 @@
 (function(){
 
-    "use strict"
+    'use strict';
     
     angular
     .module('app')
@@ -13,7 +13,7 @@
                 //funcion que rellena folios 
                 var rellenaFolio = function(folio){
 
-                    if (folio != '') {
+                    if (folio !== '') {
 
                         var totalletras = folio.length;
 
@@ -27,7 +27,7 @@
                             for (var i = 0; i < faltantes; i++) {
 
                               var letra = letras.charAt(i);
-                              letras = letras + "0";
+                              letras = letras + '0';
                             }
                         }
 
@@ -37,7 +37,7 @@
 
                             for (var i = 0; i < faltantes; i++) {
                               
-                              numeros = "0" + numeros;
+                              numeros = '0' + numeros;
                             }
                         }
 
@@ -47,10 +47,10 @@
 
                     }else{
 
-                        return folio
+                        return folio;
 
                     }
-                }
+                };
 
                 element.on('blur',function(){
 
@@ -76,7 +76,7 @@
                                 e.preventDefault();
                             }else{
 
-                                element.css("text-transform","uppercase");
+                                element.css('text-transform','uppercase');
 
                             }
                         //los ultimos 6 NO deben ser letras

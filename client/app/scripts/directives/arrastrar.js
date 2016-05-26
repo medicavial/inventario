@@ -3,7 +3,7 @@
 (function(){
 
 
-    "use strict"
+    'use strict';
 
     angular
     .module('app')
@@ -15,23 +15,15 @@
 
             	var functionToCall = scope.$eval(attrs.dragEnd);
 
-                // element.on('$md.dragstart', function() {
-                // })
-
-                // element.on('$md.drag', function() {
-                // })
-
                 element.on('$md.dragend', function() {
                     functionToCall(modelCtrl.$viewValue);
-                    // console.log(modelCtrl.$viewValue);
-                })
+                });
 
                 element.on('click', function() {
                     functionToCall(modelCtrl.$viewValue);
-                    // console.log(modelCtrl.$viewValue);
-                })
+                });
             }
-        }
-    })
+        };
+    });
 
 })();

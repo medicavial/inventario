@@ -32,7 +32,11 @@
 
                 }).error(function (data){
 
-                    mensajes.alerta(data.flash,'error center-dialog','top','error');
+                    if (data) {
+                        mensajes.alerta(data.flash,'error center-dialog','top','error');
+                    }else{
+                        mensajes.alerta('Error en conexión intentalo nuevamente','error center-dialog','top','error');
+                    }
                     $rootScope.cargando = false;
                 });
 

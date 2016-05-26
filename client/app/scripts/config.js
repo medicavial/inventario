@@ -530,16 +530,10 @@
 		$mdThemingProvider.definePalette('neonBlue', neonBlueMap);
 		$mdThemingProvider.definePalette('neonGreen', neonGreenMap);
 		
-
-
-
 	    $mdThemingProvider.setDefaultTheme('theme1');
 	    $mdThemingProvider.alwaysWatchTheme(true);
 
-	    $httpProvider.defaults.timeout = 5000;
-
-
-	    // $httpProvider.interceptors.push('myHttpInterceptor');
+	    $httpProvider.defaults.timeout = 1000;
 	  	
 	};
 
