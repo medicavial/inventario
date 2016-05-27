@@ -118,19 +118,22 @@
 		$scope.inicio = function(){
 			$scope.datos = {
 				nombre:'',
-				entradas:false,
-	        	salidas:false,
+				alertas:false,
+	        	conexion:false,
+	        	movimientos:false,
 	        	traspasos:false,
-	        	editaItem:false,
-	        	desactivaItem:false,
+	        	generaOrden:false,
+	        	surtirOrden:false,
+	        	cerrarOrden:false,
+	        	completaOrden:false,
+	        	salidasAgranel:false,
+	        	recetaMV:false,
+	        	usuarios:false,
+	        	perfiles:false,
+	        	tipos:false,
+	        	catalogos:false,
 	        	editaCatalogos:false,
-	        	desactivaCatalogos:false,
-	        	autorizaorden:false,
-	        	modificaorden:false,
-	        	cerrarorden:false,
-	        	surtir:false,
-	        	facturas:false,
-	        	asociar:false,
+	        	reportes:false,
 				activo:true
 			}
 
@@ -165,20 +168,24 @@
 
 			$scope.datos = {
 				nombre : informacion.PER_nombre,
-				entradas : informacion.PER_entradas ? true:false,
-				salidas : informacion.PER_salidas ? true:false,
-				traspasos : informacion.PER_traspasos ? true:false,
-				editaItem : informacion.PER_consultaItems ? true:false,
-				desactivaItem : informacion.PER_desactivaItems ? true:false,
-				editaCatalogos : informacion.PER_consultaCatalogo ? true:false,
-				desactivaCatalogos : informacion.PER_desactivaCatalogo ? true:false,
-				autorizaorden : informacion.PER_autorizaOrden ? true:false,
-				modificaorden : informacion.PER_modificaOrden ? true:false,
-				cerrarorden : informacion.PER_cerrarOrden ? true:false,
-				surtir : informacion.PER_surtir ? true:false,
-				facturas : informacion.PER_subirFactura ? true:false,
-				asociar : informacion.PER_asociar ? true:false,
-				activo : informacion.PER_activo ? true:false
+				alertas: informacion.PER_alertas ? true:false,
+	        	conexion: informacion.PER_conexiones ? true:false,
+	        	movimientos: informacion.PER_movimientos ? true:false,
+	        	traspasos: informacion.PER_traspasos ? true:false,
+	        	generaOrden: informacion.PER_generarOrden ? true:false,
+	        	surtirOrden: informacion.PER_surtirOrden ? true:false,
+	        	cerrarOrden: informacion.PER_cerrarOrden ? true:false,
+	        	completaOrden: informacion.PER_completaOrden ? true:false,
+	        	salidasAgranel: informacion.PER_salidasAgranel ? true:false,
+	        	recetaMV: informacion.PER_recetaMV ? true:false,
+	        	usuarios: informacion.PER_usuarios ? true:false,
+	        	perfiles: informacion.PER_perfiles ? true:false,
+	        	tipos: informacion.PER_tipos ? true:false,
+	        	catalogos: informacion.PER_consultaCatalogo ? true:false,
+	        	editaCatalogos: informacion.PER_modificaCatalogo ? true:false,
+	        	reportes: informacion.PER_reportes ? true:false,
+				activo : informacion.PER_activo ? true:false,
+
 			}
 
 			$scope.guardando = false;

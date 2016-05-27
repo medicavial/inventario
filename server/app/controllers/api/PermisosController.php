@@ -43,19 +43,22 @@ class PermisosController extends \BaseController {
 
 		$permiso->PER_nombre = Input::get('nombre');
 		
-		$permiso->PER_entradas = Input::get('entradas');
-        $permiso->PER_salidas = Input::get('salidas');
+		$permiso->PER_alertas = Input::get('alertas');
+        $permiso->PER_conexiones = Input::get('conexion');
+        $permiso->PER_movimientos = Input::get('movimientos');
         $permiso->PER_traspasos = Input::get('traspasos');
-        $permiso->PER_consultaItems = Input::get('editaItem');
-        $permiso->PER_desactivaItems = Input::get('desactivaItem');
-        $permiso->PER_consultaCatalogo = Input::get('editaCatalogos');
-        $permiso->PER_desactivaCatalogo = Input::get('desactivaCatalogos');
-        $permiso->PER_autorizaOrden = Input::get('autorizaorden');
-        $permiso->PER_modificaOrden = Input::get('modificaorden');
-        $permiso->PER_cerrarOrden = Input::get('cerrarorden');
-        $permiso->PER_surtir = Input::get('surtir');
-        $permiso->PER_subirFactura = Input::get('facturas');
-        $permiso->PER_asociar = Input::get('asociar');
+        $permiso->PER_generarOrden = Input::get('generaOrden');
+        $permiso->PER_surtirOrden = Input::get('surtirOrden');
+        $permiso->PER_cerrarOrden = Input::get('cerrarOrden');
+        $permiso->PER_completaOrden = Input::get('completaOrden');
+        $permiso->PER_salidasAgranel = Input::get('salidasAgranel');
+        $permiso->PER_recetaMV = Input::get('recetaMV');
+        $permiso->PER_usuarios = Input::get('usuarios');
+        $permiso->PER_perfiles = Input::get('perfiles');
+        $permiso->PER_tipos = Input::get('tipos');
+        $permiso->PER_consultaCatalogo = Input::get('catalogos');
+        $permiso->PER_modificaCatalogo = Input::get('editaCatalogos');
+        $permiso->PER_reportes = Input::get('reportes');
         $permiso->PER_activo = Input::get('activo');
 
 		$permiso->save();
@@ -100,19 +103,23 @@ class PermisosController extends \BaseController {
 
 		$permiso->PER_nombre = Input::get('nombre');
 		
-		$permiso->PER_entradas = Input::get('entradas');
-        $permiso->PER_salidas = Input::get('salidas');
+		$permiso->PER_alertas = Input::get('alertas');
+        $permiso->PER_conexiones = Input::get('conexion');
+        $permiso->PER_movimientos = Input::get('movimientos');
         $permiso->PER_traspasos = Input::get('traspasos');
-        $permiso->PER_consultaItems = Input::get('editaItem');
-        $permiso->PER_desactivaItems = Input::get('desactivaItem');
-        $permiso->PER_consultaCatalogo = Input::get('editaCatalogos');
-        $permiso->PER_desactivaCatalogo = Input::get('desactivaCatalogos');
-        $permiso->PER_autorizaOrden = Input::get('autorizaorden');
-        $permiso->PER_modificaOrden = Input::get('modificaorden');
-        $permiso->PER_cerrarOrden = Input::get('cerrarorden');
-        $permiso->PER_surtir = Input::get('surtir');
-        $permiso->PER_subirFactura = Input::get('facturas');
-        $permiso->PER_asociar = Input::get('asociar');
+        $permiso->PER_generarOrden = Input::get('generaOrden');
+        $permiso->PER_surtirOrden = Input::get('surtirOrden');
+        $permiso->PER_cerrarOrden = Input::get('cerrarOrden');
+        $permiso->PER_completaOrden = Input::get('completaOrden');
+        $permiso->PER_salidasAgranel = Input::get('salidasAgranel');
+        $permiso->PER_recetaMV = Input::get('recetaMV');
+        $permiso->PER_usuarios = Input::get('usuarios');
+        $permiso->PER_perfiles = Input::get('perfiles');
+        $permiso->PER_tipos = Input::get('tipos');
+        $permiso->PER_consultaCatalogo = Input::get('catalogos');
+        $permiso->PER_modificaCatalogo = Input::get('editaCatalogos');
+        $permiso->PER_reportes = Input::get('reportes');
+
         $permiso->PER_activo = Input::get('activo');
 
 		$permiso->save();
