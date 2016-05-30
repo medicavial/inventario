@@ -26,6 +26,7 @@
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Surtir Orden';
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 		$scope.lotesCompletos = false;
 
 		$scope.descripcion = datos.data.PRO_nombrecorto;

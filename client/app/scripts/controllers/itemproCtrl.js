@@ -16,6 +16,7 @@
 		$rootScope.titulo = 'Registro de Costos por item';
 		$rootScope.cargando = false;
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 		$rootScope.tema = 'theme1';
 		scope.items = datos.data;
 

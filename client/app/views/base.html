@@ -1,11 +1,11 @@
 <md-toolbar layout="row" layout-align="center center" md-scroll-shrink>
   <div class="md-toolbar-tools">
-    <md-button ng-click="toggleSidenav('left')" hide-gt-md class="md-icon-button" ng-if="!atras">
-      <ng-md-icon icon="menu" style="fill:white" aria-label="Menu"></ng-md-icon> 
+    <md-button ng-click="toggleSidenav('left')" ng-if="verificaVista()" class="md-icon-button">
+      <ng-md-icon icon="{{menu}}" style="fill:white" aria-label="Menu"></ng-md-icon> 
     </md-button>
-    <md-button class="md-icon-button" aria-label="atras" ng-if="atras" back-button>
-        <ng-md-icon icon="arrow_back" style="fill:white" aria-label="regresar"></ng-md-icon> 
-    </md-button>
+    <!-- <md-button class="md-icon-button" aria-label="atras" ng-if="atras" back-button>
+        <ng-md-icon icon="arrow_back" style="fill:white" aria-label="regresar"></ng-md-icon>
+    </md-button> -->
     <h1>{{ titulo }}</h1>
     <span flex></span>
     <md-button class="md-icon-button" aria-label="Notificaciones">
@@ -35,7 +35,22 @@
 
 <div layout="row" flex>
     <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" style="transition: all 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);">
-      <md-list>
+      <!-- Este div ayuda a que el card quede fijo -->
+      <div>
+        <md-card>
+          <md-card-header>
+            <md-card-avatar>
+              <img class="md-user-avatar" src="img/user.png"/>
+            </md-card-avatar>
+          </md-card-header>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-subhead">{{nombre}}</span>
+            </md-card-title-text>
+          </md-card-title>
+        </md-card>
+        <md-list>
+      </div>
         
         <md-subheader class="md-no-sticky">MENU</md-subheader>
 

@@ -14,6 +14,7 @@
         $rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Completar Orden';
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
         vm.items = info.data;
 
         vm.inicio = function(){

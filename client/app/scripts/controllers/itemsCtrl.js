@@ -112,6 +112,7 @@
 		$scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
 
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 
 		$scope.inicio = function(){
 			
@@ -220,6 +221,7 @@
 		$rootScope.titulo = 'Detalle de Item';
 
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 
 		$scope.tipoitems = datos[0].data;
 		$scope.subtipoitems = datos[1].data;

@@ -7,9 +7,9 @@
 	.controller('reporteExistenciasCtrl',reporteExistenciasCtrl)
 
 
-	reporteExistenciasCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes'];
+	reporteExistenciasCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes', '$mdBottomSheet'];
 
-	function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes){
+	function reporteExistenciasCtrl($rootScope,busqueda,mensajes,datos,reportes, $mdBottomSheet){
 
 		var scope = this;
 		$rootScope.tema = 'theme4';
@@ -28,6 +28,8 @@
 		scope.paginacion = [10,20,30,40];
 
 		scope.inicio = function(){
+			scope.nuevaBusqueda = true;
+			scope.consultando = false;
 			scope.items = datos[1].data;
 			scope.almacenes = [];
 			scope.datos = {
@@ -65,17 +67,38 @@
 
 		scope.buscar = function(){
 
+			scope.consultando = true;
 			scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
 			scope.almacenB = scope.datos.almacen ? scope.almacenB : '';
 			scope.itemB = scope.datos.item ? scope.itemB : '';
 
 			reportes.existencias(scope.datos).success(function (data){
+				scope.consultando = false;
 				scope.info = data;
-				scope.inicio();
+				scope.nuevaBusqueda = false;
 			}).error(function (error){
 				scope.info = [];
 			})
 		}
+
+		scope.opciones = function() {
+
+			$mdBottomSheet.show({
+				templateUrl: 'views/opcionesReporte.html',
+				controller: 'opcionesCtrl',
+				clickOutsideToClose: true
+			}).then(function(accion) {
+					console.log(accion);
+				if (accion.name == 'Nuevo') {
+					scope.inicio();
+				}else if (accion.name == 'Editar'){
+					scope.nuevaBusqueda = true;
+				}else if (accion.name == 'Exportar'){
+					mensajes.alerta('Preparando Exportación','info','top right','wb_cloudy');
+					reportes.exportar('existencias',scope.datos);
+				}
+			});
+		};
 
 	}
 

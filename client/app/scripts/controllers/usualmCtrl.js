@@ -16,6 +16,7 @@
 		$rootScope.titulo = 'Registro de Usuario en almacen';
 		$rootScope.cargando = false;
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 		$rootScope.tema = 'theme1';
 
 		scope.inicio = function(){

@@ -13,6 +13,7 @@ class ReportesController extends BaseController {
 			$unidad = Input::get('unidad');
 
 			if(Input::has('almacen')){
+
 				$almacen = Input::get('almacen');
 				$nombre = Almacen::find($almacen)->ALM_nombre;
 
@@ -62,6 +63,59 @@ class ReportesController extends BaseController {
 		return $datos;
 	}
 
+	public function exportar($tipo){
+		
+		$datos = $this->existencias();
+
+		return Excel::create($tipo, function($excel) use($datos) {
+
+		    $excel->sheet('Datos', function($sheet) use($datos) {
+
+		        $sheet->fromArray($datos);
+		        $sheet->row(1, array(
+				     'Item', 'ClaveItem','UnidadClave','Almacen','Cantidad','Ultimo Movimiento','Unidad','AlmacenClave'
+				));
+				$sheet->setAutoSize(array(
+				    'A','D','E','F','G'
+				));
+				$sheet->setWidth(array(
+				    'B'     =>  0,
+				    'C'     =>  0,
+				    'H'     =>  0
+				));
+
+		    });
+
+		})->store('xls', public_path('exports') , true);
+
+	}
+
+	public function exportarPDF($tipo){
+		
+		$datos = $this->existencias();
+
+		return Excel::create($tipo, function($excel) use($datos) {
+
+		    $excel->sheet('Datos', function($sheet) use($datos) {
+
+		        $sheet->fromArray($datos);
+		        $sheet->row(1, array(
+				     'Item', 'ClaveItem','UnidadClave','Almacen','Cantidad','Ultimo Movimiento','Unidad','AlmacenClave'
+				));
+				$sheet->setAutoSize(array(
+				    'A','D','E','F','G'
+				));
+				$sheet->setWidth(array(
+				    'B'     =>  0,
+				    'C'     =>  0,
+				    'H'     =>  0
+				));
+
+		    });
+
+		})->store('pdf', public_path('exports') , true);
+
+	}
 
 	public function ordenes(){
 		OrdenCompra::todos();

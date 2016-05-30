@@ -125,6 +125,7 @@ return array(
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Barryvdh\Snappy\ServiceProvider',
 		'Softpampa\Barcode\BarcodeServiceProvider',
+		'Maatwebsite\Excel\ExcelServiceProvider',
 	),
 
 	/*
@@ -194,6 +195,7 @@ return array(
 		'PDF' 			  => 'Barryvdh\DomPDF\Facade',
 		'DNS1D' 		  => 'Softpampa\Barcode\Facades\DNS1DFacade',
     	'DNS2D' 		  => 'Softpampa\Barcode\Facades\DNS2DFacade',
+    	'Excel' 		  => 'Maatwebsite\Excel\Facades\Excel',
 
 	),
 

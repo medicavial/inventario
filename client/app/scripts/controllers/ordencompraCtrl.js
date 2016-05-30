@@ -155,6 +155,7 @@
 		$scope.paso4 = 'views/ordenPaso4.html';
 
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Nueva Orden';
 		$scope.unidades = datos.data;

@@ -184,6 +184,8 @@ Route::group(array('prefix' => 'api'), function()
     {
         Route::post('existencias', 'ReportesController@existencias');
         Route::post('ordenes', 'ReportesController@ordenes');
+        Route::post('exportar/{tipo}', 'ReportesController@exportar');
+        Route::post('exportarPDF/{tipo}', 'ReportesController@exportarPDF');
         Route::get('pdf/ordencompra/{id}','ReportesController@ordenCompraPDF');
 
     });

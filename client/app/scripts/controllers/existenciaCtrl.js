@@ -30,7 +30,7 @@
 		};
 
 		scope.traspasar = function(ev,almacen,item) {
-
+			
 			var datos = {almacen:almacen,item:item};
 
 		    $mdDialog.show({

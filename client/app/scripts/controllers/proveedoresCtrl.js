@@ -89,6 +89,7 @@
 
 		$rootScope.titulo = 'Nuevo Proveedor';
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 		
 		$scope.inicio = function(){
 			
@@ -163,6 +164,7 @@
 
 		$rootScope.titulo = 'Edita Proveedor';
 		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 
 		$scope.inicio = function(){
 

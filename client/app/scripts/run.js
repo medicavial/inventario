@@ -6,17 +6,20 @@
 	.module('app')
 	.run(run);
 
-	run.$inject = ['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api'];
+	run.$inject = ['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api','$mdMedia'];
 
-	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api) {
+	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api,$mdMedia) {
 
 		//seteo inicial de la app
 		var url = '';
+		$rootScope.atras = false;
 
 		//parametros globales tomados del localStorage
 		$rootScope.username = webStorage.session.get('username');
 		$rootScope.nombre = webStorage.session.get('nombre');
 		$rootScope.id = webStorage.session.get('id');
+
+		$rootScope.menu = 'menu';
 
 		//incia el menu;
 		$rootScope.resetMenu = function(){
@@ -86,7 +89,11 @@
 		}
 
 		$rootScope.toggleSidenav = function(menuId) {
-			$mdSidenav(menuId).toggle();
+			if ($rootScope.atras) {
+				$window.history.back();
+			}else{
+				$mdSidenav(menuId).toggle();
+			}
 		};
 
 		$rootScope.muestra = function(ruta) {
@@ -143,6 +150,7 @@
 
 	    $rootScope.$on('$stateChangeSuccess',	function(event, toState, toParams, fromState, fromParams){ 
 	        $rootScope.cargando = false;
+	        $rootScope.menu = 'menu';
 		});
 
 		$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
@@ -151,6 +159,16 @@
 			mensajes.alerta('Problemas de conexión intentalo nuevamente por favor','error','top right','error');
 			return $state.go('index.home');
 		});
+
+		$rootScope.verificaVista = function(){
+			if (!$mdMedia('gt-md')) {
+				return true;
+			}else if($rootScope.atras){
+				return true;
+			}else{
+				return false;
+			}
+		}
 
 	};
 
