@@ -65,24 +65,37 @@ class ReportesController extends BaseController {
 
 	public function exportar($tipo){
 		
-		$datos = $this->existencias();
+		if ($tipo == 'existencias') {
+			$datos = $this->existencias();
+		}
 
 		return Excel::create($tipo, function($excel) use($datos) {
 
 		    $excel->sheet('Datos', function($sheet) use($datos) {
 
 		        $sheet->fromArray($datos);
-		        $sheet->row(1, array(
-				     'Item', 'ClaveItem','UnidadClave','Almacen','Cantidad','Ultimo Movimiento','Unidad','AlmacenClave'
-				));
-				$sheet->setAutoSize(array(
-				    'A','D','E','F','G'
-				));
-				$sheet->setWidth(array(
-				    'B'     =>  0,
-				    'C'     =>  0,
-				    'H'     =>  0
-				));
+
+		        if ($tipo == 'existencias') {
+		        	
+			        $sheet->removeColumn('B',2);
+			        $sheet->removeColumn('F');
+
+			        $sheet->row(1, array(
+					     'Item','Almacen','Cantidad','Ultimo Movimiento','Unidad'
+					));
+
+		        }
+		        
+				$sheet->setAutoSize(true);
+				$sheet->freezeFirstRow();
+				$sheet->row(1, function($row) {
+				    // call cell manipulation methods
+				    $row->setFont(array(
+					    'size'       => '16',
+					    'bold'       =>  true
+					));
+				});
+				$sheet->setAutoFilter();
 
 		    });
 
@@ -99,17 +112,29 @@ class ReportesController extends BaseController {
 		    $excel->sheet('Datos', function($sheet) use($datos) {
 
 		        $sheet->fromArray($datos);
+		        $sheet->removeColumn('B',2);
+		        $sheet->removeColumn('F');
+
 		        $sheet->row(1, array(
-				     'Item', 'ClaveItem','UnidadClave','Almacen','Cantidad','Ultimo Movimiento','Unidad','AlmacenClave'
+				     'ITEM','ALMACEN','CANTIDAD','ULTIMO MOV.','UNIDAD'
 				));
-				$sheet->setAutoSize(array(
-				    'A','D','E','F','G'
-				));
-				$sheet->setWidth(array(
-				    'B'     =>  0,
-				    'C'     =>  0,
-				    'H'     =>  0
-				));
+				$sheet->setAutoSize(true);
+				$sheet->setFontSize(9);
+
+				$style = array(
+			        'alignment' => array(
+			            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+			        )
+			    );
+
+    			$sheet->getDefaultStyle()->applyFromArray($style);
+
+				$sheet->row(1, function($row) {
+				    // call cell manipulation methods
+				    $row->setFont(array(
+					    'bold'       =>  true
+					));
+				});
 
 		    });
 

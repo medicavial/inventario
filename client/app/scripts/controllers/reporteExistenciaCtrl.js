@@ -93,9 +93,12 @@
 					scope.inicio();
 				}else if (accion.name == 'Editar'){
 					scope.nuevaBusqueda = true;
-				}else if (accion.name == 'Exportar'){
+				}else if (accion.name == 'Exp. Excel'){
 					mensajes.alerta('Preparando Exportación','info','top right','wb_cloudy');
 					reportes.exportar('existencias',scope.datos);
+				}else if (accion.name == 'Exp. PDF'){
+					mensajes.alerta('Preparando Exportación','info','top right','wb_cloudy');
+					reportes.exportarPDF('existencias',scope.datos);
 				}
 			});
 		};
