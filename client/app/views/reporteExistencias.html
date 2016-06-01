@@ -1,6 +1,6 @@
-<md-content layout="column" layout-margin class="transparent"  ng-init="existencia.inicio()">
+<div layout="column" ng-init="existencia.inicio()">
     
-    <div ng-if="existencia.nuevaBusqueda" class="md-whiteframe-z1 white" layout-gt-sm="row" layout="column" layout-padding>
+    <md-content ng-if="existencia.nuevaBusqueda" class="md-whiteframe-5dp white" layout-gt-sm="row" layout="column" layout-padding>
         
         <div layout="column" flex>
 
@@ -38,13 +38,13 @@
           <md-button class="md-raised md-primary" ng-if="!existencia.consultando" ng-click="existencia.buscar()">Buscar</md-button>
         </div>
 
-    </div>
+    </md-content>
 
 
 
     <div flex ng-if="existencia.info.length > 0">
       <p>Busqueda: {{ existencia.unidadB + existencia.almacenB + existencia.itemB }} </p>
-      <md-data-table-container class="md-whiteframe-z1">
+      <md-data-table-container class="md-whiteframe-5dp white">
         <table md-data-table>
           <thead md-order="existencia.order" md-trigger="existencias.onOrderChange">
             <tr>
@@ -73,9 +73,9 @@
     <br>
 
   
-</md-content>
+</div>
 
-<md-button id="nuevo" ng-show="existencia.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="existencia.opciones()" aria-label="Opciones">
+<md-button id="nuevo" ng-if="existencia.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="existencia.opciones()" aria-label="Opciones">
     <md-tooltip md-direction="top">
       Opciones
     </md-tooltip>

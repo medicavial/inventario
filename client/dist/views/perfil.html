@@ -25,56 +25,64 @@
         </md-input-container>
 
         <fieldset>
-          <legend>Detalle de perfil</legend>
+          <legend>Permisos de Perfil</legend>
         </fieldset>
- 
-        <div layout="row" layout-sm="column" layout-padding>
+
+        <div layout-gt-sm="row" layout="column" layout-padding>
             
             <div layout="column" flex>
-                <md-checkbox ng-model="datos.entradas" aria-label="Entrdas">
-                  Entradas
+                <md-checkbox ng-model="datos.alertas" aria-label="Entrdas">
+                  Configurar Alertas
                 </md-checkbox>
-                <md-checkbox ng-model="datos.salidas" aria-label="Salidas">
-                  Salidas
+                <md-checkbox ng-model="datos.conexion" aria-label="Asociar usuarios a almacen">
+                  Crear Conexiones
+                </md-checkbox>
+                <md-checkbox ng-model="datos.movimientos" aria-label="Entrdas">
+                  Movimientos
                 </md-checkbox>
                 <md-checkbox ng-model="datos.traspasos" aria-label="Traspasos">
                   Traspasos
                 </md-checkbox>
-                <md-checkbox ng-model="datos.editaItem" aria-label="Consultar y Modificar items">
-                  Consultar y Modificar items
+                <md-checkbox ng-model="datos.generaOrden" aria-label="Autoriza orden">
+                  Generar Orden de compra
                 </md-checkbox>
-                <md-checkbox ng-model="datos.desactivaItem" aria-label="Desactivar items">
-                  Desactivar items
+                <md-checkbox ng-model="datos.surtirOrden" aria-label="Surtir">
+                  Surtir Orden de Compra
                 </md-checkbox>
-                <md-checkbox ng-model="datos.editaCatalogos" aria-label="Consultar y Modificar Catalogos">
-                  Consultar y Modificar Catalogos
+                <md-checkbox ng-model="datos.cerrarOrden" aria-label="Cerrar orden">
+                  Cerrar Orden de compra
                 </md-checkbox>
-                <md-checkbox ng-model="datos.desactivaCatalogos" aria-label="Desactivar Catalogos">
-                  Desactivar Catalogos
+                <md-checkbox ng-model="datos.completaOrden" aria-label="Modificar orden de compra">
+                  Completar Orden de Compra
                 </md-checkbox>
             </div>
             <div layout="column" flex>
-                <md-checkbox ng-model="datos.autorizaorden" aria-label="Autoriza orden">
-                  Autorizar Orden de compra
+                <md-checkbox ng-model="datos.salidasAgranel" aria-label="Salidas">
+                  Salidas A Granel
                 </md-checkbox>
-                <md-checkbox ng-model="datos.cerrarorden" aria-label="Cerrar orden">
-                  Cerrar Orden de compra
+                <md-checkbox ng-model="datos.recetaMV" aria-label="Subir Factura">
+                  Surtir Receta MV
                 </md-checkbox>
-                <md-checkbox ng-model="datos.modificaorden" aria-label="Modificar orden de compra">
-                  Modificar orden de compra
+                <md-checkbox ng-model="datos.usuarios" aria-label="Surtir">
+                  Alta Usuarios
                 </md-checkbox>
-                <md-checkbox ng-model="datos.surtir" aria-label="Surtir">
-                  Surtir
+                <md-checkbox ng-model="datos.perfiles" aria-label="Surtir">
+                  Alta Perfiles
                 </md-checkbox>
-                <md-checkbox ng-model="datos.facturas" aria-label="Subir Factura">
-                  Subir Factura
+                <md-checkbox ng-model="datos.tipos" aria-label="Surtir">
+                  Alta Tipos Mov/Ajus/Ord
                 </md-checkbox>
-                <md-checkbox ng-model="datos.asociar" aria-label="Asociar usuarios a almacen">
-                  Asociar usuarios a almacen
+                <md-checkbox ng-model="datos.catalogos" aria-label="Consultar y Modificar Catalogos">
+                  Consultar Catalogos
+                </md-checkbox>
+                <md-checkbox ng-model="datos.editaCatalogos" aria-label="Desactivar Catalogos">
+                  Agregar/Modificar a Catalogos
+                </md-checkbox>
+                <md-checkbox ng-model="datos.reportes" aria-label="Subir Factura">
+                  Reportes
                 </md-checkbox>
             </div>
 
-          
         </div>
       
         <div layout="row" layout-sm="column" layout-fill>

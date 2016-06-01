@@ -533,6 +533,8 @@
 	    $mdThemingProvider.setDefaultTheme('theme1');
 	    $mdThemingProvider.alwaysWatchTheme(true);
 
+	    console.log($mdThemingProvider);
+
 	    $httpProvider.defaults.timeout = 1000;
 	  	
 	};

@@ -10,9 +10,17 @@
 
 	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api,$mdMedia) {
 
+		var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+		if(window.navigator.standalone && iOS) {
+		 	$rootScope.fullScreen = true;
+		}
+
 		//seteo inicial de la app
 		var url = '';
 		$rootScope.atras = false;
+
+		$rootScope.color = '#eee';
 
 		//parametros globales tomados del localStorage
 		$rootScope.username = webStorage.session.get('username');

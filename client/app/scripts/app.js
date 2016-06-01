@@ -28,7 +28,7 @@
 	])
 	
 	.constant('api', 'http://localhost/inventario/server/public/api/')
-	// .constant('api', 'http://api.medicavial.mx/api/');
+	// .constant('api', 'http://api.medicavial.mx/api/')
 
 	.constant('publicfiles','http://localhost/inventario/server/public/exports/')
 	// .constant('publicfiles','http://api.medicavial.mx/exports/')

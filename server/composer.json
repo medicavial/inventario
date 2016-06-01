@@ -12,7 +12,10 @@
 		"softpampa/barcode": "dev-master",
 		"mccool/database-backup": "dev-master",
 		"backup-manager/backup-manager": "~1.0",
-		"doctrine/dbal": "~2.3"
+		"doctrine/dbal": "~2.3",
+		"orchestra/parser": "2.2.*",
+		"soapbox/laravel-formatter": "2.x",
+		"Nathanmac/Parser": "2.*"
 	},
 	"autoload": {
 		"classmap": [

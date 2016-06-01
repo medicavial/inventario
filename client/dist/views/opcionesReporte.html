@@ -1,0 +1,15 @@
+<md-bottom-sheet class="md-grid bottomSheetdemoBasicUsage" layout="column" ng-cloak>
+  <div layout="row" layout-align="center center">
+    <h4>Elije la opción deseada</h4>
+  </div>
+  <div>
+    <md-list flex layout="row" layout-align="center center">
+      <md-list-item ng-repeat="item in items">
+        <md-button class="md-grid-item-content" ng-click="listItemClick($index)">
+          <ng-md-icon icon="{{item.icon}}"></ng-md-icon> 
+          <div class="md-grid-text"> {{ item.name }} </div>
+        </md-button>
+      </md-list-item>
+    </md-list>
+  </div>
+</md-bottom-sheet>

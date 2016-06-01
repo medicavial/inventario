@@ -2,12 +2,12 @@
     <md-data-table-toolbar class="md-whiteframe-z1">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
-          <ng-md-icon icon="search" style="fill:#3F51B5"></ng-md-icon> 
+          <ng-md-icon icon="search" ></ng-md-icon> 
         </md-icon>
         <input ng-model="query" type="text" placeholder="Buscar Usuario" flex>
       </md-input-container>
       <md-button class="md-icon-button" aria-label="limpiar" ng-show="query" ng-click="query = ''">
-        <ng-md-icon icon="close" style="fill:#3F51B5"></ng-md-icon> 
+        <ng-md-icon icon="close" ></ng-md-icon> 
       </md-button>
     </md-data-table-toolbar>
     <br>
@@ -32,7 +32,7 @@
                     <strong>{{$chip.ALM_nombre}}</strong>
                   </md-chip-template>
                   <button md-chip-remove class="md-primary vegetablechip" ng-click="usualm.confirma($event,usuario,$chip)">
-                    <ng-md-icon icon="close" style="fill:#3F51B5"></ng-md-icon>
+                    <ng-md-icon icon="close" ></ng-md-icon>
                   </button>
                 </md-chips>
                 <md-button ng-click="usualm.nuevo($event,$index)">Agregar</md-button>

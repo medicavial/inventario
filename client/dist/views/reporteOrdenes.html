@@ -1,51 +1,74 @@
-<md-content layout="row" layout-sm="column" layout-md="column" layout-margin class="transparent" ng-init="ordenes.inicio()">
+<div layout="column" ng-init="ordenes.inicio()">
     
-    <div class="md-whiteframe-z1 white" flex="30" flex-sm="100" flex-md="100" layout-padding>
+    <md-content ng-if="ordenes.nuevaBusqueda" class="md-whiteframe-5dp white" layout-gt-sm="row" layout="column" layout-padding>
         
-        <md-subheader class="c-bluegray">Accesos Directos</md-subheader>  
-        <md-divider class="bgm-bluegray"></md-divider>
-        
-        <div layout="column" layout-md="row" layout-sm="column" layout-paddin layout-align="center center" flex>
+        <div layout="column" flex>
 
-            <md-button class="md-raised" ng-click="ordenes.buscar()">Surtidos ultimos 30 dias</md-button>
+          <md-subheader class="c-bluegray">X Referencia</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="ordenes.datos.unidad" md-on-close="ordenes.cargaAlmacenes(ordenes.datos.unidad)"  placeholder="Selecciona Unidad" flex>
+            <md-option ng-repeat="unidad in ordenes.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+          </md-select>
 
-            <md-button class="md-raised" ng-click="ordenes.buscar()">Registros ultimos 30 dias</md-button>
+          <md-subheader class="c-bluegray">X Item especifico</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="ordenes.datos.item" placeholder="Selecciona Item" flex>
+            <md-option ng-repeat="item in ordenes.items" ng-click="ordenes.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
+          </md-select>
 
-            <md-button class="md-raised" ng-click="ordenes.buscar()">Cancelados ultimos 30 dias</md-button>
-
-            <!-- <md-button class="md-raised" ng-click="ordenes.buscar()">Autorizadas ultimos 30 dias</md-button> -->
         </div>
 
-        <md-subheader class="c-bluegray">X Unidad</md-subheader>  
-        <md-divider class="bgm-bluegray"></md-divider>
-        <md-select ng-model="ordenes.datos.unidad" md-on-close="ordenes.cargaAlmacenes(ordenes.datos.unidad)"  placeholder="Selecciona Unidad" flex>
-          <md-option ng-repeat="unidad in ordenes.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
-        </md-select>
-        
-        
-        <md-subheader class="c-bluegray">X Fechas</md-subheader>  
-        <md-divider class="bgm-bluegray"></md-divider>
+        <div layout="column" flex>
 
-        <div layout="column" layout-md="row" layout-sm="column">
-            <md-radio-group ng-model="ordenes.datos.tipo">
-              <md-radio-button value="registro">Registro</md-radio-button>
-              <md-radio-button value="surtido">Surtido</md-radio-button>
-              <md-radio-button value="cancelacion">Cancelacion</md-radio-button>
-              <!-- <md-radio-button value="autorizacion">Autorizacion</md-radio-button> -->
-            </md-radio-group>
-            <br>
-            <md-datepicker ng-model="ordenes.datos.fechaini" md-placeholder="Fecha Inicial"></md-datepicker>
+          <md-subheader class="c-bluegray">Accesos Directos</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          
+          <div layout="column" layout-md="row" layout-sm="column" layout-paddin layout-align="center center" flex>
 
-            <md-datepicker ng-model="ordenes.datos.fechafin" md-min-date="ordenes.datos.fechaini" md-placeholder="Fecha Final"></md-datepicker>
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Surtidos ultimos 30 dias</md-button>
+
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Registros ultimos 30 dias</md-button>
+
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Cancelados ultimos 30 dias</md-button>
+
+          </div>
+          
         </div>
         
-        <div layout="column" layout-paddin layout-align="center center" flex>
-          <md-button class="md-raised md-primary" ng-click="ordenes.buscar()">Buscar</md-button>
+
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Fechas</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          
+          <div layout-gt-sm="row" layout="column" layout-padding>
+
+              <div layout="column" layout-md="row" layout-sm="column">
+                  <md-radio-group ng-model="ordenes.datos.tipo">
+                    <md-radio-button value="registro">Registro</md-radio-button>
+                    <md-radio-button value="surtido">Surtido</md-radio-button>
+                    <md-radio-button value="cancelacion">Cancelacion</md-radio-button>
+                  </md-radio-group>
+                  <br>
+              </div>
+              <div layout="column">
+                  <md-datepicker ng-model="ordenes.datos.fechaini" md-placeholder="Fecha Inicial"></md-datepicker>
+
+                  <md-datepicker ng-model="ordenes.datos.fechafin" md-min-date="ordenes.datos.fechaini" md-placeholder="Fecha Final"></md-datepicker>
+              </div>
+
+          </div>
+        </div>
+        
+        <div layout="column" layout-paddin layout-align="center center">
+          <md-progress-circular md-mode="indeterminate" ng-if="ordenes.consultando"></md-progress-circular>
+          <md-button class="md-raised md-primary" ng-if="!ordenes.consultando" ng-click="ordenes.buscar()">Buscar</md-button>
         </div>
 
-    </div>
+    </md-content>
 
-    <div flex>
+
+    <div flex ng-if="ordenes.info.length > 0">
       <md-data-table-container class="md-whiteframe-z1">
         <table md-data-table>
           <thead md-order="ordenescompra.order" md-trigger="ordenescompra.onOrderChange">
@@ -93,11 +116,11 @@
     <br>
 
   
-</md-content>
+</div>
 
-<md-button id="nuevo" ng-show="ordenes.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="exportar()" aria-label="Exportar">
+<md-button id="nuevo" ng-if="ordenes.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ordenes.opciones()" aria-label="Opciones">
     <md-tooltip md-direction="top">
-      Exportar
+      Opciones
     </md-tooltip>
     <ng-md-icon icon="assignment_returned" style="fill:white"></ng-md-icon> 
 </md-button>

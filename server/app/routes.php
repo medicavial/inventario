@@ -14,6 +14,8 @@
 include(app_path() . '/classes/helpers.php');
 include(app_path() . '/classes/Operacion.php');
 
+use SoapBox\Formatter\Formatter;
+
 
 Route::get('/', function()
 {
@@ -52,6 +54,23 @@ Route::group(array('prefix' => 'api'), function()
          
         return Response::json(array('respuesta' => 'Imagenes subidas Correctamente','archivos' => $file));
             
+    });
+
+    Route::get('/xml', function(){
+
+        $app = new Illuminate\Container\Container;
+        $document = new Orchestra\Parser\Xml\Document($app);
+        $reader = new Orchestra\Parser\Xml\Reader($document);
+        
+        $xml = $reader->load(public_path() . '/archivo.xml');
+        $nodos = $xml->getContent();
+        foreach($nodos as $nodo) {
+            echo $nodo['version'];
+
+        }
+            
+        print_r($nodos);
+        
     });
 
     Route::post('/subePDF/{orden}', function($orden){

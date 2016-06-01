@@ -1,3 +1,7 @@
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
   font-style: normal;
@@ -14,6 +18,10 @@ body {
 
 h1,h2,h3,h4{
   font-weight: 300;
+}
+
+.status-bar{
+  height: 10px !important;
 }
 
 .md-sidenav-left md-card{
@@ -167,6 +175,8 @@ md-tooltip{
 
 .gris{
   background-color: #EBEFF2 !important;
+}
+.padding-views{
   padding: 1em;
 }
 
@@ -444,7 +454,7 @@ md-toast.info .md-toast-content {
 */
 
 @media (max-width: 960px) {
-  .gris{
+  .padding-views{
     padding: 0 !important;
   }
 }

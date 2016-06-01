@@ -65,9 +65,9 @@ class ReportesController extends BaseController {
 
 	public function exportar($tipo){
 		
-		if ($tipo == 'existencias') {
+		// if ($tipo == 'existencias') {
 			$datos = $this->existencias();
-		}
+		// }
 
 		return Excel::create($tipo, function($excel) use($datos) {
 
@@ -75,7 +75,7 @@ class ReportesController extends BaseController {
 
 		        $sheet->fromArray($datos);
 
-		        if ($tipo == 'existencias') {
+		        // if ($tipo == 'existencias') {
 		        	
 			        $sheet->removeColumn('B',2);
 			        $sheet->removeColumn('F');
@@ -84,7 +84,7 @@ class ReportesController extends BaseController {
 					     'Item','Almacen','Cantidad','Ultimo Movimiento','Unidad'
 					));
 
-		        }
+		        // }
 		        
 				$sheet->setAutoSize(true);
 				$sheet->freezeFirstRow();
@@ -143,7 +143,17 @@ class ReportesController extends BaseController {
 	}
 
 	public function ordenes(){
-		OrdenCompra::todos();
+
+		return OrdenCompra::join('tiposOrden', 'ordenCompra.TOR_clave', '=', 'tiposOrden.TOR_clave')
+					->join('proveedores', 'ordenCompra.PRO_clave', '=', 'proveedores.PRO_clave')
+					->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
+					->join('usuarios as ucreo', 'ordenCompra.USU_creo', '=', 'ucreo.USU_clave')
+					->leftJoin('usuarios as usurtio', 'ordenCompra.USU_surtio', '=', 'usurtio.USU_clave')
+					->leftJoin('usuarios as ucerro', 'ordenCompra.USU_cerro', '=', 'ucerro.USU_clave')
+					->leftJoin('usuarios as ucancelo', 'ordenCompra.USU_cancelo', '=', 'ucancelo.USU_clave')
+					->select('OCM_clave as id','OCM_fechaReg as AltaOrden','ucreo.USU_login as UsuarioCreo','ordenCompra.updated_at as UltimoMovimiento','OCM_importeEsperado as importeEsperado','OCM_importeFinal as importeFinal','UNI_nombre as unidad','PRO_nombre as proveedor')
+					->orderBy('OCM_fechaReg','DESC')
+					->get();
 	}
 
 	public function ordenCompraPDF($id){
