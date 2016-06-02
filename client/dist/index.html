@@ -2,30 +2,36 @@
 <html lang="es-MX" ng-app="app">
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=9" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Sistema de Inventario MV Ver. 0.1</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link rel="icon" href="favicon.ico" />
-	<link rel="apple-touch-icon" sizes="57x57" href="favicon-57.png" />
-	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="favicon-57.png" />
-	<link rel="apple-touch-icon" sizes="72x72" href="favicon-72.png" />
-	<link rel="apple-touch-icon" sizes="114x114" href="favicon-114.png" />
-	<link rel="apple-touch-icon" sizes="120x120" href="favicon-120.png" />
-	<link rel="apple-touch-icon" sizes="144x144" href="favicon-144.png" />
-	<link rel="apple-touch-icon" sizes="152x152" href="favicon-152.png" />
-	<link rel="apple-touch-startup-image" href="splash.jpg">
-	<meta name="theme-color" content="#FFFFFF">
-	<meta name="application-name" content="Inventario MV" />
-	<meta name="msapplication-TileImage" content="favicon-144.png" />
-	<meta name="msapplication-TileColor" content="#FFFFFF" />
-	<meta name="apple-mobile-web-app-title" content="Inventario MV">
+	<link rel="manifest" href="manifest.json">
+
+	<!-- Add to home screen for Safari on iOS -->
 	<meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Inventario MV">
+	<link rel="apple-touch-startup-image" href="splash.jpg">
+	<link rel="apple-touch-icon" href="favicon-152.png">
+
+	<meta name="msapplication-TileImage" content="favicon-144.png">
+	<meta name="msapplication-TileColor" content="#2F3BA2">
+	
+	<meta name="theme-color" content="#FFFFFF">
+	<meta name='mobile-web-app-capable' content='yes'>
 	
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic"/>
 	<link rel="stylesheet" href="css/style.min.css">
 	<base href="/">
+
+	<script>
+		if('serviceWorker' in navigator) {
+		  navigator.serviceWorker
+		           .register('sw.js')
+		           .then(function() { console.log("Service Worker Registered"); });
+		}
+	</script>
 </head>
 <body>
 
