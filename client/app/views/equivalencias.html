@@ -1,7 +1,7 @@
-<div layout="column" class="animated slideInUp">
+<div layout="column">
     
 
-    <md-data-table-toolbar class="md-whiteframe-z1">
+    <md-data-table-toolbar class="md-whiteframe-z1 animated fadeInUp">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
           <ng-md-icon icon="search" style="fill:#3F51B5"></ng-md-icon> 
@@ -13,7 +13,7 @@
       </md-button>
     </md-data-table-toolbar>
     <br>
-    <md-data-table-container class="md-whiteframe-z1">
+    <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
       <table md-data-table>
         <thead md-order="equivalencias.order" md-trigger="equivalencias.onOrderChange">
           <tr>
@@ -59,8 +59,7 @@
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-label="equivalencias.texto" md-row-select="equivalencias.paginacion" md-limit="equivalencias.limit" md-page="equivalencias.page" md-total="{{equivalencias.info.length}}"></md-data-table-pagination>
-
+    <md-data-table-pagination class="animated fadeInUp" md-label="equivalencias.texto" md-row-select="equivalencias.paginacion" md-limit="equivalencias.limit" md-page="equivalencias.page" md-total="{{equivalencias.info.length}}"></md-data-table-pagination>
 
 </div>
 

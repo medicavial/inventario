@@ -2,6 +2,23 @@
     
     <md-content ng-if="ordenes.nuevaBusqueda" class="md-whiteframe-5dp white" layout-gt-sm="row" layout="column" layout-padding>
         
+        <div layout="column">
+
+          <md-subheader class="c-bluegray">Accesos Directos</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          
+          <div layout="column" layout-md="row" layout-sm="column" layout-padding layout-align="center center">
+
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Surtidos ultimos 30 dias</md-button>
+
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Registros ultimos 30 dias</md-button>
+
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Cancelados ultimos 30 dias</md-button>
+
+          </div>
+          
+        </div>
+
         <div layout="column" flex>
 
           <md-subheader class="c-bluegray">X Referencia</md-subheader>  
@@ -20,32 +37,15 @@
 
         <div layout="column" flex>
 
-          <md-subheader class="c-bluegray">Accesos Directos</md-subheader>  
-          <md-divider class="bgm-bluegray"></md-divider>
-          
-          <div layout="column" layout-md="row" layout-sm="column" layout-paddin layout-align="center center" flex>
-
-              <md-button class="md-raised" ng-click="ordenes.buscar()">Surtidos ultimos 30 dias</md-button>
-
-              <md-button class="md-raised" ng-click="ordenes.buscar()">Registros ultimos 30 dias</md-button>
-
-              <md-button class="md-raised" ng-click="ordenes.buscar()">Cancelados ultimos 30 dias</md-button>
-
-          </div>
-          
-        </div>
-        
-
-        <div layout="column" flex>
-
           <md-subheader class="c-bluegray">X Fechas</md-subheader>  
           <md-divider class="bgm-bluegray"></md-divider>
           
-          <div layout-gt-sm="row" layout="column" layout-padding>
+          <div layout="column" layout-padding layout-align="center center">
 
               <div layout="column" layout-md="row" layout-sm="column">
                   <md-radio-group ng-model="ordenes.datos.tipo">
-                    <md-radio-button value="registro">Registro</md-radio-button>
+                    <md-radio-button value="">Registro</md-radio-button>
+                    <md-radio-button value="cerrado">Cerrado</md-radio-button>
                     <md-radio-button value="surtido">Surtido</md-radio-button>
                     <md-radio-button value="cancelacion">Cancelacion</md-radio-button>
                   </md-radio-group>
@@ -58,6 +58,23 @@
               </div>
 
           </div>
+        </div>
+
+        <div layout="column" flex>
+          
+
+          <md-subheader class="c-bluegray">X Estatus</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          
+          <md-radio-group ng-model="ordenes.datos.estatus" layout-padding>
+            <md-radio-button value="">Todas</md-radio-button>
+            <md-radio-button value="abiertas">Abiertas</md-radio-button>
+            <md-radio-button value="incompletas">Incompletas</md-radio-button>
+            <md-radio-button value="cerradas">Cerradas</md-radio-button>
+            <md-radio-button value="canceladas">Canceladas</md-radio-button>
+          </md-radio-group>
+          <br>
+
         </div>
         
         <div layout="column" layout-paddin layout-align="center center">

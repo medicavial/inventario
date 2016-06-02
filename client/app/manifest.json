@@ -1,0 +1,27 @@
+{
+  "name": "Inventario MV",
+  "short_name": "inventario",
+  "icons": [{
+        "src": "favicon-120.png",
+        "type": "image/png",
+        "sizes": "128x128"
+      }, {
+        "src": "favicon-152.png",
+        "type": "image/png",
+        "sizes": "152x152"
+      }, {
+        "src": "favicon-144.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      },
+      {
+        "src": "favicon-300.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      }],
+  "start_url": "/home",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2196F3",
+  "theme_color": "#2196F3"
+}

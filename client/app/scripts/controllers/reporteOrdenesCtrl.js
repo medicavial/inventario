@@ -32,10 +32,11 @@
 			scope.datos = {
 				unidad:'',
 				item:'',
-				tipo:'registro',
+				tipo:'',
 				fechaini:'',
 				fechafin:'',
-				acceso:''
+				acceso:'',
+				estatus:''
 			}
 		}
 

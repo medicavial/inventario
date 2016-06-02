@@ -144,6 +144,21 @@ class ReportesController extends BaseController {
 
 	public function ordenes(){
 
+		$sql = 'OCM_clave as id , 
+				OCM_fechaReg as AltaOrden , 
+				ucreo.USU_login as UsuarioCreo , 
+				ordenCompra.updated_at as UltimoMovimiento , 
+				OCM_importeEsperado as importeEsperado , 
+				OCM_importeFinal as importeFinal , 
+				UNI_nombre as unidad , 
+				PRO_nombre as proveedor , 
+				CASE
+					WHEN OCM_cancelada = 1 THEN "Cancelada" 
+					WHEN OCM_cerrada = 1 THEN "Cerrada"
+					WHEN OCM_surtida = 1 AND OCM_incompleta = 1 AND OCM_cerrada = 0 THEN "Incompleta"
+					ELSE "Abiertas" 
+				END as Estatus';
+
 		return OrdenCompra::join('tiposOrden', 'ordenCompra.TOR_clave', '=', 'tiposOrden.TOR_clave')
 					->join('proveedores', 'ordenCompra.PRO_clave', '=', 'proveedores.PRO_clave')
 					->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
@@ -151,7 +166,7 @@ class ReportesController extends BaseController {
 					->leftJoin('usuarios as usurtio', 'ordenCompra.USU_surtio', '=', 'usurtio.USU_clave')
 					->leftJoin('usuarios as ucerro', 'ordenCompra.USU_cerro', '=', 'ucerro.USU_clave')
 					->leftJoin('usuarios as ucancelo', 'ordenCompra.USU_cancelo', '=', 'ucancelo.USU_clave')
-					->select('OCM_clave as id','OCM_fechaReg as AltaOrden','ucreo.USU_login as UsuarioCreo','ordenCompra.updated_at as UltimoMovimiento','OCM_importeEsperado as importeEsperado','OCM_importeFinal as importeFinal','UNI_nombre as unidad','PRO_nombre as proveedor')
+					->select(DB::raw($sql))
 					->orderBy('OCM_fechaReg','DESC')
 					->get();
 	}

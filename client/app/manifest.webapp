@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "name": "Inventario MV",
+  "launch_path": "index.html",
+  "description": "Sistema de Inventario MedicaVial",
+  "icons": {
+    "128": "favicon-120.png"
+  },
+  "developer": {
+    "name": "Sergio Alcala",
+    "url": ""
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "es",
+  "permissions": {
+  },
+  "locales": {
+    "es": {
+      "name": "Inventario MV",
+      "description": "Sistema de Inventario MedicaVial"
+    }
+  }
+}
