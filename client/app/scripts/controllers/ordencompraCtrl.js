@@ -153,7 +153,7 @@
 		    		motivo:motivo
 		    	}
 		    	
-		    	operacion.cancelarOrden(info).success( function (data){
+		    	operacion.cancelaOrden(info).success( function (data){
 		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
 		    		orden.OCM_cancelada = 1;
 		    	})

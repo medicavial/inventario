@@ -23,11 +23,11 @@
 //   e.waitUntil(
 //     caches.open('inventario').then(function(cache) {
 //       return cache.addAll([
-//          '',
-//          'index.html',
-//          'css/style.min.css',
-//          'js/vendor.min.js',
-//          'js/app.min.js'
+//          '/',
+//          '/index.html',
+//          '/css/style.min.css',
+//          '/js/vendor.min.js',
+//          '/js/app.min.js'
 //       ]);
 //     })
 //   );

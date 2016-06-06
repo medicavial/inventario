@@ -163,7 +163,6 @@
 
 		$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
 			event.preventDefault();
-			$state.get('error').error = { code: 123, description: 'Exception stack trace' }
 			mensajes.alerta('Problemas de conexión intentalo nuevamente por favor','error','top right','error');
 			return $state.go('index.home');
 		});

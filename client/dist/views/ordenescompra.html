@@ -1,6 +1,6 @@
 <div layout="column" >
 
-    <md-data-table-toolbar class="md-whiteframe-z1">
+    <md-data-table-toolbar class="md-whiteframe-z1 animated fadeInUp">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
           <ng-md-icon icon="search"></ng-md-icon> 
@@ -12,7 +12,7 @@
       </md-button>
     </md-data-table-toolbar>
     <br>
-    <md-data-table-container class="md-whiteframe-z1">
+    <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
       <table md-data-table>
         <thead md-order="ordenescompra.order" md-trigger="ordenescompra.onOrderChange">
           <tr>
@@ -85,7 +85,7 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item ng-if="orden.OCM_surtida == 0">
-                      <md-button ng-click="ordenescompra.edita($event,orden)">
+                      <md-button ng-click="ordenescompra.cancelar($event,orden)">
                         <p>Cancelar</p>
                       </md-button>
                     </md-menu-item>
@@ -99,7 +99,7 @@
     
     <br>
     
-    <md-data-table-pagination md-label="ordenescompra.texto" md-row-select="ordenescompra.paginacion" md-limit="ordenescompra.limit" md-page="ordenescompra.page" md-total="{{ordenescompra.info.length}}"></md-data-table-pagination>
+    <md-data-table-pagination md-label="ordenescompra.texto" md-row-select="ordenescompra.paginacion" md-limit="ordenescompra.limit" md-page="ordenescompra.page" md-total="{{ordenescompra.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
 
 
 </div>
