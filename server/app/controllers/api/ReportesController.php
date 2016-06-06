@@ -144,9 +144,34 @@ class ReportesController extends BaseController {
 
 	public function ordenes(){
 
+		$parametros = array();
+		$fecha = 'OCM_fechaReg';
+		$fechaini = Input::has('fechaini') ? Input::get('fechaini') : date('Y-m-d') . ' 00:00:00';
+		$fechafin = Input::has('fechafin') ? Input::get('fechafin') : date('Y-m-d') . ' 23:59:59';
+
+		if (Input::has('acceso')) {
+
+			$acceso = Input::get('acceso');
+			$fechaini = strtotime ( '-30 day' , strtotime ( $fechafin ) ) ;
+
+
+			if ($acceso == 'surtidos') {
+				$parametros['OCM_cancelada'] = 0;
+				$parametros['OCM_surtida'] = 1;
+				$fecha = 'OCM_fechaSurtida';
+			}elseif ($acceso == 'cancelados') {
+				$parametros['OCM_cancelada'] = 1;
+				$fecha = 'OCM_fechaCancelacion';
+			}
+		}
+
 		$sql = 'OCM_clave as id , 
-				OCM_fechaReg as AltaOrden , 
-				ucreo.USU_login as UsuarioCreo , 
+				OCM_fechaReg as AltaOrden ,
+				OCM_fechaSurtida as SurtidaOrden ,
+				OCM_fechaCancelacion as CancelacionOrden , 
+				ucreo.USU_login as UsuarioCreo ,
+				usurtio.USU_login as UsuarioSurtio ,
+				ucancelo.USU_login as UsuarioCancelo , 
 				ordenCompra.updated_at as UltimoMovimiento , 
 				OCM_importeEsperado as importeEsperado , 
 				OCM_importeFinal as importeFinal , 
@@ -167,6 +192,8 @@ class ReportesController extends BaseController {
 					->leftJoin('usuarios as ucerro', 'ordenCompra.USU_cerro', '=', 'ucerro.USU_clave')
 					->leftJoin('usuarios as ucancelo', 'ordenCompra.USU_cancelo', '=', 'ucancelo.USU_clave')
 					->select(DB::raw($sql))
+					->whereBetween($fecha, array($fechaini, $fechafin))
+					->where($parametros)
 					->orderBy('OCM_fechaReg','DESC')
 					->get();
 	}

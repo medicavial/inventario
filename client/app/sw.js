@@ -19,25 +19,24 @@
  
 // Version 0.54
 
-self.addEventListener('install', function(e) {
-  e.waitUntil(
-    caches.open('inventario').then(function(cache) {
-      return cache.addAll([
-         '',
-         'index.html',
-         'css/style.min.css',
-         'js/vendor.min.js',
-         'js/app.min.js'
-      ]);
-    })
-  );
-});
+// self.addEventListener('install', function(e) {
+//   e.waitUntil(
+//     caches.open('inventario').then(function(cache) {
+//       return cache.addAll([
+//          '',
+//          'index.html',
+//          'css/style.min.css',
+//          'js/vendor.min.js',
+//          'js/app.min.js'
+//       ]);
+//     })
+//   );
+// });
 
-self.addEventListener('fetch', function(event) {
-  console.log(event.request.url);
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
-    })
-  );
-});
+// self.addEventListener('fetch', function(event) {
+//   event.respondWith(
+//     caches.match(event.request).then(function(response) {
+//       return response || fetch(event.request);
+//     })
+//   );
+// });

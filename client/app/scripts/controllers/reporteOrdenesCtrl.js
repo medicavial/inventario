@@ -55,6 +55,55 @@
 			})
 		}
 
+		scope.surtidos = function(){
+			scope.datos.acceso = 'surtidos';
+			scope.consultando = true;
+
+			reportes.ordenes(scope.datos).success(function (data){
+
+				console.log(data);
+				scope.info = data;
+				scope.nuevaBusqueda = false;
+				scope.consultando = false;
+			}).error(function (error){
+				scope.info = [];
+				scope.nuevaBusqueda = false;
+				scope.consultando = false
+			})
+		}
+
+		scope.registrados = function(){
+
+			scope.datos.acceso = 'registrados';
+			scope.consultando = true;
+
+			reportes.ordenes(scope.datos).success(function (data){
+				scope.info = data;
+				scope.nuevaBusqueda = false;
+				scope.consultando = false;
+			}).error(function (error){
+				scope.info = [];
+				scope.nuevaBusqueda = false;
+				scope.consultando = false
+			})
+		}
+
+		scope.cancelados = function(){
+
+			scope.datos.acceso = 'cancelados';
+			scope.consultando = true;
+
+			reportes.ordenes(scope.datos).success(function (data){
+				scope.info = data;
+				scope.nuevaBusqueda = false;
+				scope.consultando = false;
+			}).error(function (error){
+				scope.info = [];
+				scope.nuevaBusqueda = false;
+				scope.consultando = false
+			})
+		}
+
 		scope.opciones = function() {
 
 			$mdBottomSheet.show({

@@ -54,6 +54,9 @@
                 return defer.promise;
 
             },
+            cancelaOrden : function(datos){
+                return $http.post(api+'operacion/cancelarorden',datos);
+            },
             cerrarOrden : function(datos){
                 return $http.post(api+'operacion/cerrarorden',datos);
             },

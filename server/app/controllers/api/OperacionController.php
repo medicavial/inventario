@@ -23,6 +23,24 @@ class OperacionController extends BaseController {
 
 	}
 
+	public function cancelarOrden(){
+
+		$orden = Input::get('orden');
+		$usuario = Input::get('usuario');
+		$motivo = Input::get('motivo');
+
+		$orden = OrdenCompra::find($orden);
+
+		$orden->OCM_cancleada = 1;
+		$orden->OCM_fechaCancelacion =  date('Y-m-d H:i:s');
+		$orden->USU_cancelo = $usuario;	
+		$orden->OCM_motivo = $motivo;	
+		$orden->save();
+
+		return Response::json(array('respuesta' => 'Orden Cancelada Correctamente'));
+
+	}
+
 	public function cerrarOrden(){
 
 		$orden = Input::get('orden');

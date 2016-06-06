@@ -128,6 +128,38 @@
 		    });
 		};
 
+		scope.cancelar = function(ev,orden) {
+		    // Abre ventana de confirmacion
+
+		    // var orden = scope.info[index];
+
+		    var confirm = $mdDialog.prompt()
+		          .title('¿Deseas Cancelar la orden?')
+		          .content('')
+		          .placeholder('Motivo de cancelación')
+      			  .ariaLabel('Motivo de cancelación')
+		          .ok('Si')
+		          .cancel('No')
+		          .targetEvent(ev)
+		          .closeTo({
+					bottom: 1500
+				   });
+
+		    $mdDialog.show(confirm).then(function(motivo) {
+		    	// console.log(motivo);
+		    	var info = {
+		    		usuario:$rootScope.id,
+		    		orden:orden.OCM_clave,
+		    		motivo:motivo
+		    	}
+		    	
+		    	operacion.cancelarOrden(info).success( function (data){
+		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
+		    		orden.OCM_cancelada = 1;
+		    	})
+		    });
+		};
+
 		scope.correo = function(orden,ev) {
 
 			var datos = {data:orden};
