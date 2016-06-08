@@ -1,6 +1,6 @@
 <div layout="column" >
     
-    <md-data-table-toolbar class="md-whiteframe-z1 animated fadeInUp">
+    <md-data-table-toolbar class="md-whiteframe-z1">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
           <ng-md-icon icon="search"></ng-md-icon> 
@@ -12,7 +12,7 @@
       </md-button>
     </md-data-table-toolbar>
     <br>
-    <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
+    <md-data-table-container class="md-whiteframe-z1">
       <table md-data-table>
         <thead md-order="proveedores.order" md-trigger="proveedores.onOrderChange">
           <tr>
@@ -60,7 +60,7 @@
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-label="proveedores.texto" md-row-select="proveedores.paginacion" md-limit="proveedores.limit" md-page="proveedores.page" md-total="{{proveedores.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
+    <md-data-table-pagination md-label="proveedores.texto" md-row-select="proveedores.paginacion" md-limit="proveedores.limit" md-page="proveedores.page" md-total="{{proveedores.info.length}}"></md-data-table-pagination>
 
 </div>
 

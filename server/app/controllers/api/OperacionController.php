@@ -31,7 +31,7 @@ class OperacionController extends BaseController {
 
 		$orden = OrdenCompra::find($orden);
 
-		$orden->OCM_cancelada = 1;
+		$orden->OCM_cancleada = 1;
 		$orden->OCM_fechaCancelacion =  date('Y-m-d H:i:s');
 		$orden->USU_cancelo = $usuario;	
 		$orden->OCM_motivo = $motivo;	

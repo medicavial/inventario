@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0-rc4-master-c26842a
+ * v1.1.0-rc4-master-c81f9f1
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -48,7 +48,7 @@
    *  </hljs>
    *
    */
-  function MdColorsService($mdTheming, $mdUtil, $log) {
+  function MdColorsService($mdTheming, $mdUtil, $parse, $log) {
     colorPalettes = colorPalettes || Object.keys($mdTheming.PALETTES);
 
     // Publish service instance
@@ -70,8 +70,10 @@
      * Then calculate the rgba() values based on the theme color parts
      *
      * @param {DOMElement} element the element to apply the styles on.
-     * @param {object} colorExpression json object, keys are css properties and values are string of the wanted color,
-     * for example: `{color: 'red-A200-0.3'}`.
+     * @param {scope} scope a scope is needed in case there are interpolated values in the expression.
+     * @param {string|object} colorExpression json object, keys are css properties and values are string of the wanted color,
+     * for example: `{color: 'red-A200-0.3'}`. Note that the color keys must be upperCamelCase instead of snake-case.
+     * e.g. `{background-color: 'grey-300'}` --> `{backgroundColor: 'grey-300'}`
      *
      * @usage
      * <hljs lang="js">
@@ -85,10 +87,16 @@
      *   });
      * </hljs>
      */
-    function applyThemeColors(element, colorExpression) {
+    function applyThemeColors(element, scope, colorExpression) {
       try {
+        // Json.parse() does not work because the keys are not quoted;
+        // use $parse to convert to a hash map
+        // NOTE: keys cannot be snake-case, upperCamelCase are required
+        //        e.g.   {background-color: 'grey-300'} --> {backgroundColor: 'grey-300'}
+        var themeColors = $parse(colorExpression)(scope);
+
         // Assign the calculate RGBA color values directly as inline CSS
-        element.css(interpolateColors(colorExpression));
+        element.css(interpolateColors(themeColors));
       } catch( e ) {
         $log.error(e.message);
       }
@@ -171,10 +179,12 @@
       var hasTheme = angular.isDefined($mdTheming.THEMES[parts[0]]);
       var theme = hasTheme ? parts.splice(0, 1)[0] : $mdTheming.defaultTheme();
 
+      var defaultHue = parts[0] !== 'accent' ? 500 : 'A200';
+
       return {
         theme: theme,
         palette: extractPalette(parts, theme),
-        hue: extractHue(parts, theme),
+        hue: parts[1] || defaultHue,
         opacity: parts[2] || 1
       };
     }
@@ -202,32 +212,8 @@
 
       return palette;
     }
-
-    function extractHue(parts, theme) {
-      var themeColors = $mdTheming.THEMES[theme].colors;
-
-      if (parts[1] === 'hue') {
-        var hueNumber = parseInt(parts.splice(2, 1)[0],10);
-
-        if (hueNumber < 1 || hueNumber > 3) {
-          throw new Error($mdUtil.supplant('mdColors: \'hue-{hueNumber}\' is not a valid hue, can be only \'hue-1\', \'hue-2\' and \'hue-3\'', {hueNumber: hueNumber}));
-        }
-        parts[1] = 'hue-' + hueNumber;
-
-        if (!(parts[0] in themeColors)) {
-          throw new Error($mdUtil.supplant('mdColors: \'hue-x\' can only be used with [{availableThemes}], but was used with \'{usedTheme}\'', {
-            availableThemes: Object.keys(themeColors).join(', '),
-            usedTheme: parts[0]
-          }));
-        }
-
-        return themeColors[parts[0]].hues[parts[1]];
-      }
-
-      return parts[1] || themeColors[parts[0] in themeColors ? parts[0] : 'primary'].hues['default'];
-    }
   }
-  MdColorsService.$inject = ["$mdTheming", "$mdUtil", "$log"];
+  MdColorsService.$inject = ["$mdTheming", "$mdUtil", "$parse", "$log"];
 
   /**
    * @ngdoc directive
@@ -244,7 +230,7 @@
    *   ## `[?theme]-[palette]-[?hue]-[?opacity]`
    *   - [theme]    - default value is the default theme
    *   - [palette]  - can be either palette name or primary/accent/warn/background
-   *   - [hue]      - default is 500 (hue-x can be used with primary/accent/warn/background)
+   *   - [hue]      - default is 500
    *   - [opacity]  - default is 1
    *
    *   > `?` indicates optional parameter
@@ -267,7 +253,7 @@
    * </hljs>
    *
    */
-  function MdColorsDirective($mdColors, $mdUtil, $log, $parse) {
+  function MdColorsDirective($mdColors, $mdUtil, $log) {
     return {
       restrict: 'A',
       compile: function (tElem, tAttrs) {
@@ -275,19 +261,17 @@
 
         return function (scope, element, attrs) {
           var colorExpression = function () {
-            // Json.parse() does not work because the keys are not quoted;
-            // use $parse to convert to a hash map
-            return $parse(attrs.mdColors)(scope);
+            return attrs.mdColors;
           };
 
           try {
             if (shouldWatch) {
               scope.$watch(colorExpression, angular.bind(this,
-                $mdColors.applyThemeColors, element
-              ), true);
+                $mdColors.applyThemeColors, element, scope
+              ));
             }
             else {
-              $mdColors.applyThemeColors(element, colorExpression());
+              $mdColors.applyThemeColors(element, scope, colorExpression());
             }
 
           }
@@ -315,7 +299,7 @@
     };
 
   }
-  MdColorsDirective.$inject = ["$mdColors", "$mdUtil", "$log", "$parse"];
+  MdColorsDirective.$inject = ["$mdColors", "$mdUtil", "$log"];
 
 
 })();

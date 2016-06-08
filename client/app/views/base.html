@@ -278,8 +278,7 @@
 
 
     <md-content layout="column" class="gris" flex >
-
-      <md-toolbar class="animated fadeInDown" layout="row" layout-align="center center" md-scroll-shrink>
+      <md-toolbar layout="row" layout-align="center center" md-scroll-shrink>
         <div class="md-toolbar-tools">
           <md-button ng-click="toggleSidenav('left')" ng-if="verificaVista()" class="md-icon-button">
             <ng-md-icon icon="{{menu}}" style="fill:white" aria-label="Menu"></ng-md-icon> 
@@ -313,7 +312,6 @@
           </md-menu>
         </div>
       </md-toolbar>
-
       <ui-view ng-if="!cargando" class="padding-views paginas"></ui-view>
       <div id="centro" ng-if="cargando" layout-align="center center">
         <md-progress-circular md-mode="indeterminate" md-diameter="96" class="md-accent"></md-progress-circular>

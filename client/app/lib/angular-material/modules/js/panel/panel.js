@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.9
+ * v1.1.0-rc4-master-c81f9f1
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -105,9 +105,6 @@ angular
  *     controller.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on
  *     the scope.
- *   - `bindToController` - `{boolean=}`: Binds locals to the controller
- *     instead of passing them in. Defaults to true, as this is a best
- *     practice.
  *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys
  *     will be used as names of values to inject into the controller. For
  *     example, `locals: {three: 3}` would inject `three` into the controller,
@@ -119,8 +116,6 @@ angular
  *     application.
  *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
  *     This class should define any borders, box-shadow, etc. for the panel.
- *   - `zIndex` - `{number=}`: The z-index to place the panel at.
- *     Defaults to 80.
  *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
  *     specifies the alignment of the panel. For more information, see
  *     `MdPanelPosition`.
@@ -298,13 +293,6 @@ angular
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
  * hidden and animations are completed.
- */
-
-/**
- * @ngdoc method
- * @name MdPanelRef#destroy
- * @description
- * Destroys the panel. The panel cannot be opened again after this is called.
  */
 
 /**
@@ -614,10 +602,9 @@ var FOCUS_TRAP_TEMPLATE = angular.element(
  * @param {!angular.JQLite} $rootElement
  * @param {!angular.Scope} $rootScope
  * @param {!angular.$injector} $injector
- * @param {!angular.$window} $window
  * @final @constructor ngInject
  */
-function MdPanelService($rootElement, $rootScope, $injector, $window) {
+function MdPanelService($rootElement, $rootScope, $injector) {
   /**
    * Default config options for the panel.
    * Anything angular related needs to be done later. Therefore
@@ -643,17 +630,13 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
   this._config = {};
 
   /** @private @const */
-  this._$rootElement = $rootElement;
-
-  /** @private @const */
   this._$rootScope = $rootScope;
 
   /** @private @const */
-  this._$injector = $injector;
+  this._$rootElement = $rootElement;
 
   /** @private @const */
-  this._$window = $window;
-
+  this._$injector = $injector;
 
   /**
    * Default animations that can be used within the panel.
@@ -675,7 +658,7 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
    */
   this.yPosition = MdPanelPosition.yPosition;
 }
-MdPanelService.$inject = ["$rootElement", "$rootScope", "$injector", "$window"];
+MdPanelService.$inject = ["$rootElement", "$rootScope", "$injector"];
 
 
 /**
@@ -719,7 +702,7 @@ MdPanelService.prototype.open = function(opt_config) {
  * @returns {MdPanelPosition}
  */
 MdPanelService.prototype.newPanelPosition = function() {
-  return new MdPanelPosition(this._$window);
+  return new MdPanelPosition();
 };
 
 
@@ -747,11 +730,9 @@ MdPanelService.prototype.newPanelAnimation = function() {
 MdPanelService.prototype._wrapTemplate = function(origTemplate) {
   var template = origTemplate || '';
 
-  // The panel should be initially rendered offscreen so we can calculate
-  // height and width for positioning.
   return '' +
       '<div class="md-panel-outer-wrapper">' +
-      '  <div class="md-panel" style="left: -9999px;">' + template + '</div>' +
+      '  <div class="md-panel">' + template + '</div>' +
       '</div>';
 };
 
@@ -794,12 +775,6 @@ function MdPanelRef(config, $injector) {
 
   /** @private @const {!angular.$log} */
   this._$log = $injector.get('$log');
-
-  /** @private @const {!angular.$window} */
-  this._$window = $injector.get('$window');
-
-  /** @private @const {!Function} */
-  this._$$rAF = $injector.get('$$rAF');
 
   // Public variables.
   /**
@@ -1148,6 +1123,7 @@ MdPanelRef.prototype._createPanel = function() {
 
           self._configureTrapFocus();
           self._addStyles().then(function() {
+            self._panelContainer.addClass(MD_PANEL_HIDDEN);
             resolve(self);
           }, reject);
         }, reject);
@@ -1166,22 +1142,15 @@ MdPanelRef.prototype._addStyles = function() {
     self._panelContainer.css('z-index', self._config['zIndex']);
     self._panelEl.css('z-index', self._config['zIndex'] + 1);
 
-    var hideAndResolve = function() {
-      // Remove left: -9999px and add hidden class.
-      self._panelEl.css('left', '');
-      self._panelContainer.addClass(MD_PANEL_HIDDEN);
-      resolve(self);
-    };
-
     if (self._config['fullscreen']) {
       self._panelEl.addClass('_md-panel-fullscreen');
-      hideAndResolve();
+      resolve(self);
       return; // Don't setup positioning.
     }
 
     var positionConfig = self._config['position'];
     if (!positionConfig) {
-      hideAndResolve();
+      resolve(self);
       return; // Don't setup positioning.
     }
 
@@ -1189,38 +1158,19 @@ MdPanelRef.prototype._addStyles = function() {
     // correctly. This is necessary so that the panel will have a defined height
     // and width.
     self._$rootScope['$$postDigest'](function() {
-      self._updatePosition(true);
+      positionConfig._calculatePanelPosition(self._panelEl);
+      self._panelEl.css('top', positionConfig.getTop());
+      self._panelEl.css('bottom', positionConfig.getBottom());
+      self._panelEl.css('left', positionConfig.getLeft());
+      self._panelEl.css('right', positionConfig.getRight());
+
+      // Use the vendor prefixed version of transform.
+      var prefixedTransform = self._$mdConstant.CSS.TRANSFORM;
+      self._panelEl.css(prefixedTransform, positionConfig.getTransform());
+
       resolve(self);
     });
   });
-};
-
-
-/**
- * Calculates and updates the position of the panel.
- * @param {boolean=} opt_init
- * @private
- */
-MdPanelRef.prototype._updatePosition = function(opt_init) {
-  var positionConfig = this._config['position'];
-
-  if (positionConfig) {
-    positionConfig._setPanelPosition(this._panelEl);
-    
-    // Hide the panel now that position is known.
-    if (opt_init) {
-      this._panelContainer.addClass(MD_PANEL_HIDDEN);
-    }
-    
-    this._panelEl.css('top', positionConfig.getTop());
-    this._panelEl.css('bottom', positionConfig.getBottom());
-    this._panelEl.css('left', positionConfig.getLeft());
-    this._panelEl.css('right', positionConfig.getRight());
-
-    // Use the vendor prefixed version of transform.
-    var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
-    this._panelEl.css(prefixedTransform, positionConfig.getTransform());
-  }
 };
 
 
@@ -1281,7 +1231,6 @@ MdPanelRef.prototype._createBackdrop = function() {
 MdPanelRef.prototype._addEventListeners = function() {
   this._configureEscapeToClose();
   this._configureClickOutsideToClose();
-  this._configureScrollListener();
 };
 
 
@@ -1368,31 +1317,6 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
       target.off('mouseup', mouseupHandler);
     });
   }
-};
-
-
-/**
- * Configures the listeners for updating the panel position on scroll.
- * @private
-*/
-MdPanelRef.prototype._configureScrollListener = function() {
-  var updatePosition = angular.bind(this, this._updatePosition);
-  var debouncedUpdatePosition = this._$$rAF.throttle(updatePosition);
-  var self = this;
-
-  var onScroll = function() {
-    if (!self._config['disableParentScroll']) {
-      debouncedUpdatePosition();
-    }
-  };
-
-  // Add listeners.
-  this._$window.addEventListener('scroll', onScroll, true);
-
-  // Queue remove listeners function.
-  this._removeListeners.push(function() {
-    self._$window.removeEventListener('scroll', onScroll, true);
-  });
 };
 
 
@@ -1533,24 +1457,21 @@ MdPanelRef.prototype._done = function(callback, self) {
  *
  * var panelPosition = new MdPanelPosition()
  *     .relativeTo(myButtonEl)
- *     .addPanelPosition($mdPanel.xPosition.CENTER, $mdPanel.yPosition.ALIGN_TOPS);
+ *     .withPanelXPosition($mdPanel.xPosition.CENTER)
+ *     .withPanelYPosition($mdPanel.yPosition.ALIGN_TOPS);
  *
  * $mdPanel.create({
  *   position: panelPosition
  * });
  *
- * @param {!angular.$window} $window
  * @final @constructor
  */
-function MdPanelPosition($window) {
-  /** @private @const */
-  this._$window = $window;
-
+function MdPanelPosition() {
   /** @private {boolean} */
   this._absolute = false;
 
-  /** @private {!angular.JQLite} */
-  this._relativeToEl;
+  /** @private {!DOMRect} */
+  this._relativeToRect;
 
   /** @private {string} */
   this._top = '';
@@ -1572,9 +1493,6 @@ function MdPanelPosition($window) {
 
   /** @private {!Array<{x:string, y:string}>} */
   this._positions = [];
-
-  /** @private {?{x:string, y:string}} */
-  this._actualPosition;
 }
 
 
@@ -1711,7 +1629,7 @@ MdPanelPosition.prototype.center = function() {
  */
 MdPanelPosition.prototype.relativeTo = function(element) {
   this._absolute = false;
-  this._relativeToEl = getElement(element);
+  this._relativeToRect = getElement(element)[0].getBoundingClientRect();
   return this;
 };
 
@@ -1723,7 +1641,7 @@ MdPanelPosition.prototype.relativeTo = function(element) {
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.addPanelPosition = function(xPosition, yPosition) {
-  if (!this._relativeToEl) {
+  if (!this._relativeToRect) {
     throw new Error('addPanelPosition can only be used with relative ' +
         'positioning. Set relativeTo first.');
   }
@@ -1787,6 +1705,7 @@ MdPanelPosition.prototype._validateXPosition = function(xPosition) {
 
   throw new Error('Panel x Position only accepts the following values:\n' +
       positionValues.join(' | '));
+
 };
 
 
@@ -1863,36 +1782,14 @@ MdPanelPosition.prototype.getTransform = function() {
   return (translateX + ' ' + translateY).trim();
 };
 
-/**
- * True if the panel is completely on-screen with this positioning; false
- * otherwise.
- * @param {!angular.JQLite} panelEl
- * @return {boolean}
- */
-MdPanelPosition.prototype._isOnscreen = function(panelEl) {
-  // this works because we always use fixed positioning for the panel,
-  // which is relative to the viewport.
-  // TODO(gmoothart): take into account _translateX and _translateY to the
-  //   extent feasible.
-
-  var left = parseInt(this.getLeft());
-  var top = parseInt(this.getTop());
-  var right = left + panelEl[0].offsetWidth;
-  var bottom = top + panelEl[0].offsetHeight;
-
-  return (left >= 0) &&
-    (top >= 0) &&
-    (bottom <= this._$window.innerHeight) &&
-    (right <= this._$window.innerWidth);
-};
-
 
 /**
  * Gets the first x/y position that can fit on-screen.
  * @returns {{x: string, y: string}}
  */
 MdPanelPosition.prototype.getActualPosition = function() {
-  return this._actualPosition;
+  // TODO(gmoothart): intelligently pick the first on-screen position.
+  return this._positions[0] || {};
 };
 
 
@@ -1913,53 +1810,32 @@ MdPanelPosition.prototype._reduceTranslateValues =
 
 
 /**
- * Sets the panel position based on the created panel element and best x/y
- * positioning.
+ * Calculates the panel position based on the created panel element.
  * @param {!angular.JQLite} panelEl
  * @private
  */
-MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
+MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
   // Only calculate the position if necessary.
   if (this._absolute) {
     return;
   }
 
+  // TODO(ErinCoughlan): Update position on scroll.
   // TODO(ErinCoughlan): Position panel intelligently to keep it on screen.
-
-  if (this._actualPosition) {
-    this._calculatePanelPosition(panelEl, this._actualPosition);
-    return;
-  }
-
-  for (var i = 0; i < this._positions.length; i++) {
-    this._actualPosition = this._positions[i];
-    this._calculatePanelPosition(panelEl, this._actualPosition);
-    if (this._isOnscreen(panelEl)) {
-      break;
-    }
-  }
-};
-
-/**
- * Calculates the panel position based on the created panel element and the
- * provided positioning.
- * @param {!angular.JQLite} panelEl
- * @param {!{x:string, y:string}} position
- * @private
- */
-MdPanelPosition.prototype._calculatePanelPosition = function(panelEl, position) {
 
   var panelBounds = panelEl[0].getBoundingClientRect();
   var panelWidth = panelBounds.width;
   var panelHeight = panelBounds.height;
 
-  var targetBounds = this._relativeToEl[0].getBoundingClientRect();
+  var targetBounds = this._relativeToRect;
 
   var targetLeft = targetBounds.left;
   var targetRight = targetBounds.right;
   var targetWidth = targetBounds.width;
 
-  switch (position.x) {
+  var pos = this.getActualPosition();
+
+  switch (pos.x) {
     case MdPanelPosition.xPosition.OFFSET_START:
       // TODO(ErinCoughlan): Change OFFSET_START for rtl vs ltr.
       this._left = targetLeft - panelWidth + 'px';
@@ -1986,7 +1862,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl, position) 
   var targetBottom = targetBounds.bottom;
   var targetHeight = targetBounds.height;
 
-  switch (position.y) {
+  switch (pos.y) {
     case MdPanelPosition.yPosition.ABOVE:
       this._top = targetTop - panelHeight + 'px';
       break;

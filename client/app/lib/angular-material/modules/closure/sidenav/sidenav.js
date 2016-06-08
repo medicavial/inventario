@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0-rc4-master-c26842a
+ * v1.1.0-rc4-master-c81f9f1
  */
 goog.provide('ng.material.components.sidenav');
 goog.require('ng.material.components.backdrop');
@@ -32,17 +32,11 @@ angular
  *
  * @description
  * `$mdSidenav` makes it easy to interact with multiple sidenavs
- * in an app. When looking up a sidenav instance, you can either look
- * it up synchronously or wait for it to be initializied asynchronously.
- * This is done by passing the second argument to `$mdSidenav`.
+ * in an app.
  *
  * @usage
  * <hljs lang="js">
  * // Async lookup for sidenav instance; will resolve when the instance is available
- * $mdSidenav(componentId, true).then(function(instance) {
- *   $log.debug( componentId + "is now ready" );
- * });
- * // Sync lookup for sidenav instance; this will resolve immediately.
  * $mdSidenav(componentId).then(function(instance) {
  *   $log.debug( componentId + "is now ready" );
  * });
@@ -90,9 +84,8 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
   return function(handle, enableWait) {
     if ( angular.isUndefined(handle) ) return service;
 
-    var shouldWait = enableWait === true;
-    var instance = service.find(handle, shouldWait);
-    return  !instance && shouldWait ? service.waitFor(handle) :
+    var instance = service.find(handle);
+    return  !instance && (enableWait === true) ? service.waitFor(handle) :
             !instance && angular.isUndefined(enableWait) ? addLegacyAPI(service, handle) : instance;
   };
 
@@ -122,11 +115,9 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
      * Synchronously lookup the controller instance for the specified sidNav instance which has been
      * registered with the markup `md-component-id`
      */
-    function findInstance(handle, shouldWait) {
+    function findInstance(handle) {
       var instance = $mdComponentRegistry.get(handle);
-
-      if (!instance && !shouldWait) {
-
+      if(!instance) {
         // Report missing instance
         $log.error( $mdUtil.supplant(errorMsg, [handle || ""]) );
 
@@ -142,7 +133,7 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
      * Deferred lookup of component instance using $component registry
      */
     function waitForInstance(handle) {
-      return $mdComponentRegistry.when(handle).catch($log.error);
+      return $mdComponentRegistry.when(handle);
     }
 }
 SidenavService.$inject = ["$mdComponentRegistry", "$mdUtil", "$q", "$log"];
@@ -282,7 +273,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     if (!angular.isDefined(attr.mdDisableBackdrop)) {
       backdrop = $mdUtil.createBackdrop(scope, "_md-sidenav-backdrop md-opaque ng-enter");
     }
-
+    
     element.addClass('_md');     // private md component indicator for styling
     $mdTheming(element);
 
@@ -296,7 +287,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     });
 
     scope.$on('$destroy', function(){
-      backdrop && backdrop.remove();
+      backdrop && backdrop.remove()
     });
 
     scope.$watch(isLocked, updateIsLocked);

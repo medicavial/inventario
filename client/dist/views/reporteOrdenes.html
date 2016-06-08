@@ -9,11 +9,11 @@
           
           <div layout="column" layout-md="row" layout-sm="column" layout-padding layout-align="center center">
 
-              <md-button class="md-raised" ng-click="ordenes.surtidos()">Surtidos ultimos 30 dias</md-button>
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Surtidos ultimos 30 dias</md-button>
 
-              <md-button class="md-raised" ng-click="ordenes.registrados()">Registros ultimos 30 dias</md-button>
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Registros ultimos 30 dias</md-button>
 
-              <md-button class="md-raised" ng-click="ordenes.cancelados()">Cancelados ultimos 30 dias</md-button>
+              <md-button class="md-raised" ng-click="ordenes.buscar()">Cancelados ultimos 30 dias</md-button>
 
           </div>
           
@@ -88,30 +88,40 @@
     <div flex ng-if="ordenes.info.length > 0">
       <md-data-table-container class="md-whiteframe-z1">
         <table md-data-table>
-          <thead md-order="ordenes.order" md-trigger="ordenes.onOrderChange">
+          <thead md-order="ordenescompra.order" md-trigger="ordenescompra.onOrderChange">
             <tr>
-              <th name="No."  order-by="id"></th>
-              <th name="Alta Orden"  order-by="AltaOrden"></th>
-              <th name="Ultimo Movimiento"  order-by="UltimoMovimiento"></th>
-              <th name="Proveedor" order-by="proveedor"></th>
-              <th name="Usuario Alta"  order-by="UsuarioCreo"></th>
-              <th name="Usuario Surtio"  order-by="UsuarioSurtio"></th>
-              <th name="Importe Esperado" order-by="importeEsperado"></th>
-              <th name="Importe Final" order-by="importeFinal"></th>
-              <th name="Estatus" order-by="Estatus"></th>
+              <th name="No."  order-by="OCM_clave"></th>
+              <th name="Alta Orden"  order-by="created_at"></th>
+              <th name="Ultimo Movimiento"  order-by="updated_at"></th>
+              <th name="Proveedor" order-by="PRO_nombre"></th>
+              <th name="Tipo Orden" order-by="TOR_nombre"></th>
+              <th name="Usuario Alta"  order-by="USU_nombrecompleto"></th>
+              <th name="Importe Esperado" order-by="OCM_importeEsperado"></th>
+              <th name="Importe Final" order-by="OCM_importeFinal"></th>
+              <th name="Status"></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="orden in ordenes.info |filter:query | orderBy: ordenes.order | limitTo: ordenes.limit: (ordenes.page - 1) * ordenes.limit">
-              <td>{{orden.id}}</td>
-              <td>{{orden.AltaOrden}}</td>
-              <td>{{orden.UltimoMovimiento}}</td>
-              <td>{{orden.proveedor}}</td>
-              <td>{{orden.UsuarioCreo}}</td>
-              <td>{{orden.UsuarioSurtio}}</td>
-              <td>{{orden.importeEsperado | currency}}</td>
-              <td>{{orden.importeFinal | currency}}</td>
-              <td>{{orden.Estatus}}</td>
+            <tr ng-repeat="orden in ordenescompra.info |filter:query | orderBy: ordenescompra.order | limitTo: ordenescompra.limit: (ordenescompra.page - 1) * ordenescompra.limit">
+              <td>{{orden.OCM_clave}}</td>
+              <td>{{orden.created_at}}</td>
+              <td>{{orden.updated_at}}</td>
+              <td>{{orden.PRO_nombrecorto}}</td>
+              <td>{{orden.TOR_nombre}}</td>
+              <td>{{orden.USU_nombrecompleto}}</td>
+              <td>{{orden.OCM_importeEsperado | currency}}</td>
+              <td>{{orden.OCM_importeFinal | currency}}</td>
+              <td>
+                <div ng-if="orden.OCM_cerrada == '1'">
+                    Surtida
+                </div>
+                <div ng-if="orden.OCM_cancelada == '1'">
+                  Cancelada
+                </div>
+                <div ng-if="orden.OCM_cancelada == '0' && orden.OCM_cerrada == '0'">
+                  Abierta
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
