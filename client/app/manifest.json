@@ -1,5 +1,7 @@
 {
   "name": "Inventario MV",
+  "manifest_version": 2,
+  "version": "1.0",
   "short_name": "inventario",
   "icons": [{
         "src": "favicon-120.png",
@@ -19,6 +21,9 @@
         "type": "image/png",
         "sizes": "256x256"
       }],
+  "permissions": [
+    "http://api.medicavial.mx/api/"
+  ],
   "start_url": "/home",
   "display": "standalone",
   "orientation": "portrait",
