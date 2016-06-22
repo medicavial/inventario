@@ -28,8 +28,8 @@
             <td>{{perfil.PER_nombre}}</td>
             <td>{{perfil.created_at}}</td>
             <td>
-              <div ng-show="perfil.PER_activo">SI</div>
-              <div ng-hide="perfil.PER_activo">NO</div>
+              <div ng-if=" perfil.PER_activo == 1 ">SI</div>
+              <div ng-if=" perfil.PER_activo == 0 ">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -40,14 +40,14 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="perfiles.editaPerfil($event,$index)">
+                      <md-button ng-click="perfiles.editaPerfil($event,perfil)">
                         <p>Modificar</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="perfiles.confirmacion($event,$index)">
-                        <p ng-show="perfil.PER_activo" >Desactivar</p>
-                        <p ng-hide="perfil.PER_activo" >Activar</p>
+                      <md-button ng-click="perfiles.confirmacion($event,perfil)">
+                        <p ng-if=" perfil.PER_activo == 1 " >Desactivar</p>
+                        <p ng-if=" perfil.PER_activo == 0 " >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

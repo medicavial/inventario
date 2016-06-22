@@ -50,27 +50,27 @@
 		    });
 		};
 
-		scope.edita = function(ev,index) {
+		scope.edita = function(ev,almacen) {
 
-			var usuario = scope.info[index];
+			// var usuario = scope.info[index];
 
 		    $mdDialog.show({
 		      controller: almacenEditCtrl,
 		      templateUrl: 'views/almacen.html',
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
-		      locals: {informacion: usuario },
+		      locals: {informacion: almacen },
 		      closeTo:{bottom: 1500}
 		    }).then(function(){
 		    	scope.info = almacenes.query();
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,almacen) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var almacen = scope.info[index];
+		    // var almacen = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar el almacen?')

@@ -30,8 +30,8 @@
             <td>{{unidad.UNI_responsable}}</td>
             <td>{{unidad.UNI_correo}}</td>
             <td>
-              <div ng-show="unidad.UNI_activo">SI</div>
-              <div ng-hide="unidad.UNI_activo">NO</div>
+              <div ng-if=" unidad.UNI_activo == 1 ">SI</div>
+              <div ng-if=" unidad.UNI_activo == 0 ">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -42,14 +42,14 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="unidades.edita($event,$index)">
+                      <md-button ng-click="unidades.edita($event,unidad)">
                         <p>Modificar</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="unidades.confirmacion($event,$index)">
-                        <p ng-show="unidad.UNI_activo" >Desactivar</p>
-                        <p ng-hide="unidad.UNI_activo" >Activar</p>
+                      <md-button ng-click="unidades.confirmacion($event,unidad)">
+                        <p ng-if="unidad.UNI_activo == 1 " >Desactivar</p>
+                        <p ng-if="unidad.UNI_activo == 0 " >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

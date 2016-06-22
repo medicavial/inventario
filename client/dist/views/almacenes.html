@@ -32,8 +32,8 @@
             <td>{{almacen.TAL_nombre}}</td>
             <td>{{almacen.created_at}}</td>
             <td>
-              <div ng-show="almacen.ALM_activo">SI</div>
-              <div ng-hide="almacen.ALM_activo">NO</div>
+              <div ng-if="almacen.ALM_activo == 1">SI</div>
+              <div ng-if="almacen.ALM_activo == 0">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -44,14 +44,14 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="almacenes.edita($event,$index)">
+                      <md-button ng-click="almacenes.edita($event,almacen)">
                         <p>Modificar</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="almacenes.confirmacion($event,$index)">
-                        <p ng-show="almacen.ALM_activo" >Desactivar</p>
-                        <p ng-hide="almacen.ALM_activo" >Activar</p>
+                      <md-button ng-click="almacenes.confirmacion($event,almacen)">
+                        <p ng-if="almacen.ALM_activo == 1" >Desactivar</p>
+                        <p ng-if="almacen.ALM_activo == 0" >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

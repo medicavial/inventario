@@ -39,11 +39,11 @@
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,proveedor) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var proveedor = scope.info[index];
+		    // var proveedor = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar el proveedor?')

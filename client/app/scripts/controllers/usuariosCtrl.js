@@ -43,9 +43,9 @@
 		    });
 		};
 
-		scope.editaUsuario = function(ev,index) {
+		scope.editaUsuario = function(ev,usuario) {
 
-			var usuario = scope.info[index];
+			// var usuario = scope.info[index];
 
 		    $mdDialog.show({
 		      controller: usuarioEditCtrl,
@@ -61,11 +61,11 @@
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,usuario) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var usuario = scope.info[index];
+		    // var usuario = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 				.title('¿Desactivar el usuario?')

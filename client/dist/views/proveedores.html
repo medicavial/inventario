@@ -1,6 +1,6 @@
 <div layout="column" >
     
-    <md-data-table-toolbar class="md-whiteframe-z1">
+    <md-data-table-toolbar class="md-whiteframe-z1 animated fadeInUp">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
           <ng-md-icon icon="search"></ng-md-icon> 
@@ -12,7 +12,7 @@
       </md-button>
     </md-data-table-toolbar>
     <br>
-    <md-data-table-container class="md-whiteframe-z1">
+    <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
       <table md-data-table>
         <thead md-order="proveedores.order" md-trigger="proveedores.onOrderChange">
           <tr>
@@ -30,8 +30,8 @@
             <td>{{proveedor.PRO_razonSocial}}</td>
             <td>{{proveedor.created_at}}</td>
             <td>
-              <div ng-show="proveedor.PRO_activo">SI</div>
-              <div ng-hide="proveedor.PRO_activo">NO</div>
+              <div ng-if=" proveedor.PRO_activo == 1 ">SI</div>
+              <div ng-if=" proveedor.PRO_activo == 0 ">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -47,9 +47,9 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="proveedores.confirmacion($event,$index)">
-                        <p ng-show="proveedor.PRO_activo" >Desactivar</p>
-                        <p ng-hide="proveedor.PRO_activo" >Activar</p>
+                      <md-button ng-click="proveedores.confirmacion($event,proveedor)">
+                        <p ng-if=" proveedor.PRO_activo == 1 " >Desactivar</p>
+                        <p ng-if=" proveedor.PRO_activo == 0 " >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>
@@ -60,7 +60,7 @@
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-label="proveedores.texto" md-row-select="proveedores.paginacion" md-limit="proveedores.limit" md-page="proveedores.page" md-total="{{proveedores.info.length}}"></md-data-table-pagination>
+    <md-data-table-pagination md-label="proveedores.texto" md-row-select="proveedores.paginacion" md-limit="proveedores.limit" md-page="proveedores.page" md-total="{{proveedores.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
 
 </div>
 

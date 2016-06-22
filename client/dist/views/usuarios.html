@@ -30,8 +30,8 @@
             <td>{{usuario.USU_nombrecompleto}}</td>
             <td>{{usuario.created_at}}</td>
             <td>
-              <div ng-show="usuario.USU_activo">SI</div>
-              <div ng-hide="usuario.USU_activo">NO</div>
+              <div ng-if=" usuario.USU_activo == 1 ">SI</div>
+              <div ng-if=" usuario.USU_activo == 0 ">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -42,14 +42,14 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="usuarios.editaUsuario($event,$index)">
+                      <md-button ng-click="usuarios.editaUsuario($event,usuario)">
                         <p>Modificar</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="usuarios.confirmacion($event,$index)">
-                        <p ng-show="usuario.USU_activo" >Desactivar</p>
-                        <p ng-hide="usuario.USU_activo" >Activar</p>
+                      <md-button ng-click="usuarios.confirmacion($event,usuario)">
+                        <p ng-if=" usuario.USU_activo == 1" >Desactivar</p>
+                        <p ng-if=" usuario.USU_activo == 0" >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

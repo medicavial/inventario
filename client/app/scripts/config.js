@@ -102,6 +102,7 @@
 			url:'detalleItem?itemId',
 			templateUrl :'views/item.html',
 			controller:'itemEditCtrl',
+			controllerAs:'ie',
 			resolve:{
 	            datos:function(busqueda,$q,$stateParams,items){
 	                var promesa = $q.defer(),

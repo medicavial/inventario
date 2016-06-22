@@ -15,7 +15,7 @@ class AddMoreDataToItemsTable extends Migration {
 		Schema::table('items', function(Blueprint $table)
 		{
 			$table->integer('ITE_clasificacion')->after('ITE_sustancia');
-			$table->integer('ITE_codigoean')->after('ITE_sustancia');
+			$table->string('ITE_codigoean')->after('ITE_sustancia');
 			$table->integer('ITE_marca')->after('ITE_sustancia');
 		});
 	}

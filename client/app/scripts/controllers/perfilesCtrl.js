@@ -39,9 +39,9 @@
 		    });
 		};
 
-		scope.editaPerfil = function(ev,index) {
+		scope.editaPerfil = function(ev,perfil) {
 
-			var perfil = scope.info[index];
+			// var perfil = scope.info[index];
 
 		    $mdDialog.show({
 		      controller: perfilEditCtrl,
@@ -56,11 +56,11 @@
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,perfil) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var permiso = scope.info[index];
+		    // var permiso = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar el permiso?')

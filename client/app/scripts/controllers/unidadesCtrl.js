@@ -39,9 +39,7 @@
 		    });
 		};
 
-		scope.edita = function(ev,index) {
-
-			var unidad = scope.info[index];
+		scope.edita = function(ev,unidad) {
 
 		    $mdDialog.show({
 		      controller: unidadEditCtrl,
@@ -56,11 +54,10 @@
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,unidad) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var unidad = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar la Unidad?')

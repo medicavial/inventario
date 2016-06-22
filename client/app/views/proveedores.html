@@ -30,8 +30,8 @@
             <td>{{proveedor.PRO_razonSocial}}</td>
             <td>{{proveedor.created_at}}</td>
             <td>
-              <div ng-show="proveedor.PRO_activo">SI</div>
-              <div ng-hide="proveedor.PRO_activo">NO</div>
+              <div ng-if=" proveedor.PRO_activo == 1 ">SI</div>
+              <div ng-if=" proveedor.PRO_activo == 0 ">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -47,9 +47,9 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="proveedores.confirmacion($event,$index)">
-                        <p ng-show="proveedor.PRO_activo" >Desactivar</p>
-                        <p ng-hide="proveedor.PRO_activo" >Activar</p>
+                      <md-button ng-click="proveedores.confirmacion($event,proveedor)">
+                        <p ng-if=" proveedor.PRO_activo == 1 " >Desactivar</p>
+                        <p ng-if=" proveedor.PRO_activo == 0 " >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

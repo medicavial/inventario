@@ -1,6 +1,6 @@
 <md-content layout="row" layout-sm="column" layout-margin class="transparent">
     
-    <div class="md-whiteframe-z1 white" flex="20" flex-sm="100" layout-padding>
+    <div class="md-whiteframe-z1 white animated fadeInUp" flex="20" flex-sm="100" layout-padding>
         <md-subheader class="c-bluegray">Ordenar por</md-subheader>  
         <md-divider class="bgm-bluegray"></md-divider>
         <md-radio-group ng-model="existencias.order">
@@ -48,35 +48,8 @@
 
     </div>
 
-    <!-- <div class="md-whiteframe-z2 white" flex ng-if="almacen">
-        
-        <section ng-repeat="almacen in existencias.info">
-          <md-subheader class="md-primary md-no-sticky">{{almacen.almacen}}</md-subheader>
-          <md-list layout-padding>
-
-            <md-list-item class="md-3-line" ng-if="almacen.existencias.length == 0">
-                Sin Items registrados
-            </md-list-item>
-
-            <md-list-item class="md-3-line" ng-repeat="item in almacen.existencias |filter:query" ng-if="almacen.existencias.length > 0">
-                <md-icon>
-                  <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
-                </md-icon>
-                <div class="md-list-item-text">
-                  <h3>{{item.ITE_nombre}}</h3>
-                  <h4>Existentes : {{item.EXI_cantidad}}</h4>
-                  <p>
-                    Ultima Modificacion:{{item.updated_at}}
-                  </p>  
-                </div>
-            </md-list-item>
-          </md-list>
-        </section>
-        
-    </div> -->
-
     <div flex>
-      <md-data-table-container class="md-whiteframe-z1">
+      <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
         <table md-data-table>
           <thead md-order="existencias.order" md-trigger="existencias.onOrderChange">
             <tr>
@@ -99,7 +72,7 @@
         </table>
       </md-data-table-container>
       <br>
-      <md-data-table-pagination md-label="existencias.texto" md-row-select="existencias.paginacion" md-limit="existencias.limit" md-page="existencias.page" md-total="{{existencias.info.length}}"></md-data-table-pagination>
+      <md-data-table-pagination md-label="existencias.texto" md-row-select="existencias.paginacion" md-limit="existencias.limit" md-page="existencias.page" md-total="{{existencias.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
       
     </div>
     <br>
