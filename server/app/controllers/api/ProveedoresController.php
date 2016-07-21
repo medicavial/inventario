@@ -118,7 +118,11 @@ class ProveedoresController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		$proveedor = Proveedor::find($id);
+		$proveedor->PRO_activo = Input::get('activo');
+		$proveedor->save();
+
+		return Response::json(array('respuesta' => 'Proveedor Modificado Correctamente'));
 	}
 
 

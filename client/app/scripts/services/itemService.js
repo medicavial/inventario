@@ -13,7 +13,8 @@
 	                'get':    {method:'GET'},
 	                'save':   {method:'POST'},
 	                'query':  {method:'GET', isArray:true},
-	                'update': { method:'PUT' }
+	                'update': {method:'PUT'},
+	                'remove': {method:'DELETE'}
 	            });
 
 	    return Item;

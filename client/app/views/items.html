@@ -7,7 +7,7 @@
         </md-icon>
         <input ng-model="query" type="text" placeholder="Buscar Item" flex mayusculas>
       </md-input-container>
-      <md-button class="md-icon-button" aria-label="limpiar" ng-show="query" ng-click="query = ''">
+      <md-button class="md-icon-button" aria-label="limpiar" ng-if="query" ng-click="query = ''">
         <ng-md-icon icon="close"></ng-md-icon> 
       </md-button>
     </md-data-table-toolbar>
@@ -34,8 +34,8 @@
             <td>{{item.ITE_cantidadtotal}}</td>
             <td>{{item.ITE_precioventa |currency}}</td>
             <td>
-              <div ng-show="item.ITE_activo">SI</div>
-              <div ng-hide="item.ITE_activo">NO</div>
+              <div ng-if="item.ITE_activo == 1 ">SI</div>
+              <div ng-if="item.ITE_activo == 0 ">NO</div>
             </td>
             <td class="option-table">
                 <md-menu md-position-mode="target-right target" >
@@ -51,9 +51,9 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="items.confirmacion($event,$index)">
-                        <p ng-show="item.ITE_activo" >Desactivar</p>
-                        <p ng-hide="item.ITE_activo" >Activar</p>
+                      <md-button ng-click="items.confirmacion($event,item)">
+                        <p ng-if="item.ITE_activo == 1 " >Desactivar</p>
+                        <p ng-if="item.ITE_activo == 0 " >Activar</p>
                       </md-button>
                     </md-menu-item>
                   </md-menu-content>

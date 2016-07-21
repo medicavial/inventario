@@ -39,9 +39,9 @@
 		    });
 		};
 
-		scope.editaTipo = function(ev,index) {
+		scope.editaTipo = function(ev,unidaditem) {
 
-			var unidaditem = scope.info[index];
+			// var unidaditem = scope.info[index];
 
 		    $mdDialog.show({
 		      controller: unidadItemEditCtrl,
@@ -50,17 +50,16 @@
 		      targetEvent: ev,
 		      locals: {informacion: unidaditem },
 		      closeTo:{bottom: 1500}
-		    }).then(
-		    function(){
+		    }).then(function(){
 		    	scope.info = unidadesItem.query();
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,unidaditem) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var unidaditem = scope.info[index];
+		    // var unidaditem = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar el Tipo de item?')

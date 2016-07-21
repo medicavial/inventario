@@ -16,7 +16,7 @@ class CreateItemsTable extends Migration {
 		{
 			$table->increments('ITE_clave');
 			$table->string('ITE_nombre');
-			$table->decimal('ITE_precioventa',5,2);
+			$table->decimal('ITE_precioventa',10,2);
 			$table->integer('ITE_cantidadtotal')->default(0);
 
 			$table->integer('TIT_clave')->unsigned();

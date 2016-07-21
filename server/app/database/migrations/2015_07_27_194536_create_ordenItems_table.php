@@ -25,8 +25,8 @@ class CreateOrdenItemsTable extends Migration {
 			$table->integer('OIT_cantidadPedida');
 			$table->integer('OIT_cantidadSurtida');
 
-			$table->decimal('OIT_precioEsperado',5,2);
-			$table->decimal('OIT_precioFinal',5,2);
+			$table->decimal('OIT_precioEsperado',10,2);
+			$table->decimal('OIT_precioFinal',10,2);
 
 			$table->timestamps();
 		});

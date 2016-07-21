@@ -39,8 +39,8 @@ class CreateOrdenCompraTable extends Migration {
 			$table->integer('USU_cancelo')->unsigned();
 			$table->foreign('USU_cancelo')->references('USU_clave')->on('usuarios');
 
-			$table->decimal('OCM_importeEsperado',6,2);
-			$table->decimal('OCM_importeFinal',6,2);
+			$table->decimal('OCM_importeEsperado',10,2);
+			$table->decimal('OCM_importeFinal',10,2);
 			$table->boolean('OCM_pagada')->default(false);
 			$table->dateTime('OCM_fechaPagada');
 			

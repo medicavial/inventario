@@ -41,12 +41,12 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                      <md-button ng-click="equivalencias.editaunidad($event,$index)">
+                      <md-button ng-click="equivalencias.editaTipo($event,unidad)">
                         <p>Modificar</p>
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="equivalencias.confirmacion($event,$index)">
+                      <md-button ng-click="equivalencias.confirmacion($event,unidad)">
                         <p ng-show="unidad.UTI_activo" >Desactivar</p>
                         <p ng-hide="unidad.UTI_activo" >Activar</p>
                       </md-button>

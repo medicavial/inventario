@@ -44,9 +44,7 @@
 		    });
 		};
 
-		scope.edita = function(ev,index) {
-
-			var usuario = scope.info[index];
+		scope.edita = function(ev,item) {
 
 		    $mdDialog.show({
 		      controller: itemEditCtrl,
@@ -59,11 +57,11 @@
 		    });
 		};
 
-		scope.confirmacion = function(ev,index) {
+		scope.confirmacion = function(ev,item) {
 		    // Abre ventana de confirmacion
 
 		    // console.log(index);
-		    var item = scope.info[index];
+		    // var item = scope.info[index];
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar el item?')
@@ -91,7 +89,7 @@
 					activo:item.ITE_activo
 				}
 
-		      	items.update({item:item.ITE_clave},datos,
+		      	items.remove({item:item.ITE_clave},datos,
 		      		function (data){
 		      			mensajes.alerta(data.respuesta,'success','top right','done_all');
 		      		}

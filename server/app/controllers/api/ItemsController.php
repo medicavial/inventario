@@ -56,6 +56,7 @@ class ItemsController extends \BaseController {
 		$item->ITE_cantidadCaja = Input::get('cantidadCaja');
 		$item->UTI_clave = Input::get('unidad');
 		$item->ITE_agranel = Input::get('agranel');
+		$item->ITE_activo = Input::get('activo');
 
 		$item->save();
 
@@ -134,7 +135,7 @@ class ItemsController extends \BaseController {
 		$item->ITE_cantidadCaja = Input::get('cantidadCaja');
 		$item->UTI_clave = Input::get('unidad');
 		$item->ITE_agranel = Input::get('agranel');
-		
+		$item->ITE_activo = Input::get('activo');
 		
 		$item->save();
 
@@ -150,8 +151,11 @@ class ItemsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		$item = Item::find($id);
+		$item->ITE_activo = Input::get('activo');
+		$item->save();
+		
+		return Response::json(array('respuesta' => 'Item Modificado Correctamente'));
 	}
-
 
 }
