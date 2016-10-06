@@ -79,8 +79,26 @@
 			controller:'configuracionCtrl',
 			controllerAs: "configuracion",
 			resolve:{
-	            datos:function(busqueda,$rootScope){
-	                return busqueda.unidadesUsuario($rootScope.id);
+	            datos:function(busqueda,$rootScope,$q){
+
+	            	var promesa = $q.defer(),
+	            		unidades = busqueda.unidadesUsuario($rootScope.id),
+	            		items = busqueda.items();
+
+	            	$q.all([unidades,items]).then(
+	            		function (data){
+	            			var datos = {
+	            				unidades:data[0].data,
+	            				items:data[1].data
+	            			}
+	            			promesa.resolve(datos);
+
+	            		},function(error){
+	            			promesa.reject(error);
+	            		});
+
+	                return promesa.promise;
+	               	
 	            }
 	        }
 		})
@@ -131,6 +149,18 @@
 	        }
 		})
 
+		.state('index.equivalencias',{
+			url:'equivalencias',
+			templateUrl :'views/equivalencias.html',
+			controller:'equivalenciasCtrl',
+			controllerAs: "equivalencias",
+			resolve:{
+	            datos:function(unidadesItem){
+	                return unidadesItem.query().$promise;
+	            }
+	        }
+		})
+
 		.state('index.existencias',{
 			url:'existencias',
 			templateUrl :'views/existencias.html',
@@ -149,6 +179,13 @@
 			controller:'homeCtrl'
 		})
 
+		.state('index.importar',{
+			url:'importar',
+			templateUrl :'views/importar.html',
+			controller:'importarCtrl',
+			controllerAs:'imp'
+		})
+
 		.state('index.items',{
 			url:'items',
 			templateUrl :'views/items.html',
@@ -165,6 +202,7 @@
 			url:'item',
 			templateUrl :'views/item.html',
 			controller:'itemCtrl',
+			controllerAs:'ie',
 			resolve:{
 	            datos:function(busqueda,$q){
 	                var promesa = $q.defer(),
@@ -379,18 +417,6 @@
 	        }
 		})
 
-		.state('index.equivalencias',{
-			url:'equivalencias',
-			templateUrl :'views/equivalencias.html',
-			controller:'equivalenciasCtrl',
-			controllerAs: "equivalencias",
-			resolve:{
-	            datos:function(unidadesItem){
-	                return unidadesItem.query().$promise;
-	            }
-	        }
-		})
-
 		.state('index.usualm',{
 			url:'usualm',
 			templateUrl :'views/usuarioalmacen.html',
@@ -400,6 +426,25 @@
 	            datos:function(busqueda,$q){
 	            	var promesa = $q.defer(),
 	            		usuarios = busqueda.usuariosAlmacen();
+
+	            	$q.all([usuarios]).then(function (data){
+	            		promesa.resolve(data);
+	            	});
+
+	                return promesa.promise;
+	            }
+	        }
+		})
+
+		.state('index.usualmNuevo',{
+			url:'usualmNuevo?usuario',
+			templateUrl :'views/almacenusuario.html',
+			controller:'nuevoUsualmCtrl',
+			controllerAs: "usualm",
+			resolve:{
+	            datos:function(busqueda,$q,$stateParams){
+	            	var promesa = $q.defer(),
+	            		usuarios = busqueda.usuarios();
 
 	            	$q.all([usuarios]).then(function (data){
 	            		promesa.resolve(data);
@@ -452,11 +497,12 @@
 			controller:'reporteExistenciasCtrl',
 			controllerAs: "existencia",
 			resolve:{
-	            datos:function(busqueda,$q){
-	                var promesa = $q.defer(),
-	            		unidades = busqueda.unidades(),
-	            		items 	 = busqueda.items();
-	            	$q.all([unidades,items]).then(function (data){
+	            datos:function(busqueda,$q,$rootScope){
+	                var promesa   = $q.defer(),
+	            		unidades  = busqueda.unidadesUsuario($rootScope.id),
+	            		tipoitems = busqueda.tiposItem(),
+	            		items 	  = busqueda.items();
+	            	$q.all([unidades,items,tipoitems]).then(function (data){
 	            		promesa.resolve(data);
 	            	});
 
@@ -465,15 +511,22 @@
 	        }
 		})
 
+		.state('index.reporteItems',{
+			url:'reporteItems',
+			templateUrl :'views/reporteItems.html',
+			controller:'reporteItemsCtrl',
+			controllerAs: "itm"
+		})
+
 		.state('index.reporteOrdenes',{
 			url:'reporteOrdenes',
 			templateUrl :'views/reporteOrdenes.html',
 			controller:'reporteOrdenesCtrl',
 			controllerAs: "ordenes",
 			resolve:{
-	            datos:function(busqueda,$q){
+	            datos:function(busqueda,$q,$rootScope){
 	                var promesa = $q.defer(),
-	            		unidades = busqueda.unidades(),
+	            		unidades = busqueda.unidadesUsuario($rootScope.id),
 	            		items 	 = busqueda.items();
 	            	$q.all([unidades,items]).then(function (data){
 	            		promesa.resolve(data);
@@ -534,7 +587,7 @@
 	    $mdThemingProvider.setDefaultTheme('theme1');
 	    $mdThemingProvider.alwaysWatchTheme(true);
 
-	    console.log($mdThemingProvider);
+	    // console.log($mdThemingProvider);
 
 	    $httpProvider.defaults.timeout = 1000;
 	  	

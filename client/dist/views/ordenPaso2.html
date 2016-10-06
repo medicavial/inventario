@@ -35,6 +35,9 @@
               </p>
             </md-list-item>
           </md-list>
+          <div class="alerta" ng-if=" segmentable(value) ">
+              <ng-md-icon icon="warning" style="fill: red"></ng-md-icon> Este es un item segmentable cada caja contiene {{ caja(value) }} items y la cantidad se redondea al numero posible de cajas
+          </div>
 
         </div>
     

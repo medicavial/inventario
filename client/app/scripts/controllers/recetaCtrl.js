@@ -8,11 +8,11 @@
 	.controller('loteRecetaCtrl',loteRecetaCtrl)
 	.controller('itemRecetaCtrl',itemRecetaCtrl)
 
-	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q'];
+	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q','$filter'];
 	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion']
 	itemRecetaCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda','info'];
 
-	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes, $q){
+	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes, $q, $filter){
 
 		var scope = this;
 		$rootScope.cargando = false;
@@ -23,6 +23,7 @@
 		scope.surtiendo = false;
 		scope.datosReceta = false;
 		scope.loading = false;
+		scope.filtro = '';
 		scope.itemssurtidos = [];
 
 		console.log(datos);
@@ -56,6 +57,7 @@
 		scope.verificaExistencia = function(item,ev){
 
 			// var item = scope.datos[index];
+			scope.filtro =  '';
 
 			console.log(item);
 
@@ -87,9 +89,12 @@
 
 		        }, function() {
 		            item.item = scope.valorAnterior;
+		            item.surtido = false;
 		        });
 
-			};
+			}else{
+				item.surtido = false;
+			}
 		}
 
 
@@ -166,6 +171,23 @@
 			}).error(function (data){
 				scope.cargando = false;
 			});
+		}
+
+		scope.filtraOrtesis = function(item){
+			var palabras = item.ITE_nombre.split(" ");
+
+			return palabras[0];
+
+		}
+
+		scope.generaFiltro = function(recetaItem){
+			var item = $filter('filter')(scope.items, { ITE_clave:recetaItem.item });
+			
+			var palabras = item[0].ITE_nombre.split(" ");
+
+			scope.filtro = palabras[0];
+
+			scope.valorAnterior = recetaItem.item;
 		}
 
 	}
@@ -322,7 +344,6 @@
 		$scope.datosLote = function(lote){
 			if (lote) {
 				var dato = JSON.parse(lote);
-
 				console.log(dato);
 				$scope.datos.idLote = dato.LOT_clave;
 				$scope.datos.lote = dato.LOT_numero;
@@ -373,6 +394,7 @@
 
 		//verificamos la existencia actual del item en el almacen
 		$scope.verificaExistencia = function(almacen){
+
 
 			if (almacen) {
 

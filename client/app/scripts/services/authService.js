@@ -24,6 +24,9 @@
                     $rootScope.nombre = webStorage.session.get('nombre');
                     $rootScope.id = webStorage.session.get('id');
 
+                    webStorage.session.add('permisos',JSON.stringify(data));
+                    $rootScope.permisos = data;
+
                     if (credenciales.guardar) {
                         webStorage.local.add('usuario',JSON.stringify(data));
                     }
@@ -47,9 +50,15 @@
                 $http.get(api+'logout');
             	$state.go('login');
             },
-            verify : function(api)
-            {
-                
+            verify : function(url)
+            {   //verificacion de permisos por ruta
+                if (url == 'index.usuarios' && $rootScope.permisos.PER_usuarios == 0) {
+                    return false;
+                }else if (url == 'index.usuarios' && $rootScope.permisos.PER_usuarios == 0) {
+                    
+                }else{
+                    return true;
+                }
             }
         }
     }

@@ -161,6 +161,8 @@
 
 			angular.forEach($scope.seleccionItems, function (value,key){
 
+				// console.log(value);
+
 				if (value.lotes != undefined) {
 
 					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
@@ -197,6 +199,7 @@
 				$scope.step2block = false;
 			}else if (index == 1) {
 				$scope.step3block = false;
+				$scope.verificaLotes();
 			}else if (index == 2) {
 
 				if ($scope.seleccionItems.length < $scope.items.length) $scope.datos.incompleta = true;
@@ -232,9 +235,9 @@
 
 			angular.forEach($scope.seleccionItems,function (value,key){
 
-				// console.log(value);
-				var costoItem = value.OIT_precioFinal > 0 ? value.OIT_precioFinal : value.OIT_precioEsperado;
-				var cantidadItem = value.OIT_precioFinal > 0 ? value.OIT_cantidadSurtida : value.OIT_cantidadPedida;
+				console.log(value);
+				var costoItem = parseFloat(value.OIT_precioFinal) > 0 ? parseFloat(value.OIT_precioFinal) : parseFloat(value.OIT_precioEsperado);
+				var cantidadItem = parseFloat(value.OIT_cantidadSurtida) > 0 ? Number(value.OIT_cantidadSurtida) : Number(value.OIT_cantidadPedida);
 				var totalItem = costoItem * cantidadItem;
 
 				$scope.info.OCM_importeFinal  += totalItem;
@@ -294,10 +297,17 @@
 
 		    }).then(function(modificacion){
 
+		    	console.log(modificacion);
+		    	//aqui es cuando le dieron actualizar al boton 
+
+		    	//aqui verificamos si cambio la cantidad que se pidio por una inferior
 		    	if (modificacion.cantidad < item.OIT_cantidadPedida) {
+
+		    		//se activa el bit de orden incompleta
 		    		$scope.datos.incompleta = true;
 		    	};
 		    	
+		    	//se asignan las nuevas cantidades
 		    	item.OIT_cantidadSurtida = modificacion.cantidad;
 
 				var idx = $scope.seleccionItems.indexOf(item);
@@ -361,11 +371,11 @@
 
 		$scope.inicio = function(){
 
-			$scope.maximo = info.OIT_cantidadPedida;
+			$scope.maximo = Number(info.OIT_cantidadPedida);
 
 			$scope.datos = {
 				cantidad : Number(info.OIT_cantidadPedida),
-				costo : info.OIT_precioEsperado
+				costo : parseFloat(info.OIT_precioEsperado)
 			}
 		};
 

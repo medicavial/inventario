@@ -27,12 +27,33 @@
             <td>{{item.PRO_nombre}}</td>
             <td>{{item.IPR_ultimoCosto |currency}}</td>
             <td>{{item.IPR_ultimaFecha |date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+            <td class="option-table">
+                <md-menu md-position-mode="target-right target" >
+                  <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
+                    <md-icon md-menu-origin>
+                      <ng-md-icon icon="more_vert"></ng-md-icon> 
+                    </md-icon>
+                  </md-button>
+                  <md-menu-content width="2">
+                    <md-menu-item>
+                      <md-button ng-click="itempro.edita($event,item)">
+                        <p>Modificar Costo</p>
+                      </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="itempro.elimina($event,item)">
+                        <p>Eliminar</p>
+                      </md-button>
+                    </md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+            </td>
           </tr>
         </tbody>
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-limit="itempro.limit" md-page="itempro.page" md-total="10"></md-data-table-pagination>
+    <md-data-table-pagination md-limit="itempro.limit" md-page="itempro.page" md-total="{{itempro.items.length}}"></md-data-table-pagination>
 
     
     <md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="itempro.nuevo($event)" aria-label="Nuevo Registro">

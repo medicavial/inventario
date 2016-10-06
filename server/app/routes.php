@@ -29,16 +29,19 @@ Route::get('/', function()
     // $backup = new McCool\DatabaseBackup\BackupProcedure($dumper);
     // $backup->backup();
 
-    return ordenItem::find(20);
+    // return ordenItem::find(20);
+    
+
 });
 
 
 Route::group(array('prefix' => 'api'), function()
 {
 
-	Route::get('/', function()
-	{
+	Route::get('/', function(){
+
 		return View::make('hello');
+
 	});
 
     Route::post('/upload/{tipo}', function($tipo){
@@ -170,6 +173,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('unidades/usuario/{id}', 'BusquedasController@unidadesUsuario');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
+    
     });
 
     Route::group(array('prefix' => 'operacion'), function()
@@ -184,7 +188,10 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('correo', 'OperacionController@enviaCorreo');
         Route::get('elimina/almacen/{almacen}/{usuario}', 'OperacionController@eliminaUsuarioAlmacen');
         Route::get('envia/orden/{orden}', 'OperacionController@enviaCorreoOrden');
+        Route::post('importacion', 'OperacionController@importacion');
         Route::post('item/proveedor', 'OperacionController@itemProveedor');
+        Route::put('item/proveedor', 'OperacionController@actualizaItemProveedor');
+        Route::delete('item/proveedor', 'OperacionController@eliminaItemProveedor');
         Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');
         Route::post('items/almacenes/{unidad}', 'OperacionController@itemsAlmacenes');
         Route::post('movimiento', 'OperacionController@movimiento');
@@ -202,7 +209,8 @@ Route::group(array('prefix' => 'api'), function()
 
     Route::group(array('prefix' => 'reportes'), function()
     {
-        Route::post('existencias', 'ReportesController@existencias');
+        Route::get('existencias', 'ReportesController@existencias');
+        Route::get('items', 'ReportesController@items');
         Route::post('ordenes', 'ReportesController@ordenes');
         Route::post('exportar/{tipo}', 'ReportesController@exportar');
         Route::post('exportarPDF/{tipo}', 'ReportesController@exportarPDF');

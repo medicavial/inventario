@@ -46,7 +46,7 @@
 
           <md-divider></md-divider>
 
-          <md-list-item ng-click="abrirMenu(1)">
+          <md-list-item ng-click="abrirMenu(1)" ng-if=" permisos.PER_clave == '1' || permisos.PER_clave == '2' ">
             <md-icon>
               <ng-md-icon icon="dashboard" style="fill:rgb(255, 87, 34)"></ng-md-icon>
             </md-icon>
@@ -56,37 +56,43 @@
             </md-icon>
           </md-list-item>
           <div ng-if="admin" class="sub-menu">
-            <md-list-item ng-click="ir('index.usuarios')">
+            <md-list-item ng-click="ir('index.usuarios')" ng-if=" permisos.PER_usuarios == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
               </md-icon>
               <p> Usuarios </p>
             </md-list-item>
-            <md-list-item ng-click="ir('index.perfiles')">
+            <md-list-item ng-click="ir('index.perfiles')" ng-if=" permisos.PER_perfiles == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
               </md-icon>
               <p> Perfiles </p>
             </md-list-item>
-            <md-list-item ng-click="ir('index.tiposmovimiento')">
+            <md-list-item ng-click="ir('index.importar')" ng-if=" permisos.PER_perfiles == '1' ">
+              <md-icon>
+                <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
+              </md-icon>
+              <p> Importar </p>
+            </md-list-item>
+            <md-list-item ng-click="ir('index.tiposmovimiento')" ng-if=" permisos.PER_tipos == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
               </md-icon>
               <p> Tipos Movimiento </p>
             </md-list-item>
-            <md-list-item ng-click="ir('index.tiposajuste')">
+            <md-list-item ng-click="ir('index.tiposajuste')" ng-if=" permisos.PER_tipos == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
               </md-icon>
               <p> Tipos Ajuste </p>
             </md-list-item>
-            <md-list-item ng-click="ir('index.tiposorden')">
+            <md-list-item ng-click="ir('index.tiposorden')" ng-if=" permisos.PER_tipos == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
               </md-icon>
               <p> Tipos Orden </p>
             </md-list-item>
-            <md-list-item ng-click="ir('index.subtipositem')">
+            <md-list-item ng-click="ir('index.subtipositem')" ng-if=" permisos.PER_tipos == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:rgb(255, 87, 34)"></ng-md-icon> 
               </md-icon>
@@ -97,7 +103,7 @@
 
           <md-divider></md-divider>
 
-          <md-list-item ng-click="abrirMenu(2)">
+          <md-list-item ng-click="abrirMenu(2)" ng-if=" permisos.PER_consultaCatalogo == '1' ">
             <md-icon>
               <ng-md-icon icon="list" style="fill:#3175E7"></ng-md-icon>
             </md-icon>
@@ -168,42 +174,42 @@
           </md-list-item>
 
           <div ng-if="almacen" class="sub-menu">
-            <md-list-item ng-click="ir('index.configuracion')">
+            <md-list-item ng-click="ir('index.configuracion')" ng-if=" permisos.PER_alertas == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
               <p> Alertas </p>
             </md-list-item>
 
-            <md-list-item ng-click="ir('index.conexiones')">
+            <md-list-item ng-click="ir('index.conexiones')" ng-if=" permisos.PER_conexiones == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
               <p> Conexiones </p>
             </md-list-item>
 
-            <md-list-item ng-click="ir('index.movimientos')">
+            <md-list-item ng-click="ir('index.movimientos')" ng-if=" permisos.PER_movimientos == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
               <p> Movimientos </p>
             </md-list-item>
 
-            <md-list-item ng-click="ir('index.agranel')">
+            <md-list-item ng-click="ir('index.agranel')" ng-if=" permisos.PER_salidasAgranel == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
               <p> Salidas A Granel </p>
             </md-list-item>
 
-            <md-list-item ng-click="ir('index.receta')">
+            <md-list-item ng-click="ir('index.receta')" ng-if=" permisos.PER_recetaMV == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
               <p> Surtir Receta </p>
             </md-list-item>
             
-            <md-list-item ng-click="ir('index.traspaso')">
+            <md-list-item ng-click="ir('index.traspaso')" ng-if=" permisos.PER_traspasos == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
@@ -211,7 +217,7 @@
             </md-list-item>
 
 
-            <md-list-item ng-click="ir('index.ordenescompra')">
+            <md-list-item ng-click="ir('index.ordenescompra')" ng-if=" permisos.PER_generarOrden == '1' ">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
@@ -220,18 +226,18 @@
 
 
 
-            <md-list-item ng-click="ir('index.facturas')">
+            <!-- <md-list-item ng-click="ir('index.facturas')">
               <md-icon>
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#3F51B5"></ng-md-icon> 
               </md-icon>
               <p> Facturas </p>
-            </md-list-item>
+            </md-list-item> -->
           </div>
 
           <md-divider></md-divider>
 
 
-          <md-list-item ng-click="abrirMenu(4)">
+          <md-list-item ng-click="abrirMenu(4)" ng-if=" permisos.PER_reportes == '1' ">
             <md-icon>
               <ng-md-icon icon="insert_chart" style="fill:#607D8B"></ng-md-icon>
             </md-icon>
@@ -248,6 +254,12 @@
                 <ng-md-icon icon="keyboard_arrow_right" style="fill:#607D8B"></ng-md-icon> 
               </md-icon>
               <p> Existencias </p>
+            </md-list-item>
+            <md-list-item ng-click="ir('index.reporteItems')">
+              <md-icon>
+                <ng-md-icon icon="keyboard_arrow_right" style="fill:#607D8B"></ng-md-icon> 
+              </md-icon>
+              <p> Items </p>
             </md-list-item>
             <md-list-item ng-click="ir('index.reporteOrdenes')">
               <md-icon>
@@ -267,6 +279,7 @@
               </md-icon>
               <p> Movimientos </p>
             </md-list-item>
+            
 
           </div>
 

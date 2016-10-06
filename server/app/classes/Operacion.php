@@ -88,25 +88,39 @@ class Operacion {
 	private function actualizaLote(){
 
 		$catidadActualLote = Lote::find($this->idLote)->LOT_cantidad;
-		//ajuste
-		if ($this->tipomovimiento == 1) {
-			$this->reseteaLotes();
-			$catidadIngresada = $this->cantidad;
-		//entrada
-		}elseif ($this->tipomovimiento == 2) {
-			$catidadIngresada = $catidadActualLote  + $this->cantidad;
-		//salida
-		}elseif ($this->tipomovimiento == 3) {
-			$catidadIngresada = $catidadActualLote  - $this->cantidad;
+		$existencia = Lote::find($this->idLote)->EXI_clave;
+
+
+		// cuando verificamos el lote manda un id pero es para otro almacen 
+
+		// verificamos que sea para el mismo almacen 
+		if ($existencia == $this->idExistencia) {
+			
+			//ajuste
+			if ($this->tipomovimiento == 1) {
+				$this->reseteaLotes();
+				$catidadIngresada = $this->cantidad;
+			//entrada
+			}elseif ($this->tipomovimiento == 2) {
+				$catidadIngresada = $catidadActualLote  + $this->cantidad;
+			//salida
+			}elseif ($this->tipomovimiento == 3) {
+				$catidadIngresada = $catidadActualLote  - $this->cantidad;
+			}
+
+			$datosLote = Lote::find($this->idLote);
+			$datosLote->EXI_clave = $this->idExistencia;
+			$datosLote->ITE_clave = $this->item;
+			$datosLote->LOT_numero = $this->lote;
+			$datosLote->LOT_cantidad = $catidadIngresada;
+			$datosLote->LOT_caducidad = $this->caducidad;
+			$datosLote->save();
+
+		//caso contrario agregamos lote
+		}else{
+			$this->altaLote();
 		}
 
-		$datosLote = Lote::find($this->idLote);
-		$datosLote->EXI_clave = $this->idExistencia;
-		$datosLote->ITE_clave = $this->item;
-		$datosLote->LOT_numero = $this->lote;
-		$datosLote->LOT_cantidad = $catidadIngresada;
-		$datosLote->LOT_caducidad = $this->caducidad;
-		$datosLote->save();
 
 	}
 

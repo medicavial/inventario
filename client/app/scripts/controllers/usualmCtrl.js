@@ -7,7 +7,7 @@
 	.controller('nuevoUsualmCtrl',nuevoUsualmCtrl)
 
 	usualmCtrl.$inject = ['$rootScope','datos','$mdDialog','busqueda','operacion'];
-	nuevoUsualmCtrl.$inject = ['$scope','$mdDialog','busqueda','mensajes','$q','$filter','informacion','operacion','$rootScope'];
+	nuevoUsualmCtrl.$inject = ['$stateParams','busqueda','mensajes','$q','$filter','datos','operacion','$rootScope','$mdDialog'];
 
 	function usualmCtrl($rootScope,datos,$mdDialog,busqueda,operacion){
 
@@ -76,58 +76,130 @@
 
 	}
 
-	function nuevoUsualmCtrl($scope,$mdDialog,busqueda,mensajes,$q,$filter,informacion,operacion,$rootScope){
+	function nuevoUsualmCtrl($stateParams,busqueda, mensajes, $q, $filter,datos, operacion,$rootScope, $mdDialog){
 
+		var vm = this;
 
-		console.log(informacion);
-		busqueda.almacenUsuario(informacion.clave).then(function (info){
-			$scope.almacenes = info.data;
-		});
+		console.log(datos);
+		vm.usuarios = datos[0].data;
 
-		$scope.inicio = function(){
-			$scope.seleccionado = null;
-		    $scope.busqueda = null;
-		    $scope.consultado = consultado;
-		    $scope.almacenesseleccionados = [];
-		    $scope.datos = {
-		    	usuario:informacion.clave,
+		$rootScope.titulo = 'Registro de Usuario en almacen';
+		$rootScope.cargando = false;
+		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
+
+		vm.inicio = function(){
+			vm.seleccionado = null;
+		    vm.busqueda = null;
+		    vm.almacenesSeleccionados = [];
+		    vm.almacenesActivos = [];
+
+		    vm.datos = {
+		    	usuario:$stateParams.usuario,
 		    	usuarioasigno:$rootScope.id,
-		    	almacenes:$scope.almacenesseleccionados
+		    	almacenes:vm.almacenesSeleccionados
 		    }
 
-			$scope.guardando = false;
+		    vm.consultaAlmacen = false;
+		    vm.selectedAll = false;
+			vm.guardando = false;
+
+			vm.almacenesUsuario($stateParams.usuario);
 		}
 
-	    function consultado(query) {
+		vm.agregaAlmacen = function(almacen){
 
-			var q = $q.defer(),
-				response = query ? $filter( 'filter' )( $scope.almacenes, query ) : $scope.almacenes;
-				q.resolve( response );
+			almacen.seleccionado = !almacen.seleccionado;
 
-			return q.promise;
+			// console.log(almacen);
+			if (almacen.seleccionado) {
+				vm.almacenesSeleccionados.push(almacen);
+			}else{
+				var index = vm.almacenesSeleccionados.indexOf(almacen);
+				vm.almacenesSeleccionados.splice(1,index);
+			}
 
-	    }
+		}
+
+		vm.almacenesUsuario = function(usuario){
+
+			if (usuario) {
+				vm.consultaAlmacen = true;	
+				vm.almacenesActivos = [];
+
+				busqueda.almacenesUsuario(usuario).then(function (datos){
+					vm.almacenesActivos = datos.data;
+				});	
+
+				busqueda.almacenUsuario(usuario).then(function (info){
+					vm.almacenes = info.data;
+					vm.consultaAlmacen = false;
+				});	
+			};
+		}
+
+		vm.seleccionaTodo = function(){
+
+			console.log(vm.selectedAll);
+			if (vm.selectedAll) {
+				vm.datos.almacenes = [];
+			}else{
+				vm.datos.almacenes = vm.almacenes;
+			}
+			angular.forEach(vm.almacenes, function (almacen) {
+	            almacen.seleccionado = !vm.selectedAll;
+	        });
+		}
 
 
-		$scope.guardar = function(){
-				console.log($scope.datos);
-				$scope.guardando = true;
+		vm.guardar = function(){
+				// console.log(vm.datos);
+				vm.guardando = true;
 
-				operacion.altaAlmacenes($scope.datos).success(function (data){
+				operacion.altaAlmacenes(vm.datos).success(function (data){
 
 					mensajes.alerta(data.respuesta,'success','top right','done_all');
-					$scope.guardando = false;
-					$scope.inicio();
+					vm.guardando = false;
+					vm.inicio();
 
 				}).error(function (error){
-
+					mensajes.alerta('Ocurrio un error de conexión intentalo nuevamente','error','top right','error');
 				});
 
 		}
 
-		$scope.cancel = function() {
-			$mdDialog.hide();
+		vm.confirma = function(ev,almacen) {
+		    // Abre ventana de confirmacion
+		    
+		    var confirm = $mdDialog.confirm()
+		          .title('¿Seguro que deseas asignar este almacen?')
+		          .textContent('')
+		          .ariaLabel('Quitar Almacen')
+		          .ok('Si')
+		          .cancel('No')
+		          .targetEvent(ev)
+		          .closeTo({
+					bottom: 1500
+				   });
+
+		    $mdDialog.show(confirm).then(
+			    function() {
+
+			    	operacion.bajaAlmacen(almacen.ALM_clave,vm.datos.usuario).success(function (data){
+			    		mensajes.alerta(data.respuesta,'success','top right','done_all');
+						vm.inicio();
+			    	}).error(function (error){
+
+			    	})
+			    },
+			    function() {
+			    	
+			    }
+		    );
 		};
+
+
+
 
 	}
 

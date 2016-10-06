@@ -26,21 +26,22 @@
             <td>{{usuario.clave}}</td>
             <td>{{usuario.usuario}}</td>
             <td>{{usuario.nombre}}</td>
+            <td>{{usuario.almacenes.length}}</td>
             <td layout="row">
-                <md-chips ng-model="usuario.almacenes" readonly="false">
+                <!-- <md-chips ng-model="usuario.almacenes" readonly="false">
                   <md-chip-template>
                     <strong>{{$chip.ALM_nombre}}</strong>
                   </md-chip-template>
                   <button md-chip-remove class="md-primary vegetablechip" ng-click="usualm.confirma($event,usuario,$chip)">
                     <ng-md-icon icon="close" ></ng-md-icon>
                   </button>
-                </md-chips>
-                <md-button ng-click="usualm.nuevo($event,$index)">Agregar</md-button>
+                </md-chips> -->
+                <md-button ui-sref="index.usualmNuevo({'usuario':usuario.clave})">Agregar</md-button>
             </td>
           </tr>
         </tbody>
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-limit="usualm.limit" md-page="usualm.page" md-total="10"></md-data-table-pagination>
+    <md-data-table-pagination md-limit="usualm.limit" md-page="usualm.page" md-total="{{ usualm.usuarios.length }}"></md-data-table-pagination>
 </div>

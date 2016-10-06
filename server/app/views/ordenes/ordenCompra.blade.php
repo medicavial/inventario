@@ -121,8 +121,15 @@
 
 
 				<td><div align="left"> {{ $item['ITE_nombre'] }} </div></td>
-				<td><div align="center">$ {{ $item['OIT_precioEsperado'] }} </div></td>
+
+				@if( $item['ITE_segmentable'] )
+					<td><div align="center"> {{ $item['OIT_precioEsperado'] * $item['ITE_cantidadCaja']  }} </div></td>
+				@else
+					<td><div align="center">$ {{ $item['OIT_precioEsperado'] }} </div></td>
+				@endif
+				
 				<td><div align="center">  </div></td>
+
 				<td><div align="center">$ {{ $item['OIT_cantidadPedida'] * $item['OIT_precioFinal']   }} </div></td>
 
 
@@ -138,10 +145,14 @@
 				@endif
 				
 				<td><div align="left"> {{ $item['ITE_nombre'] }} </div></td>
-				<td><div align="center">$ {{ $item['OIT_precioEsperado'] }} </div></td>
+				@if( $item['ITE_segmentable'] )
+					<td><div align="center"> {{ $item['OIT_precioEsperado'] * $item['ITE_cantidadCaja']  }} </div></td>
+				@else
+					<td><div align="center">$ {{ $item['OIT_precioEsperado'] }} </div></td>
+				@endif
 				<td><div align="center">  </div></td>
 
-				<td><div align="center">$ {{ $item['OIT_cantidadPedida'] * $item['OIT_precioEsperado']   }} </div></td>
+				<td><div align="center">$ {{  $item['OIT_cantidadPedida'] * $item['OIT_precioEsperado']  }} </div></td>
 			</tr>
 		@endif
     @endforeach

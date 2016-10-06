@@ -16,6 +16,7 @@ class Almacen extends Eloquent {
         return $query->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
                      ->join('tiposAlmacen', 'almacenes.TAL_clave', '=', 'tiposAlmacen.TAL_clave')
                      ->select('almacenes.*','unidades.UNI_nombre','TAL_nombre')
+                     ->orderBy('ALM_nombre')
                      ->get();
     }
 
@@ -24,6 +25,7 @@ class Almacen extends Eloquent {
         return $query->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
                      ->join('tiposAlmacen', 'almacenes.TAL_clave', '=', 'tiposAlmacen.TAL_clave')
         			 ->select('almacenes.*','unidades.UNI_nombre','TAL_nombre')
+                     ->orderBy('ALM_nombre')
         			 ->where('ALM_activo',true)->get();
     }
 
@@ -33,6 +35,7 @@ class Almacen extends Eloquent {
         return $query->join('tiposAlmacen', 'almacenes.TAL_clave', '=', 'tiposAlmacen.TAL_clave')
                      ->where('UNI_clave',$unidad)
                      ->where('ALM_activo',true)
+                     ->orderBy('ALM_nombre')
                      ->get();
     }
 
@@ -43,6 +46,7 @@ class Almacen extends Eloquent {
         return $query->whereNotIn('ALM_clave', $almacenes)
                      ->select('almacenes.*')
                      ->where('ALM_activo',true)
+                     ->orderBy('ALM_nombre')
                      ->get();
     }
 
@@ -52,6 +56,7 @@ class Almacen extends Eloquent {
         return $query->join('usuarioAlmacen', 'almacenes.ALM_clave', '=', 'usuarioAlmacen.ALM_clave')
                      ->select('almacenes.*')
                      ->where( array('ALM_activo' => true , 'USU_clave' => $usuario) )
+                     ->orderBy('ALM_nombre')
                      ->get();
     }
 

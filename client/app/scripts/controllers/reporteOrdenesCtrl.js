@@ -28,7 +28,6 @@
 		scope.inicio = function(){
 
 			scope.nuevaBusqueda = true;
-			scope.almacenes = [];
 			scope.datos = {
 				unidad:'',
 				item:'',
@@ -42,66 +41,102 @@
 
 		scope.buscar = function(){
 
-			scope.consultando = true;
+			if(scope.datos.unidad){
+				scope.consultando = true;
+				scope.datos.acceso = '';
 
-			reportes.ordenes(scope.datos).success(function (data){
-				scope.info = data;
-				scope.nuevaBusqueda = false;
-				scope.consultando = false;
-			}).error(function (error){
-				scope.info = [];
-				scope.nuevaBusqueda = false;
-				scope.consultando = false
-			})
+				reportes.ordenes(scope.datos).success(function (data){
+					if (data.length > 0) {
+						scope.info = data;
+						scope.nuevaBusqueda = false;
+					}else{
+						mensajes.alerta('No se encontro información disponible','error','top right','error');
+					}
+					scope.consultando = false;
+				}).error(function (error){
+					scope.info = [];
+					scope.consultando = false;
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+
+				})
+
+			}else{
+				mensajes.alerta('debes ingresar unidad','error','top right','error');
+			}
 		}
 
 		scope.surtidos = function(){
-			scope.datos.acceso = 'surtidos';
-			scope.consultando = true;
+			if(scope.datos.unidad){
+				scope.datos.acceso = 'surtidos';
+				scope.consultando = true;
 
-			reportes.ordenes(scope.datos).success(function (data){
+				reportes.ordenes(scope.datos).success(function (data){
 
-				console.log(data);
-				scope.info = data;
-				scope.nuevaBusqueda = false;
-				scope.consultando = false;
-			}).error(function (error){
-				scope.info = [];
-				scope.nuevaBusqueda = false;
-				scope.consultando = false
-			})
+					console.log(data);
+					if (data.length > 0) {
+						scope.info = data;
+						scope.nuevaBusqueda = false;
+					}else{
+						mensajes.alerta('No se encontro información disponible','error','top right','error');
+					}
+					scope.consultando = false;
+				}).error(function (error){
+					scope.info = [];
+					scope.consultando = false;
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+				})
+
+			}else{
+				mensajes.alerta('debes ingresar unidad','error','top right','error');
+			}
 		}
 
 		scope.registrados = function(){
+			if(scope.datos.unidad){
+				scope.datos.acceso = 'registrados';
+				scope.consultando = true;
 
-			scope.datos.acceso = 'registrados';
-			scope.consultando = true;
+				reportes.ordenes(scope.datos).success(function (data){
+					if (data.length > 0) {
+						scope.info = data;
+						scope.nuevaBusqueda = false;
+					}else{
+						mensajes.alerta('No se encontro información disponible','error','top right','error');
+					}
+					scope.consultando = false;
+				}).error(function (error){
+					scope.info = [];
+					scope.consultando = false;
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+				})
 
-			reportes.ordenes(scope.datos).success(function (data){
-				scope.info = data;
-				scope.nuevaBusqueda = false;
-				scope.consultando = false;
-			}).error(function (error){
-				scope.info = [];
-				scope.nuevaBusqueda = false;
-				scope.consultando = false
-			})
+			}else{
+				mensajes.alerta('debes ingresar unidad','error','top right','error');
+			}
 		}
 
 		scope.cancelados = function(){
+			if(scope.datos.unidad){
+				scope.datos.acceso = 'cancelados';
+				scope.consultando = true;
 
-			scope.datos.acceso = 'cancelados';
-			scope.consultando = true;
+				reportes.ordenes(scope.datos).success(function (data){
+					if (data.length > 0) {
+						scope.info = data;
+						scope.nuevaBusqueda = false;
+					}else{
+						mensajes.alerta('No se encontro información disponible','error','top right','error');
+					}
+					scope.consultando = false;
+				}).error(function (error){
+					scope.info = [];
+					scope.consultando = false;
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+				})
 
-			reportes.ordenes(scope.datos).success(function (data){
-				scope.info = data;
-				scope.nuevaBusqueda = false;
-				scope.consultando = false;
-			}).error(function (error){
-				scope.info = [];
-				scope.nuevaBusqueda = false;
-				scope.consultando = false
-			})
+			}	else{
+				mensajes.alerta('debes ingresar unidad','error','top right','error');
+			}
 		}
 
 		scope.opciones = function() {
@@ -118,10 +153,10 @@
 					scope.nuevaBusqueda = true;
 				}else if (accion.name == 'Exp. Excel'){
 					mensajes.alerta('Preparando Exportación','info','top right','wb_cloudy');
-					reportes.exportar('existencias',scope.datos);
+					reportes.exportar('ordenes',scope.datos);
 				}else if (accion.name == 'Exp. PDF'){
 					mensajes.alerta('Preparando Exportación','info','top right','wb_cloudy');
-					reportes.exportarPDF('existencias',scope.datos);
+					reportes.exportarPDF('ordenes',scope.datos);
 				}
 			});
 		};

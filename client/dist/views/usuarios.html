@@ -14,7 +14,7 @@
     <br>
     <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
       <table md-data-table>
-        <thead md-order="perfiles.order" md-trigger="perfiles.onOrderChange">
+        <thead md-order="usuarios.order" md-trigger="usuarios.onOrderChange">
           <tr>
             <th name="ID"  order-by="USU_clave"></th>
             <th name="Usuario" order-by="USU_login"></th>
@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="usuario in usuarios.info |filter:query | orderBy: perfiles.order | limitTo: perfiles.limit: (perfiles.page - 1) * perfiles.limit">
+          <tr ng-repeat="usuario in usuarios.info |filter:query | orderBy: usuarios.order | limitTo: usuarios.limit: (usuarios.page - 1) * usuarios.limit">
             <td>{{usuario.USU_clave}}</td>
             <td>{{usuario.USU_login}}</td>
             <td>{{usuario.USU_nombrecompleto}}</td>

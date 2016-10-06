@@ -17,7 +17,7 @@
       
       <div layout="row" layout-wrap>
         <div flex flex-gt-sm="20" ng-repeat="almacen in almacenes">
-          <md-checkbox aria-label="Checkbox 1" ng-checked="exists(almacen, selected)" ng-click="toggle(almacen, selected)">
+          <md-checkbox aria-label="{{almacen.ALM_nombre}}" ng-checked="exists(almacen, selected)" ng-click="toggle(almacen, selected)">
            {{almacen.ALM_nombre}}
           </md-checkbox>
         </div>
@@ -41,10 +41,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order">
+        <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order" md-disable-select="existencia.POR_surtir > 0 || existencia.compra < 1">
           <td>{{existencia.ITE_codigo}}</td>
           <td>{{existencia.ITE_nombre}}</td>
-          <td>{{existencia.EXI_cantidad}}</td>
+          <td>{{ existencia.EXI_cantidad }}</td>
           <td>{{existencia.POR_surtir}}</td>
           <td>{{existencia.CON_nivelMinimo}}</td>
           <td>{{existencia.CON_nivelMaximo}}</td>
@@ -55,7 +55,7 @@
               </div>
           </td>
           <td>
-            {{existencia.compra}}
+            {{ existencia.compra < 1 ? '0': existencia.compra }}
           </td>
         </tr>
       </tbody>

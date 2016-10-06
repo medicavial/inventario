@@ -25,6 +25,7 @@ class BusquedasController extends BaseController {
                      ->select('almacenes.*','unidades.UNI_nombre','TAL_nombre')
                      ->whereNotIn('ALM_clave', $almacenes)
                      ->where('ALM_activo',true)
+                     ->orderBy('ALM_nombre')
                      ->get();
 	}
 
@@ -97,7 +98,7 @@ class BusquedasController extends BaseController {
 	                     ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
 	                     ->select(DB::raw($sql))
 	                     ->groupBy('existencias.ITE_clave')
-	                     ->where('almacenes.UNI_clave', $unidad)
+	                     ->where('unidades.UNI_claveMV', $unidad)
 	                     // este condicional solo filtra el botiquin 
 	                     ->where('almacenes.TAL_clave', 2)
 	                     ->where('items.TIT_clave', $tipo)
@@ -113,16 +114,18 @@ class BusquedasController extends BaseController {
 	public function lotesAlmacenXitem($almacen,$item){
 		$clave = Existencia::where( array('ITE_clave'=>$item,'ALM_clave'=>$almacen) )->first()->EXI_clave;
 
-		return Lote::where( array('EXI_clave'=>$clave,'ITE_clave' => $item) )->get();
+		return Lote::where( array('EXI_clave'=>$clave,'ITE_clave' => $item) )->where('LOT_cantidad','>',0)->get();
 	}
 
 	public function lotesUnidadXitem($unidad,$item){
+
 		return Lote::join('existencias','existencias.EXI_clave','=','lote.EXI_clave')
 					 ->join('almacenes','almacenes.ALM_clave','=','existencias.ALM_clave')
 					 ->where('UNI_clave',$unidad)
 					 ->where('lote.ITE_clave',$item)
+					 ->where('TAL_clave',1)
+					 ->where('LOT_cantidad','>',0)
 					 ->select('lote.*')
-					 ->groupBy('UNI_clave')
 					 ->get();
 	}
 
@@ -281,6 +284,7 @@ class BusquedasController extends BaseController {
 							 ->where( array('UNI_activo' => true ,'USU_clave' => $id ) )
 							 ->select('unidades.*')
 							 ->groupBy('almacenes.UNI_clave')
+							 ->orderBy('almacenes.ALM_nombre')
 							 ->get();
 	}
 

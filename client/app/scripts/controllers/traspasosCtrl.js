@@ -23,12 +23,14 @@
 		    $scope.disponible = '';
 		    $scope.itemsAlmacen = [];
 		    $scope.lotes = [];
+		    $scope.traspasos = [];
 		    $scope.cantidadLote = 0;
 
 			$scope.datos = {
 				almacenOrigen:'',
 				almacenDestino:'',
 				item:'',
+				itemNombre:'',
 				cantidad:'',
 				lote:'',
 				usuario:$rootScope.id
@@ -37,6 +39,7 @@
 			$scope.guardando = false;
 
 		}
+
 
 		$scope.datosLote = function(lote){
 			if (lote) {
@@ -57,21 +60,45 @@
 			};
 		}
 
+		$scope.agregar = function(){
+
+
+			$scope.traspasos.push({
+				almacenOrigen:$scope.datos.almacenOrigen,
+				almacenDestino:$scope.datos.almacenDestino,
+				item:$scope.datos.item,
+				itemNombre:$scope.datos.itemNombre,
+				cantidad:$scope.datos.cantidad,
+				lote:$scope.datos.lote,
+				usuario:$rootScope.id
+			});
+
+			$scope.datos.item = '';
+			$scope.datos.cantidad = '';
+			$scope.datos.lote = '';
+			$scope.item = '';
+    		$scope.disponible = '';
+    		$scope.busqueda = '';
+		}
+
 		$scope.guardar = function(){
 
 			// console.log($scope.datos);
-			if ($scope.traspasoForm.$valid) {
 
-				// console.log($scope.datos);
-				$scope.guardando = true;
-				operacion.altaTraspaso($scope.datos).success(function (data){
-					mensajes.alerta(data.respuesta,'success','top right','done_all');
-					$scope.guardando = false;
-					$scope.traspasoForm.$setPristine();
-					$scope.inicio();
-				});
 
-			};
+			// console.log($scope.traspasos);
+			$scope.guardando = true;
+			operacion.altaTraspaso($scope.traspasos).success(function (data){
+				mensajes.alerta(data.respuesta,'success','top right','done_all');
+				$scope.guardando = false;
+				$scope.traspasoForm.$setPristine();
+				$scope.inicio();
+			}).error(function (data){
+				mensajes.alerta('Ocurrio un error vuelve a intentarlo','error','top right','error');
+				$scope.guardando = false;
+			})
+
+
 			
 		}
 
@@ -82,18 +109,25 @@
 			$scope.seleccionado = null;
 		    $scope.busqueda = null;
 		    $scope.disponible = '';
-
+		    $scope.itemsAlmacen = [];
+		    
 			busqueda.itemsAlmacen(clave).success(function (data){
 				$scope.itemsAlmacen = data;
 			});
 
 		}
 
+		$scope.eliminar = function(index){
+			console.log(index);
+			$scope.traspasos.splice(index,1);
+		}
+
 		$scope.seleccionaItem = function(item){
-			// $scope.disponible = '';
-			// console.log(item);
+			$scope.disponible = '';
+			console.log(item);
 			if (item) {
 				$scope.datos.item = item.ITE_clave;
+				$scope.datos.itemNombre = item.ITE_nombre;
 				$scope.disponible = Number(item.EXI_cantidad);
 				busqueda.lotesAlmacenXitem($scope.datos.almacenOrigen,item.ITE_clave).success(function (data){
 					$scope.lotes = data;

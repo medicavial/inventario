@@ -186,6 +186,9 @@
 
 			if (almacen) {
 
+				$scope.lotes = [];
+
+
 				mensajes.alerta('Verificando Datos de Almacen','info','top right','search');
 				//en caso de que el item sea forzoso buscamos los lotes existentes
 				if ($scope.item.TIT_forzoso == 1) {
@@ -231,7 +234,7 @@
 				}).error(function (data){
 					$scope.mensajeError();
 					$scope.guardando = false;
-				})
+				});
 
 			};
 			

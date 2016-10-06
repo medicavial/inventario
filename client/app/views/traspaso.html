@@ -4,7 +4,7 @@
   <form name="traspasoForm" ng-submit="guardar()">
 
         <div layout="row">
-          <md-subheader class="md-primary" flex>Datos Origen</md-subheader>
+          <md-subheader class="md-primary" flex>Datos</md-subheader>
           <md-button class="md-icon-button" aria-label="More" ng-click="inicio()">
               <md-tooltip md-direction="bottom">
                 Limpiar
@@ -19,64 +19,87 @@
             <div layout-gt-sm="row" layout="column" class="no-padding">
               
               <md-input-container flex>
-
+                <label>Almacen Origen</label>
                 <md-select placeholder="Almacen Origen" ng-model="datos.almacenOrigen" name="origen" md-on-close="itemsxalmacen(datos.almacenOrigen)" flex>
                   <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
                 </md-select>
 
               </md-input-container>
 
-                <md-autocomplete
-                    md-input-name="item"
-                    md-selected-item="item"
-                    md-search-text="busqueda"
-                    md-search-text-change="cambioTexto(busqueda)"
-                    md-item-text="item.ITE_nombre"
-                    md-selected-item-change = "seleccionaItem(item)"
-                    md-items="item in consultado(busqueda)"
-                    md-min-length="0"
-                    md-floating-label="Selecciona Item"
-                    flex>
-                  <md-item-template >
-                    <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
-                  </md-item-template>
-                  <md-not-found>
-                    No se encontro "{{busqueda}}".
-                  </md-not-found>
-                </md-autocomplete>
+              <md-input-container flex>
+                <label>Almacen Destino</label>
+                <md-select placeholder="Almacen Destino" ng-model="datos.almacenDestino" name="almacenDestino" required md-on-close="verificaAlmacen($event)" flex>
+                  <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+                </md-select>
+                <div ng-messages="traspasoForm.almacenDestino.$error" ng-if="traspasoForm.$submitted">
+                  <div ng-message="required">Campo obligatorio.</div>
+                </div>
+              </md-input-container>
               
-                <md-input-container flex ng-if="item.TIT_forzoso">
-                  <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)">
-                    <md-option ng-repeat="lote in lotes" value="{{lote}}">{{lote.LOT_numero}}</md-option>
-                  </md-select>
-                </md-input-container>
-
-                <md-input-container>
-                  <label>Cantidad Disponible</label>
-                  <input type="number"  name="disponible" ng-model="disponible" disabled> 
-                </md-input-container>
 
 
             </div>
 
         </md-content>
         
+
         
-        <md-subheader class="md-primary">Dastos Destino</md-subheader>
+        <md-subheader class="md-primary">Traspasar</md-subheader>
         <md-divider></md-divider>
-        
+        <md-content layout-align="center center" flex-gt-sm="50">
+
+          <md-list>
+            <md-list-item ng-repeat="traspaso in traspasos">
+              <p>{{ traspaso.itemNombre }}</p>
+              <p>Cantidad: {{ traspaso.cantidad }}</p>
+              <md-button class="md-secondary md-icon-button" ng-click="eliminar($index)" aria-label="Eliminar">
+                <md-tooltip md-direction="top">
+                  Eliminar
+                </md-tooltip>
+                <ng-md-icon icon="delete" style="fill:red" ></ng-md-icon> 
+              </md-button>
+            </md-list-item>
+          </md-list>
+
+          <md-progress-circular md-mode="indeterminate" ng-show="guardando"></md-progress-circular>
+          <md-button class="md-raised md-primary" ng-if="traspasos.length" ng-click="guardar()" ng-hide="guardando">Terminar</md-button>
+
+        </md-content>
+
         <md-content layout-padding>
           
           <div layout-gt-sm="row" layout="column">
             
-            <md-input-container flex>
-              <md-select placeholder="Almacen Destino" ng-model="datos.almacenDestino" name="almacenDestino" required md-on-close="verificaAlmacen($event)" flex>
-                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+            <md-autocomplete
+                md-input-name="item"
+                md-selected-item="item"
+                md-search-text="busqueda"
+                md-search-text-change="cambioTexto(busqueda)"
+                md-item-text="item.ITE_nombre"
+                md-selected-item-change = "seleccionaItem(item)"
+                md-items="item in consultado(busqueda)"
+                md-min-length="0"
+                md-floating-label="Selecciona Item"
+                flex>
+              <md-item-template >
+                <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
+              </md-item-template>
+              <md-not-found>
+                No se encontro "{{busqueda}}".
+              </md-not-found>
+            </md-autocomplete>
+            <md-input-container flex ng-if="item.TIT_forzoso == '1'">
+              <label>Lote</label>
+              <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)" ng-required="item.TIT_forzoso == '1'">
+                <md-option ng-repeat="lote in lotes" value="{{lote}}">{{lote.LOT_numero}} - Disponible:{{ lote.LOT_cantidad }}</md-option>
               </md-select>
-              <div ng-messages="traspasoForm.almacenDestino.$error" ng-if="traspasoForm.$submitted">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
             </md-input-container>
+
+            <md-input-container flex>
+              <label>Cantidad Disponible</label>
+              <input type="number"  name="disponible" ng-model="disponible" disabled> 
+            </md-input-container>
+            
 
             <md-input-container flex>
               <label>Cantidad a Traspasar</label>
@@ -93,15 +116,15 @@
         </md-content>
         
         <md-content layout="row" layout-align="center center">
-          <md-progress-circular md-mode="indeterminate" ng-show="guardando"></md-progress-circular>
-          <md-button id="nuevo" class="md-fab boton" ng-click="" aria-label="Guardar" type="submit" ng-hide="guardando" ng-disabled="traspasoForm.$invalid">
+          
+          <md-button id="nuevo" class="md-fab boton" aria-label="Guardar" type="button" ng-click="agregar()" ng-disabled="traspasoForm.$invalid">
               <md-tooltip md-direction="top">
-                Guardar
+                Agregar
               </md-tooltip>
-              <ng-md-icon icon="check" style="fill:white"></ng-md-icon> 
+              <ng-md-icon icon="add" style="fill:white"></ng-md-icon> 
           </md-button>
         </md-content>
-
+        
         <br><br>
   </form>
   </md-whiteframe>

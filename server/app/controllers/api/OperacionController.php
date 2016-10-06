@@ -78,14 +78,24 @@ class OperacionController extends BaseController {
 			//clave del item de esta orden
 			$claveOrdenitem = $item['OIT_clave'];
 
-			//la cantidad que se acompleto debe de set la misma que falto por eso la resta  
-			$cantidad = $item['OIT_cantidadPedida'] - $item['OIT_cantidadSurtida'];
+
+			if (isset($item['cantidadSurtida'])) {
+				//aqui se añadio o no cantidad diferente a la solicitada
+				//se manda lo que se envio
+				$cantidad = $item['cantidadSurtida'];
+				//se agrega la cantidad surtida mas lo que se acompleto para la receta
+				$surtida = $item['OIT_cantidadSurtida'] + $cantidad;
+			}else{
+				//la cantidad que se acompleto debe de ser la misma que falto por eso la resta  
+				$cantidad = $item['OIT_cantidadPedida'] - $item['OIT_cantidadSurtida'];	
+				$surtida = $item['OIT_cantidadPedida'];
+			}
+
 			$claveItem = $item['ITE_clave'];
 
-
 			//acompletamos la orden del item 
-			$datoItem = ordenItem::find($claveOrdenitem);
-			$datoItem->OIT_cantidadSurtida = $item['OIT_cantidadPedida'];
+			$datoItem = OrdenItem::find($claveOrdenitem);
+			$datoItem->OIT_cantidadSurtida = $surtida;
 			$datoItem->save();
 
 			// se obtienen los datos del item si es forzoso el lote y los lotes
@@ -129,7 +139,7 @@ class OperacionController extends BaseController {
 
 	//muestra los datos de existencia con la unidad 
 	public function configuracionUnidad($unidad){
-		return Existencia::unidad($unidad);
+		return Item::activos();
 	}
 
 	public function eliminaUsuarioAlmacen($almacen,$usuario){
@@ -225,10 +235,13 @@ class OperacionController extends BaseController {
 
 	            $message->from('salcala@medicavial.com.mx', 'Sistema de Inventario MV');
 	            $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
-	            $message->to($correo);
+	            // $message->to($correo);
+	            $message->to('sistemasaxa@medicavial.com.mx');
+
 	            if ($correoCopia != '') {
 	            	$message->cc($correoCopia);
 	            }
+
 	            $message->attach($archivo);
 
 	        });
@@ -267,12 +280,10 @@ class OperacionController extends BaseController {
 			array_push($almacenes, $dato['ALM_clave']);
 		}
 
-		return Existencia::almacenes($unidad,$almacenes);
+		// return Existencia::almacenes($unidad,$almacenes);
 
-	}
-
-	public function itemsUnidad($unidad){
-		$datos =  Existencia::configuracion($unidad);
+		$datos =  Existencia::almacenes($unidad,$almacenes);
+		
 		$respuesta = array();
 
 		foreach ($datos as $dato) {
@@ -286,10 +297,13 @@ class OperacionController extends BaseController {
 				$cantidad = 0;
 			}
 
+			$conf = Configuracion::where(array( 'ITE_clave' => $claveItem,'UNI_clave' => $unidad ))->first();
+
+			$nivelCompra = $conf->CON_nivelCompra;
+			$nivelMaximo = $conf->CON_nivelMaximo;
+			$nivelMinimo = $conf->CON_nivelMinimo;
+			
 			$existencia = $dato['EXI_cantidad'];
-			$nivelCompra = $dato['CON_nivelCompra'];
-			$nivelMaximo = $dato['CON_nivelMaximo'];
-			$nivelMinimo = $dato['CON_nivelMinimo'];
 
 			//se genera una cantidad virtual cuando tienes cantidades por surtir
 			$existenciaAparente = $existencia + $cantidad;
@@ -323,6 +337,73 @@ class OperacionController extends BaseController {
 
 	}
 
+	public function itemsUnidad($unidad){
+
+
+
+		$datos =  Existencia::configuracion($unidad);
+		$respuesta = array();
+
+		
+		foreach ($datos as $dato) {
+
+			$claveItem = $dato['ITE_clave'];
+			$consulta = OrdenCompra::porSurtir($claveItem,$unidad);
+
+			if ($consulta->count() > 0) {
+				$cantidad = $consulta->PorSurtir;
+			}else{
+				$cantidad = 0;
+			}
+
+			$conf = Configuracion::where(array( 'ITE_clave' => $claveItem,'UNI_clave' => $unidad ))->first();
+
+
+			if ($conf) {
+
+				$nivelCompra = $conf->CON_nivelCompra;
+				$nivelMaximo = $conf->CON_nivelMaximo;
+				$nivelMinimo = $conf->CON_nivelMinimo;
+
+				$existencia = $dato['EXI_cantidad'];
+
+				//se genera una cantidad virtual cuando tienes cantidades por surtir
+				$existenciaAparente = $existencia + $cantidad;
+
+				$comprar = $nivelMaximo - $existenciaAparente;
+
+				
+				if ($existenciaAparente <= $nivelMinimo) {
+					$semaforo = 'bgm-red';
+				}elseif ( ($existenciaAparente > $nivelMinimo && $existenciaAparente < $nivelCompra) || $existenciaAparente == $nivelCompra ) {
+					$semaforo = 'bgm-yellow';
+				}elseif ($existenciaAparente > $nivelCompra) {
+					$semaforo = 'bgm-green';
+				}
+
+				$respuesta[] = array(
+					'ITE_clave' => $dato['ITE_clave'],
+					'ITE_nombre' => $dato['ITE_nombre'],
+					'UNI_clave' => $dato['UNI_clave'],
+					'EXI_cantidad' => $existencia,
+					'POR_surtir' => $cantidad,
+					'CON_nivelCompra' => $nivelCompra,
+					'CON_nivelMinimo' => $nivelMinimo,
+					'CON_nivelMaximo' => $nivelMaximo,
+					'ITE_codigo' => $dato['ITE_codigo'],
+					'semaforo'	=> $semaforo,
+					'compra' => $comprar,
+				);
+
+			}else{
+				return Response::json(array('respuesta' => 'Algunos items no tienen alertas favor de verificar'),500);
+			}
+		}
+
+		return $respuesta;
+
+	}
+
 	public function itemProveedor(){
 
 		$itemprovedor = new ItemProveedor;
@@ -338,6 +419,91 @@ class OperacionController extends BaseController {
 		return Response::json(array('respuesta' => 'Item asignado Correctamente'));
 
 	}
+
+	public function importacion(){
+
+		$ruta = 'archivo';
+		$file = Input::file('file');
+		$nombreArchivo = $file->getClientOriginalName();
+		$file->move(public_path(),$file->getClientOriginalName());
+
+
+		Excel::load( $nombreArchivo , function($reader) {
+
+	        $datos = $reader->toArray();
+
+	        foreach ($datos as $dato) {
+
+	            $item = $dato['item_id'];
+	            $unidad = $dato['unidad_id'];
+	            $almacen = $dato['almacen_id'];
+	            $existencia = $dato['existencia'];
+	            $lote = $dato['lote'];
+	            $caducidad = $dato['caducidad'];
+
+	            $existenciaActual = Existencia::where(array('ALM_clave'=>$almacen,'ITE_clave' => $item ))->count();
+
+	            if ($existenciaActual == 0) {
+	        
+		            $operacion = new Operacion;
+
+		            //la operacion es un ajuste de tipo inicial
+					$operacion->tipomovimiento = 1;
+					$operacion->tipoajuste = 1;
+
+					$operacion->item = $item;
+					$operacion->almacen = $almacen;
+					$operacion->cantidad = $existencia;
+					$operacion->idLote = '';
+					$operacion->lote = $lote;
+					$operacion->orden = '';
+					$operacion->caducidad = $caducidad;
+					$operacion->usuario = Input::get('usuario');
+					$operacion->observaciones = 'Importación atravez de archivo de excel';
+					$operacion->receta = '';
+					$operacion->alta();
+					$operacion->verificaLote();
+
+	            }else{
+	            	return Response::json(array('flash' => 'Este Almacen ya contiene datos'),500);
+
+	            }
+
+
+	        }
+
+	        return Response::json(array('respuesta' => 'Datos cargados correctamente'));
+
+	    });
+	}
+
+	public function actualizaItemProveedor(){
+
+		ItemProveedor::where( array(
+			'ITE_clave' => Input::get('itemId'),
+			'PRO_clave' => Input::get('proveedor'),
+			'IPR_ultimaFecha' => Input::get('fecha')
+		) )->update( array( 'IPR_ultimoCosto' => Input::get('cantidad') ));
+		
+
+		return Response::json(array('respuesta' => 'Conexión Actualizada Correctamente'));
+
+	}
+
+	public function eliminaItemProveedor(){
+
+		ItemProveedor::where( array(
+			'ITE_clave' => Input::get('ITE_clave'),
+			'PRO_clave' => Input::get('PRO_clave'),
+			'IPR_ultimaFecha' => Input::get('IPR_ultimaFecha')
+		) )->delete();
+		
+
+		return Response::json(array('respuesta' => 'Conexión Eliminada Correctamente'));
+
+	}
+
+	
 
 	// agrega unnuevo movminiento
 	public function movimiento(){
@@ -593,45 +759,51 @@ class OperacionController extends BaseController {
 	public function traspaso(){
 
 		//preparamos los movimientos que se involucran el el traspaso del item
+		$datos =  Input::all();
 
-		$almacenOrigen = Input::get('almacenOrigen');
-		$almacenDestino = Input::get('almacenDestino');
-		$idLote = Input::get('lote');
-		$item = Input::get('item');
-		$cantidad = Input::get('cantidad');
+		foreach ($datos as $dato) {
+			# code...
+			$almacenOrigen = $dato['almacenOrigen'];
+			$almacenDestino = $dato['almacenDestino'];
+			$idLote = $dato['lote'];
+			$item = $dato['item'];
+			$cantidad = $dato['cantidad'];
 
 
-		//baja de cantidad en almacenOrigen
-		$operacion1 = new Operacion;
+			//baja de cantidad en almacenOrigen
+			$operacion1 = new Operacion;
 
-		$operacion1->tipomovimiento = 3;
-		$operacion1->item = Input::get('item');
-		$operacion1->almacen = Input::get('almacenOrigen');
-		$operacion1->cantidad = Input::get('cantidad');
-		$operacion1->idLote = Input::get('lote');
-		$operacion1->usuario = Input::get('usuario');
-		$operacion1->traspaso = 1;
-		$operacion1->observaciones = 'Disminución por traspaso';
+			$operacion1->tipomovimiento = 3;
+			$operacion1->item = $dato['item'];
+			$operacion1->almacen = $dato['almacenOrigen'];
+			$operacion1->cantidad = $dato['cantidad'];
+			$operacion1->idLote = $dato['lote'];
+			$operacion1->usuario = $dato['usuario'];
+			$operacion1->traspaso = 1;
+			$operacion1->observaciones = 'Disminución por traspaso';
 
-		$operacion1->salida();
+			$operacion1->salida();
 
-		$operacion1->verificaLote();
+			$operacion1->verificaLote();
 
-		//incremento de cantidad en almacenDestino
-		$operacion2 = new Operacion;
+			//incremento de cantidad en almacenDestino
+			$operacion2 = new Operacion;
 
-		$operacion2->tipomovimiento = 2;
-		$operacion2->item = Input::get('item');
-		$operacion2->almacen = Input::get('almacenDestino');
-		$operacion2->cantidad = Input::get('cantidad');
-		$operacion2->idLote = Input::get('lote');
-		$operacion2->usuario = Input::get('usuario');
-		$operacion2->traspaso = 1;
-		$operacion2->observaciones = 'Incremento por traspaso';
+			$operacion2->tipomovimiento = 2;
+			$operacion2->item = $dato['item'];
+			$operacion2->almacen = $dato['almacenDestino'];
+			$operacion2->cantidad = $dato['cantidad'];
+			$operacion2->idLote = $dato['lote'];
+			$operacion2->usuario = $dato['usuario'];
+			$operacion2->traspaso = 1;
+			$operacion2->observaciones = 'Incremento por traspaso';
 
-		$operacion2->entrada();
+			$operacion2->entrada();
 
-		$operacion2->verificaLote();
+			$operacion2->verificaLote();
+
+
+		}
 
 
 		return Response::json(array('respuesta' => 'Traspaso efectuado Correctamente'));

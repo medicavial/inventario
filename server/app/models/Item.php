@@ -9,6 +9,7 @@ class Item extends Eloquent {
     public function scopeActivos($query)
     {
         return $query->join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')
+                     ->join('presentaciones','items.PRE_clave', '=' ,'presentaciones.PRE_clave')
                      ->where('ITE_activo',true)
                      ->orderBy('ITE_nombre')
                      ->get();
@@ -41,6 +42,19 @@ class Item extends Eloquent {
     public function tipoItem()
     {
         return $this->hasOne('TipoItem', 'TIT_clave', 'TIT_clave');
+    }
+
+
+    public function configuracion($query,$unidad){
+        
+        // return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+        //              ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+        //              ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+        //              ->select('ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave')
+        //              ->where('almacenes.UNI_clave', $unidad)
+        //              ->groupBy('ITE_clave')
+        //              ->orderBy('ITE_nombre')
+        //              ->get();
     }
 
 }		

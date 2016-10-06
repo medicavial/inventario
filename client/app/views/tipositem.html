@@ -32,7 +32,7 @@
               <div ng-show="tipo.TIT_activo">SI</div>
               <div ng-hide="tipo.TIT_activo">NO</div>
             </td>
-            <td class="option-table">
+            <td class="option-table" ng-if="permisos.PER_modificaCatalogo == '1' ">
                 <md-menu md-position-mode="target-right target" >
                   <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
                     <md-icon md-menu-origin>
@@ -64,7 +64,7 @@
 
 </div>
 
-<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="tipositem.nuevoTipo($event)" aria-label="Nuevo Estado">
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="tipositem.nuevoTipo($event)" aria-label="Nuevo Estado" ng-if="permisos.PER_modificaCatalogo == '1' ">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>

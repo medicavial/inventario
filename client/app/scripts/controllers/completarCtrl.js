@@ -28,9 +28,13 @@
 				items:vm.items,
 				usuario:$rootScope.id
 			}
+
+			vm.verificaLotes();
 		}   
         
         vm.ingresaLote = function(item,ev) {
+
+        	var cantidadSurtida = item.OIT_cantidadSurtida;
 
 		    $mdDialog.show({
 		      	controller: lotesItemCtrl,
@@ -44,8 +48,10 @@
 					}
 				},
 		      	clickOutsideToClose:false
-		    }).then(function(lotes){
-		    	item.lotes = lotes;
+		    }).then(function(datos){
+		    	console.log(datos);
+		    	item.cantidadSurtida = datos.cantidad;
+		    	item.lotes = datos.lotes;
 		    	vm.verificaLotes();
 		    });
 		}; 
@@ -56,15 +62,13 @@
 			var actual = 1;
 
 			angular.forEach(vm.items, function (value,key){
-
+				// console.log(items);
 				if (value.lotes != undefined) {
 
 					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
-
 						if (actual == items) {
 							vm.lotesCompletos = true;
 						};
-
 					};
 
 				}else{
@@ -78,6 +82,7 @@
 					}else{
 						vm.lotesCompletos = false;
 					}
+
 				}
 
 				actual++;
@@ -106,8 +111,10 @@
 	function lotesItemCtrl($scope, $mdDialog, info, operacion, mensajes,informacion){
 		
 		
+		// console.log(info);
+		$scope.cantidad = 0;
 		$scope.lotes = info.lotes ? info.lotes : [];
-		$scope.maximo = info.OIT_cantidadSurtida > 0 ? info.OIT_cantidadSurtida : info.OIT_cantidadPedida ;
+		$scope.maximo = Number(info.OIT_cantidadPedida) - Number(info.OIT_cantidadSurtida);
 
 		if ($scope.lotes.length > 0) {
 
@@ -126,7 +133,7 @@
 				}else{
 					var dato = JSON.parse(lote);
 
-					console.log(dato);
+					// console.log(dato);
 					$scope.datos.idLote = dato.LOT_clave;
 					$scope.datos.lote = dato.LOT_numero;
 					$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
@@ -145,6 +152,7 @@
 				lote : '',
 				caducidad : ''
 			}
+
 			
 			if(informacion.data.length > 0){
 				$scope.lotesUnidad = informacion.data;
@@ -161,6 +169,8 @@
 			if ($scope.modificaForm.$valid) {
 				$scope.maximo -= $scope.datos.cantidad;
 
+				$scope.cantidad += $scope.datos.cantidad;
+
 				$scope.lotes.push($scope.datos);
 				$scope.inicio();
 			};
@@ -168,11 +178,12 @@
 
 		$scope.ingresa = function(){
 
-			if ($scope.maximo == 0) {
-				$mdDialog.hide($scope.lotes);
-			}else{
-				mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
+			var datos = {
+				lotes:$scope.lotes,
+				cantidad:$scope.cantidad
 			}
+			$mdDialog.hide(datos);
+			
 		};
 
 		$scope.cancel = function() {

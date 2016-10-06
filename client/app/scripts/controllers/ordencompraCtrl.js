@@ -250,8 +250,10 @@
 						$scope.consultaUnidad = false;
 					},
 					function (error){
-						alert(error);
+
+						mensajes.alerta(error,'error','top right','error');
 						$scope.consultaUnidad = false;
+						
 					}
 				);
 				
@@ -260,8 +262,12 @@
 
 
 		$scope.muestraItems = function(datos){
+
+			$scope.consultaUnidad = true;
+
 			operacion.itemsAlmacenes($scope.unidad,datos).success(function (data){
 				$scope.items = data;
+				$scope.consultaUnidad = false;
 			});
 		};
 
@@ -310,7 +316,24 @@
 			return list.indexOf(item) > -1;
 		};
 
+		$scope.segmentable = function(item){
 
+			// console.log(item);
+			var item = Number(item[0].ITE_segmentable);
+
+			if (item == 1) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		$scope.caja = function(item){
+
+			return item[0].ITE_cantidadCaja;
+		}
+
+		//define la cantidad que se requiere comprar
 		$scope.cantidad = function(item){
 
 			for(var i = 0; i < $scope.ordenItems.length; i++){
@@ -318,7 +341,13 @@
 				var itx = $scope.ordenItems[i];
 
 	            if (itx.ITE_nombre == item) {
-	                return itx.porsurtir;
+
+	                if (itx.ITE_segmentable == 1) {
+	            		var cantidad = Number(itx.porsurtir)/Number(itx.ITE_cantidadCaja);
+	            		return cantidad.toFixed();
+	            	}else{
+	                	return Number(itx.porsurtir);	            		
+	            	}            		
 	            };
 
 	        }
@@ -351,6 +380,15 @@
 
 	        }
 	        
+		}
+
+		$scope.costoTotal = function(item){
+			// console.log(item);
+			if (item.ITE_segmentable == 1) {
+				return (item.cantidad * item.ITE_cantidadCaja) * item.IPR_ultimoCosto;
+			}else{
+				return item.cantidad * item.IPR_ultimoCosto;
+			}
 		}
 
 

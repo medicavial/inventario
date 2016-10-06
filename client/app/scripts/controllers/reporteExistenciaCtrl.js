@@ -31,11 +31,13 @@
 			scope.nuevaBusqueda = true;
 			scope.consultando = false;
 			scope.items = datos[1].data;
+			scope.tiposItem = datos[2].data;
 			scope.almacenes = [];
 			scope.datos = {
 				unidad:'',
 				almacen:'',
-				item:''
+				item:'',
+				tipo:''
 			}
 		}
 
@@ -67,18 +69,33 @@
 
 		scope.buscar = function(){
 
-			scope.consultando = true;
-			scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
-			scope.almacenB = scope.datos.almacen ? scope.almacenB : '';
-			scope.itemB = scope.datos.item ? scope.itemB : '';
 
-			reportes.existencias(scope.datos).success(function (data){
-				scope.consultando = false;
-				scope.info = data;
-				scope.nuevaBusqueda = false;
-			}).error(function (error){
-				scope.info = [];
-			})
+			if (scope.datos.unidad) {
+
+				scope.consultando = true;
+				scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
+				scope.almacenB = scope.datos.almacen ? scope.almacenB : '';
+				scope.itemB = scope.datos.item ? scope.itemB : '';
+
+				reportes.existencias(scope.datos).success(function (data){
+
+					scope.consultando = false;
+
+					if (data.length > 0) {
+						scope.info = data;
+						scope.nuevaBusqueda = false;
+					}else{
+						mensajes.alerta('No se encontro información disponible','error','top right','error');
+					}
+				}).error(function (error){
+					scope.info = [];
+					scope.consultando = false;
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+				})
+				
+			}else{
+				mensajes.alerta('debes ingresar unidad','error','top right','error');
+			}
 		}
 
 		scope.opciones = function() {

@@ -10,7 +10,7 @@ class AuthController extends BaseController {
 
 		if (Auth::attempt(array('USU_login' => $user, 'password' => $password, 'USU_activo' => 1))){
 		    
-		    return Auth::user()->join('permisos','permisos.PER_clave','=','usuarios.PER_clave')->first();
+		    return User::where('USU_login',$user)->join('permisos','permisos.PER_clave','=','usuarios.PER_clave')->first();
 
 		}else{
 

@@ -7,32 +7,39 @@
 	.controller('itemsCtrl',itemsCtrl)
 	.controller('itemEditCtrl',itemEditCtrl)
 
-	itemsCtrl.$inject 	 = ['$rootScope','$mdDialog','datos','items','mensajes'];
+	itemsCtrl.$inject 	 = ['$rootScope','$mdDialog','datos','items','mensajes','webStorage'];
 	itemCtrl.$inject 	 = ['$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
 	itemEditCtrl.$inject = ['$mdDialog','busqueda','items','mensajes', '$rootScope','datos','archivos','$mdConstant'];
 
 
-	function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes){
+	function itemsCtrl($rootScope,$mdDialog,datos,items,mensajes, webStorage){
 
 		var scope = this;
 		$rootScope.tema = 'theme3';
 		$rootScope.titulo = 'Items Registrados';
 		scope.info = datos;
 		scope.total = 0;
-		scope.limit = 10;
-		scope.page = 1;
+		scope.order = webStorage.session.get('ordenItems') == undefined ? '' : webStorage.session.get('ordenItems');
+		scope.page = webStorage.session.get('paginaItems') == undefined ? 1 : webStorage.session.get('paginaItems');
+		scope.limit = webStorage.session.get('limiteItems') == undefined ? 10 : webStorage.session.get('limiteItems');
+		scope.query = webStorage.session.get('queryItems') == undefined ? '' : webStorage.session.get('queryItems');
 
 		scope.onPaginationChange = function (page, limit) {
-		    console.log(page);
-		    console.log(limit);
+		    webStorage.session.add('paginaItems',page);
+		    webStorage.session.add('limiteItems',limit);
 		};
 
 		scope.onOrderChange = function (order) {
-			console.log(scope.query);
-		    //return $nutrition.desserts.get(scope.query, success).$promise; 
+			webStorage.session.add('ordenItems',order);
+		};
+
+		scope.guardaBusqueda = function(){
+			webStorage.session.add('queryItems',scope.query);
 		};
 
 		scope.nuevo = function(ev) {
+
+
 		    $mdDialog.show({
 		      controller: itemCtrl,
 		      templateUrl: 'views/item.html',
@@ -62,6 +69,10 @@
 
 		    // console.log(index);
 		    // var item = scope.info[index];
+		    console.log(scope.total);
+			console.log(scope.limit);
+			console.log(scope.page);
+			console.log(scope.query);
 
 		    var confirm = $mdDialog.confirm()
 		          .title('¿Desactivar el item?')

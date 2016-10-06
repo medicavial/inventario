@@ -13,7 +13,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr  md-auto-select ng-repeat="item in items |filter:query | orderBy: items.order">
+              <tr  md-auto-select ng-repeat="item in items |filter:query | orderBy: items.order ">
                 <td ng-click="calculaTotal()">{{item.ITE_nombre}}</td>
                 <td ng-click="calculaTotal()">{{item.OIT_cantidadPedida}}  <span ng-if="item.OIT_cantidadSurtida > 0">/ {{ item.OIT_cantidadSurtida }}</span></td>
                 <td ng-click="calculaTotal()">{{item.OIT_precioEsperado | currency}} <span ng-if="item.OIT_precioFinal > 0">/ {{ item.OIT_precioFinal | currency }}</span> </td>

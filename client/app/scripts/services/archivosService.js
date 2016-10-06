@@ -6,7 +6,7 @@
     angular.module('app')
     .factory('archivos',archivos);
     
-    function archivos($http, api,Upload,$q){
+    function archivos($http, api,Upload,$q,$rootScope){
         return{
             items: function(archivos,clave)
             {
@@ -73,6 +73,31 @@
 
                 return promesa.promise;
             },
+            subeArchivo:function(archivo){
+
+                var promesa = $q.defer();
+
+
+                Upload.upload({
+                    url: api + 'operacion/importacion',
+                    fields: {'usuario': $rootScope.id},
+                    file: archivo
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    promesa.notify(progressPercentage);
+                    // console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    promesa.resolve(data);
+                    // console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                }).error(function (data, status, headers, config) {
+                    promesa.reject(data);
+                    // console.log('error status: ' + status);
+                })
+
+
+                return promesa.promise;
+
+            }
         }
     }
 

@@ -5,9 +5,9 @@
         <md-icon>
           <ng-md-icon icon="search"></ng-md-icon> 
         </md-icon>
-        <input ng-model="query" type="text" placeholder="Buscar Item" flex mayusculas>
+        <input ng-model="items.query" type="text" placeholder="Buscar Item" flex mayusculas ng-blur="items.guardaBusqueda()">
       </md-input-container>
-      <md-button class="md-icon-button" aria-label="limpiar" ng-if="query" ng-click="query = ''">
+      <md-button class="md-icon-button" aria-label="limpiar" ng-if="items.query" ng-click="items.query = ''">
         <ng-md-icon icon="close"></ng-md-icon> 
       </md-button>
     </md-data-table-toolbar>
@@ -26,7 +26,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in items.info |filter:query | orderBy: items.order | limitTo: items.limit: (items.page - 1) * items.limit">
+          <tr ng-repeat="item in items.info |filter:items.query | orderBy: items.order | limitTo: items.limit: (items.page - 1) * items.limit">
             <td>{{item.ITE_codigo}}</td>
             <td>{{item.ITE_nombre}}</td>
             <td>{{item.TIT_nombre}}</td>
@@ -37,7 +37,7 @@
               <div ng-if="item.ITE_activo == 1 ">SI</div>
               <div ng-if="item.ITE_activo == 0 ">NO</div>
             </td>
-            <td class="option-table">
+            <td class="option-table" ng-if="permisos.PER_modificaCatalogo == '1' ">
                 <md-menu md-position-mode="target-right target" >
                   <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
                     <md-icon md-menu-origin>
@@ -46,12 +46,12 @@
                   </md-button>
                   <md-menu-content width="2">
                     <md-menu-item>
-                        <md-button ui-sref="index.detalleItem({itemId:item.ITE_clave})">
+                        <md-button aria-label="modificar" ui-sref="index.detalleItem({itemId:item.ITE_clave})">
                           <p>Modificar</p>
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="items.confirmacion($event,item)">
+                      <md-button aria-label="estatus" ng-click="items.confirmacion($event,item)">
                         <p ng-if="item.ITE_activo == 1 " >Desactivar</p>
                         <p ng-if="item.ITE_activo == 0 " >Activar</p>
                       </md-button>
@@ -64,11 +64,11 @@
       </table>
     </md-data-table-container>
     <br>
-    <md-data-table-pagination md-limit="items.limit" md-page="items.page" md-total="{{items.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
+    <md-data-table-pagination md-limit="items.limit" md-page="items.page" md-total="{{items.info.length}}" md-trigger="items.onPaginationChange" class="animated fadeInUp"></md-data-table-pagination>
 
 </div>
 
-<md-button id="nuevo" ng-if="cargando == false" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.item')" aria-label="Nuevo Estado">
+<md-button id="nuevo" ng-if="cargando == false" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.item')" aria-label="Nuevo Estado" ng-if="permisos.PER_modificaCatalogo == '1' ">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>

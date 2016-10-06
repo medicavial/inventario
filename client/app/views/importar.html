@@ -1,0 +1,25 @@
+
+<div layout="column" class="white" ng-init="imp.inicio()">
+
+  <md-whiteframe class="md-whiteframe-4dp">
+
+    <md-subheader class="md-primary">Sube Archivo de Excel</md-subheader>
+    
+    <md-content layout-gt-sm="row" layout="column"  layout-padding ng-if="!imp.cargando">
+      <div class="drop-box"  ngf-drop ngf-drag-over-class="dragover" ngf-multiple="false"  ngf-change="imp.subir($file, $event)" flex>
+          <md-button type="button" class="md-raised"  ngf-select="imp.subir($files)" ngf-change="imp.subir($file, $event)">Subir Imagenes</md-button><br>
+          Arrastra tu archivo aqui
+      </div>
+    </md-content>
+    <div layout="row" layout-align="center center" ng-if="imp.cargando">
+      Cargando Datos...
+      <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+    </div>
+    
+
+    <br>
+    <br>
+
+  </md-whiteframe>
+
+</div>

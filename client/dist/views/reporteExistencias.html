@@ -6,7 +6,7 @@
 
           <md-subheader class="c-bluegray">X Unidad</md-subheader>  
           <md-divider class="bgm-bluegray"></md-divider>
-          <md-select ng-model="existencia.datos.unidad" md-on-close="existencia.cargaAlmacenes(existencia.datos.unidad)"  placeholder="Selecciona Unidad" flex>
+          <md-select ng-model="existencia.datos.unidad" md-on-close="existencia.cargaAlmacenes(existencia.datos.unidad)" required placeholder="Selecciona Unidad" flex>
             <md-option ng-repeat="unidad in existencia.unidades" ng-click="existencia.agregaUnidad(unidad.UNI_nombre)" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
           </md-select>
           

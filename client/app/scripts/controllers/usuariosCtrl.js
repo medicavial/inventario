@@ -28,7 +28,7 @@
 	      text: 'Usuarios por pagina:',
 	      of: 'de'
 	    };
-		scope.paginacion = [10,20,30,40];
+		scope.paginacion = [10,20,30,40,50];
 
 		scope.nuevoUsuario = function(ev) {
 		    $mdDialog.show({

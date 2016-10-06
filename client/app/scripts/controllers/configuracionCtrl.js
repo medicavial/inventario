@@ -22,7 +22,8 @@
 		scope.guardando = false;
 		scope.consultando = false;
 		scope.consultaUnidad = false;
-		scope.unidades = datos.data;
+		scope.unidades = datos.unidades;
+		scope.items = datos.items;
 		scope.edicion = true;
 		scope.correos = [];
 		scope.itemSeleccionado = '';
@@ -52,19 +53,21 @@
 
 			if (unidad) {
 
-				scope.items = [];
-				scope.consultaUnidad = true;
-				busqueda.configuracion(unidad).success(function (data){
 
-					if (data.length > 0) {
-						scope.edicion = true;
-						scope.items = data;
-					}else{
-						mensajes.alerta('Esta Unidad no tiene items en stock','','top right','info_outline');
-					}
-					scope.consultaUnidad = false;
+				// scope.items = [];
+				scope.unidad = unidad;
+				// scope.consultaUnidad = true;
+				// busqueda.configuracion(unidad).success(function (data){
 
-				});
+					// if (data.length > 0) {
+					scope.edicion = true;
+						// scope.items = data;
+					// }else{
+						// mensajes.alerta('Esta Unidad no tiene items en stock','','top right','info_outline');
+					// }
+					// scope.consultaUnidad = false;
+
+				// });
 				
 			};
 		}
@@ -82,7 +85,7 @@
 				scope.datos.item = item.ITE_clave;
 				scope.itemNombre = item.ITE_nombre;
 
-				busqueda.itemUnidad(item.ITE_clave,item.UNI_clave).success(function (data){
+				busqueda.itemUnidad(item.ITE_clave,scope.unidad).success(function (data){
 
 					// console.log(data);
 

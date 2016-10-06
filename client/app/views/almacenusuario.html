@@ -1,51 +1,67 @@
-<md-dialog aria-label="Nueva Conexion" ng-init="inicio()" flex-sm="65" flex-gt-md="40" flex="100">
+<md-content class="md-whiteframe-2dp animated fadeInUp" layout="column" ng-init="usualm.inicio()">
+    
+    <md-subheader>Selecciona usuario</md-subheader>  
+    <md-divider></md-divider>
+    
+    <md-content layout-padding>
 
-  <md-toolbar class="md-warn">
-    <div class="md-toolbar-tools">
-      <h2>Nueva Conexion</h2>
-      <span flex></span>
-      <md-button  class="md-icon-button" ng-click="cancel()">
-        <!-- <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Cerrar Ventana"></md-icon> -->
-        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
-      </md-button>
-    </div>
-  </md-toolbar>
+      <md-select ng-model="usualm.datos.usuario" placeholder="Selecciona Usuario" md-on-close="usualm.almacenesUsuario(usualm.datos.usuario)" flex flex-gt-sm="40">
+        <md-option ng-repeat="usuario in usualm.usuarios" ng-value="{{usuario.USU_clave}}">{{usuario.USU_nombrecompleto}}</md-option>
+      </md-select>
 
-  <md-dialog-content>
-      <md-content layout-padding>
+      <md-progress-circular md-mode="indeterminate" ng-if="usualm.consultaAlmacen" flex></md-progress-circular>
+        
 
-        <md-chips ng-model="almacenesseleccionados" readonly="false"  md-autocomplete-snap md-require-match>
-          <md-autocomplete
-              md-selected-item="seleccionado"
-              md-search-text="busqueda"
-              md-items="alm in consultado(busqueda)"
-              md-item-text="alm.ALM_nombre"
-              placeholder="Escribe el Almacen"
-              >
-            <span md-highlight-text="busqueda">{{alm.ALM_nombre}}</span>
-          </md-autocomplete>
-          <md-chip-template>
-            <strong>{{$chip.ALM_nombre}}</strong>
-          </md-chip-template>
-
-        </md-chips>
-        <div layout="row" layout-sm="column" layout-align="space-around" ng-show="guardando">
-          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        <div>
+          <md-checkbox aria-label="Selecciona Todo"
+                       ng-model="usualm.selectedAll"
+                       ng-click="usualm.seleccionaTodo()">
+            <span ng-if="usualm.selectedAll">Des-</span>Seleccionar Todo
+          </md-checkbox>
         </div>
 
-      </md-content>
- 
-  </md-dialog-content>
-  <div class="md-actions" layout="row">
+        <div layout="column" layout-gt-sm="row">
+          
+          <md-input-container md-no-float flex>
+            <md-icon>
+              <ng-md-icon icon="search" style="fill:#3F51B5"></ng-md-icon> 
+            </md-icon>
+            <input ng-model="query" type="text" placeholder="Buscar Almacen" mayusculas>
+          </md-input-container>
 
-    <span flex></span>
-    <md-button type="button" ng-click="cancel()">
-        Salir
-    </md-button>
-    <md-button type="button" ng-disabled="guardando" ng-click="guardar()">
-        Guardar
-    </md-button>
-  </div>
+        </div>
+        
+        <div layout="column" layout-gt-sm="row">
+
+          <md-list flex >
+            <md-subheader class="c-bluegray">Almacen(es) Disponibles</md-subheader>  
+            <md-list-item ng-click="usualm.agregaAlmacen(almacen)" ng-repeat="almacen in usualm.almacenes  |filter:query">
+              <md-checkbox ng-model="almacen.seleccionado"></md-checkbox>
+              <p> {{ almacen.ALM_nombre }} </p>
+            </md-list-item>
+          </md-list>
+
+          <md-list flex>
+            <md-subheader class="c-bluegray">Almacen(es) Del Usuario</md-subheader>  
+            <md-list-item ng-click="" ng-repeat="almacenUsu in usualm.almacenesActivos  |filter:query">
+              <p> {{ almacenUsu.ALM_nombre }} </p>
+              <ng-md-icon class="md-secondary" icon="delete" style="fill:#3F51B5" ng-click="usualm.confirma($event,almacenUsu)" aria-label="Eliminar"></ng-md-icon>
+            </md-list-item>
+          </md-list>
+
+        </div>
 
 
-</md-dialog>
+    
+
+    </md-content>
+
+</md-content>
+
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="usualm.guardar()" aria-label="Nueva Relación">
+    <md-tooltip md-direction="top">
+      Agregar Almacen(es)
+    </md-tooltip>
+    <ng-md-icon icon="fast_forward" style="fill:white" ng-if="!usualm.guardando"></ng-md-icon> 
+    <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="usualm.guardando"></md-progress-circular>
+</md-button>

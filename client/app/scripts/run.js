@@ -6,9 +6,9 @@
 	.module('app')
 	.run(run);
 
-	run.$inject = ['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api','$mdMedia'];
+	run.$inject = ['$rootScope', '$state', '$mdSidenav','$mdBottomSheet','auth','webStorage','$window', 'api','$mdMedia','mensajes'];
 
-	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api,$mdMedia) {
+	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api,$mdMedia, mensajes) {
 
 		var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
@@ -27,10 +27,12 @@
 		$rootScope.nombre = webStorage.session.get('nombre');
 		$rootScope.id = webStorage.session.get('id');
 
+		$rootScope.permisos = JSON.parse(webStorage.session.get('permisos'));
+		
 		$rootScope.menu = 'menu';
 
 		//incia el menu;
-		$rootScope.resetMenu = function(){
+		$rootScope.resetMenu = function(icono){
 			
 			$rootScope.iconoAdmin = 'add';
 			$rootScope.iconoCatalogos = 'add';
@@ -49,13 +51,12 @@
 		// interaccion del menu
 		$rootScope.abrirMenu = function(index){			
 
-			$rootScope.resetMenu();
-
 			if (index == 1) {
 
 				if ($rootScope.admin) {
 					$rootScope.iconoAdmin = 'add';
 				}else{
+					// $rootScope.resetMenu(iconoAdmin);
 					$rootScope.iconoAdmin = 'remove';
 				}
 
@@ -67,6 +68,7 @@
 				if ($rootScope.catalogos) {
 					$rootScope.iconoCatalogos = 'add';
 				}else{
+					// $rootScope.resetMenu(iconoCatalogos);
 					$rootScope.iconoCatalogos = 'remove';
 				}
 
@@ -78,6 +80,7 @@
 				if ($rootScope.almacen) {
 					$rootScope.iconoAlmacen = 'add';
 				}else{
+					// $rootScope.resetMenu(iconoAlmacen);
 					$rootScope.iconoAlmacen = 'remove';
 				}
 
@@ -89,6 +92,7 @@
 				if ($rootScope.reportes) {
 					$rootScope.iconoReportes = 'add';
 				}else{
+					// $rootScope.resetMenu(iconoReportes);
 					$rootScope.iconoReportes = 'remove';
 				}
 
@@ -162,10 +166,10 @@
 		});
 
 		$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-			event.preventDefault();
-			$state.get('error').error = { code: 123, description: 'Exception stack trace' }
+			$rootScope.cargando = false;
 			mensajes.alerta('Problemas de conexión intentalo nuevamente por favor','error','top right','error');
-			return $state.go('index.home');
+			event.preventDefault();
+            $state.go('index.home');
 		});
 
 		$rootScope.verificaVista = function(){

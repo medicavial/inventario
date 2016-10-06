@@ -2,6 +2,23 @@
     
     <md-content ng-if="ordenes.nuevaBusqueda" class="md-whiteframe-5dp white" layout-gt-sm="row" layout="column" layout-padding>
         
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Referencia</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="ordenes.datos.unidad" md-on-close="ordenes.cargaAlmacenes(ordenes.datos.unidad)" required placeholder="Selecciona Unidad" flex>
+            <md-option ng-repeat="unidad in ordenes.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+          </md-select>
+
+          <!-- <md-subheader class="c-bluegray">X Item especifico</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="ordenes.datos.item" placeholder="Selecciona Item" flex>
+            <md-option ng-repeat="item in ordenes.items" ng-click="ordenes.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
+          </md-select> -->
+          <div flex></div>
+
+        </div>
+        
         <div layout="column">
 
           <md-subheader class="c-bluegray">Accesos Directos</md-subheader>  
@@ -17,22 +34,6 @@
 
           </div>
           
-        </div>
-
-        <div layout="column" flex>
-
-          <md-subheader class="c-bluegray">X Referencia</md-subheader>  
-          <md-divider class="bgm-bluegray"></md-divider>
-          <md-select ng-model="ordenes.datos.unidad" md-on-close="ordenes.cargaAlmacenes(ordenes.datos.unidad)"  placeholder="Selecciona Unidad" flex>
-            <md-option ng-repeat="unidad in ordenes.unidades" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
-          </md-select>
-
-          <md-subheader class="c-bluegray">X Item especifico</md-subheader>  
-          <md-divider class="bgm-bluegray"></md-divider>
-          <md-select ng-model="ordenes.datos.item" placeholder="Selecciona Item" flex>
-            <md-option ng-repeat="item in ordenes.items" ng-click="ordenes.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
-          </md-select>
-
         </div>
 
         <div layout="column" flex>

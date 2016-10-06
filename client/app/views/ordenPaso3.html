@@ -34,7 +34,7 @@
               <p>{{item.ITE_nombre}}</p>
               <p class="right">Costo: {{item.IPR_ultimoCosto | currency}}</p>
               <p class="right">Cantidad: {{item.cantidad}}</p>
-              <p class="right">Total: {{item.cantidad * item.IPR_ultimoCosto | currency}} </p>
+              <p class="right">Total: {{ costoTotal(item) | currency}} </p>
 
             </md-list-item>
             <md-divider ng-if="!$last"></md-divider>

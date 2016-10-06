@@ -21,9 +21,10 @@
           md-items="item in consultado(busqueda)"
           md-item-text="item.ITE_nombre"
           md-min-length="0"
-          placeholder="Escribe item a buscar">
+          placeholder="Escribe item a buscar"
+          ng-disabled="edicion">
         <md-item-template>
-          <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
+          <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}} - {{ item.PRE_nombre }} {{ item.ITE_presentacion }}</span>
         </md-item-template>
         <md-not-found>
           No se encontro "{{busqueda}}".
@@ -31,7 +32,7 @@
       </md-autocomplete>
       <br/>
       
-      <md-select placeholder="Proveedor" ng-model="datos.proveedor" name="tipo" required >
+      <md-select placeholder="Proveedor" ng-model="datos.proveedor" name="tipo" required ng-disabled="edicion">
         <md-option ng-repeat="proveedor in proveedores" value="{{proveedor.PRO_clave}}">{{proveedor.PRO_nombre}}</md-option>
       </md-select>
 

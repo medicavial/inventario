@@ -8,10 +8,27 @@
     .factory('reportes',reportes);
     
     function reportes($http, api,mensajes,publicfiles){
+
+        //funcion que convierte json en parametros get
+        function serializeObj(obj) {
+            var result = [];
+
+            for (var property in obj)
+                result.push(encodeURIComponent(property) + "=" + encodeURIComponent(obj[property]));
+
+            return result.join("&");
+        }
+
         return{
             existencias : function(datos)
             {
-                return $http.post(api + 'reportes/existencias',datos);
+                console.log(datos);
+                var parametros = serializeObj(datos);
+                return $http.get(api + 'reportes/existencias?' + parametros);
+            },
+            items : function(datos)
+            {
+                return $http.get(api + 'reportes/items');
             },
             ordenes : function(datos)
             {

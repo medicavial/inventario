@@ -8,11 +8,14 @@
 
     function operacion($http, api,$q,busqueda,$rootScope,$filter){
         return{
-            altaAlmacenes : function(datos){
-                return $http.post(api + 'operacion/usuario/almacenes',datos);
-            },
             actualizaConfiguracion : function(id,datos){
                 return $http.put(api + 'operacion/configuraciones/'+id,datos);
+            },
+            actualizaItempro :function(datos){
+                return $http.put(api + 'operacion/item/proveedor',datos);
+            },
+            altaAlmacenes : function(datos){
+                return $http.post(api + 'operacion/usuario/almacenes',datos);
             },
             altaConfiguracion : function(datos){
                 return $http.post(api + 'operacion/configuraciones',datos);
@@ -115,11 +118,17 @@
 
                 angular.forEach(datos, function(value, key) {
 
-
+                    // console.log(value);
                     var id = items.indexOf(value);
 
                     if (key == 0) {
+
+                        if (value.ITE_segmentable == 1) {
+                            cantidad = parseInt(value.porsurtir/value.ITE_cantidadCaja);
+                        };
+
                         items[id].cantidad = cantidad;
+
                     }else{
                         items[id].cantidad = 0;
                     }
@@ -134,6 +143,9 @@
 
                 return promesa.promise;
                 
+            },
+            eliminaItempro :function(datos){
+                return $http.delete(api + 'operacion/item/proveedor',datos);
             },
             eliminaOrden : function(proveedor,catalogo){
 
@@ -161,6 +173,14 @@
                     var cantidad = value.Cantidad,
                         proveedores = value.proveedores.length;
 
+                    var segmentable = value.proveedores[0].ITE_segmentable,
+                        cantidadCaja = value.proveedores[0].ITE_cantidadCaja;
+
+
+                    if (segmentable == 1) {
+                        cantidad = parseInt(cantidad/cantidadCaja);
+                    }
+
 
                     //calculamos la cantidad que debe ser proporcional segun el numero de proveedores
                     //y la redondeamos 
@@ -175,11 +195,14 @@
 
                     angular.forEach(value.proveedores, function(value, key) {
 
+                        console.log(value);
+
                         if (key == 0) {
                             value.cantidad = cantidadProporcionada + diferencia;
                         }else{
                             value.cantidad = cantidadProporcionada;
                         }
+
                         seleccionOrden.push(value);
                     
                     });
@@ -201,7 +224,17 @@
 
                 angular.forEach(items, function(value, key) {
 
+                    console.log(value);
+
                     var cantidad = value.Cantidad;
+
+                    var segmentable = value.proveedores[0].ITE_segmentable,
+                        cantidadCaja = value.proveedores[0].ITE_cantidadCaja;
+
+
+                    if (segmentable == 1) {
+                        cantidad = parseInt(cantidad/cantidadCaja);
+                    }
 
                     angular.forEach(value.proveedores, function(value, key) {
 
@@ -241,7 +274,17 @@
                 angular.forEach(items, function(value, key) {
 
                     //generamos la multiplicacion para saber su costo total del item
-                    var cantidad = value.cantidad * value.IPR_ultimoCosto;
+
+                    //verificamos si es segmentable para calcular el costo real de todos los items
+                    if (value.ITE_segmentable == 1) {
+
+                        var cantidad = (value.cantidad * value.ITE_cantidadCaja) * value.IPR_ultimoCosto;
+                        value.cantidad = value.cantidad * value.ITE_cantidadCaja;
+
+                    }else{
+                        var cantidad = value.cantidad * value.IPR_ultimoCosto;
+                    }
+
                     //y los sumamos a la cantidad anterior
                     total += cantidad;
                     // agregamos item al arreglo
@@ -409,7 +452,14 @@
                         promesa.resolve(data);
                     },
                     function (error){
-                        promesa.reject('Hubo un problema favor de reintentarlo');
+                        console.log(error);
+                        var msg;
+                        if (error.data.respuesta) {
+                            msg = error.data.respuesta;
+                        }else{
+                            msg = 'Hubo un problema favor de reintentarlo';                            
+                        }
+                        promesa.reject(msg);
                     }
                 );
 
@@ -441,8 +491,20 @@
                             value.existencia = existenciaitem;
 
                             if (key == 0) {
-                                value.cantidad = cantidad;
+
+                                if (value.ITE_segmentable == 1) {
+
+                                    var caja = Number(cantidad)/Number(value.ITE_cantidadCaja);
+                                    value.cantidad = Number(caja.toFixed());
+        
+                                }else{
+                                    // console.log('entro');
+                                    value.cantidad = Number(cantidad);
+                                }
+
                                 seleccionOrden.push(value);
+
+
                             }else{
                                 value.cantidad = 0;
                                 seleccionOrden.push(value);
@@ -478,6 +540,13 @@
                     proveedores = datos.length;
 
                 angular.forEach(datos, function(value, key) {
+
+
+                    // console.log(value);
+
+                    if (value.ITE_segmentable == 1) {
+                        cantidad = parseInt(value.porsurtir/value.ITE_cantidadCaja);
+                    };
 
                     //calculamos la cantidad que debe ser proporcional segun el numero de proveedores
                     //y la redondeamos 
