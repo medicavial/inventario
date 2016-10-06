@@ -79,11 +79,16 @@ ng-md-icon {
 
 ng-md-icon svg {
     pointer-events: none;
+    display: block;
 }
 
 ng-md-icon[md-font-icon] {
     line-height: 1;
     width: auto;
+}
+
+ng-md-icon[disabled] svg {
+    fill: rgba(0, 0, 0, 0.26);
 }
 
 md-input-container > ng-md-icon {

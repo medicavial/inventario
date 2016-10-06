@@ -28,6 +28,15 @@ h1,h2,h3,h4{
   font-weight: 300;
 }
 
+
+.md-subheader {
+    background-color: white !important;
+}
+
+md-content {
+    background-color: white !important;
+}
+
 .alerta{
   margin-left: 2em;
   color: red;
