@@ -13,6 +13,7 @@ var gulp      = require('gulp'),
     watch 	  = require('gulp-watch'),
     historyApiFallback = require('connect-history-api-fallback');
 
+
 // Servidor web de desarrollo 
 gulp.task('server', function() {  
 	connect.server({    
@@ -26,11 +27,11 @@ gulp.task('server', function() {
 	}); 
 });
 
-gulp.task('server-producccion', function() {  
+gulp.task('server-produccion', function() {  
 	connect.server({    
 		root: './dist',    
 		hostname: '0.0.0.0',    
-		port: 3000,    
+		port: 4000,    
 		livereload: true,    
 		middleware: function(connect, opt) {      
 			return [ historyApiFallback ];    
@@ -99,6 +100,20 @@ gulp.task('copy', function() {
 	.pipe(gulp.dest('./dist/img'));
 });
 
-gulp.task('produccion', ['compress','copy']);
+
+gulp.task('generate-service-worker', function(callback) {
+  var fs = require('fs');
+  var path = require('path');
+  var swPrecache = require('sw-precache');
+  var rootDir = './dist';
+ 
+  swPrecache.write(path.join(rootDir, 'service-worker.js'), {
+    staticFileGlobs: [rootDir + '/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff}'],
+    stripPrefix: rootDir
+  }, callback);
+
+});
+
+gulp.task('produccion', ['compress','copy','generate-service-worker']);
 
 gulp.task('default', ['server','inject','wiredep', 'watch']);

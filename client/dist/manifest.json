@@ -1,66 +1,52 @@
-// {
-//   // Required
-//   "manifest_version": 2,
-//   "name": "MV Inventario",
-//   "version": "1.0",
-//   "short_name": "inventario",
-//   "description": "Sistema de inventario Medicavial",
-
-//   "icons": {  
-//     "16": "favicon-16.png",
-//     "32": "favicon-32.png",
-//     "48": "favicon-48.png",
-//     "128": "favicon-120.png" 
-//   },
-//   "app": {
-//     "launch": {
-//       "local_path": "index.html"
-//     }
-//   },
-
-//   "permissions": [
-//         "storage",
-//         "unlimitedStorage",
-//         "alarms",
-//         "notifications",
-//         "http://api.medicavial.mx/api/",
-//         "webview",
-//         "<all_urls>",
-//         "fullscreen"
-//     ],
-//   "background": {
-//       "scripts": [
-//           "js/app.min.js",
-//           "js/vendor.min.js"
-//       ]
-//   },
-//   "content_security_policy": "script-src 'self'; object-src 'self'",
-//   "chrome_url_overrides" : {
-//     "newtab": "index.html"
-//   }
-// }
 {
-  "name": "Inventario MV",
-  "description": "Sistema de Inventario MV",
-  "version": "0.1",
-  "manifest_version": 2,
-  "app": {
-    "background": {
-      "scripts": ["background.js"]
+  "name": "Inventarios",
+  "short_name": "MVInv.",
+  "theme_color": "#3f51b5",
+  "background_color": "#3f51b5",
+  "display": "standalone",
+  "Scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "img/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  },
-  "permissions": [
-        "storage",
-        "unlimitedStorage",
-        "alarms",
-        "notifications",
-        "http://api.medicavial.mx/api/",
-        "https://fonts.googleapis.com/",
-        "webview",
-        "<all_urls>",
-        "fullscreen"
-    ],
-  "icons": { "16": "favicon-16.png", "128": "favicon-120.png" },
-  "content_security_policy": "script-src 'self'; object-src 'self'"
+  ],
+  "splash_pages": null
 }
-
