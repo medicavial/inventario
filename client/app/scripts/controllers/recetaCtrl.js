@@ -35,7 +35,6 @@
 
 		scope.surtirItem = function(valor){
 
-
 			console.log(valor);
 			if (valor.lotes == undefined && valor.forzoso == 1) {
 				mensajes.alerta('Debes ingresar un lote para surtir item','error','top right','error');
@@ -164,6 +163,7 @@
 			scope.datos = [];
 
 			busqueda.receta(scope.receta).success(function (data){
+				console.log(data);
 				scope.datos = data;
 				scope.cargando = false;
 				scope.datosReceta = true;
@@ -174,20 +174,22 @@
 		}
 
 		scope.filtraOrtesis = function(item){
-			var palabras = item.ITE_nombre.split(" ");
 
+			var palabras = item.ITE_nombre.split(" ");
 			return palabras[0];
 
 		}
 
 		scope.generaFiltro = function(recetaItem){
+
 			var item = $filter('filter')(scope.items, { ITE_clave:recetaItem.item });
-			
 			var palabras = item[0].ITE_nombre.split(" ");
-
 			scope.filtro = palabras[0];
-
 			scope.valorAnterior = recetaItem.item;
+
+			console.log(scope.filtro);
+			console.log(scope.valorAnterior);
+
 		}
 
 	}
