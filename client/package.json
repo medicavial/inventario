@@ -18,6 +18,7 @@
     "gulp-watch": "^4.1.1",
     "jshint-stylish": "^1.0.1",
     "nib": "^1.1.0",
-    "wiredep": "^2.2.2"
+    "wiredep": "^2.2.2",
+    "gulp-serviceworker":"*"
   }
 }
