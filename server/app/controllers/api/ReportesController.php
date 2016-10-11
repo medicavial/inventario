@@ -11,10 +11,74 @@ class ReportesController extends BaseController {
     			->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
 				->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
 				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-				->select('ITE_codigo','ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa');
+				->select('ITE_codigo','ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa','existencias.EXI_clave');
 
 	 	if (Input::has('unidad')) {
 	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
+		}
+
+		if (Input::has('almacen')) {									
+			$query->where('almacenes.ALM_clave', Input::get('almacen') );
+		}
+
+		if (Input::has('item')) {									
+			$query->where('items.ITE_clave', Input::get('item') );
+		}
+
+		if (Input::has('tipo')) {									
+			$query->where('items.TIT_clave', Input::get('tipo') );
+		}								
+
+		return $query->get();
+
+	}
+
+
+	public function lotes(){
+
+		$query = Lote::query();
+
+        $query->join('existencias', 'existencias.EXI_clave', '=', 'lote.EXI_clave')
+        		->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+    			->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
+				->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+				->select('ITE_codigo','ITE_nombre','almacenes.ALM_nombre','UNI_nombrecorto','TIT_nombre','LOT_numero','LOT_caducidad','LOT_cantidad');
+
+	 	if (Input::has('unidad')) {
+	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
+		}
+
+		if (Input::has('almacen')) {									
+			$query->where('almacenes.ALM_clave', Input::get('almacen') );
+		}
+
+		if (Input::has('item')) {									
+			$query->where('items.ITE_clave', Input::get('item') );
+		}
+
+		if (Input::has('tipo')) {									
+			$query->where('items.TIT_clave', Input::get('tipo') );
+		}								
+
+		return $query->get();
+
+	}
+
+
+	public function movimientos(){
+
+		$query = Movimiento::query();
+
+        $query->join('items', 'movimientos.ITE_clave', '=', 'items.ITE_clave')
+				->join('almacenes', 'movimientos.ALM_clave', '=', 'almacenes.ALM_clave')
+				->join('usuarios', 'movimientos.USU_clave', '=', 'usuarios.USU_clave')
+				->join('tiposMovimiento', 'movimientos.TIM_clave', '=', 'tiposMovimiento.TIM_clave')
+				->leftJoin('tiposAjuste', 'movimientos.TIA_clave', '=', 'tiposAjuste.TIA_clave')
+				->select('ITE_codigo','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre','MOV_observaciones','MOV_cantidad','movimientos.created_at');
+
+	 	if (Input::has('unidad')) {
+	 		$query->where('UNI_clave', Input::get('unidad') );
 		}
 
 		if (Input::has('almacen')) {									
@@ -59,6 +123,10 @@ class ReportesController extends BaseController {
 			$datos = $this->items();
 		}else if($tipo == 'ordenes'){
 			$datos = $this->ordenes();
+		}else if($tipo == 'lotes'){
+			$datos = $this->lotes();
+		}else if($tipo == 'movimientos'){
+			$datos = $this->movimientos();
 		}
 
 		return Excel::create($tipo, function($excel) use($datos,$tipo) {
@@ -71,6 +139,7 @@ class ReportesController extends BaseController {
 		        	
 			        $sheet->removeColumn('C',2);
 			        $sheet->removeColumn('G');
+			        $sheet->removeColumn('I');
 
 			        $sheet->row(1, array(
 					    'Codigo','Item','Almacen','Cantidad','Ultimo Movimiento','Unidad','Tipo Item','Precio Venta'
@@ -86,6 +155,20 @@ class ReportesController extends BaseController {
 				    	'No.','Fecha Registro','Fecha Surtida','Fecha Cancelada','usuario Alta',
 				    	'Usuario Surtio','Usuario Cancelo','Ultimo Movimiento','Importe Esperado','Importe Final','Unidad','Proveedor','Estatus' 
 					));
+		        }else if ($tipo == 'lotes') {
+		        	
+
+			        $sheet->row(1, array(
+					    'Codigo','Item','Almacen','Cantidad','Unidad','Tipo Item','Lote','Cantidad','Caducidad'
+					));
+
+		        }else if ($tipo == 'movmientos') {
+		        	
+
+			        $sheet->row(1, array(
+					    'Codigo','Item','Almacen','usuario','Tipo Movimiento','Tipo Ajuste','Observaciones','Cantidad','Fecha'
+					));
+
 		        }
 		        
 				// $sheet->setAutoSize(true);

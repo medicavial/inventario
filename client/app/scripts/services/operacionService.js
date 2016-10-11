@@ -26,6 +26,9 @@
             altaMovimiento :function(datos){
                 return $http.post(api + 'operacion/movimiento',datos);
             },
+            altaMovimientos :function(datos){
+                return $http.post(api + 'operacion/movimientos',datos);
+            },
             altaTraspaso :function(datos){
                 return $http.post(api + 'operacion/traspaso',datos);
             },

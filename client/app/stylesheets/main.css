@@ -6,13 +6,11 @@ main {
     padding: 20px
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
-}
 
-body {
+html, body  {
   font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
   font-style: normal;
+  font-display: optional;
   font-weight: 300!important;
   line-height: 1.42857143;
   letter-spacing: 0.01rem;
@@ -21,7 +19,37 @@ body {
   text-rendering: optimizeLegibility;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  
+}
+
+html {
+  overflow: hidden; 
+}
+
+body {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-align-content: stretch;
+      -ms-flex-line-pack: stretch;
+          align-content: stretch;
+  background: #ececec; 
 }
 
 h1,h2,h3,h4{
@@ -465,6 +493,10 @@ md-toast.info .md-toast-content {
   font-size: 2em !important;
   padding:0.5em 1em;
   text-align: right;
+}
+
+.inside-table[md-data-table]>thead:not([md-table-progress])>tr>th>div{
+  display: none;
 }
 
 /*.md-input.ng-invalid.ng-dirty {

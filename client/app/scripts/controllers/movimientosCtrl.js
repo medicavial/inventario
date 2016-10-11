@@ -172,12 +172,25 @@
 
 		$scope.verificaCantidadLote = function(){
 
-			if ($scope.cantidadLote > 0 && $scope.cantidadLote < $scope.datos.cantidad && $scope.datos.tipomov == 3) {
-				mensajes.alerta('El lote solo tiene ' + $scope.cantidadLote + ' disponible(s)','error','top right','error');
-				$scope.datos.cantidad = 0;
-			}else if ($scope.cantidadLote == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '' && $scope.datos.tipomov == 3) {
-				mensajes.alerta('Este lote no tiene cantidad disponible','error','top right','error');
-			};
+			if ($scope.item.TIT_forzoso == 1) {
+
+				if ($scope.cantidadLote > 0 && $scope.cantidadLote < $scope.datos.cantidad && $scope.datos.tipomov == 3) {
+					mensajes.alerta('El lote solo tiene ' + $scope.cantidadLote + ' disponible(s)','error','top right','error');
+					$scope.datos.cantidad = 0;
+				}else if ($scope.cantidadLote == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '' && $scope.datos.tipomov == 3) {
+					mensajes.alerta('Este lote no tiene cantidad disponible','error','top right','error');
+				};
+
+			}else{
+
+				if ($scope.disponible > 0 && $scope.disponible < $scope.datos.cantidad && $scope.datos.tipomov == 3) {
+					mensajes.alerta('Solo se tiene ' + $scope.disponible + ' disponible(s)','error','top right','error');
+					$scope.datos.cantidad = 0;
+				}else if ($scope.disponible == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '' && $scope.datos.tipomov == 3) {
+					mensajes.alerta('No hay cantidad disponible','error','top right','error');
+				};
+				
+			}
 		}
 
 
