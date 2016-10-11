@@ -38,28 +38,6 @@
             <td>{{movimiento.OCM_clave}}</td>
             <td> <span ng-if="movimiento.TIM_clave == 1"> * </span><span ng-if="movimiento.TIM_clave == 2"> + </span><span ng-if="movimiento.TIM_clave == 3"> - </span> {{movimiento.MOV_cantidad}}</td>
             <td>{{movimiento.created_at}}</td>
-            <!-- <td class="option-table">
-                <md-menu md-position-mode="target-right target" >
-                  <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
-                    <md-icon md-menu-origin>
-                      <ng-md-icon icon="more_vert"></ng-md-icon> 
-                    </md-icon>
-                  </md-button>
-                  <md-menu-content width="2">
-                    <md-menu-item>
-                      <md-button ng-click="movimientos.edita($event,$index)">
-                        <p>Modificar</p>
-                      </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                      <md-button ng-click="movimientos.confirmacion($event,$index)">
-                        <p ng-show="item.ITE_activo" >Desactivar</p>
-                        <p ng-hide="item.ITE_activo" >Activar</p>
-                      </md-button>
-                    </md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-            </td> -->
           </tr>
         </tbody>
       </table>
@@ -70,10 +48,9 @@
 
 </div>
 
-<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="movimientos.nuevo($event)" aria-label="Nuevo Estado">
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.altaMovimientos')" aria-label="Nuevo Movimiento">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>
-    <ng-md-icon icon="add" style="fill:white" ng-hide="movimientos.loading"></ng-md-icon> 
-    <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="movimientos.loading"></md-progress-circular>
+    <ng-md-icon icon="add" style="fill:white"></ng-md-icon>
 </md-button>

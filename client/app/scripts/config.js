@@ -43,6 +43,31 @@
 			templateUrl: 'views/base.html'
 		})
 
+		.state('index.altaMovimientos',{
+			url:'altaMovimientos',
+			templateUrl :'views/altaMovimientos.html',
+			controller:'altaMovimientosCtrl',
+			controllerAs: "am",
+			resolve:{
+	            datos:function(busqueda,$q,$rootScope){
+	            	
+	                var promesa 		= $q.defer(),
+	            		items 			= busqueda.items(),
+	            		tiposMovimiento = busqueda.tiposMovimiento(),
+	            		almacenes 		= busqueda.almacenesUsuario($rootScope.id),
+	            		tiposajuste 	= busqueda.tiposAjuste();
+
+	            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+	            		
+	            		promesa.resolve(data);
+	            		
+	            	});
+
+	                return promesa.promise;
+	            }
+	        }
+		})
+
 		.state('index.almacenes',{
 			url:'almacenes',
 			templateUrl :'views/almacenes.html',
@@ -516,6 +541,46 @@
 			templateUrl :'views/reporteItems.html',
 			controller:'reporteItemsCtrl',
 			controllerAs: "itm"
+		})
+
+		.state('index.reporteLotes',{
+			url:'reporteLotes',
+			templateUrl :'views/reporteLotes.html',
+			controller:'reporteLotesCtrl',
+			controllerAs: "lot",
+			resolve:{
+	            datos:function(busqueda,$q,$rootScope){
+	                var promesa   = $q.defer(),
+	            		unidades  = busqueda.unidadesUsuario($rootScope.id),
+	            		tipoitems = busqueda.tiposItem(),
+	            		items 	  = busqueda.items();
+	            	$q.all([unidades,items,tipoitems]).then(function (data){
+	            		promesa.resolve(data);
+	            	});
+
+	                return promesa.promise;
+	            }
+	        }
+		})
+
+		.state('index.reporteMovimientos',{
+			url:'reporteMovimientos',
+			templateUrl :'views/reporteMovimientos.html',
+			controller:'reporteMovimientosCtrl',
+			controllerAs: "mov",
+			resolve:{
+	            datos:function(busqueda,$q,$rootScope){
+	                var promesa   = $q.defer(),
+	            		unidades  = busqueda.unidadesUsuario($rootScope.id),
+	            		tipoitems = busqueda.tiposItem(),
+	            		items 	  = busqueda.items();
+	            	$q.all([unidades,items,tipoitems]).then(function (data){
+	            		promesa.resolve(data);
+	            	});
+
+	                return promesa.promise;
+	            }
+	        }
 		})
 
 		.state('index.reporteOrdenes',{

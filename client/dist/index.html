@@ -25,17 +25,6 @@
 <body>
 
 	<ui-view class="base" layout="column" md-theme="{{ tema }}" md-theme-watch></ui-view>
-
-	<script>
-		// TODO add service worker code here
-	  	if ('serviceWorker' in navigator) {
-		    navigator.serviceWorker
-		             .register('./service-worker.js')
-		             .then(function() { 
-		             	console.log('Service Worker Registered'); 
-		             });
-	  	}
-	</script>
 	
 	<script src="js/vendor.min.js"></script>
 

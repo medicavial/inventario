@@ -30,6 +30,16 @@
             {
                 return $http.get(api + 'reportes/items');
             },
+            lotes : function(datos)
+            {
+                var parametros = serializeObj(datos);
+                return $http.get(api + 'reportes/lotes?' + parametros);
+            },
+            movimientos : function(datos)
+            {
+                var parametros = serializeObj(datos);
+                return $http.get(api + 'reportes/movimientos?' + parametros);
+            },
             ordenes : function(datos)
             {
                 return $http.post(api + 'reportes/ordenes',datos);

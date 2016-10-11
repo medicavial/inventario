@@ -195,6 +195,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items/unidad/{unidad}', 'OperacionController@itemsUnidad');
         Route::post('items/almacenes/{unidad}', 'OperacionController@itemsAlmacenes');
         Route::post('movimiento', 'OperacionController@movimiento');
+        Route::post('movimientos', 'OperacionController@movimientos');
         Route::post('ordencompra', 'OperacionController@ordencompra');
         Route::post('proveedores/items', 'OperacionController@proveedoresItems');
         Route::post('reserva/item', 'OperacionController@reservaItem');
@@ -211,6 +212,8 @@ Route::group(array('prefix' => 'api'), function()
     {
         Route::get('existencias', 'ReportesController@existencias');
         Route::get('items', 'ReportesController@items');
+        Route::get('lotes', 'ReportesController@lotes');
+        Route::get('movimientos', 'ReportesController@movimientos');
         Route::post('ordenes', 'ReportesController@ordenes');
         Route::post('exportar/{tipo}', 'ReportesController@exportar');
         Route::post('exportarPDF/{tipo}', 'ReportesController@exportarPDF');

@@ -216,10 +216,16 @@ class BusquedasController extends BaseController {
 			$valoresItem = Item::find($item);
 			$modificable = $valoresItem->ITE_talla;
 			$familia = $valoresItem->TIT_clave;
+			$segmentable = $valoresItem->ITE_segmentable;
+			$caja = $valoresItem->ITE_cantidadCaja;
 
 			$forzoso = TipoItem::find($familia)->TIT_forzoso;
 
-			$caja = $valoresItem->ITE_cantidadCaja;
+			if ($segmentable) {
+				$cantidad = $dato['NS_cantidad'] * $caja;
+			}else{
+				$cantidad = $dato['NS_cantidad'];
+			}
 			
 			$items[] = array(
 				'receta' => $id,
@@ -227,8 +233,8 @@ class BusquedasController extends BaseController {
 				'item' => $item,
 				'forzoso' => $forzoso,
 				'familia' => $familia,
-				'cantidad' => $dato['NS_cantidad'],
-				'caja' => $caja,
+				'cantidad' => $cantidad,
+				'caja' => 0,
 				'editable' => $modificable,
 				'existencia' => $dato['id_existencia'],
 				'reserva' => $dato['id_reserva'],

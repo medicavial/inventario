@@ -547,6 +547,56 @@ class OperacionController extends BaseController {
 
 	}
 
+	// agrega varios movminientos
+	public function movimientos(){
+
+
+		$datos = Input::all();
+
+		foreach ($datos as $dato) {
+			# code...
+			//preparamos los movimientos del item
+			$operacion = new Operacion;
+
+			$operacion->tipomovimiento = $dato['tipomov'];
+			$operacion->item = $dato['item'];
+			$operacion->almacen = $dato['almacen'];
+			$operacion->cantidad = $dato['cantidad'];
+			$operacion->tipoajuste = $dato['tipoa'];
+			$operacion->idLote = $dato['idLote'];
+			$operacion->lote = $dato['lote'];
+			$operacion->orden = $dato['orden'];
+			$operacion->caducidad = $dato['caducidad'];
+			$operacion->usuario = $dato['usuario'];
+			$operacion->observaciones = $dato['observaciones'];
+			$operacion->receta = '';
+
+			// si es un ajuste no importa las cantidades en el item exitentes se resetean
+			if ($operacion->tipomovimiento == 1) {
+
+				$operacion->alta();
+
+			// en este se toma que es una alta de item
+			}else if($operacion->tipomovimiento == 2){
+
+				$operacion->entrada();
+				
+			// en este se toma que es una baja de item
+			}else if ($operacion->tipomovimiento == 3) {
+
+				$operacion->salida();
+				
+			}
+
+			$operacion->verificaLote();
+
+		}
+		
+		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
+
+
+	}
+
 	public function ordencompra(){
 
 		$datos = Input::all();

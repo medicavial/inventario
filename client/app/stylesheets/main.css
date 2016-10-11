@@ -486,6 +486,10 @@ md-toast.info .md-toast-content {
   text-align: right;
 }
 
+.inside-table[md-data-table]>thead:not([md-table-progress])>tr>th>div{
+  display: none;
+}
+
 /*.md-input.ng-invalid.ng-dirty {
     border-color: #FA787E;
 }

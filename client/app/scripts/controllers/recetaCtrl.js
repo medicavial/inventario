@@ -187,8 +187,8 @@
 			scope.filtro = palabras[0];
 			scope.valorAnterior = recetaItem.item;
 
-			console.log(scope.filtro);
-			console.log(scope.valorAnterior);
+			// console.log(scope.filtro);
+			// console.log(scope.valorAnterior);
 
 		}
 
