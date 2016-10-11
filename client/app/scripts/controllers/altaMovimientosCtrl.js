@@ -218,6 +218,11 @@
 			};
 		}
 
+		scope.eliminar = function(index){
+			// console.log(index);
+			scope.movimientos.splice(index,1);
+		}
+
 		scope.guardar = function(){
 
 			console.log(scope.movimientos);
