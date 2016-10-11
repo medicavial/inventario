@@ -87,9 +87,9 @@ class BusquedasController extends BaseController {
 	public function existenciasUnidad($unidad,$tipo){
 		
 		if ($tipo == 1) {
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja';
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
 		}else{
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja';
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
 		}
 
 		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
@@ -217,11 +217,12 @@ class BusquedasController extends BaseController {
 			$modificable = $valoresItem->ITE_talla;
 			$familia = $valoresItem->TIT_clave;
 			$segmentable = $valoresItem->ITE_segmentable;
+			$segmentableReceta = $valoresItem->ITE_noSegmentableReceta;
 			$caja = $valoresItem->ITE_cantidadCaja;
 
 			$forzoso = TipoItem::find($familia)->TIT_forzoso;
 
-			if ($segmentable) {
+			if ($segmentable == 1 && $segmentableReceta == 0) {
 				$cantidad = $dato['NS_cantidad'] * $caja;
 			}else{
 				$cantidad = $dato['NS_cantidad'];
