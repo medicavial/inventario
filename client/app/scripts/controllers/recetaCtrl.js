@@ -118,14 +118,26 @@
 
 		scope.ingresaItem = function(ev) {
 
-			var item = scope.datos.items[0];
+			if (scope.datos.length > 0) {
+				var item = scope.datos.items[0];
+				var datosReceta = {
+					almacen:item.almacen,
+					receta:item.receta
+				}
+			}else{
+				var item = scope.itemsSurtidos[0];
+				var datosReceta = {
+					almacen:item.ALM_clave,
+					receta:item.id_receta
+				}
+			}
 
 		    $mdDialog.show({
 				controller: itemRecetaCtrl,
 				templateUrl: 'views/itemReceta.html',
 				parent: angular.element(document.body),
 				targetEvent: ev,
-				locals: { info: item },
+				locals: { info: datosReceta },
 				resolve:{
 					informacion:function(busqueda,$q){
 						scope.loading = true;
@@ -295,6 +307,8 @@
 
 	function itemRecetaCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter,busqueda,info){
 
+		console.log(informacion);
+		console.log(info);
 		$scope.items = informacion[0].data;
 		$scope.tiposmovimiento = informacion[1].data;
 		$scope.almacenes = informacion[2].data;
@@ -456,6 +470,8 @@
 		}
 
 		$scope.verificaForm = function(){
+
+			console.log($scope.item);
 
 			if ($scope.datos.tipomov == 1 && $scope.datos.tipoa == '') {
 				return true;

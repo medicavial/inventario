@@ -70,7 +70,7 @@
 		scope.buscar = function(){
 
 
-			if (scope.datos.unidad && scope.datos.tipo) {
+			if (scope.datos.unidad) {
 
 				scope.consultando = true;
 				scope.unidadB = scope.datos.unidad ? scope.unidadB : '';

@@ -142,7 +142,7 @@
 		    	cantidad:''
 		    }
 
-		    $scope.edicion = true;
+		    $scope.edicion = false;
 			$scope.guardando = false;
 		}
 

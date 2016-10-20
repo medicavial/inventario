@@ -36,32 +36,53 @@ class ReportesController extends BaseController {
 
 	public function lotes(){
 
-		$query = Lote::query();
+		
+		$query = Existencia::query();
 
-        $query->join('existencias', 'existencias.EXI_clave', '=', 'lote.EXI_clave')
-        		->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
-    			->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
-				->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
-				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-				->select('ITE_codigo','ITE_nombre','almacenes.ALM_nombre','UNI_nombrecorto','TIT_nombre','LOT_numero','LOT_caducidad','LOT_cantidad');
+        $query->join('almacenes', 'almacenes.ALM_clave', '=', 'existencias.ALM_clave')				
+    		->join('items', 'items.ITE_clave' , '=', 'existencias.ITE_clave')
+			->join('tiposItem','tiposItem.TIT_clave' , '=', 'items.TIT_clave')
+			->join('lote', function($join){
+	            $join->on('existencias.EXI_clave', '=', 'lote.EXI_clave');
+	        	$join->on('items.ITE_clave', '=', 'lote.ITE_clave');
+	        })->orderBy('ITE_codigo');
+
+		
+		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad');
 
 	 	if (Input::has('unidad')) {
 	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
 		}
 
 		if (Input::has('almacen')) {									
-			$query->where('almacenes.ALM_clave', Input::get('almacen') );
+			$query->where('existencias.ALM_clave', Input::get('almacen') );
 		}
 
 		if (Input::has('item')) {									
-			$query->where('items.ITE_clave', Input::get('item') );
-		}
+			$query->where('existencias.ITE_clave', Input::get('item') );
+		}								
 
 		if (Input::has('tipo')) {									
 			$query->where('items.TIT_clave', Input::get('tipo') );
-		}								
-
+		}
 		return $query->get();
+
+	}
+
+	public function lotesAvanzado(){
+
+		$resultado = array();
+
+		$datos = $this->existencias();
+
+		foreach ($datos as $dato) {
+			$lotes = Lote::where('EXI_clave',$dato['EXI_clave'])->get();
+			$dato['lotes'] = $lotes;
+
+			array_push($resultado, $dato);
+		}
+
+		return $resultado;
 
 	}
 
@@ -156,10 +177,9 @@ class ReportesController extends BaseController {
 				    	'Usuario Surtio','Usuario Cancelo','Ultimo Movimiento','Importe Esperado','Importe Final','Unidad','Proveedor','Estatus' 
 					));
 		        }else if ($tipo == 'lotes') {
-		        	
 
 			        $sheet->row(1, array(
-					    'Codigo','Item','Almacen','Cantidad','Unidad','Tipo Item','Lote','Cantidad','Caducidad'
+					    'Codigo','Item','Almacen','Cantidad Almacen','Lote','Cantidad','Caducidad'
 					));
 
 		        }else if ($tipo == 'movmientos') {
