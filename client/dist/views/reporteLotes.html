@@ -11,16 +11,6 @@
           </md-select>
           
         </div>
-
-        <div layout="column" flex>
-
-          <md-subheader class="c-bluegray">X Tipo Item</md-subheader>  
-          <md-divider class="bgm-bluegray"></md-divider>
-          <md-select placeholder="Tipo de Item" ng-model="lot.datos.tipo" name="tipo" required flex >
-            <md-option ng-repeat="tipoitem in lot.tiposItem" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
-          </md-select>
-          
-        </div>
         
         <div layout="column" flex>
 
@@ -28,6 +18,16 @@
           <md-divider class="bgm-bluegray"></md-divider>
           <md-select ng-model="lot.datos.almacen" placeholder="Selecciona Almacen" md-on-close="lot.cargaItems(lot.datos.almacen)" flex>
             <md-option ng-repeat="almacen in lot.almacenes" ng-click="lot.agregaAlmacen(almacen.ALM_nombre)" ng-value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+          </md-select>
+          
+        </div>
+
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Tipo Item</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select placeholder="Tipo de Item" ng-model="lot.datos.tipo" name="tipo" flex >
+            <md-option ng-repeat="tipoitem in lot.tiposItem" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
           </md-select>
           
         </div>
@@ -61,6 +61,7 @@
               <th name="Codigo"  order-by="ITE_codigo"></th>
               <th name="Item"  order-by="ITE_nombre"></th>
               <th name="Almacen" order-by="ALM_nombre"></th>
+              <th name="Existencia Almacen" order-by="EXI_cantidad"></th>
               <th name="Lote" order-by="LOT_numero"></th>
               <th name="Cantidad" order-by="LOT_cantidad"></th>
               <th name="Caducidad"  order-by="LOT_caducidad"></th>
@@ -71,6 +72,7 @@
               <td>{{data.ITE_codigo}}</td>
               <td>{{data.ITE_nombre}}</td>
               <td>{{data.ALM_nombre}}</td>
+              <td>{{data.EXI_cantidad}}</td>
               <td>{{data.LOT_numero}}</td>
               <td>{{data.LOT_cantidad}}</td>
               <td>{{data.LOT_caducidad}}</td>
