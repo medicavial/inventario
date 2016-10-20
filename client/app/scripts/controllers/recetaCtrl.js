@@ -119,47 +119,54 @@
 		scope.ingresaItem = function(ev) {
 
 			if (scope.datos.length > 0) {
+
 				var item = scope.datos.items[0];
 				var datosReceta = {
 					almacen:item.almacen,
 					receta:item.receta
 				}
+
+			    $mdDialog.show({
+					controller: itemRecetaCtrl,
+					templateUrl: 'views/itemReceta.html',
+					parent: angular.element(document.body),
+					targetEvent: ev,
+					locals: { info: datosReceta },
+					resolve:{
+						informacion:function(busqueda,$q){
+							scope.loading = true;
+						    var promesa 		= $q.defer(),
+								items 			= busqueda.itemsReceta(),
+								tiposMovimiento = busqueda.tiposMovimiento(),
+			            		almacenes 		= busqueda.almacenes(),
+			            		tiposajuste 	= busqueda.tiposAjuste();
+
+							$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+								// console.log(data);
+								promesa.resolve(data);
+								scope.loading = false;
+							});
+
+						    return promesa.promise;
+						}
+					},
+			      clickOutsideToClose:false
+			    }).then(function(){
+			    	scope.surtidos();
+			    });
+
 			}else{
-				var item = scope.itemsSurtidos[0];
-				var datosReceta = {
-					almacen:item.ALM_clave,
-					receta:item.id_receta
-				}
+				mensajes.alerta('Ya no puedes ingresar items une vez surtida la receta','error','top right','error');
 			}
 
-		    $mdDialog.show({
-				controller: itemRecetaCtrl,
-				templateUrl: 'views/itemReceta.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				locals: { info: datosReceta },
-				resolve:{
-					informacion:function(busqueda,$q){
-						scope.loading = true;
-					    var promesa 		= $q.defer(),
-							items 			= busqueda.itemsReceta(),
-							tiposMovimiento = busqueda.tiposMovimiento(),
-		            		almacenes 		= busqueda.almacenes(),
-		            		tiposajuste 	= busqueda.tiposAjuste();
+				// else{
+				// 	var item = scope.itemsSurtidos[0];
+				// 	var datosReceta = {
+				// 		almacen:item.ALM_clave,
+				// 		receta:item.id_receta
+				// 	}
+				// }
 
-						$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
-							// console.log(data);
-							promesa.resolve(data);
-							scope.loading = false;
-						});
-
-					    return promesa.promise;
-					}
-				},
-		      clickOutsideToClose:false
-		    }).then(function(){
-		    	scope.surtidos();
-		    });
 		};
 
 		scope.surtidos = function(){
