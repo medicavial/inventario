@@ -23,6 +23,7 @@
 		scope.surtiendo = false;
 		scope.datosReceta = false;
 		scope.loading = false;
+		scope.cancelando = false;
 		scope.filtro = '';
 		scope.itemssurtidos = [];
 
@@ -51,6 +52,24 @@
 					mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
 				});
 			}
+		}
+
+		scope.cancelarItem = function(valor){
+
+			console.log(valor);
+			
+			scope.cancelando = true;
+			operacion.cancelarItem(valor).success(function (data){
+
+				scope.cancelando = false;
+				mensajes.alerta(data.respuesta,'success','top right','done_all');
+				valor.surtido = true;
+
+			}).error(function (data){
+				scope.cancelando = false;
+				mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
+			});
+			
 		}
 
 		scope.verificaExistencia = function(item,ev){
@@ -118,7 +137,9 @@
 
 		scope.ingresaItem = function(ev) {
 
-			if (scope.datos.length > 0) {
+			console.log(scope.datos);
+
+			if (scope.datos.items.length > 0) {
 
 				var item = scope.datos.items[0];
 				var datosReceta = {

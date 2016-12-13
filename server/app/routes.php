@@ -179,6 +179,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::group(array('prefix' => 'operacion'), function()
     {
         Route::post('cancelarorden', 'OperacionController@cancelarOrden');
+        Route::post('cancelar/item/{usuario}', 'OperacionController@cancelarItem');
         Route::post('cerrarorden', 'OperacionController@cerrarOrden');
         Route::get('completa/orden/{orden}', 'OperacionController@verificaOrden');
         Route::post('completa/orden', 'OperacionController@completaOrden');

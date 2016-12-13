@@ -60,6 +60,9 @@
                 return defer.promise;
 
             },
+            cancelarItem : function(datos){
+                return $http.post(api + 'operacion/cancelar/item/' + $rootScope.id,datos);
+            },
             cancelarOrden : function(datos){
                 return $http.post(api+'operacion/cancelarorden',datos);
             },

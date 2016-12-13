@@ -12,17 +12,18 @@ class ReportesController extends BaseController {
 				->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
 				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
 				->select('ITE_codigo','ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa','existencias.EXI_clave');
-
+				
+	 	
 	 	if (Input::has('unidad')) {
 	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
 		}
 
 		if (Input::has('almacen')) {									
-			$query->where('almacenes.ALM_clave', Input::get('almacen') );
+			$query->where('existencias.ALM_clave', Input::get('almacen') );
 		}
 
 		if (Input::has('item')) {									
-			$query->where('items.ITE_clave', Input::get('item') );
+			$query->where('existencias.ITE_clave', Input::get('item') );
 		}
 
 		if (Input::has('tipo')) {									

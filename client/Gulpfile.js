@@ -87,7 +87,7 @@ gulp.task('compress', function() {
 	.pipe(useref.assets())    
 	.pipe(gulpif('*.css', minifyCss()))    
 	.pipe(gulpif('*.js', uglify({mangle: false })))    
-	.pipe(gulp.dest('./dist')); 
+	.pipe(gulp.dest('./dist'));  
 });
 
 gulp.task('copy', function() {  
