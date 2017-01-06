@@ -12,12 +12,14 @@
 
 
 	function altaMovimientosCtrl($rootScope,datos,operacion,mensajes,$q,$filter,busqueda){
-
-		console.log(datos);
-
+		
+		// console.log(datos);
 		$rootScope.cargando = false;
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Alta de Movimientos';
+
+		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 		
 		var scope = this;
 

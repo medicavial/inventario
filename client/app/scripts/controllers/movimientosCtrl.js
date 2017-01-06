@@ -7,16 +7,16 @@
 	.controller('movimientoCtrl',movimientoCtrl)
 	.controller('movimientosCtrl',movimientosCtrl)
 
-	movimientosCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes'];
+	movimientosCtrl.$inject = ['$rootScope','$mdDialog','datos','busqueda','mensajes','reportes'];
 	movimientoCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda'];
 
 
-	function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
+	function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,reportes){
 
 		var scope = this;
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Movimientos Registrados';
-		scope.info = datos.data;
+		scope.unidades = datos[0].data;
 		scope.total = 0;
 		scope.limit = 10;
 		scope.page = 1;
@@ -27,6 +27,49 @@
 	    
 		scope.paginacion = [10,20,30,40];
 
+		scope.inicio = function(){
+
+			scope.consultando = false;
+			scope.items = datos[1].data;
+			scope.tiposItem = datos[2].data;
+			scope.almacenes = [];
+			scope.datos = {
+				unidad:'',
+				almacen:'',
+				item:'',
+				tipo:''
+			}
+		}
+
+
+		scope.buscar = function(){
+
+			if (scope.datos.unidad) {
+
+				scope.consultando = true;
+
+				reportes.movimientos(scope.datos).success(function (data){
+
+					scope.consultando = false;
+
+					scope.info = data;
+
+					if (data.length > 0) {
+						scope.nuevaBusqueda = false;
+					}else{
+						mensajes.alerta('No se encontro información disponible','error','top right','error');
+					}
+				}).error(function (error){
+					scope.info = [];
+					scope.consultando = false;
+					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+				})
+				
+			}else{
+				mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
+			}
+		}
+
 		scope.onPaginationChange = function (page, limit) {
 		    // console.log(page);
 		    // console.log(limit);
@@ -35,6 +78,20 @@
 		scope.onOrderChange = function (order) {
 			// console.log(scope.query);
 		    //return $nutrition.desserts.get(scope.query, success).$promise; 
+		};
+
+		scope.cargaAlmacenes = function(unidad){
+
+			busqueda.almacenesUnidad(unidad).success(function (data){
+					console.log(data);
+					scope.almacenes = data;
+			});
+		};
+
+		scope.cargaItems = function(almacen){
+			busqueda.itemsAlmacen(almacen).success(function (data){
+				scope.items = data;
+			});
 		};
 
 		scope.nuevo = function(ev) {
@@ -80,6 +137,9 @@
 		$scope.almacenes = informacion[2].data;
 		$scope.tiposajuste = informacion[3].data;
 		$scope.bloqueoMov = false;
+
+		$rootScope.atras = true;
+		$rootScope.menu = 'arrow_back';
 
 		// console.log($scope.items);
 

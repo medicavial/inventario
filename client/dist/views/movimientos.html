@@ -1,4 +1,4 @@
-<div layout="column" >
+<!-- <div layout="column" >
 
     <md-data-table-toolbar class="md-whiteframe-z1 animated fadeInUp">
       <md-input-container md-no-float flex class="no-padding">
@@ -45,7 +45,101 @@
     <br>
     <md-data-table-pagination md-label="movimientos.texto" md-row-select="movimientos.paginacion" md-limit="movimientos.limit" md-page="movimientos.page" md-total="{{movimientos.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
 
+</div> -->
 
+<div layout="column" ng-init="movimientos.inicio()">
+    
+    <md-content class="md-whiteframe-5dp white" layout-gt-sm="row" layout="column" layout-padding>
+        
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Unidad</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="movimientos.datos.unidad" md-on-close="movimientos.cargaAlmacenes(movimientos.datos.unidad)" required placeholder="Selecciona Unidad" flex>
+            <md-option ng-repeat="unidad in movimientos.unidades" ng-click="movimientos.agregaUnidad(unidad.UNI_nombre)" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+          </md-select>
+          
+        </div>
+        
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Almacen</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="movimientos.datos.almacen" placeholder="Selecciona Almacen" md-on-close="movimientos.cargaItems(movimientos.datos.almacen)" flex>
+            <md-option ng-repeat="almacen in movimientos.almacenes" ng-click="movimientos.agregaAlmacen(almacen.ALM_nombre)" ng-value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+          </md-select>
+          
+        </div>
+
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Item especifico</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select ng-model="movimientos.datos.item" placeholder="Selecciona Item" flex>
+            <md-option ng-repeat="item in movimientos.items" ng-click="movimientos.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
+          </md-select>
+          
+        
+        </div>
+
+        <div layout="column" flex>
+
+          <md-subheader class="c-bluegray">X Tipo Item</md-subheader>  
+          <md-divider class="bgm-bluegray"></md-divider>
+          <md-select placeholder="Tipo de Item" ng-model="movimientos.datos.tipo" name="tipo" flex >
+            <md-option ng-repeat="tipoitem in movimientos.tiposItem" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
+          </md-select>
+          
+        </div>
+        
+        <div layout="column" layout-paddin layout-align="center center" flex>
+          <md-progress-circular md-mode="indeterminate" ng-if="movimientos.consultando"></md-progress-circular>
+          <md-button class="md-raised md-primary" ng-if="!movimientos.consultando" ng-click="movimientos.buscar()">Buscar</md-button>
+        </div>
+
+    </md-content>
+
+
+
+    <div flex ng-if="movimientos.info.length > 0">
+      <p>Busqueda: {{ movimientos.unidadB + movimientos.almacenB + movimientos.itemB }} </p>
+      <md-data-table-container class="md-whiteframe-5dp white">
+        <table md-data-table>
+          <thead md-order="movimientos.order" md-trigger="movimientos.onOrderChange">
+            <tr>
+              <th name="Codigo"  order-by="ITE_codigo"></th>
+              <th name="Item"  order-by="ITE_nombre"></th>
+              <th name="Almacen" order-by="ALM_nombre"></th>
+              <th name="Usuario" order-by="USU_login"></th>
+              <th name="Tipo Movimiento" order-by="TIM_nombre"></th>
+              <th name="Tipo Ajuste" order-by="TIA_nombre"></th>
+              <th name="Observaciones"  order-by="MOV_observaciones"></th>
+              <th name="Cantidad"  order-by="MOV_cantidad"></th>
+              <th name="Fecha"  order-by="created_at"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="data in movimientos.info |filter:query | orderBy: movimientos.order | limitTo: movimientos.limit: (movimientos.page - 1) * movimientos.limit">
+              <td>{{data.ITE_codigo}}</td>
+              <td>{{data.ITE_nombre}}</td>
+              <td>{{data.ALM_nombre}}</td>
+              <td>{{data.USU_login}}</td>
+              <td>{{data.TIM_nombre}}</td>
+              <td>{{data.TIA_nombre}}</td>
+              <td>{{data.MOV_observaciones}}</td>
+              <td>{{data.MOV_cantidad}}</td>
+              <td>{{data.created_at}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </md-data-table-container>
+      <br>
+      <md-data-table-pagination md-label="movimientos.texto" md-row-select="movimientos.paginacion" md-limit="movimientos.limit" md-page="movimientos.page" md-total="{{movimientos.info.length}}"></md-data-table-pagination>
+      
+    </div>
+    <br>
+
+  
 </div>
 
 <md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.altaMovimientos')" aria-label="Nuevo Movimiento">

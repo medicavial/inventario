@@ -98,6 +98,11 @@
                   <span ng-if="ie.datos.segmentado">Item Segmentable</span>
                   <span ng-if="!ie.datos.segmentado">Item No Segmentable</span>
           </md-switch>
+
+          <md-switch ng-model="ie.datos.segmentadoReceta" aria-label="Item en Receta" flex ng-if="ie.datos.segmentado">
+                  <span ng-if="ie.datos.segmentadoReceta">X Unidad Receta</span>
+                  <span ng-if="!ie.datos.segmentadoReceta">X Caja Receta</span>
+          </md-switch>
           
           <md-switch ng-model="ie.datos.talla" aria-label="Item con Talla" flex>
                   <span ng-if="ie.datos.talla">Item Con Talla</span>

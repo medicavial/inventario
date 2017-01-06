@@ -1,5 +1,10 @@
 (function(){
 
+	/** Sergio Alcala (2017)
+    *Inicio de proyecto Inventarios 
+    *
+    */
+
 	'use strict';
 
 	var hoy = new Date(); 

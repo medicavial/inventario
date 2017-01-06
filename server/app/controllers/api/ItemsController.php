@@ -51,6 +51,7 @@ class ItemsController extends \BaseController {
 		$item->ITE_codigoean = Input::get('codigoean');
 		$item->ITE_agranel = Input::get('agranel');
 		$item->ITE_segmentable = Input::get('segmentado');
+		$item->ITE_noSegmentableReceta = Input::get('segmentadoReceta');
 		$item->ITE_receta = Input::get('receta');
 		$item->ITE_talla = Input::get('talla');
 		$item->ITE_cantidadCaja = Input::get('cantidadCaja');
@@ -130,6 +131,7 @@ class ItemsController extends \BaseController {
 		$item->ITE_clasificacion = Input::get('clasificacion');
 		$item->ITE_codigoean = Input::get('codigoean');
 		$item->ITE_segmentable = Input::get('segmentado');
+		$item->ITE_noSegmentableReceta = Input::get('segmentadoReceta');
 		$item->ITE_receta = Input::get('receta');
 		$item->ITE_talla = Input::get('talla');
 		$item->ITE_cantidadCaja = Input::get('cantidadCaja');

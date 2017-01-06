@@ -93,6 +93,7 @@ class MedicaController extends BaseController {
 
         }
 
+
         // ABA tabulador completo
         if ($compania == 1)
         {
@@ -410,30 +411,139 @@ class MedicaController extends BaseController {
 
         }
 
+        // MULTIVA                                  
+        if ($compania == 17)
+        {
+            if($producto == 1)
+            {
+                $clave = 105;                              
+            }
+            else
+            {
+                $clave = 61;                 
+            }
+        }
+
+        // POTOSI                   
+        if ($compania == 18)
+        {
+            if($producto == 1)
+            {
+                if($unidadPropia == 'S'){ $clave = 67;}
+                else {$clave = 68;}
+            }
+            elseif ($producto == 2)
+            {
+                if($unidadPropia == 'S'){ $clave = 67;}
+                else{ $clave = 68;}                              
+            }  
+            else
+            {
+               $clave = 61;  
+            }
+          
+        }
+
+
+        // PRIMERO               
+        if ($compania == 22)
+        {
+            if($producto == 1)
+            {
+                if($unidadPropia == 'S')
+                {
+                    $clave = 2;
+                }
+                else{
+                    $clave = 6;
+                }                              
+            }
+            else
+            {
+                $clave = 61;                 
+            }
+
+        }
+
+
+
+        // RSA                          
+
+        if ($compania == 20)
+        {
+            if($producto == 1)
+            {
+                if( $localidad == 18 || $localidad == 169 || $localidad == 41 || $localidad == 47 || $localidad == 61 )
+                { 
+                    $clave = 33;
+                }
+                else{
+                    $clave = 43;                                
+                } 
+            }
+            elseif ($producto == 2)
+            {
+                $clave = 21; 
+            }
+            else
+            {
+               $clave = 61;                 
+            }
+
+        }
+
+
+        // SPT
+        if ($compania == 32)
+        {
+            if($producto == 1)
+            {
+                $clave = 1;                              
+            }
+            else{
+                $clave = 61;                 
+            }
+
+        }
+
+
+        // TTRAVOL
+        if ($compania == 34)
+        {
+            if($producto == 1)
+            {
+                $clave = 1;                              
+            }
+            else
+            {
+                $clave = 61;                 
+            }
+        }
+
 
 
 
         // INBURSA
-        // if ($compania == 45)
-        // {
-        //     if($producto == 1)
-        //     {
-        //         if($unidadPropia == 'S'){ $clave= 75}
-        //         else{ $clave= 76;}
-        //     }
-        //     elseif ($producto == 4)
-        //     {
-        //       if (Sesiones > 1) {$clave= 89;}
-        //       if(Consulta) {$clave = 90;}
-        //       if(Num Placas = 1) {$clave=93;}
-        //       else {$clave=94;}
-        //       $clave=94;
-        //     }      
-        //     else{
-        //        $clave = 61;                 
-        //     }
+        if ($compania == 45)
+        {
+            if($producto == 1)
+            {
+                if($unidadPropia == 'S'){ $clave= 75;}
+                else{ $clave= 76;}
+            }
+            elseif ($producto == 4)
+            {
+              // if (Sesiones > 1) {$clave= 89;}
+              // if(Consulta) {$clave = 90;}
+              // if(Num Placas = 1) {$clave=93;}
+              // else {$clave=94;}
+              // $clave=94;
+            }      
+            else{
+               $clave = 61;                 
+            }
           
-        // }
+        }
 
 
 

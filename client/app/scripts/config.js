@@ -1,5 +1,10 @@
 (function(){
 
+	/** Sergio Alcala (2017)
+    *Configuracion de las rutas de la aplicacion
+    *
+    */
+
 	'use strict';
 
 	angular
@@ -10,22 +15,28 @@
 
 	function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider,$compileProvider, $mdDateLocaleProvider) {
 
+		// Aqui se pone en modo desarrollo (false) y modo produccion (true) 
 		$compileProvider.debugInfoEnabled(true);
 
+		// Se configuro el calendario para que se muestren los dialogos en español
 		$mdDateLocaleProvider.months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 		$mdDateLocaleProvider.shortMonths = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul', 'Ago','Sep','Oct','Nov','Dic'];
 		$mdDateLocaleProvider.days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes','Sabado'];
 		$mdDateLocaleProvider.shortDays = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi' ,'Sa'];
 
+
+		// Aqui se da el formato de fecha que se requiere
 	  	$mdDateLocaleProvider.formatDate = function(date) {
 		    return date ? moment(date).format('DD/MM/YYYY') : '';
 		};
-		  
+		 
+		 // Aqui se pone la fecha actual por default
 		$mdDateLocaleProvider.parseDate = function(dateString) {
 		    var m = moment(dateString, 'DD/MM/YYYY', true);
 		    return m.isValid() ? m.toDate() : new Date(NaN);
 		};      
 
+		// esto nos indica que en cualquier otro caso mande a home
 		$urlRouterProvider.otherwise("/home");
 
 		$stateProvider
@@ -263,8 +274,16 @@
 			controller:'movimientosCtrl',
 			controllerAs: "movimientos",
 			resolve:{
-	            datos:function(busqueda){
-	                return busqueda.movimientos();
+	            datos:function(busqueda,$q,$rootScope){
+	                var promesa   = $q.defer(),
+	            		unidades  = busqueda.unidadesUsuario($rootScope.id),
+	            		tipoitems = busqueda.tiposItem(),
+	            		items 	  = busqueda.items();
+	            	$q.all([unidades,items,tipoitems]).then(function (data){
+	            		promesa.resolve(data);
+	            	});
+
+	                return promesa.promise;
 	            }
 	        }
 		})
@@ -603,8 +622,10 @@
 		})
 
 
+		// Con esto nos indica que quitara de las rutas el #
 		$locationProvider.html5Mode(true);
 
+		// Configurando temas de la aplicacion
 	    $mdThemingProvider.theme('theme1')
 		.primaryPalette('indigo')
 	    .accentPalette('red');
@@ -634,6 +655,7 @@
 		.primaryPalette('red')
 		.dark();
 
+		// Aqui creas temas porpios
 		var neonBlueMap = $mdThemingProvider.extendPalette('blue', {
 			'500': '#3175E7',
 			'contrastDefaultColor': 'light'
@@ -645,15 +667,16 @@
 		});
 
 		
-		// Register the new color palette map with the name <code>neonRed</code>
+		// Aqui se registra color que definiste arriba
 		$mdThemingProvider.definePalette('neonBlue', neonBlueMap);
 		$mdThemingProvider.definePalette('neonGreen', neonGreenMap);
 		
+		// tema por defeto
 	    $mdThemingProvider.setDefaultTheme('theme1');
 	    $mdThemingProvider.alwaysWatchTheme(true);
 
 	    // console.log($mdThemingProvider);
-
+	    // Esto ayuda a configurar el tiempo de cada consulta pero no funciona
 	    $httpProvider.defaults.timeout = 1000;
 	  	
 	};
