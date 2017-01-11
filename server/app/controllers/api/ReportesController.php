@@ -11,10 +11,23 @@ class ReportesController extends BaseController {
     			->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
 				->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
 				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-				->select('ITE_codigo','ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa','existencias.EXI_clave');
+				->select('ITE_codigo','ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa','existencias.EXI_clave')
+				->where('EXI_cantidad','>',0);
 
 	 	if (Input::has('unidad')) {
 	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
+		}else{
+			$id= Input::get('usuario');
+			/*$unidades = App::make('BusquedasController')->unidadesUsuario($id);*/
+			$unidades =  UsuarioAlmacen::join('almacenes','almacenes.ALM_clave','=','usuarioAlmacen.ALM_clave')
+								 ->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
+								 ->where( array('UNI_activo' => true ,'USU_clave' => $id ) )
+								 ->select('unidades.UNI_clave')
+								 ->groupBy('almacenes.UNI_clave')
+								 ->orderBy('almacenes.ALM_nombre')
+								 ->get()
+								 ->toArray();
+			$query->whereIn('almacenes.UNI_clave', $unidades );
 		}
 
 		if (Input::has('almacen')) {									
@@ -206,6 +219,7 @@ class ReportesController extends BaseController {
 		    });
 
 		})->store('xls', public_path('exports') , true);
+		
 
 	}
 

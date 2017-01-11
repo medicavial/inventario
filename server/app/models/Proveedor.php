@@ -4,7 +4,7 @@ class Proveedor extends Eloquent {
 
 	protected $primaryKey ='PRO_clave';
     protected $table = 'proveedores';
-    protected $guarded = []; 
+    protected $guarded = []; //para poder hacer consultas remotas (seguridad)
 
     public function scopeActivos($query)
     {

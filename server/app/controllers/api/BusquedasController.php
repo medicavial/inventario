@@ -132,6 +132,7 @@ class BusquedasController extends BaseController {
 	public function movimientos(){
 
         return Movimiento::todos();
+        
 	}
 
 	public function movimientosAgranel(){
@@ -298,5 +299,6 @@ class BusquedasController extends BaseController {
 	public function unidadesItem(){
 		return UnidadItem::activos();
 	}
+
 
 }

@@ -15,7 +15,6 @@ class AuthController extends BaseController {
 		}else{
 
 			return Response::json(array('flash' => 'Nombre de Usuario o contraseña Invalida'), 500); 
-		
 		}
 
 		// return Input::all();

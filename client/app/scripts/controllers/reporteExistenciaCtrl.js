@@ -34,6 +34,7 @@
 			scope.tiposItem = datos[2].data;
 			scope.almacenes = [];
 			scope.datos = {
+				usuario:$rootScope.id,
 				unidad:'',
 				almacen:'',
 				item:'',
@@ -69,8 +70,7 @@
 
 		scope.buscar = function(){
 
-
-			if (scope.datos.unidad) {
+			if (scope.datos.unidad || scope.datos.item) {
 
 				scope.consultando = true;
 				scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
@@ -78,7 +78,6 @@
 				scope.itemB = scope.datos.item ? scope.itemB : '';
 
 				reportes.existencias(scope.datos).success(function (data){
-
 					scope.consultando = false;
 
 					if (data.length > 0) {
@@ -94,7 +93,8 @@
 				})
 				
 			}else{
-				mensajes.alerta('debes ingresar unidad','error','top right','error');
+				mensajes.alerta('Debes ingresar un item o una unidad','error','top right','error');
+				//mensajes.alerta('debes ingresar unidad','error','top right','error');
 			}
 		}
 

@@ -1,0 +1,164 @@
+<div class="mdl-grid" ng-init="prueba.inicio()">
+  <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-desktop">
+      <div class="mini-charts-item bgm-pink ">
+        <div class="clearfix">
+            <div class="chart stats-bar"></div>
+            <div class="count">
+                <h3>Proveedores</h3>
+                <br>
+                <span>23</span>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="prueba.consulta()">
+                  Ver detalles
+                </a>
+            </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-desktop">
+    <div class="mini-charts-item bgm-teal">
+      <div class="clearfix">
+        <div class="chart stats-bar">
+        </div>
+        <div class="count">
+          <h3>Consulta de prueba</h3>
+          <br>
+          <span>50%</span>
+          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="prueba.consultaB()">
+            Acceder
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mdl-cell mdl-cell-12-col mdl-cell--4-col-desktop">
+    <div class="mini-charts-item bgm-orange">
+      <div class="clearfix">
+        <div class="chart stats-bar">
+        </div>
+        <div class="count">
+          <h3>Cuadro C</h3>
+          <br>
+          <span>34°</span>
+          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="prueba.consultaC()">
+            Verificar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div layout="column" ng-show="infoA==true">
+  <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
+    <table md-data-table>
+      <thead>
+        <tr>
+          <th name="ID"></th>
+          <th name="Nombre"></th>
+          <th name="Razón Social"></th>
+          <th name="Fecha Alta"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="prov in infoPrueba | filter:query | orderBy:proveedores.order | limitTo:proveedores.limit: (proveedores.page -1) * proveedores.limit">
+          <td>{{prov.PRO_clave}}</td>
+          <td>{{prov.PRO_nombrecorto}}</td>
+          <td>{{prov.PRO_razonSocial}}</td>
+          <td>{{prov.created_at}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-data-table-container>
+</div>
+
+
+<div layout="column" ng-show="infoB==true">
+  <md-card ng-repeat="persona in info2" class="md-whiteframe-z1 animated fadeInUp">
+    <md-card-title>
+      <md-card-title-media>
+        <div class="md-media-sm card-media" layout>
+          <!-- <md-icon md-svg-icon="person" style="color:grey"></md-icon> -->
+          <!-- <img class="md-user-avatar md-whiteframe-5dp" src="img/user3.png"/> -->
+          <ng-md-icon icon="account_circle" style="fill: grey" size="5em"></ng-md-icon> 
+        </div>
+      </md-card-title-media>
+      <md-card-title-text>
+        <span class="md-headline">{{persona.cliente | uppercase}}</span>
+        <span class="md-subhead description">Teléfono: {{persona.telefono}}</span>
+        <span class="md-subhead description">Email: {{persona.email | lowercase}}</span>
+        <span class="md-subhead description">Domicilio: {{persona.domicilio}}</span>
+      </md-card-title-text>
+    </md-card-title>
+  </md-card>
+</div>
+
+<div class="md-whiteframe-z1 animated fadeInUp" ng-show="infoC==true">
+  <md-subheader class="c-bluegray">
+    <md-icon><ng-md-icon icon="person_add" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+    Nuevo Cliente
+  </md-subheader>  
+  <form name="formularioPrueba">
+    <div layout="column" flex>
+      <md-content layout-padding>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <md-icon><ng-md-icon icon="assignment_ind" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+            <label>Nombre</label>
+            <input ng-model="cliente.nombre" style="width: 95%" required>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <md-icon><ng-md-icon icon="assignment_ind" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+            <label>Apellido Paterno</label>
+            <input ng-model="cliente.aPaterno" style="width: 95%" required>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <md-icon><ng-md-icon icon="assignment_ind" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+            <label>Apellido Materno</label>
+            <input ng-model="cliente.aMaterno" style="width: 95%" required>
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <md-icon><ng-md-icon icon="phone" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+            <label>Teléfono</label>
+            <input type="number" ng-model="cliente.telefono" style="width: 95%" required>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <md-icon><ng-md-icon icon="email" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+            <label>Email</label>
+            <input type="email" ng-model="cliente.email" style="width: 95%" required>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <md-icon><ng-md-icon icon="location_on" style="fill: grey" size="1em"></ng-md-icon></md-icon>
+            <label>Domicilio</label>
+            <input type="text" ng-model="cliente.domicilio" style="width: 95%" required>
+          </md-input-container>
+        </div>
+
+        <br><br><br><br><br>
+
+        <div layout-gt-sm="row" layout-align="center center">
+          <md-button class="md-raised md-primary" type="submit" ng-click="prueba.guardaCliente()">
+            Guardar
+            <md-icon><ng-md-icon icon="send" style="fill: white" size="1em"></ng-md-icon></md-icon> 
+          </md-button>
+        </div>
+      <md-content>
+    </div>
+
+<!--     <div layout="column" flex>
+      <md-content layout-padding>
+            <md-datepicker ng-model="ordenes.datos.fechaini" md-placeholder="Fecha Inicial"></md-datepicker>
+      </md-content>
+    </div> -->
+  </form>
+</div>

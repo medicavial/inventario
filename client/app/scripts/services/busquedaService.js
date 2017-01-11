@@ -159,6 +159,12 @@
             },
             usuariosAlmacen : function(){
                 return $http.get(api + 'operacion/usuarios/almacen');
+            },
+            consultaPrueba : function(){
+                return $http.get(api + 'busquedas/proveedores');
+            },
+            prueba2 : function(){
+                return $http.get(api + 'segundaprueba');
             }
         }
     }

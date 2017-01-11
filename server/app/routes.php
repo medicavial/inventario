@@ -119,6 +119,32 @@ Route::group(array('prefix' => 'api'), function()
     Route::get('logout', array('uses' => 'AuthController@logout'));
     Route::get('inicio/{usuario}', array('uses' => 'AuthController@inicio'));
 
+
+    Route::get('segundaprueba',function(){
+/*        $segundaprueba= new Segundaprueba;
+
+        //$segundaprueba = Segundaprueba::find(1);
+        $segundaprueba->cliente = Input::get('nombreCompleto');
+        $segundaprueba->domicilio = Input::get('domicilio');
+        $segundaprueba->telefono = Input::get('telefono');
+        $segundaprueba->email = Input::get('email');
+        $segundaprueba->save();*/
+
+        return Segundaprueba::all();
+    });
+
+    Route::get('pruebas',function(){
+        $prueba=new Prueba;
+
+        //$prueba = Prueba::find(1);
+/*        $prueba->nombre = "Samuel";
+        $prueba->edad = 25;
+        $prueba->estatura = 1.70;
+        $prueba->save();*/
+
+        return Prueba::all();
+    });
+
     //con esto tenemos listo todos las posibles combinaciones rest full asociados al controlador
     //relacionadas a las bajas */ altas y actualizaciones de los catalogos
     Route::resource('almacenes', 'AlmacenesController');
@@ -134,6 +160,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::resource('unidades', 'UnidadesController');
     Route::resource('unidadesitem', 'UnidadItemController');
     Route::resource('usuarios', 'UsuariosController');
+    /*Route::resource('pruebas', 'PruebasController');*/
 
     
     Route::group(array('prefix' => 'busquedas'), function()

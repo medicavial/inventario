@@ -279,8 +279,46 @@
               </md-icon>
               <p> Movimientos </p>
             </md-list-item>
-            
 
+
+          </div>
+
+          <!-- inicia seccion de prueba -->
+          <div ng-show="username=='admin'">
+            <md-divider></md-divider>
+
+            <md-list-item ng-click="abrirMenu(5)">
+              <md-icon>
+                <ng-md-icon icon="phonelink" style="fill:#00AEA5"></ng-md-icon>
+              </md-icon>
+              <p>Sección de prueba</p>
+              <md-icon>
+                <ng-md-icon icon="{{iconoPruebas}}" options='{"duration": 375,"rotation": "none"}'></ng-md-icon>
+              </md-icon>
+            </md-list-item>
+            <!-- termina seccion de prueba -->
+
+            <div ng-if="pruebas" class="sub-menu">
+              <md-list-item ng-click="ir('index.prueba')">
+                <md-icon>
+                  <ng-md-icon icon="apple" style="fill:#ff00000"></ng-md-icon>
+                </md-icon>
+                <p>Subsección A</p>
+              </md-list-item>
+              <md-list-item ng-click="ir('index.home')">
+                <md-icon>
+                  <ng-md-icon icon="windows" style="fill:#ff00000"></ng-md-icon>
+                </md-icon>
+                <p>Subsección B</p>
+              </md-list-item>
+
+              <md-list-item ng-click="ir('index.home')">
+                <md-icon>
+                  <ng-md-icon icon="security" style="fill:#ff00000"></ng-md-icon> 
+                </md-icon>
+                <p> Subsección C </p>
+              </md-list-item>
+            </div>
           </div>
 
         </md-list>

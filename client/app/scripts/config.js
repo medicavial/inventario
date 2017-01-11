@@ -602,6 +602,19 @@
 	        }
 		})
 
+		.state('index.prueba',{
+			url:'prueba',
+			templateUrl :'views/prueba.html',
+			controller:'pruebaCtrl',
+			controllerAs: "prueba",
+			resolve:{
+	            datos:function(proveedores){
+	                return proveedores.query().$promise;
+	            }
+	        }
+		})
+
+
 
 		$locationProvider.html5Mode(true);
 

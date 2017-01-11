@@ -111,7 +111,6 @@ gulp.task('generate-service-worker', function(callback) {
     staticFileGlobs: [rootDir + '/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff}'],
     stripPrefix: rootDir
   }, callback);
-
 });
 
 gulp.task('produccion', ['compress','copy','generate-service-worker']);

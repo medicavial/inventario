@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => 'local',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'medica2_inventario',
 			'username'  => 'root',
-			'password'  => 'root',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

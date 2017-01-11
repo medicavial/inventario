@@ -38,11 +38,13 @@
 			$rootScope.iconoCatalogos = 'add';
 			$rootScope.iconoAlmacen = 'add';
 			$rootScope.iconoReportes = 'add';
+			$rootScope.iconoPruebas = 'add';
 
 			$rootScope.admin = false;
 			$rootScope.catalogos = false;
 			$rootScope.almacen = false;
 			$rootScope.reportes = false;
+			$rootScope.pruebas = false;
 
 		}
 
@@ -97,6 +99,18 @@
 				}
 
 				$rootScope.reportes = !$rootScope.reportes;
+			};
+
+			if (index == 5) {
+
+				if ($rootScope.pruebas) {
+					$rootScope.iconoPruebas = 'add';
+				}else{
+					// $rootScope.resetMenu(iconoPruebas);
+					$rootScope.iconoPruebas = 'remove';
+				}
+
+				$rootScope.pruebas = !$rootScope.pruebas;
 			};
 		}
 

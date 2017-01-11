@@ -47,7 +47,7 @@
             exportar : function(tipo,datos)
             {
                 $http.post(api + 'reportes/exportar/'+ tipo,datos).success(function (archivo){
-                    // console.log(archivo);
+                     //console.log(archivo);
                     var link = document.createElement("a");    
                     link.href = publicfiles + archivo.file;
                     
