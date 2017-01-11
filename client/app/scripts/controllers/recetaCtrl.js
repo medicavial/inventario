@@ -23,6 +23,7 @@
 		scope.surtiendo = false;
 		scope.datosReceta = false;
 		scope.loading = false;
+		scope.cancelando = false;
 		scope.filtro = '';
 		scope.itemssurtidos = [];
 
@@ -51,6 +52,24 @@
 					mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
 				});
 			}
+		}
+
+		scope.cancelarItem = function(valor){
+
+			console.log(valor);
+			
+			scope.cancelando = true;
+			operacion.cancelarItem(valor).success(function (data){
+
+				scope.cancelando = false;
+				mensajes.alerta(data.respuesta,'success','top right','done_all');
+				valor.surtido = true;
+
+			}).error(function (data){
+				scope.cancelando = false;
+				mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
+			});
+			
 		}
 
 		scope.verificaExistencia = function(item,ev){
@@ -118,48 +137,57 @@
 
 		scope.ingresaItem = function(ev) {
 
-			if (scope.datos.length > 0) {
+			console.log(scope.datos);
+
+			if (scope.datos.items.length > 0) {
+
 				var item = scope.datos.items[0];
 				var datosReceta = {
 					almacen:item.almacen,
 					receta:item.receta
 				}
+
+			    $mdDialog.show({
+					controller: itemRecetaCtrl,
+					templateUrl: 'views/itemReceta.html',
+					parent: angular.element(document.body),
+					targetEvent: ev,
+					locals: { info: datosReceta },
+					resolve:{
+						informacion:function(busqueda,$q){
+							scope.loading = true;
+						    var promesa 		= $q.defer(),
+								items 			= busqueda.itemsReceta(),
+								tiposMovimiento = busqueda.tiposMovimiento(),
+			            		almacenes 		= busqueda.almacenes(),
+			            		tiposajuste 	= busqueda.tiposAjuste();
+
+							$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
+								// console.log(data);
+								promesa.resolve(data);
+								scope.loading = false;
+							});
+
+						    return promesa.promise;
+						}
+					},
+			      clickOutsideToClose:false
+			    }).then(function(){
+			    	scope.surtidos();
+			    });
+
 			}else{
-				var item = scope.itemsSurtidos[0];
-				var datosReceta = {
-					almacen:item.ALM_clave,
-					receta:item.id_receta
-				}
+				mensajes.alerta('Ya no puedes ingresar items une vez surtida la receta','error','top right','error');
 			}
 
-		    $mdDialog.show({
-				controller: itemRecetaCtrl,
-				templateUrl: 'views/itemReceta.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				locals: { info: datosReceta },
-				resolve:{
-					informacion:function(busqueda,$q){
-						scope.loading = true;
-					    var promesa 		= $q.defer(),
-							items 			= busqueda.itemsReceta(),
-							tiposMovimiento = busqueda.tiposMovimiento(),
-		            		almacenes 		= busqueda.almacenes(),
-		            		tiposajuste 	= busqueda.tiposAjuste();
+				// else{
+				// 	var item = scope.itemsSurtidos[0];
+				// 	var datosReceta = {
+				// 		almacen:item.ALM_clave,
+				// 		receta:item.id_receta
+				// 	}
+				// }
 
-						$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
-							// console.log(data);
-							promesa.resolve(data);
-							scope.loading = false;
-						});
-
-					    return promesa.promise;
-					}
-				},
-		      clickOutsideToClose:false
-		    }).then(function(){
-		    	scope.surtidos();
-		    });
 		};
 
 		scope.surtidos = function(){

@@ -1,5 +1,10 @@
 (function(){
 
+	/** Sergio Alcala (2017)
+    *Modulo que inicializa cuando la aplicacion abre
+    *
+    */
+
 	'use strict';
 
 	angular
@@ -10,14 +15,9 @@
 
 	function run($rootScope, $state,$mdSidenav,$mdBottomSheet,auth,webStorage,$window, api,$mdMedia, mensajes) {
 
-		var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-		if(window.navigator.standalone && iOS) {
-		 	$rootScope.fullScreen = true;
-		}
-
 		//seteo inicial de la app
 		var url = '';
+		// esto nos indica que la aplicacion no pondra un icono de atras
 		$rootScope.atras = false;
 
 		$rootScope.color = '#eee';
@@ -48,6 +48,7 @@
 
 		}
 
+		// funcion que resetea el menu 
 		$rootScope.resetMenu();
 
 		// interaccion del menu
@@ -114,6 +115,7 @@
 			};
 		}
 
+		// funcion para ocultar el menu 
 		$rootScope.toggleSidenav = function(menuId) {
 			if ($rootScope.atras) {
 				$window.history.back();
@@ -122,9 +124,11 @@
 			}
 		};
 
+		// funcion que manda a la ruta seleccionada
 		$rootScope.muestra = function(ruta) {
 		    $state.go(ruta);
 		};
+
 
 		$rootScope.showGridBottomSheet = function($event) {
 		    $mdBottomSheet.show({
@@ -133,11 +137,14 @@
 		    });
 		};
 
+		//Funcion para cerrar cesion
 		$rootScope.logout = function(){
 			$mdBottomSheet.hide();
+			//Utilizamos el servicio auth con la propiedad logout
 			auth.logout();
 		}
 
+		// funcion que nos manda a la ruta queremos ir 
 		$rootScope.ir = function(ruta){
 
 			if ($mdSidenav('left').isOpen()) {
@@ -150,17 +157,24 @@
 			$state.go(ruta);
 		}
 
+		// mandamos abrir un archivo para que lo muestre en otra pestaña
 		$rootScope.pdf = function(index){
 			$window.open(api + 'reportes/pdf/ordencompra/'+ index, '_blank');
 		}
 
+
+		//verificamos que la ruta haya cambiado
 		$rootScope.$on('$stateChangeStart',	function(event, toState, toParams, fromState, fromParams){ 
 	        
+	        // inicializa los iconos
 	        $rootScope.atras = false;
 
+	        // guardamos la ruta a la que cambio
 	        url = toState.name;
+	        //verificamos si es diferente de login y el usuario no haya iniciado sesión
 		    if(url != 'login' && webStorage.session.get('username') == null)
 	        {   
+	        	// te regresa a login
 	        	event.preventDefault();
 	            $state.go('login');
 	        }

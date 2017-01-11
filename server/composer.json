@@ -15,6 +15,7 @@
 		"orchestra/parser": "2.2.*",
 		"soapbox/laravel-formatter": "2.x",
 		"Nathanmac/Parser": "2.*"
+		
 	},
 	"autoload": {
 		"classmap": [

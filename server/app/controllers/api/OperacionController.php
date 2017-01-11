@@ -23,6 +23,27 @@ class OperacionController extends BaseController {
 
 	}
 
+	public function cancelarItem($usuario){
+
+		$claveExistencia = Input::get('existencia');
+		$claveReserva = Input::get('reserva');
+		$recetaItem = Input::get('recetaItem');
+
+		//actualizamos en la tabla mv el item cancelado		
+		$recetaMV = Suministros::find($recetaItem);
+		$recetaMV->NS_cancelado = 1;
+		$recetaMV->NS_fecCancelado = date('Y-m-d H:i');
+		$recetaMV->NS_usuCancel = $usuario;
+		$recetaMV->save();
+
+		//eliminamos reserva 
+		$reserva = Reserva::find($claveReserva);
+		$reserva->delete();
+
+		return Response::json(array('respuesta' => 'Item Cancelado Correctamente'));
+		
+	}
+
 	public function cancelarOrden(){
 
 		$orden = Input::get('orden');

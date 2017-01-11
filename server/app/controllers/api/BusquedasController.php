@@ -205,7 +205,7 @@ class BusquedasController extends BaseController {
 		//obtenemos la receta de la base de MV
 		$datosReceta = Receta::find($id);
 		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
-		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->get();
+		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
 		$items = array();
 
 		//recorremos item por item de la receta para obtener los datos del item en inventario

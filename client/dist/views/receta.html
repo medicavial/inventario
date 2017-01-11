@@ -43,9 +43,13 @@
 				<p class="text-center" flex flex-gt-sm="20" ng-if="recetaItem.forzoso == 1 ">
 					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.lotes.length > 0" class="md-raised md-warm" ng-click="receta.ingresaLote(recetaItem)">Agregar Lote(s)</md-button>
 				</p>
-				<p flex flex-gt-sm="40">
+				<p flex flex-gt-sm="20">
 					<md-progress-circular md-mode='indeterminate' ng-if="receta.surtiendo && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
 					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.surtido" class="md-raised md-warm" ng-click="receta.surtirItem(recetaItem)">Surtir</md-button>
+				</p>
+				<p flex flex-gt-sm="20">
+					<md-progress-circular md-mode='indeterminate' ng-if="receta.cancelando && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+					<md-button ng-hide="receta.cancelando && !$index" ng-if="!recetaItem.surtido" class="md-raised md-accent" ng-click="receta.cancelarItem(recetaItem)">Cancelar</md-button>
 				</p>
 			</md-list-item>
 		</md-list>

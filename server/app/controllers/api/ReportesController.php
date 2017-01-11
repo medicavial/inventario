@@ -31,11 +31,11 @@ class ReportesController extends BaseController {
 		}
 
 		if (Input::has('almacen')) {									
-			$query->where('almacenes.ALM_clave', Input::get('almacen') );
+			$query->where('existencias.ALM_clave', Input::get('almacen') );
 		}
 
 		if (Input::has('item')) {									
-			$query->where('items.ITE_clave', Input::get('item') );
+			$query->where('existencias.ITE_clave', Input::get('item') );
 		}
 
 		if (Input::has('tipo')) {									
