@@ -160,7 +160,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::resource('unidades', 'UnidadesController');
     Route::resource('unidadesitem', 'UnidadItemController');
     Route::resource('usuarios', 'UsuariosController');
-    /*Route::resource('pruebas', 'PruebasController');*/
+    Route::resource('samus', 'SamusController');
 
     
     Route::group(array('prefix' => 'busquedas'), function()

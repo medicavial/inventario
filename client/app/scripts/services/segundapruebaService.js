@@ -9,7 +9,7 @@
 	//servicio para permisos
 	function segundaprueba($resource,api){
 
-	    var SegundaPrueba = $resource(api + 'segundaprueba/:SegundaPrueba', {}, {
+	    var SegundaPrueba = $resource(api + 'samus/:SegundaPrueba', {}, {
 	                'get':    {method:'GET'},
 	                'save':   {method:'POST'},
 	                'query':  {method:'GET', isArray:true},
@@ -18,7 +18,6 @@
 	            });
 
 	    return SegundaPrueba;
-	    /*console.log(Prueba);*/
 	}
 
 })();

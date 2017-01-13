@@ -2,7 +2,7 @@
 
 class Segundaprueba extends Eloquent {
 
-	//protected $primaryKey ='id_cliente';
+	protected $primaryKey ='id_cliente';
     protected $table = 'segundaprueba';
     protected $guarded = []; 
 

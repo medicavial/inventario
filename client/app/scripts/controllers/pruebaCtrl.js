@@ -5,9 +5,9 @@
 	angular.module('app')
 	.controller('pruebaCtrl',pruebaCtrl)
 
-	pruebaCtrl.$inject = ['$rootScope','$scope','busqueda','datos','proveedores','segundaprueba'];
+	pruebaCtrl.$inject = ['$rootScope','$scope','busqueda','datos','proveedores','segundaprueba','mensajes'];
 
-	function pruebaCtrl($rootScope,$scope,busqueda,datos,proveedores, segundaprueba){
+	function pruebaCtrl($rootScope,$scope,busqueda,datos,proveedores, segundaprueba, mensajes){
 
 		var prueba = this;
 
@@ -31,7 +31,7 @@
 		prueba.limit=10;
 		prueba.page=1;
 		prueba.texto={
-			text:'proveedores por página:',
+			text:'Clientes por página:',
 			of: 'de'
 		};
 		prueba.paginacion=[10,20,30,40];
@@ -51,9 +51,9 @@
 		};
 
 		prueba.consultaB = function () {
-			busqueda.prueba2().then(function (info){
-				$scope.info2=info.data;
-				//console.log($scope.info2);
+			segundaprueba.query(function (info){
+				$scope.info2=info;
+				console.log($scope.info2);
 				$scope.infoA=false;
 				$scope.infoB=true;
 				$scope.infoC=false;
@@ -72,10 +72,25 @@
 
 		prueba.guardaCliente = function () {
 			$scope.cliente.nombreCompleto=$scope.cliente.nombre+' '+$scope.cliente.aPaterno+' '+$scope.cliente.aMaterno;
-			console.log($scope.cliente);
-			pruebas.save($scope.cliente, function (data){
-
-			});
+			// console.log($scope.cliente);
+			segundaprueba.save($scope.cliente, 
+				function (data){
+				$scope.cliente={
+					nombreCompleto: null,
+					nombre: null,
+					aPaterno: null,
+					aMaterno: null,
+					telefono: null,
+					email: null,
+					domicilio: null,
+				};
+				mensajes.alerta('Cliente guardado satisfactoriamente','success','top right','wb_cloudy');
+				prueba.consultaB();
+				},
+				function (error){
+				mensajes.alerta('Ha ocurrido un error, intentalo nuevamente','error','top right','wb_cloudy');
+				}
+			)
 		};
 	}
 

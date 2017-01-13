@@ -38,11 +38,11 @@
         <div class="chart stats-bar">
         </div>
         <div class="count">
-          <h3>Cuadro C</h3>
+          <h3>Clientes</h3>
           <br>
           <span>34°</span>
           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="prueba.consultaC()">
-            Verificar
+            Registrar nuevo
           </a>
         </div>
       </div>
@@ -63,7 +63,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="prov in infoPrueba | filter:query | orderBy:proveedores.order | limitTo:proveedores.limit: (proveedores.page -1) * proveedores.limit">
+        <tr ng-repeat="prov in infoPrueba | filter:query | orderBy:prueba.order | limitTo:prueba.limit: (prueba.page -1) * prueba.limit">
           <td>{{prov.PRO_clave}}</td>
           <td>{{prov.PRO_nombrecorto}}</td>
           <td>{{prov.PRO_razonSocial}}</td>
@@ -72,6 +72,7 @@
       </tbody>
     </table>
   </md-data-table-container>
+  <md-data-table-pagination md-label="prueba.texto" md-row-select="prueba.paginacion" md-limit="prueba.limit" md-page="prueba.page" md-total="{{prueba.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
 </div>
 
 
@@ -108,19 +109,19 @@
           <md-input-container class="md-block" flex-gt-sm>
             <md-icon><ng-md-icon icon="assignment_ind" style="fill: grey" size="1em"></ng-md-icon></md-icon>
             <label>Nombre</label>
-            <input ng-model="cliente.nombre" style="width: 95%" required>
+            <input ng-model="cliente.nombre" style="width: 95%" required mayusculas>
           </md-input-container>
 
           <md-input-container class="md-block" flex-gt-sm>
             <md-icon><ng-md-icon icon="assignment_ind" style="fill: grey" size="1em"></ng-md-icon></md-icon>
             <label>Apellido Paterno</label>
-            <input ng-model="cliente.aPaterno" style="width: 95%" required>
+            <input ng-model="cliente.aPaterno" style="width: 95%" required mayusculas>
           </md-input-container>
 
           <md-input-container class="md-block" flex-gt-sm>
             <md-icon><ng-md-icon icon="assignment_ind" style="fill: grey" size="1em"></ng-md-icon></md-icon>
             <label>Apellido Materno</label>
-            <input ng-model="cliente.aMaterno" style="width: 95%" required>
+            <input ng-model="cliente.aMaterno" style="width: 95%" required mayusculas>
           </md-input-container>
         </div>
 
@@ -140,7 +141,7 @@
           <md-input-container class="md-block" flex-gt-sm>
             <md-icon><ng-md-icon icon="location_on" style="fill: grey" size="1em"></ng-md-icon></md-icon>
             <label>Domicilio</label>
-            <input type="text" ng-model="cliente.domicilio" style="width: 95%" required>
+            <input type="text" ng-model="cliente.domicilio" style="width: 95%" required mayusculas>
           </md-input-container>
         </div>
 
