@@ -11,6 +11,11 @@
 
 	function configuracionCtrl($rootScope,$mdDialog,busqueda,operacion, mensajes, datos){
 
+		if ($rootScope.permisos.PER_alertas==0) {
+			console.clear();
+			console.error('No tiene permiso para estar en esta sección');
+			$rootScope.ir('index.home');
+		};
 		// console.log(datos);
 		var scope = this;
 

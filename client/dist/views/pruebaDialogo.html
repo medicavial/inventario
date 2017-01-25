@@ -1,0 +1,65 @@
+<md-dialog aria-label="Mango (Fruit)" flex-sm="65" flex-gt-md="60" flex="100">
+  <md-toolbar style="background-color: rgba(21, 166, 176, 0.96);">
+    <div class="md-toolbar-tools">
+      <h2>Este es el título</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cerrarDialogo()" aria-label="Cerrar Dialogo">
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <h2>HOLA SAMUS</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget fermentum ante. Morbi a dignissim libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+      </p>
+
+      <h5 align="center">¿Desea continuar?</h5>
+
+      <div align="center">
+        <md-button class="md-raised edgePadding" ng-click="cerrarDialogo()">
+          No
+        </md-button>
+        <md-button class="md-primary md-raised edgePadding" style="background-color: rgba(21, 166, 176, 0.96); font-size: 16px;" ng-click="mostrarDatos()" ng-disabled="solicitaPsw==true">
+          Si
+        </md-button>
+      </div>
+
+      <br><br>
+
+      <div align="center" ng-show="solicitaPsw==true">
+        <form name="sesion.loginForm" ng-submit="verificarPassword()">
+          <div layout="row" flex layout-align="center center">
+            <div layout="column"       layout-align="center end">
+              <md-input-container class="md-icon-float animated bounceInUp" flex>
+                <label>Contraseña</label>
+                <md-icon  class="psw">
+                  <ng-md-icon icon="lock" style="fill:#595959"></ng-md-icon> 
+                </md-icon>
+                <input ng-model="datos.password" name="psw" type="password" aria-label="contraseña" ng-required="solicitaPsw==true">
+              </md-input-container>
+            </div>
+
+            <div layout="column" layout-align="center start">
+              <md-button type="submit" class="animated bounceInUp md-fab md-primary" aria-label="Nuevo Estado"
+                style=" color : rgb(49, 46, 46);
+                        background-color: rgba(21, 166, 176, 0.96);
+                        font-size: 16px;">
+                  <md-tooltip md-direction="top">
+                    Verificar
+                  </md-tooltip>
+                  <ng-md-icon icon="send" style="fill:white"></ng-md-icon> 
+              </md-button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- <img style="margin: auto; max-width: 100%;" alt="Lush mango tree" src="img/google.png"> -->
+
+    </div>
+    
+  </md-dialog-content>
+</md-dialog>

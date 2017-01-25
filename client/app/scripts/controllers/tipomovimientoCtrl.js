@@ -14,6 +14,12 @@
 
 	function tiposMovimientoCtrl($rootScope,$mdDialog,datos,tiposmovimiento,mensajes){
 
+		if ($rootScope.permisos.PER_tipos==0) {
+			console.clear();
+			console.error('No tiene permiso para estar en esta sección');
+			$rootScope.ir('index.home');
+		};
+
 		var scope = this;
 		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Tipos de Movmiento';

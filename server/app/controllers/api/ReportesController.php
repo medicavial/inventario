@@ -134,12 +134,6 @@ class ReportesController extends BaseController {
 	public function traspasos(){
 		$query = Movimiento::query();
 
-		$fechaInicio = Input::has('fechaInicio') ? Input::get('fechaInicio') : date('Y-m-d') . ' 00:00:00';
-		$fechaFinal = Input::has('fechaFinal') ? Input::get('fechaFinal') : date('Y-m-d') . ' 23:59:59';
-
-		// $fechaInicio = date('Y-m-d') . ' 00:00:00';
-		// $fechaFinal = date('Y-m-d') . ' 23:59:59';
-
         $query->join('items', 'movimientos.ITE_clave', '=', 'items.ITE_clave')
 				->join('almacenes', 'movimientos.ALM_clave', '=', 'almacenes.ALM_clave')
 				->join('usuarios', 'movimientos.USU_clave', '=', 'usuarios.USU_clave')

@@ -17,6 +17,7 @@
 
 		//seteo inicial de la app
 		var url = '';
+
 		// esto nos indica que la aplicacion no pondra un icono de atras
 		$rootScope.atras = false;
 
@@ -129,7 +130,6 @@
 		    $state.go(ruta);
 		};
 
-
 		$rootScope.showGridBottomSheet = function($event) {
 		    $mdBottomSheet.show({
 				templateUrl: 'views/interactivo.html',
@@ -154,6 +154,7 @@
 			if (ruta == 'index.home') {
 				$rootScope.resetMenu();
 			};
+
 			$state.go(ruta);
 		}
 

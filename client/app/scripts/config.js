@@ -105,6 +105,11 @@
 			url:'conexiones',
 			templateUrl :'views/conexiones.html',
 			controller 	: function($rootScope){
+				if ($rootScope.permisos.PER_conexiones==0) {
+				      console.clear();
+				      console.error('No tiene permiso para estar en esta sección');
+				      $rootScope.ir('index.home');
+				};
 				$rootScope.titulo = 'Conexiones';
 			}
 		})

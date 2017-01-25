@@ -13,6 +13,12 @@
 
 	function agranelCtrl($rootScope,$mdDialog,datos,busqueda,mensajes){
 
+		if ($rootScope.permisos.PER_salidasAgranel==0) {
+			console.clear();
+			console.error('No tiene permiso para estar en esta sección');
+			$rootScope.ir('index.home');
+		};
+
 		var scope = this;
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Salidas de a granel';
@@ -24,7 +30,6 @@
 			text: 'Movimientos por pagina:',
 			of: 'de'
 	    };
-	    
 		scope.paginacion = [10,20,30,40];
 
 		scope.onPaginationChange = function (page, limit) {

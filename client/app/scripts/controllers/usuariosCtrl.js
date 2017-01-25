@@ -16,6 +16,12 @@
 
 	function usuariosCtrl($rootScope,$mdDialog,datos,usuarios,mensajes){
 
+		if ($rootScope.permisos.PER_usuarios==0) {
+			console.clear();
+			console.error('No tiene permiso para estar en esta sección');
+			$rootScope.ir('index.home');
+		};
+
 		var scope = this;
 		$rootScope.tema = 'theme2';
 		$rootScope.titulo = 'Usuarios Registrados';

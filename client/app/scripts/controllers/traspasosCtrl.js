@@ -9,6 +9,12 @@
 
 	function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,datos,$filter,$q){
 
+		if ($rootScope.permisos.PER_traspasos==0) {
+			console.clear();
+			console.error('No tiene permiso para estar en esta sección');
+			$rootScope.ir('index.home');
+		};
+
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Nuevo traspaso';
 
