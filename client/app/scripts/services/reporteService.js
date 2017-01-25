@@ -40,6 +40,11 @@
                 var parametros = serializeObj(datos);
                 return $http.get(api + 'reportes/movimientos?' + parametros);
             },
+            traspasos : function(datos)
+            {
+                var parametros = serializeObj(datos);
+                return $http.get(api + 'reportes/traspasos?' + parametros);
+            },
             ordenes : function(datos)
             {
                 return $http.post(api + 'reportes/ordenes',datos);

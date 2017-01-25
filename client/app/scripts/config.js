@@ -602,6 +602,26 @@
 	        }
 		})
 
+		.state('index.reporteTraspasos',{
+			url:'reporteTraspasos',
+			templateUrl :'views/reporteTraspasos.html',
+			controller:'reporteTraspasosCtrl',
+			controllerAs: "tras",
+			resolve:{
+	            datos:function(busqueda,$q,$rootScope){
+	                var promesa   = $q.defer(),
+	            		unidades  = busqueda.unidadesUsuario($rootScope.id),
+	            		tipoitems = busqueda.tiposItem(),
+	            		items 	  = busqueda.items();
+	            	$q.all([unidades,items,tipoitems]).then(function (data){
+	            		promesa.resolve(data);
+	            	});
+
+	                return promesa.promise;
+	            }
+	        }
+		})
+
 		.state('index.reporteOrdenes',{
 			url:'reporteOrdenes',
 			templateUrl :'views/reporteOrdenes.html',
@@ -631,6 +651,13 @@
 	                return proveedores.query().$promise;
 	            }
 	        }
+		})
+
+		.state('index.pruebaSE',{
+			url:'pruebaSE',
+			templateUrl :'views/pruebaSE.html',
+			controller:'pruebaSECtrl',
+			controllerAs: "pruebaSE"
 		})
 
 

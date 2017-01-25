@@ -63,9 +63,9 @@ class ReportesController extends BaseController {
 		
 		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad');
 
-	 	if (Input::has('unidad')) {
-	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
-		}
+	 // 	if (Input::has('unidad')) {
+	 // 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
+		// }
 
 		if (Input::has('almacen')) {									
 			$query->where('existencias.ALM_clave', Input::get('almacen') );
@@ -131,6 +131,45 @@ class ReportesController extends BaseController {
 
 	}
 
+	public function traspasos(){
+		$query = Movimiento::query();
+
+		$fechaInicio = Input::has('fechaInicio') ? Input::get('fechaInicio') : date('Y-m-d') . ' 00:00:00';
+		$fechaFinal = Input::has('fechaFinal') ? Input::get('fechaFinal') : date('Y-m-d') . ' 23:59:59';
+
+		// $fechaInicio = date('Y-m-d') . ' 00:00:00';
+		// $fechaFinal = date('Y-m-d') . ' 23:59:59';
+
+        $query->join('items', 'movimientos.ITE_clave', '=', 'items.ITE_clave')
+				->join('almacenes', 'movimientos.ALM_clave', '=', 'almacenes.ALM_clave')
+				->join('usuarios', 'movimientos.USU_clave', '=', 'usuarios.USU_clave')
+				->join('tiposMovimiento', 'movimientos.TIM_clave', '=', 'tiposMovimiento.TIM_clave')
+				->leftJoin('tiposAjuste', 'movimientos.TIA_clave', '=', 'tiposAjuste.TIA_clave')
+				->select('ITE_codigo','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre','MOV_observaciones','MOV_cantidad','movimientos.created_at')
+				->where('movimientos.MOV_traspaso', 1 )
+				->whereBetween('movimientos.created_at', array(Input::has('fechaInicio') ? Input::get('fechaInicio') : date('Y-m-d') . ' 00:00:00' , Input::has('fechaFinal') ? Input::get('fechaFinal') : date('Y-m-d') . ' 23:59:59'));
+				// ->whereBetween('created_at', array("'".$fechaInicio."'", "'".$fechaFinal."'"));
+
+	 	if (Input::has('unidad')) {
+	 		$query->where('UNI_clave', Input::get('unidad') );
+		}
+
+		if (Input::has('almacen')) {									
+			$query->where('almacenes.ALM_clave', Input::get('almacen') );
+		}
+
+		if (Input::has('item')) {									
+			$query->where('items.ITE_clave', Input::get('item') );
+		}
+
+		if (Input::has('tipo')) {									
+			$query->where('items.TIT_clave', Input::get('tipo') );
+		}
+
+		return $query->get();
+
+	}
+
 	public function items(){
 
 		$query = Item::query();
@@ -161,6 +200,8 @@ class ReportesController extends BaseController {
 			$datos = $this->lotes();
 		}else if($tipo == 'movimientos'){
 			$datos = $this->movimientos();
+		}else if($tipo == 'traspasos'){
+			$datos = $this->traspasos();
 		}
 
 		return Excel::create($tipo, function($excel) use($datos,$tipo) {
@@ -197,6 +238,11 @@ class ReportesController extends BaseController {
 
 		        }else if ($tipo == 'movmientos') {
 		        	
+			        $sheet->row(1, array(
+					    'Codigo','Item','Almacen','usuario','Tipo Movimiento','Tipo Ajuste','Observaciones','Cantidad','Fecha'
+					));
+
+		        }else if ($tipo == 'traspasos') {
 
 			        $sheet->row(1, array(
 					    'Codigo','Item','Almacen','usuario','Tipo Movimiento','Tipo Ajuste','Observaciones','Cantidad','Fecha'
@@ -225,7 +271,12 @@ class ReportesController extends BaseController {
 
 	public function exportarPDF($tipo){
 		
-		$datos = $this->existencias();
+		//$datos = $this->existencias();
+		if ($tipo == 'existencias'){
+			$datos = $this->existencias();
+		} elseif ($tipo == 'traspasos'){
+			$datos = $this->traspasos();
+		}
 
 		return Excel::create($tipo, function($excel) use($datos) {
 
@@ -273,7 +324,7 @@ class ReportesController extends BaseController {
 		if (Input::has('acceso')) {
 
 			$acceso = Input::get('acceso');
-			$fechaini = date('Y-m-d', strtotime ( '-30 day' , strtotime ( $fechafin ) ) ) . ' 00:00:00';;
+			$fechaini = date('Y-m-d', strtotime ( '-30 day' , strtotime ( $fechafin ) ) ) . ' 00:00:00';
 
 			//verificamos los accesos directos 
 

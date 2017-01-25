@@ -166,6 +166,10 @@
             prueba2 : function(){
                 return $http.get(api + 'segundaprueba');
             }
+            // ,
+            // traspasos : function(){
+            //     return $http.get(api + 'busquedas/traspasos');
+            // }
         }
     }
 

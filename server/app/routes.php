@@ -242,6 +242,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('items', 'ReportesController@items');
         Route::get('lotes', 'ReportesController@lotes');
         Route::get('movimientos', 'ReportesController@movimientos');
+        Route::get('traspasos', 'ReportesController@traspasos');
         Route::post('ordenes', 'ReportesController@ordenes');
         Route::post('exportar/{tipo}', 'ReportesController@exportar');
         Route::post('exportarPDF/{tipo}', 'ReportesController@exportarPDF');
