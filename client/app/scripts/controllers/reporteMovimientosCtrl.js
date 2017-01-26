@@ -37,8 +37,12 @@
 				unidad:'',
 				almacen:'',
 				item:'',
-				tipo:''
+				tipo:'',
+				fechaInicio: null,
+				fechaFinal: null,
 			}
+			scope.fechaInicio=null;
+			scope.fechaFinal=null;
 		}
 
 		scope.agregaUnidad = function(unidad){
@@ -67,35 +71,69 @@
 			});
 		};
 
+		scope.cambio = function(){
+			//console.log(scope.datos);
+
+			var d = new Date(scope.fechaInicio),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    if (scope.fechaInicio==null) {
+			    	scope.datos.fechaInicio
+			    } else{
+			    	scope.datos.fechaInicio= year+'-'+month+'-'+day+' 00:00:00';
+			    };
+
+			var d = new Date(scope.fechaFinal),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    if (scope.fechaFinal==null) {
+			    	scope.datos.fechaFinal
+			    } else{
+			    	scope.datos.fechaFinal= year+'-'+month+'-'+day+' 00:00:00';
+			    };
+		}
+
 		scope.buscar = function(){
+			if (scope.datos.fechaInicio==null || scope.datos.fechaFinal==null) {
+				mensajes.alerta('Se requiere fecha de inicial y final para generar el reporte','error','top right','error');
+			} else{
+				if (scope.datos.unidad) {
 
+					scope.consultando = true;
+					scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
+					scope.almacenB = scope.datos.almacen ? scope.almacenB : '';
+					scope.itemB = scope.datos.item ? scope.itemB : '';
 
-			if (scope.datos.unidad) {
+					reportes.movimientos(scope.datos).success(function (data){
 
-				scope.consultando = true;
-				scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
-				scope.almacenB = scope.datos.almacen ? scope.almacenB : '';
-				scope.itemB = scope.datos.item ? scope.itemB : '';
+						scope.consultando = false;
 
-				reportes.movimientos(scope.datos).success(function (data){
+						scope.info = data;
 
-					scope.consultando = false;
-
-					scope.info = data;
-
-					if (data.length > 0) {
-						scope.nuevaBusqueda = false;
-					}else{
-						mensajes.alerta('No se encontro información disponible','error','top right','error');
-					}
-				}).error(function (error){
-					scope.info = [];
-					scope.consultando = false;
-					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
-				})
-				
-			}else{
-				mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
+						if (data.length > 0) {
+							scope.nuevaBusqueda = false;
+						}else{
+							mensajes.alerta('No se encontro información disponible','error','top right','error');
+						}
+					}).error(function (error){
+						scope.info = [];
+						scope.consultando = false;
+						mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+					})
+					
+				}else{
+					mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
+				}
 			}
 		}
 

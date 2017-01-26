@@ -41,6 +41,8 @@
 				fechaInicio: null,
 				fechaFinal:null,
 			}
+			scope.fechaInicio=null;
+			scope.fechaFinal=null;
 		}
 
 		scope.cambio = function(){
@@ -54,7 +56,11 @@
 			    if (month.length < 2) month = '0' + month;
 			    if (day.length < 2) day = '0' + day;
 
-			    scope.datos.fechaInicio= year+'-'+month+'-'+day+' 00:00:00';
+			    if (scope.fechaInicio==null) {
+			    	scope.datos.fechaInicio
+			    } else{
+			    	scope.datos.fechaInicio= year+'-'+month+'-'+day+' 00:00:00';
+			    };
 
 			var d = new Date(scope.fechaFinal),
 			        month = '' + (d.getMonth() + 1),
@@ -64,9 +70,11 @@
 			    if (month.length < 2) month = '0' + month;
 			    if (day.length < 2) day = '0' + day;
 
-			    scope.datos.fechaFinal= year+'-'+month+'-'+day+' 23:59:59';
-
-			    //console.log(scope.datos);
+			    if (scope.fechaFinal==null) {
+			    	scope.datos.fechaFinal
+			    } else{
+			    	scope.datos.fechaFinal= year+'-'+month+'-'+day+' 00:00:00';
+			    };
 		}
 
 		scope.agregaUnidad = function(unidad){
@@ -97,6 +105,9 @@
 
 		scope.buscar = function(){
 			console.log(scope.datos);
+			if (scope.datos.fechaInicio==null || scope.datos.fechaFinal==null) {
+				mensajes.alerta('Se requiere fecha de inicio y final para generar el reporte','error','top right','error');
+			} else{
 
 			// if (scope.datos.unidad) {
 				scope.consultando = true;
@@ -125,6 +136,7 @@
 			// }else{
 			// 	mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
 			// }
+			};
 		}
 
 		scope.opciones = function() {

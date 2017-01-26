@@ -34,16 +34,13 @@
         </div>
 
         <div layout="column" flex>
-
           <md-subheader class="c-bluegray">X Tipo Item</md-subheader>  
           <md-divider class="bgm-bluegray"></md-divider>
           <md-select placeholder="Tipo de Item" ng-model="existencia.datos.tipo" name="tipo" flex >
             <md-option ng-repeat="tipoitem in existencia.tiposItem" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
           </md-select>
-          
-        
         </div>
-        
+
         <div layout="column" layout-paddin layout-align="center center" flex>
           <md-progress-circular md-mode="indeterminate" ng-if="existencia.consultando"></md-progress-circular>
           <md-button class="md-raised md-primary" ng-if="!existencia.consultando" ng-click="existencia.buscar()">Buscar</md-button>
