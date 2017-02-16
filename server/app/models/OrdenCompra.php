@@ -11,7 +11,8 @@ class OrdenCompra extends Eloquent {
         return $query->join('tiposOrden', 'ordenCompra.TOR_clave', '=', 'tiposOrden.TOR_clave')
                      ->join('proveedores', 'ordenCompra.PRO_clave', '=', 'proveedores.PRO_clave')
                      ->join('usuarios', 'ordenCompra.USU_creo', '=', 'usuarios.USU_clave')
-                     ->select('ordenCompra.*','PRO_nombrecorto','TOR_nombre','USU_nombrecompleto')
+                     ->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
+                     ->select('ordenCompra.*','PRO_nombrecorto','TOR_nombre','USU_nombrecompleto','UNI_nombrecorto')
                      ->get();
     }
 

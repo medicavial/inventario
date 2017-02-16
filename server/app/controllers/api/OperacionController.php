@@ -417,7 +417,8 @@ class OperacionController extends BaseController {
 				);
 
 			}else{
-				return Response::json(array('respuesta' => 'Algunos items no tienen alertas favor de verificar'),500);
+				// return Response::json(array('respuesta' => 'Algunos items no tienen alertas favor de verificar'),500);
+				//cambio
 			}
 		}
 

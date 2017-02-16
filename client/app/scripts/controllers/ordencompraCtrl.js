@@ -17,7 +17,7 @@
 
 	function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,$window,api,operacion){
 
-		if ($rootScope.permisos.PER_generarOrden==0) {
+		if ($rootScope.permisos.PER_surtirOrden==0) {
 			console.clear();
 			console.error('No tiene permiso para estar en esta sección');
 			$rootScope.ir('index.home');

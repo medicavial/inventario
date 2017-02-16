@@ -230,7 +230,7 @@ class ReportesController extends BaseController {
 					    'Codigo','Item','Almacen','Cantidad Almacen','Lote','Cantidad','Caducidad'
 					));
 
-		        }else if ($tipo == 'movmientos') {
+		        }else if ($tipo == 'movimientos') {
 		        	
 			        $sheet->row(1, array(
 					    'Codigo','Item','Almacen','usuario','Tipo Movimiento','Tipo Ajuste','Observaciones','Cantidad','Fecha'

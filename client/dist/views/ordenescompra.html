@@ -30,6 +30,7 @@
         <tbody>
           <tr ng-repeat="orden in ordenescompra.info |filter:query | orderBy: ordenescompra.order | limitTo: ordenescompra.limit: (ordenescompra.page - 1) * ordenescompra.limit">
             <td>{{orden.OCM_clave}}</td>
+            <td>{{orden.UNI_nombrecorto}}</td>
             <td>{{orden.created_at}}</td>
             <td>{{orden.updated_at}}</td>
             <td>{{orden.PRO_nombrecorto}}</td>
@@ -104,7 +105,7 @@
 
 </div>
 
-<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.nuevaorden')" aria-label="Nuevo Estado">
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.nuevaorden')" aria-label="Nuevo Estado" ng-if=" permisos.PER_generarOrden == '1' ">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>

@@ -73,7 +73,7 @@
 			    if (scope.fechaFinal==null) {
 			    	scope.datos.fechaFinal
 			    } else{
-			    	scope.datos.fechaFinal= year+'-'+month+'-'+day+' 00:00:00';
+			    	scope.datos.fechaFinal= year+'-'+month+'-'+day+' 23:59:59';
 			    };
 		}
 
