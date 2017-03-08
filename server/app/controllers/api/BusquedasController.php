@@ -33,7 +33,7 @@ class BusquedasController extends BaseController {
 	public function almacenesUnidad($unidad){
 
 		return Almacen::unidad($unidad);
-		
+
 	}
 
 	public function itemAlmacen($almacen,$item){
@@ -54,7 +54,7 @@ class BusquedasController extends BaseController {
 	}
 
 	public function itemsAgranel(){
-		return Item::join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')                
+		return Item::join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')
 					 ->where( array('ITE_activo'=> true,'ITE_agranel'=> true) )
                      ->orderBy('ITE_nombre')
                      ->get();
@@ -79,13 +79,13 @@ class BusquedasController extends BaseController {
 	}
 
 	public function existencias($usuario){
-		
+
 		return Existencia::usuario($usuario);
-		
+
 	}
 
 	public function existenciasUnidad($unidad,$tipo){
-		
+
 		if ($tipo == 1) {
 			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
 		}else{
@@ -99,11 +99,11 @@ class BusquedasController extends BaseController {
 	                     ->select(DB::raw($sql))
 	                     ->groupBy('existencias.ITE_clave')
 	                     ->where('unidades.UNI_claveMV', $unidad)
-	                     // este condicional solo filtra el botiquin 
+	                     // este condicional solo filtra el botiquin
 	                     ->where('almacenes.TAL_clave', 2)
 	                     ->where('items.TIT_clave', $tipo)
 	                     ->get();
-		
+
 	}
 
 	public function lote($lote){
@@ -132,7 +132,7 @@ class BusquedasController extends BaseController {
 	public function movimientos(){
 
         return Movimiento::todos();
-        
+
 	}
 
 	public function movimientosAgranel(){
@@ -140,8 +140,9 @@ class BusquedasController extends BaseController {
         return Movimiento::agranel();
 	}
 
-	public function ordenescompra(){
-		return OrdenCompra::todos();
+	public function ordenescompra($unidades){
+
+				return OrdenCompra::todos($unidades);
 	}
 
 	public function ordencompra($id){
@@ -182,7 +183,7 @@ class BusquedasController extends BaseController {
 			'OCM_fechaPagada' => $dato->OCM_fechapagado,
 			'items' => $items
 	    );
-		    
+
 		// }
 
 		return $orden;
@@ -228,7 +229,7 @@ class BusquedasController extends BaseController {
 			}else{
 				$cantidad = $dato['NS_cantidad'];
 			}
-			
+
 			$items[] = array(
 				'receta' => $id,
 				'recetaItem' => $dato['NS_id'],
@@ -244,7 +245,7 @@ class BusquedasController extends BaseController {
 				'surtido' => false,
 				'lote' => ''
 			);
-			
+
 		}
 
 		$respuesta = array(

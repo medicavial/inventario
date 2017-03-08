@@ -45,7 +45,7 @@
 				</p>
 				<p flex flex-gt-sm="20">
 					<md-progress-circular md-mode='indeterminate' ng-if="receta.surtiendo && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
-					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.surtido" class="md-raised md-warm" ng-click="receta.surtirItem(recetaItem)">Surtir</md-button>
+					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.surtido || receta.surtiendo" class="md-raised md-warm" ng-click="receta.surtirItem(recetaItem)">Surtir</md-button>
 				</p>
 				<p flex flex-gt-sm="20">
 					<md-progress-circular md-mode='indeterminate' ng-if="receta.cancelando && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>

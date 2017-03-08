@@ -27,14 +27,15 @@
 		$rootScope.username = webStorage.session.get('username');
 		$rootScope.nombre = webStorage.session.get('nombre');
 		$rootScope.id = webStorage.session.get('id');
+		$rootScope.unidadesAdmin=webStorage.session.get('unidades');
 
 		$rootScope.permisos = JSON.parse(webStorage.session.get('permisos'));
-		
+
 		$rootScope.menu = 'menu';
 
 		//incia el menu;
 		$rootScope.resetMenu = function(icono){
-			
+
 			$rootScope.iconoAdmin = 'add';
 			$rootScope.iconoCatalogos = 'add';
 			$rootScope.iconoAlmacen = 'add';
@@ -49,11 +50,11 @@
 
 		}
 
-		// funcion que resetea el menu 
+		// funcion que resetea el menu
 		$rootScope.resetMenu();
 
 		// interaccion del menu
-		$rootScope.abrirMenu = function(index){			
+		$rootScope.abrirMenu = function(index){
 
 			if (index == 1) {
 
@@ -116,7 +117,7 @@
 			};
 		}
 
-		// funcion para ocultar el menu 
+		// funcion para ocultar el menu
 		$rootScope.toggleSidenav = function(menuId) {
 			if ($rootScope.atras) {
 				$window.history.back();
@@ -144,7 +145,7 @@
 			auth.logout();
 		}
 
-		// funcion que nos manda a la ruta queremos ir 
+		// funcion que nos manda a la ruta queremos ir
 		$rootScope.ir = function(ruta){
 
 			if ($mdSidenav('left').isOpen()) {
@@ -165,8 +166,8 @@
 
 
 		//verificamos que la ruta haya cambiado
-		$rootScope.$on('$stateChangeStart',	function(event, toState, toParams, fromState, fromParams){ 
-	        
+		$rootScope.$on('$stateChangeStart',	function(event, toState, toParams, fromState, fromParams){
+
 	        // inicializa los iconos
 	        $rootScope.atras = false;
 
@@ -174,7 +175,7 @@
 	        url = toState.name;
 	        //verificamos si es diferente de login y el usuario no haya iniciado sesión
 		    if(url != 'login' && webStorage.session.get('username') == null)
-	        {   
+	        {
 	        	// te regresa a login
 	        	event.preventDefault();
 	            $state.go('login');
@@ -189,7 +190,7 @@
 	        $rootScope.cargando = true;
 		});
 
-	    $rootScope.$on('$stateChangeSuccess',	function(event, toState, toParams, fromState, fromParams){ 
+	    $rootScope.$on('$stateChangeSuccess',	function(event, toState, toParams, fromState, fromParams){
 	        $rootScope.cargando = false;
 	        $rootScope.menu = 'menu';
 		});

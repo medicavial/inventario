@@ -62,7 +62,7 @@
           </md-list>
 
           <md-progress-circular md-mode="indeterminate" ng-show="guardando"></md-progress-circular>
-          <md-button class="md-raised md-primary" ng-if="traspasos.length" ng-click="guardar()" ng-hide="guardando">Terminar</md-button>
+          <md-button class="md-raised md-primary" ng-if="traspasos.length" ng-click="guardar()" ng-hide="guardando" ng-disabled="guardando">Terminar</md-button>
 
         </md-content>
 

@@ -72,7 +72,7 @@
 		};
 
 		scope.cambio = function(){
-			//console.log(scope.datos);
+			console.log(scope.datos);
 
 			var d = new Date(scope.fechaInicio),
 			        month = '' + (d.getMonth() + 1),

@@ -30,7 +30,7 @@ Route::get('/', function()
     // $backup->backup();
 
     // return ordenItem::find(20);
-    
+
 
 });
 
@@ -45,18 +45,18 @@ Route::group(array('prefix' => 'api'), function()
 	});
 
     Route::post('/upload/{tipo}', function($tipo){
-        
+
         $ruta = "resource/".$tipo."/" . Input::get('clave');
 
         if(Input::hasFile('file')) {
-            
+
             $file = Input::file('file');
             $file->move($ruta,$file->getClientOriginalName());
 
         }
-         
+
         return Response::json(array('respuesta' => 'Imagenes subidas Correctamente','archivos' => $file));
-            
+
     });
 
     Route::get('/xml', function(){
@@ -64,22 +64,22 @@ Route::group(array('prefix' => 'api'), function()
         $app = new Illuminate\Container\Container;
         $document = new Orchestra\Parser\Xml\Document($app);
         $reader = new Orchestra\Parser\Xml\Reader($document);
-        
+
         $xml = $reader->load(public_path() . '/archivo.xml');
         $nodos = $xml->getContent();
         foreach($nodos as $nodo) {
             echo $nodo['version'];
 
         }
-            
+
         print_r($nodos);
-        
+
     });
 
     Route::post('/subePDF/{orden}', function($orden){
 
         if(Input::has('data')) {
-            
+
             $data =  base64_decode(Input::get('data'));
             $ruta =  public_path().'/ordenesCompra/'.$orden.'.pdf';
 
@@ -102,7 +102,7 @@ Route::group(array('prefix' => 'api'), function()
             return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
 
         }
-              
+
     });
 
     Route::post('delete',function(){
@@ -160,9 +160,9 @@ Route::group(array('prefix' => 'api'), function()
     Route::resource('unidades', 'UnidadesController');
     Route::resource('unidadesitem', 'UnidadItemController');
     Route::resource('usuarios', 'UsuariosController');
-    Route::resource('samus', 'SamusController');
+    //Route::resource('samus/{fun}', 'SamusController@pruebaSamus');
 
-    
+
     Route::group(array('prefix' => 'busquedas'), function()
     {
         Route::get('almacen/{usuario}', 'BusquedasController@almacenUsuario');
@@ -185,7 +185,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('lotes/unidad/{unidad}/item/{item}', 'BusquedasController@lotesUnidadXitem');
         Route::get('movimientos', 'BusquedasController@movimientos');
         Route::get('movimientos/agranel', 'BusquedasController@movimientosAgranel');
-        Route::get('ordenescompra', 'BusquedasController@ordenescompra');
+        // Route::get('ordenescompra', 'BusquedasController@ordenescompra');
+        Route::get('ordenescompra/{unidades}', 'BusquedasController@ordenescompra');
         Route::get('ordencompra/{id}', 'BusquedasController@ordencompra');
         Route::get('tiposajuste', 'BusquedasController@tiposAjuste');
         Route::get('tiposalmacen', 'BusquedasController@tiposalmacen');
@@ -200,7 +201,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('unidades/usuario/{id}', 'BusquedasController@unidadesUsuario');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
-    
+
     });
 
     Route::group(array('prefix' => 'operacion'), function()

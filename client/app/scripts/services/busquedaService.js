@@ -2,7 +2,7 @@
 (function(){
 
     'use strict';
-    
+
     angular.module('app')
     .factory('busqueda',busqueda);
 
@@ -20,7 +20,7 @@
             },
             almacenUsuario : function(usuario)
             {
-                // 
+                //
                 return $http.get(api + 'busquedas/almacen/'+usuario);
             },
             almacenesUnidad : function(unidad)
@@ -68,7 +68,7 @@
             },
             itemAlmacen : function(almacen,item)
             {
-                //busca la existencia de un item en un almacen 
+                //busca la existencia de un item en un almacen
                 return $http.get(api + 'busquedas/item/existencia/' + almacen + '/' + item);
             },
             itemUnidad : function(item,unidad)
@@ -95,32 +95,32 @@
             {
                 return $http.get(api + 'busquedas/movimientos/agranel');
             },
-            ordenescompra : function()
+            ordenescompra : function(unidades)
             {
-                return $http.get(api + 'busquedas/ordenescompra');
+                return $http.get(api + 'busquedas/ordenescompra/'+unidades);
             },
             detalleOrdenCompra : function(id)
             {
                 return $http.get(api + 'busquedas/ordencompra/'+id);
             },
             tiposAjuste : function()
-            {   
+            {
                 return $http.get(api + 'busquedas/tiposajuste');
             },
             tiposAlmacen : function()
-            {   
+            {
                 return $http.get(api + 'busquedas/tiposalmacen');
             },
             tiposItem : function()
-            {   
+            {
                 return $http.get(api + 'busquedas/tipositem');
             },
             tiposMovimiento : function()
-            {   
+            {
                 return $http.get(api + 'busquedas/tiposmovimiento');
             },
             SubTiposItem : function()
-            {	
+            {
                 return $http.get(api + 'busquedas/subtipositem');
             },
             perfiles : function()

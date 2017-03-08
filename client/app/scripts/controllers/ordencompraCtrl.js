@@ -1,7 +1,7 @@
 (function(){
 
 	'use strict';
-	
+
 	angular
 	.module('app')
 	.controller('ordenCompraCtrl',ordenCompraCtrl)
@@ -16,7 +16,7 @@
 
 
 	function ordenesCompraCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,$window,api,operacion){
-
+		// console.log($rootScope.unidadesAdmin);
 		if ($rootScope.permisos.PER_surtirOrden==0) {
 			console.clear();
 			console.error('No tiene permiso para estar en esta sección');
@@ -27,6 +27,7 @@
 		$rootScope.tema = 'theme1';
 		$rootScope.titulo = 'Ordenes Registrados';
 		scope.info = datos.data;
+		// console.log(scope.info);
 		scope.total = 0;
 		scope.limit = 10;
 		scope.page = 1;
@@ -60,7 +61,7 @@
 		    		scope.info = data;
 		    	});
 		    });
-		    
+
 		};
 
 		scope.completar = function(ev,orden) {
@@ -76,16 +77,17 @@
 				targetEvent: ev,
 				resolve:{
 		            informacion:function(operacion,$q){
-		            	
+
 		                var promesa = $q.defer(),
 		            		items 	= operacion.verificaFaltantes(orden.OCM_clave);
 
 		            	$q.when(items).then(function (data){
-		            		// console.log(data);
+		            		console.log(data);
 		            		var datos = {
 		            			items:data.data,
 		            			orden:orden
 		            		}
+										console.log(datos);
 
 		            		promesa.resolve(datos);
 		            		// scope.loading = false;
@@ -100,7 +102,7 @@
 		    		scope.info = data;
 		    	});
 		    });
-		    
+
 		};
 
 		scope.cerrar = function(ev,orden) {
@@ -125,7 +127,7 @@
 		    		usuario:$rootScope.id,
 		    		orden:orden.OCM_clave
 		    	}
-		    	
+
 		    	operacion.cerrarOrden(info).success( function (data){
 		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
 		    		orden.OCM_incompleta = 0;
@@ -158,7 +160,7 @@
 		    		orden:orden.OCM_clave,
 		    		motivo:motivo
 		    	}
-		    	
+
 		    	operacion.cancelarOrden(info).success( function (data){
 		    		mensajes.alerta(data.respuesta,'success','top right','done_all');
 		    		orden.OCM_cancelada = 1;
@@ -178,7 +180,7 @@
 		      clickOutsideToClose:true,
 		      locals: { info: datos }
 		    }).then(function(){
-		    	
+
 		    });
 		};
 
@@ -202,7 +204,7 @@
 		$scope.generandoTodas = false;
 
 		$scope.inicio = function(){
-			
+
 			$scope.step1block = false;
 			$scope.step2block = true;
 			$scope.step3block = true;
@@ -259,10 +261,10 @@
 
 						mensajes.alerta(error,'error','top right','error');
 						$scope.consultaUnidad = false;
-						
+
 					}
 				);
-				
+
 			};
 		};
 
@@ -279,6 +281,7 @@
 
 		$scope.toggle = function (item, list) {
 			var idx = list.indexOf(item);
+			console.log(idx);
 	        if (idx > -1) list.splice(idx, 1);
 	        else list.push(item);
 	        $scope.muestraItems(list);
@@ -352,12 +355,12 @@
 	            		var cantidad = Number(itx.porsurtir)/Number(itx.ITE_cantidadCaja);
 	            		return cantidad.toFixed();
 	            	}else{
-	                	return Number(itx.porsurtir);	            		
-	            	}            		
+	                	return Number(itx.porsurtir);
+	            	}
 	            };
 
 	        }
-	        
+
 		}
 
 		$scope.compra = function(item){
@@ -371,7 +374,7 @@
 	            };
 
 	        }
-	        
+
 		}
 
 		$scope.existencia = function(item){
@@ -385,7 +388,7 @@
 	            };
 
 	        }
-	        
+
 		}
 
 		$scope.costoTotal = function(item){
@@ -433,7 +436,7 @@
 		}
 
 		$scope.generaMasBarato = function(){
-			
+
 			operacion.generaMasBarato($scope.totalItems).then(function (data){
 				$scope.ordenItems = data;
 			});
@@ -475,7 +478,7 @@
 
 		}
 
-		//se generan todas las ordenes aqui 
+		//se generan todas las ordenes aqui
 		$scope.confirmaOrden = function(){
 
 			$scope.generandoTodas = true;
@@ -512,9 +515,9 @@
 
 		}
 
-		//se generan las orden de compra por proveedor 
+		//se generan las orden de compra por proveedor
 		$scope.confirmaOrdenProveedor = function(proveedor){
-			
+
 			$scope.todos = false;
 
 			operacion.ordenXproveedor(proveedor,$scope.unidad,$scope.almacenes,$scope.seleccionOrden).then(
@@ -524,7 +527,7 @@
 
 					var idOrden = data.ordenes[0];
 					$scope.ordenes.push(idOrden);
-					
+
 					pdf.enviaOrden(idOrden).success(function (data){
 						$scope.respuestasCorreos.push(data.respuesta);
 					}).error(function (error){
@@ -563,7 +566,7 @@
 
 
 		$scope.muestraOrdenes = function(){
-			
+
 			operacion.generaDetalleOrdenes($scope.ordenes).then(
 				function(data){
 					$scope.ordenesListas = data;
@@ -586,7 +589,7 @@
 		      clickOutsideToClose:true,
 		      locals: { info: orden }
 		    }).then(function(){
-		    	
+
 		    });
 		};
 
@@ -606,7 +609,7 @@
 		}
 
 		$scope.enviaCorreo = function(){
-			
+
 			operacion.correo($scope.datos).success(function (data){
 				$scope.inicio();
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
@@ -619,7 +622,7 @@
 		$scope.cancel = function() {
 			$mdDialog.hide();
 		};
-		
+
 	}
 
 
@@ -628,7 +631,7 @@
 		// console.log(informacion);
 
 		$scope.inicio = function(){
-			
+
 			$scope.guardando = false;
 
 			$scope.datos = {
@@ -653,7 +656,7 @@
 		$scope.cancel = function() {
 			$mdDialog.hide();
 		};
-		
+
 	}
 
 })();

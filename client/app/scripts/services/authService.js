@@ -2,14 +2,14 @@
 (function(){
 
     'use strict';
-    
+
     angular.module('app')
     .factory('auth',auth);
 
     function auth($http, api, $state, webStorage,$rootScope,mensajes){
         return{
             login : function(credenciales)
-            {   
+            {
 
                 $http.post(api+'login',credenciales)
                 .success(function (data){
@@ -25,6 +25,22 @@
                     $rootScope.id = webStorage.session.get('id');
 
                     webStorage.session.add('permisos',JSON.stringify(data));
+
+                    //EXTRAEMOS LAS UNIDADES QUE TIENE EL USUARIO Y LAS GUARDAMOS EN WEBSTORAGE
+                    var clinicas=data.unidades;
+                    var cantidad=clinicas.length;
+                    var unidades='';
+
+                    for (var i = 0; i < cantidad; i++) {
+                      if (i>0) {
+                          unidades=unidades+',';
+                      }
+                      unidades = unidades+''+clinicas[i].UNI_clave;
+                    }
+                    webStorage.session.add('unidades',unidades);
+                    $rootScope.unidadesAdmin=webStorage.session.get('unidades');
+                    //TERMINA EL GUARDADO DE UNIDADES
+
                     $rootScope.permisos = data;
 
                     if (credenciales.guardar) {
@@ -45,8 +61,9 @@
 
             },
             logout : function()
-            {	
+            {
             	webStorage.session.clear();
+              $rootScope.unidadesAdmin=null;
                 $http.get(api+'logout');
             	$state.go('login');
             },
@@ -55,7 +72,7 @@
                 if (url == 'index.usuarios' && $rootScope.permisos.PER_usuarios == 0) {
                     return false;
                 }else if (url == 'index.usuarios' && $rootScope.permisos.PER_usuarios == 0) {
-                    
+
                 }else{
                     return true;
                 }

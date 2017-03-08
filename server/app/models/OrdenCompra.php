@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class OrdenCompra extends Eloquent {
 
@@ -6,13 +6,14 @@ class OrdenCompra extends Eloquent {
     protected $primaryKey ='OCM_clave';
 
 
-    public function scopeTodos($query)
+    public function scopeTodos($query,$unidades)
     {
         return $query->join('tiposOrden', 'ordenCompra.TOR_clave', '=', 'tiposOrden.TOR_clave')
                      ->join('proveedores', 'ordenCompra.PRO_clave', '=', 'proveedores.PRO_clave')
                      ->join('usuarios', 'ordenCompra.USU_creo', '=', 'usuarios.USU_clave')
                      ->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
                      ->select('ordenCompra.*','PRO_nombrecorto','TOR_nombre','USU_nombrecompleto','UNI_nombrecorto')
+                     ->whereIn('ordenCompra.UNI_clave', explode(",",$unidades))
                      ->get();
     }
 
@@ -47,4 +48,4 @@ class OrdenCompra extends Eloquent {
     }
 
 
-}		
+}

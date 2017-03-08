@@ -97,5 +97,43 @@ class SamusController extends \BaseController {
 		//
 	}
 
+	public function pruebaSamus(){
+		// $dato = Input::get('fun');
+		$saludo='Hola Mundo';
+		print_r( $saludo );
+/*
+        Mail::send('emails.prueba', array('key' => $saludo), function($message) use ($saludo)
+        {
+
+        	$ordeCompra = $saludo;
+        	$correo = 'sramirez@medicavial.com.mx';
+        	// $copias = $saludo;
+        	$asunto = 'Prueba de correo';
+
+        	$clave = $saludo;
+        	$nombreUnidad = $saludo;
+
+            $message->from('algo@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+            // foreach ($copias as $copia) {
+            // 	$message->cc($copia);
+            // }
+
+            $message->subject($asunto);
+            $message->to($correo);
+
+
+            // $archivo =  public_path().'/ordenesCompra/'.$ordeCompra.'.pdf';
+
+            // $pdf = helpers::ordenPDF($ordeCompra);
+            // $pdf->save($archivo);
+
+            // $message->attach($archivo);
+
+        });
+
+        return Response::json(array('respuesta' => 'Correo enviado Correctamente'));*/
+
+	}
+
 
 }

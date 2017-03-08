@@ -1,15 +1,15 @@
 (function(){
 
 	/** Sergio Alcala (2017)
-    *Inicio de proyecto Inventarios 
+    *Inicio de proyecto Inventarios
     *
     */
 
 	'use strict';
 
-	var hoy = new Date(); 
-	var dd = hoy.getDate(); 
-	var mm = hoy.getMonth()+1;//enero es 0! 
+	var hoy = new Date();
+	var dd = hoy.getDate();
+	var mm = hoy.getMonth()+1;//enero es 0!
 	if (mm < 10) { mm = '0' + mm; }
 	if (dd < 10) { dd = '0' + dd; }
 
@@ -31,7 +31,7 @@
 		'ngFileUpload',
 		'angular.filter'
 	])
-	
+
 	/* EN LOCAL */
 	.constant('api', 'http://localhost/inventario/server/public/api/')
 	.constant('publicfiles','http://localhost/inventario/server/public/exports/')
@@ -41,8 +41,3 @@
 	// .constant('publicfiles','http://api.medicavial.mx/exports/');
 
 })();
-
-
-
-
-

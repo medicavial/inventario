@@ -220,10 +220,57 @@ class OperacionController extends BaseController {
 	public function enviaCorreoOrden($orden){
 
         $datos = OrdenCompra::find($orden);
+        // return json_decode($datos, true);
 
         // con esta funcion preparamos el cuerpo del correo 
 
-        try{
+	        Mail::send('emails.orden', array($datos) , function($message) use ($datos)
+	        {
+	        	$noOrden=$datos->OCM_clave;
+	        	//generamos lo necesario para el envio
+	        	$datosOrden = OrdenCompra::find($noOrden);
+	        	// return $datosOrden;
+	        	$unidad = $datosOrden->UNI_clave;
+	        	$proveedor = $datosOrden->PRO_clave;
+
+	        	$nombreUnidad = Unidad::find($unidad)->UNI_nombrecorto;
+
+	        	//generamos el pdf adjunto
+	        	$archivo =  public_path().'/ordenesCompra/'.$noOrden.'.pdf';
+
+	            $pdf = helpers::ordenPDF($noOrden);
+	            $pdf->save($archivo);
+
+
+	            $correoParametro = Parametro::find(1)->PAR_correoOrden;
+
+	            // preparamos el correo a enviar
+	            $correoProveedor = Proveedor::find($proveedor)->PRO_correo1;
+
+	            if ($correoProveedor != '') {
+	            	$correo = $correoProveedor;
+	            	$correoCopia = $correoParametro;
+	            }else{
+	            	$correo = $correoParametro;
+	            }
+
+	            $message->from('no-reply@medicavial.com.mx', 'Sistema de Inventario MV');
+	            $message->subject('Orden de compra ' . $noOrden . ' ,' . $nombreUnidad);
+	            // $message->to($correo);
+	            $message->to('sistemasaxa@medicavial.com.mx');
+	            $message->bcc(array('mvcompras@medicavial.com.mx','sramirez@medicavial.com.mx'));
+
+	            if ($correoCopia != '') {
+	            	$message->cc($correoCopia);
+	            }
+
+	            $message->attach($archivo);
+
+	        });
+
+        	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));
+
+/*        try{
 
 	        Mail::send('emails.orden', $datos , function($message) use ($orden)
 	        {
@@ -254,7 +301,7 @@ class OperacionController extends BaseController {
 	            	$correo = $correoParametro;
 	            }
 
-	            $message->from('salcala@medicavial.com.mx', 'Sistema de Inventario MV');
+	            $message->from('no-reply@medicavial.com.mx', 'Sistema de Inventario MV');
 	            $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
 	            // $message->to($correo);
 	            $message->to('sistemasaxa@medicavial.com.mx');
@@ -270,6 +317,7 @@ class OperacionController extends BaseController {
         	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));
         	
         }catch(Exception $e){
+        		return $e;
 
         	$datosOrden = OrdenCompra::find($orden);
         	$unidad = $datosOrden->UNI_clave;
@@ -288,7 +336,7 @@ class OperacionController extends BaseController {
 
         	return Response::json(array('respuesta' => 'Correo no se logro mandar a '. $correo),500);
         
-        }
+        }*/
 
 
 	}

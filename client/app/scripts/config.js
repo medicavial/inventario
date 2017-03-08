@@ -15,7 +15,7 @@
 
 	function config($stateProvider, $urlRouterProvider, $locationProvider,$mdThemingProvider,$httpProvider,$compileProvider, $mdDateLocaleProvider) {
 
-		// Aqui se pone en modo desarrollo (false) y modo produccion (true) 
+		// Aqui se pone en modo desarrollo (false) y modo produccion (true)
 		$compileProvider.debugInfoEnabled(true);
 
 		// Se configuro el calendario para que se muestren los dialogos en español
@@ -29,12 +29,12 @@
 	  	$mdDateLocaleProvider.formatDate = function(date) {
 		    return date ? moment(date).format('DD/MM/YYYY') : '';
 		};
-		 
+
 		 // Aqui se pone la fecha actual por default
 		$mdDateLocaleProvider.parseDate = function(dateString) {
 		    var m = moment(dateString, 'DD/MM/YYYY', true);
 		    return m.isValid() ? m.toDate() : new Date(NaN);
-		};      
+		};
 
 		// esto nos indica que en cualquier otro caso mande a home
 		$urlRouterProvider.otherwise("/home");
@@ -61,7 +61,7 @@
 			controllerAs: "am",
 			resolve:{
 	            datos:function(busqueda,$q,$rootScope){
-	            	
+
 	                var promesa 		= $q.defer(),
 	            		items 			= busqueda.items(),
 	            		tiposMovimiento = busqueda.tiposMovimiento(),
@@ -69,9 +69,9 @@
 	            		tiposajuste 	= busqueda.tiposAjuste();
 
 	            	$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
-	            		
+
 	            		promesa.resolve(data);
-	            		
+
 	            	});
 
 	                return promesa.promise;
@@ -139,7 +139,7 @@
 	            		});
 
 	                return promesa.promise;
-	               	
+
 	            }
 	        }
 		})
@@ -260,7 +260,7 @@
 	            }
 	        }
 		})
-		
+
 		.state('index.itempro',{
 			url:'itempro',
 			templateUrl :'views/itempro.html',
@@ -323,7 +323,7 @@
 			controllerAs: "ordenescompra",
 			resolve:{
 	            datos:function(busqueda,$rootScope){
-	                return busqueda.ordenescompra();
+	                return busqueda.ordenescompra($rootScope.unidadesAdmin);
 	            }
 	        }
 		})
@@ -393,7 +393,7 @@
 	            }
 	        }
 		})
-		
+
 		.state('index.tiposalmacen',{
 			url:'tiposalmacen',
 			templateUrl :'views/tiposalmacen.html',
@@ -711,11 +711,11 @@
 			'contrastDefaultColor': 'light'
 		});
 
-		
+
 		// Aqui se registra color que definiste arriba
 		$mdThemingProvider.definePalette('neonBlue', neonBlueMap);
 		$mdThemingProvider.definePalette('neonGreen', neonGreenMap);
-		
+
 		// tema por defeto
 	    $mdThemingProvider.setDefaultTheme('theme1');
 	    $mdThemingProvider.alwaysWatchTheme(true);
@@ -723,7 +723,7 @@
 	    // console.log($mdThemingProvider);
 	    // Esto ayuda a configurar el tiempo de cada consulta pero no funciona
 	    $httpProvider.defaults.timeout = 1000;
-	  	
+
 	};
 
 })();
