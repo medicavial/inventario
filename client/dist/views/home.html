@@ -1,5 +1,5 @@
 <div class="mdl-grid">
-  
+
   <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
       <div class="mini-charts-item bgm-cyan ">
         <div class="clearfix">
@@ -7,8 +7,8 @@
             <div class="count">
                 <h3>Items En Unidad</h3>
                 <br>
-                <span>5</span>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple>
+                <span> {{ datos.itemsTotal }} </span>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irItems()">
                   Ver detalles
                 </a>
             </div>
@@ -22,8 +22,8 @@
             <div class="count">
                 <h3>Ordenes de Compra</h3>
                 <br>
-                <span>0</span>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple>
+                <span> {{ datos.ordenes }} </span>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irOrdenes()">
                   Ver detalles
                 </a>
             </div>
@@ -38,7 +38,7 @@
             <div class="count">
                 <h3>Por Caducar</h3>
                 <br>
-                <span>0</span>
+                <span> {{ datos.porCaducar }} </span>
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple>
                   Ver detalles
                 </a>
@@ -52,9 +52,9 @@
         <div class="clearfix">
             <div class="chart stats-bar"></div>
             <div class="count">
-                <h3>Productos para surtir</h3>
+                <h3>Pendientes para receta</h3>
                 <br>
-                <span>0</span>
+                <span> {{ datos.porSurtir }} </span>
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple>
                   Ver detalles
                 </a>

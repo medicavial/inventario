@@ -15,7 +15,7 @@
 
           <md-toolbar class="md-warn">
             <div class="md-toolbar-tools">
-              <samll class="md-flex">Proveedor:{{proveedor}}</samll>
+              <samll class="md-flex">Proveedor: {{proveedor}}</samll>
               <span flex></span>
               <span class="right">Total: {{ muestraTotal(proveedor) | currency}} </span>
               <md-button class="md-icon-button" aria-label="Eliminar" ng-click="eliminaOrden(proveedor)">
@@ -32,7 +32,7 @@
               <!-- <span class="right" nf-if="$fist">Por Surtir: {{proveedor.cantidad}}</span> -->
               <p>{{item.ITE_nombre}}</p>
               <p class="right">Costo: {{item.IPR_ultimoCosto | currency}}</p>
-              <p class="right">Cantidad: {{item.cantidad}}</p>
+              <p class="right">Cantidad: {{item.cantidad}} <span ng-show="item.ITE_segmentable==1">Caja con {{item.ITE_cantidadCaja}} piezas</span> </p>
               <p class="right">Total: {{ costoTotal(item) | currency}} </p>
 
             </md-list-item>

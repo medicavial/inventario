@@ -351,8 +351,16 @@
                         //si equivale al proveedor lo agregamos al arreglo de items por proveedor
                         if (proveedor == value.PRO_clave) {
 
-                            //generamos la multiplicacion para saber su costo total del item
-                            var cantidad = value.cantidad * value.IPR_ultimoCosto;
+                            //UPDATE: verificamos si se trata de un producto segmentable y obtenemos el costo total
+                            if (item.ITE_segmentable==1) {
+                                var cantidad = (value.cantidad * value.ITE_cantidadCaja) * value.IPR_ultimoCosto;
+                            } else{
+                                var cantidad = value.cantidad * value.IPR_ultimoCosto;
+                            };
+
+                            // //generamos la multiplicacion para saber su costo total del item
+                            // var cantidad = value.cantidad * value.IPR_ultimoCosto;
+
                             //y los sumamos a la cantidad anterior
                             total += cantidad;
                             // agregamos item al arreglo

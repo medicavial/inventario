@@ -450,7 +450,7 @@
 
 				var item = $scope.seleccionOrden[i];
 
-	            var cantidad = item.cantidad * item.IPR_ultimoCosto;
+	            var cantidad = (item.cantidad * item.ITE_cantidadCaja) * item.IPR_ultimoCosto;
 
 	            if (item.PRO_nombrecorto == proveedor) {
 	                total += cantidad;
@@ -469,7 +469,12 @@
 			for(var i = 0; i < $scope.seleccionOrden.length; i++){
 
 				var item = $scope.seleccionOrden[i];
-	            var cantidad = item.cantidad * item.IPR_ultimoCosto;
+				if (item.ITE_segmentable==1) {
+					var cantidad = (item.cantidad * item.ITE_cantidadCaja) * item.IPR_ultimoCosto;
+				} else{
+					var cantidad = item.cantidad * item.IPR_ultimoCosto;
+				};
+	            // var cantidad = item.cantidad * item.IPR_ultimoCosto;
 	            TotalGeneral += cantidad;
 
 	        }
