@@ -217,7 +217,12 @@
 		.state('index.home',{
 			url:'home',
 			templateUrl :'views/home.html',
-			controller:'homeCtrl'
+			controller:'homeCtrl',
+			resolve:{
+	            datos:function(busqueda,$rootScope){
+	                return busqueda.inicial($rootScope.unidadesAdmin);
+	            }
+	        }
 		})
 
 		.state('index.importar',{

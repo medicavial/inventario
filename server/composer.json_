@@ -8,9 +8,15 @@
 		"barryvdh/laravel-cors": "0.2.x",
 		"barryvdh/laravel-dompdf": "0.4.*",
 		"barryvdh/laravel-snappy": "0.1.x",
-		"softpampa/barcode": "dev-master",
+		"maatwebsite/excel": "~1.3",
 		"mccool/database-backup": "dev-master",
-		"backup-manager/backup-manager": "~1.0"
+		"backup-manager/backup-manager": "~1.0",
+		"doctrine/dbal": "~2.3",
+		"orchestra/parser": "2.2.*",
+		"soapbox/laravel-formatter": "2.x",
+		"softpampa/barcode": "dev-master",
+		"Nathanmac/Parser": "2.*"
+
 	},
 	"autoload": {
 		"classmap": [

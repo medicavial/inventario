@@ -2,7 +2,7 @@
 (function(){
 
     'use strict';
-    
+
     angular.module('app')
     .factory('pdf',pdf);
 
@@ -12,11 +12,11 @@
 
 	    	enviaOrden:function(orden){
 
-	    			// console.log(orden);
+	    			 console.log(orden);
 	                return $http.get(api+'operacion/envia/orden/'+orden);
 
 	   		}
-	   		
+
 	    };
 	}
 

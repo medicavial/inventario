@@ -163,8 +163,14 @@
             consultaPrueba : function(){
                 return $http.get(api + 'busquedas/proveedores');
             },
+            consultaPrueba : function(){
+                return $http.get(api + 'busquedas/caducidad');
+            },
             prueba2 : function(){
                 return $http.get(api + 'segundaprueba');
+            },
+            inicial : function(unidades){
+                return $http.get(api + 'busquedas/inicial/'+unidades);
             }
             // ,
             // traspasos : function(){

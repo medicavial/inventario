@@ -92,9 +92,9 @@ Route::group(array('prefix' => 'api'), function()
 
                 $ruta2 =  public_path().'/ordenesCompra/'.$orden.'.pdf';
 
-                $message->from('salcala@medicavial.com.mx', 'Sistema de Inventario MV');
+                $message->from('sramirez@medicavial.com.mx', 'Sistema de Inventario MV');
                 $message->subject('Welcome!');
-                $message->to('salcala@medicavial.com.mx');
+                $message->to('sramirez@medicavial.com.mx');
                 // ->cc('bar@example.com');
                 $message->attach($ruta2);
             });
@@ -172,6 +172,9 @@ Route::group(array('prefix' => 'api'), function()
         //ruta que manda la orden al sistema MV
         Route::get('existencias/unidad/{unidad}/{tipo}', 'BusquedasController@existenciasUnidad');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
+        Route::get('inicial/{unidades}', 'DatosIniciales@index');
+        Route::get('inicial/porCaducar/{unidades}', 'DatosIniciales@porCaducar');
+        Route::get('inicial/porSurtir/{unidades}', 'DatosIniciales@porSurtir');
         Route::get('item/existencia/{almacen}/{item}', 'BusquedasController@itemAlmacen');
         Route::get('item/unidad/{item}/{unidad}', 'BusquedasController@itemUnidad');
         Route::get('items', 'BusquedasController@items');
@@ -201,7 +204,6 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('unidades/usuario/{id}', 'BusquedasController@unidadesUsuario');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
-
     });
 
     Route::group(array('prefix' => 'operacion'), function()

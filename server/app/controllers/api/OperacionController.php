@@ -14,7 +14,7 @@ class OperacionController extends BaseController {
 		$configuracion->CON_nivelCompra = Input::get('compra');
 
 		// if (Input::has('correos')) {
-		// 	$configuracion->CON_correos = implode("," , Input::get('correos'));			
+		// 	$configuracion->CON_correos = implode("," , Input::get('correos'));
 		// }
 
 		$configuracion->save();
@@ -29,19 +29,19 @@ class OperacionController extends BaseController {
 		$claveReserva = Input::get('reserva');
 		$recetaItem = Input::get('recetaItem');
 
-		//actualizamos en la tabla mv el item cancelado		
+		//actualizamos en la tabla mv el item cancelado
 		$recetaMV = Suministros::find($recetaItem);
 		$recetaMV->NS_cancelado = 1;
 		$recetaMV->NS_fecCancelado = date('Y-m-d H:i');
 		$recetaMV->NS_usuCancel = $usuario;
 		$recetaMV->save();
 
-		//eliminamos reserva 
+		//eliminamos reserva
 		$reserva = Reserva::find($claveReserva);
 		$reserva->delete();
 
 		return Response::json(array('respuesta' => 'Item Cancelado Correctamente'));
-		
+
 	}
 
 	public function cancelarOrden(){
@@ -52,10 +52,10 @@ class OperacionController extends BaseController {
 
 		$orden = OrdenCompra::find($orden);
 
-		$orden->OCM_cancleada = 1;
+		$orden->OCM_cancelada = 1;
 		$orden->OCM_fechaCancelacion =  date('Y-m-d H:i:s');
-		$orden->USU_cancelo = $usuario;	
-		$orden->OCM_motivo = $motivo;	
+		$orden->USU_cancelo = $usuario;
+		$orden->OCM_motivo = $motivo;
 		$orden->save();
 
 		return Response::json(array('respuesta' => 'Orden Cancelada Correctamente'));
@@ -71,7 +71,7 @@ class OperacionController extends BaseController {
 
 		$orden->OCM_cerrada = 1;
 		$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
-		$orden->USU_cerro = $usuario;	
+		$orden->USU_cerro = $usuario;
 		$orden->save();
 
 		return Response::json(array('respuesta' => 'Orden Cerrada Correctamente'));
@@ -93,9 +93,9 @@ class OperacionController extends BaseController {
 		//buscamos la orden
 		$orden = OrdenCompra::find($cveOrden);
 
-		// recorremos item por item 
+		// recorremos item por item
 		foreach ($items as $item) {
-			
+
 			//clave del item de esta orden
 			$claveOrdenitem = $item['OIT_clave'];
 
@@ -107,14 +107,14 @@ class OperacionController extends BaseController {
 				//se agrega la cantidad surtida mas lo que se acompleto para la receta
 				$surtida = $item['OIT_cantidadSurtida'] + $cantidad;
 			}else{
-				//la cantidad que se acompleto debe de ser la misma que falto por eso la resta  
-				$cantidad = $item['OIT_cantidadPedida'] - $item['OIT_cantidadSurtida'];	
+				//la cantidad que se acompleto debe de ser la misma que falto por eso la resta
+				$cantidad = $item['OIT_cantidadPedida'] - $item['OIT_cantidadSurtida'];
 				$surtida = $item['OIT_cantidadPedida'];
 			}
 
 			$claveItem = $item['ITE_clave'];
 
-			//acompletamos la orden del item 
+			//acompletamos la orden del item
 			$datoItem = OrdenItem::find($claveOrdenitem);
 			$datoItem->OIT_cantidadSurtida = $surtida;
 			$datoItem->save();
@@ -133,7 +133,7 @@ class OperacionController extends BaseController {
 		$orden->save();
 
 		return Response::json(array('respuesta' => 'Orden Completada Correctamente'));
-		
+
 
 	}
 
@@ -148,7 +148,7 @@ class OperacionController extends BaseController {
 		$configuracion->CON_nivelCompra = Input::get('compra');
 
 		// if (Input::has('correos')) {
-		// 	$configuracion->CON_correos = implode("," , Input::get('correos'));			
+		// 	$configuracion->CON_correos = implode("," , Input::get('correos'));
 		// }
 
 		$configuracion->save();
@@ -158,7 +158,7 @@ class OperacionController extends BaseController {
 	}
 
 
-	//muestra los datos de existencia con la unidad 
+	//muestra los datos de existencia con la unidad
 	public function configuracionUnidad($unidad){
 		return Item::activos();
 	}
@@ -170,12 +170,12 @@ class OperacionController extends BaseController {
 	}
 
 	public function eliminaReserva($id){
-		
+
 		$reserva = Reserva::find($id);
 		$reserva->delete();
-		
+
 		return Response::json(array('respuesta' => 'Reserva removida Correctamente'));
-		
+
 	}
 
 	public function enviaCorreo(){
@@ -222,7 +222,7 @@ class OperacionController extends BaseController {
         $datos = OrdenCompra::find($orden);
         // return json_decode($datos, true);
 
-        // con esta funcion preparamos el cuerpo del correo 
+        // con esta funcion preparamos el cuerpo del correo
 
 	        Mail::send('emails.orden', array($datos) , function($message) use ($datos)
 	        {
@@ -315,7 +315,7 @@ class OperacionController extends BaseController {
 	        });
 
         	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));
-        	
+
         }catch(Exception $e){
         		return $e;
 
@@ -335,7 +335,7 @@ class OperacionController extends BaseController {
             }
 
         	return Response::json(array('respuesta' => 'Correo no se logro mandar a '. $correo),500);
-        
+
         }*/
 
 
@@ -352,7 +352,7 @@ class OperacionController extends BaseController {
 		// return Existencia::almacenes($unidad,$almacenes);
 
 		$datos =  Existencia::almacenes($unidad,$almacenes);
-		
+
 		$respuesta = array();
 
 		foreach ($datos as $dato) {
@@ -371,14 +371,14 @@ class OperacionController extends BaseController {
 			$nivelCompra = $conf->CON_nivelCompra;
 			$nivelMaximo = $conf->CON_nivelMaximo;
 			$nivelMinimo = $conf->CON_nivelMinimo;
-			
+
 			$existencia = $dato['EXI_cantidad'];
 
 			//se genera una cantidad virtual cuando tienes cantidades por surtir
 			$existenciaAparente = $existencia + $cantidad;
 
 			$comprar = $nivelMaximo - $existenciaAparente;
-			
+
 			if ($existenciaAparente <= $nivelMinimo) {
 				$semaforo = 'bgm-red';
 			}elseif ( ($existenciaAparente > $nivelMinimo && $existenciaAparente < $nivelCompra) || $existenciaAparente == $nivelCompra ) {
@@ -413,7 +413,7 @@ class OperacionController extends BaseController {
 		$datos =  Existencia::configuracion($unidad);
 		$respuesta = array();
 
-		
+
 		foreach ($datos as $dato) {
 
 			$claveItem = $dato['ITE_clave'];
@@ -441,7 +441,7 @@ class OperacionController extends BaseController {
 
 				$comprar = $nivelMaximo - $existenciaAparente;
 
-				
+
 				if ($existenciaAparente <= $nivelMinimo) {
 					$semaforo = 'bgm-red';
 				}elseif ( ($existenciaAparente > $nivelMinimo && $existenciaAparente < $nivelCompra) || $existenciaAparente == $nivelCompra ) {
@@ -514,7 +514,7 @@ class OperacionController extends BaseController {
 	            $existenciaActual = Existencia::where(array('ALM_clave'=>$almacen,'ITE_clave' => $item ))->count();
 
 	            if ($existenciaActual == 0) {
-	        
+
 		            $operacion = new Operacion;
 
 		            //la operacion es un ajuste de tipo inicial
@@ -554,7 +554,7 @@ class OperacionController extends BaseController {
 			'PRO_clave' => Input::get('proveedor'),
 			'IPR_ultimaFecha' => Input::get('fecha')
 		) )->update( array( 'IPR_ultimoCosto' => Input::get('cantidad') ));
-		
+
 
 		return Response::json(array('respuesta' => 'Conexión Actualizada Correctamente'));
 
@@ -567,13 +567,13 @@ class OperacionController extends BaseController {
 			'PRO_clave' => Input::get('PRO_clave'),
 			'IPR_ultimaFecha' => Input::get('IPR_ultimaFecha')
 		) )->delete();
-		
+
 
 		return Response::json(array('respuesta' => 'Conexión Eliminada Correctamente'));
 
 	}
 
-	
+
 
 	// agrega unnuevo movminiento
 	public function movimiento(){
@@ -603,12 +603,12 @@ class OperacionController extends BaseController {
 		}else if($operacion->tipomovimiento == 2){
 
 			$operacion->entrada();
-			
+
 		// en este se toma que es una baja de item
 		}else if ($operacion->tipomovimiento == 3) {
 
 			$operacion->salida();
-			
+
 		}
 
 		$operacion->verificaLote();
@@ -650,18 +650,18 @@ class OperacionController extends BaseController {
 			}else if($operacion->tipomovimiento == 2){
 
 				$operacion->entrada();
-				
+
 			// en este se toma que es una baja de item
 			}else if ($operacion->tipomovimiento == 3) {
 
 				$operacion->salida();
-				
+
 			}
 
 			$operacion->verificaLote();
 
 		}
-		
+
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
 
 
@@ -686,22 +686,22 @@ class OperacionController extends BaseController {
 
 			//guardamos una nueva orden
 			$orden = new OrdenCompra;
-			
+
 			$orden->OCM_fechaReg = date('Y-m-d H:i:s');
 			$orden->TOR_clave = $valor['tipo'];
 			$orden->USU_creo = $valor['usuario'];
 			$orden->PRO_clave = $valor['proveedor'];
 			$orden->OCM_importeEsperado = $valor['total'];
-			$orden->OCM_almacenes = implode("," , $almacenes); 
+			$orden->OCM_almacenes = implode("," , $almacenes);
 			$orden->UNI_clave = $valor['unidad'];
 
 			$orden->save();
 
 			$claveOrden = $orden->OCM_clave;
 
-			// guardamos que items se guardaron en esta orden 
+			// guardamos que items se guardaron en esta orden
 			foreach ($items as $item) {
-				
+
 				$ordenItem = new OrdenItem;
 
 				$ordenItem->ITE_clave = $item['ITE_clave'];
@@ -737,27 +737,27 @@ class OperacionController extends BaseController {
 				'Cantidad' => $item['CON_nivelMaximo'] - $item['EXI_cantidad'],
 				'proveedores' => ItemProveedor::todo($item['ITE_clave'])
 		    );
-		    
+
 		}
-		
+
 		return $datos;
-		
+
 	}
 
 	public function reservaItem(){
-		
+
 		$item = Input::get('id_item');
 		$almacen = Input::get('id_almacen');
 		$cantidad = Input::get('NS_cantidad');
-		
+
 		$reserva = new Reserva;
 		$reserva->RES_cantidad = $cantidad;
 		$reserva->ITE_clave = $item;
 		$reserva->ALM_clave = $almacen;
 		$reserva->save();
-		
+
 		return $reserva->RES_clave;
-		
+
 	}
 
 	public function surtirItem($usuario){
@@ -787,7 +787,7 @@ class OperacionController extends BaseController {
 		$recetaMV->NS_surtida = $operacion->item;
 		$recetaMV->save();
 
-		//eliminamos reserva 
+		//eliminamos reserva
 		$reserva = Reserva::find($claveReserva);
 		$reserva->delete();
 
@@ -804,7 +804,7 @@ class OperacionController extends BaseController {
 		}
 
 		return Response::json(array('respuesta' => 'Item Surtido Correctamente'));
-		
+
 	}
 
 
@@ -843,7 +843,7 @@ class OperacionController extends BaseController {
 		if (!Input::get('incompleta') ) {
 
 			$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
-			$orden->USU_cerro = $usuario;	
+			$orden->USU_cerro = $usuario;
 			$orden->OCM_cerrada = true;
 
 		}
@@ -868,8 +868,8 @@ class OperacionController extends BaseController {
 			$datoItem->save();
 
 			helpers::surteItem($claveItem,$cantidadSurtida,$almacen,$ordenClave,$usuario,'Surtido Orden',$loteForzoso,$lotes);
-		
-		}	
+
+		}
 
 		return Response::json(array('respuesta' => 'Orden Surtida Correctamente'));
 
@@ -941,7 +941,7 @@ class OperacionController extends BaseController {
 
 			$conexion = new UsuarioAlmacen;
 
-			$conexion->USU_clave =  $usuario; 
+			$conexion->USU_clave =  $usuario;
 	    	$conexion->ALM_clave =  $dato['ALM_clave'];
 	    	$conexion->UAL_fechaAsociado =  date('Y-m-d H:i:s');
 	    	$conexion->USU_asocio =  $usuarioasigno;
@@ -953,7 +953,7 @@ class OperacionController extends BaseController {
 		return Response::json(array('respuesta' => 'Almacenes Asignados Correctamente'));
 
 	}
-	
+
 
 	public function usuariosAlm(){
 		$usuarios = User::activos();
@@ -988,7 +988,7 @@ class OperacionController extends BaseController {
 		$respuesta = array();
 
 		foreach ($datos as $item) {
-			
+
 			$pedido = $item['OIT_cantidadPedida'];
 			$surtido = $item['OIT_cantidadSurtida'];
 

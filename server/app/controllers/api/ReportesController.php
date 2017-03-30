@@ -30,17 +30,17 @@ class ReportesController extends BaseController {
 			$query->whereIn('almacenes.UNI_clave', $unidades );
 		}
 
-		if (Input::has('almacen')) {									
+		if (Input::has('almacen')) {
 			$query->where('existencias.ALM_clave', Input::get('almacen') );
 		}
 
-		if (Input::has('item')) {									
+		if (Input::has('item')) {
 			$query->where('existencias.ITE_clave', Input::get('item') );
 		}
 
-		if (Input::has('tipo')) {									
+		if (Input::has('tipo')) {
 			$query->where('items.TIT_clave', Input::get('tipo') );
-		}								
+		}
 
 		return $query->get();
 
@@ -49,10 +49,10 @@ class ReportesController extends BaseController {
 
 	public function lotes(){
 
-		
+
 		$query = Existencia::query();
 
-        $query->join('almacenes', 'almacenes.ALM_clave', '=', 'existencias.ALM_clave')				
+        $query->join('almacenes', 'almacenes.ALM_clave', '=', 'existencias.ALM_clave')
     		->join('items', 'items.ITE_clave' , '=', 'existencias.ITE_clave')
 			->join('tiposItem','tiposItem.TIT_clave' , '=', 'items.TIT_clave')
 			->join('lote', function($join){
@@ -60,22 +60,22 @@ class ReportesController extends BaseController {
 	        	$join->on('items.ITE_clave', '=', 'lote.ITE_clave');
 	        })->orderBy('ITE_codigo');
 
-		
+
 		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad');
 
 	 // 	if (Input::has('unidad')) {
 	 // 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
 		// }
 
-		if (Input::has('almacen')) {									
+		if (Input::has('almacen')) {
 			$query->where('existencias.ALM_clave', Input::get('almacen') );
 		}
 
-		if (Input::has('item')) {									
+		if (Input::has('item')) {
 			$query->where('existencias.ITE_clave', Input::get('item') );
-		}								
+		}
 
-		if (Input::has('tipo')) {									
+		if (Input::has('tipo')) {
 			$query->where('items.TIT_clave', Input::get('tipo') );
 		}
 		return $query->get();
@@ -116,17 +116,17 @@ class ReportesController extends BaseController {
 	 		$query->where('UNI_clave', Input::get('unidad') );
 		}
 
-		if (Input::has('almacen')) {									
+		if (Input::has('almacen')) {
 			$query->where('almacenes.ALM_clave', Input::get('almacen') );
 		}
 
-		if (Input::has('item')) {									
+		if (Input::has('item')) {
 			$query->where('items.ITE_clave', Input::get('item') );
 		}
 
-		if (Input::has('tipo')) {									
+		if (Input::has('tipo')) {
 			$query->where('items.TIT_clave', Input::get('tipo') );
-		}								
+		}
 
 		return $query->get();
 
@@ -148,15 +148,15 @@ class ReportesController extends BaseController {
 	 		$query->where('UNI_clave', Input::get('unidad') );
 		}
 
-		if (Input::has('almacen')) {									
+		if (Input::has('almacen')) {
 			$query->where('almacenes.ALM_clave', Input::get('almacen') );
 		}
 
-		if (Input::has('item')) {									
+		if (Input::has('item')) {
 			$query->where('items.ITE_clave', Input::get('item') );
 		}
 
-		if (Input::has('tipo')) {									
+		if (Input::has('tipo')) {
 			$query->where('items.TIT_clave', Input::get('tipo') );
 		}
 
@@ -171,7 +171,7 @@ class ReportesController extends BaseController {
         $query->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
                      ->join('subTiposItem', 'items.STI_clave', '=', 'subTiposItem.STI_clave')
                      ->select(DB::raw(
-                 			'ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre, 
+                 			'ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre,
 							ITE_precioventa as Precio_venta, IF(ITE_segmentable = 0,"NO","SI") as Segmentable,
 							ITE_cantidadtotal as Existencia,ITE_codigoean as CodigoBarras , TIT_nombre as Tipo,
 							STI_nombre as Subtipo, IF(ITE_talla = 0, "NO","SI") as ConTalla,
@@ -183,7 +183,7 @@ class ReportesController extends BaseController {
 	}
 
 	public function exportar($tipo){
-		
+
 		if ($tipo == 'existencias') {
 			$datos = $this->existencias();
 		}else if($tipo == 'items'){
@@ -205,7 +205,7 @@ class ReportesController extends BaseController {
 		        $sheet->fromArray($datos);
 
 		        if ($tipo == 'existencias') {
-		        	
+
 			        $sheet->removeColumn('C',2);
 			        $sheet->removeColumn('G');
 			        $sheet->removeColumn('I');
@@ -217,12 +217,12 @@ class ReportesController extends BaseController {
 		        }else if ($tipo == 'items'){
 		        	$sheet->row(1, array(
 				    	'ID_sistema','Codigo','Nombre','Precio venta','Segmentable',
-				    	'Existencia','CodigoBarras','Tipo','Subtipo','ConTalla','Adicionable receta' 
+				    	'Existencia','CodigoBarras','Tipo','Subtipo','ConTalla','Adicionable receta'
 					));
 		        }else if ($tipo == 'ordenes'){
 		        	$sheet->row(1, array(
 				    	'No.','Fecha Registro','Fecha Surtida','Fecha Cancelada','usuario Alta',
-				    	'Usuario Surtio','Usuario Cancelo','Ultimo Movimiento','Importe Esperado','Importe Final','Unidad','Proveedor','Estatus' 
+				    	'Usuario Surtio','Usuario Cancelo','Ultimo Movimiento','Importe Esperado','Importe Final','Unidad','Proveedor','Estatus'
 					));
 		        }else if ($tipo == 'lotes') {
 
@@ -231,7 +231,7 @@ class ReportesController extends BaseController {
 					));
 
 		        }else if ($tipo == 'movimientos') {
-		        	
+
 			        $sheet->row(1, array(
 					    'Codigo','Item','Almacen','usuario','Tipo Movimiento','Tipo Ajuste','Observaciones','Cantidad','Fecha'
 					));
@@ -243,7 +243,7 @@ class ReportesController extends BaseController {
 					));
 
 		        }
-		        
+
 				// $sheet->setAutoSize(true);
 				$sheet->freezeFirstRow();
 				$sheet->row(1, function($row) {
@@ -259,12 +259,12 @@ class ReportesController extends BaseController {
 		    });
 
 		})->store('xls', public_path('exports') , true);
-		
+
 
 	}
 
 	public function exportarPDF($tipo){
-		
+
 		//$datos = $this->existencias();
 		if ($tipo == 'existencias'){
 			$datos = $this->existencias();
@@ -285,7 +285,7 @@ class ReportesController extends BaseController {
 		        $sheet->row(1, array(
 				     'CODIGO','ITEM','ALMACEN','CANTIDAD','ULTIMO MOV.','UNIDAD','PRECIO VANTA'
 				));
-				
+
 				$sheet->setAutoSize(true);
 				$sheet->setFontSize(9);
 
@@ -322,7 +322,7 @@ class ReportesController extends BaseController {
 			$acceso = Input::get('acceso');
 			$fechaini = date('Y-m-d', strtotime ( '-30 day' , strtotime ( $fechafin ) ) ) . ' 00:00:00';
 
-			//verificamos los accesos directos 
+			//verificamos los accesos directos
 
 			//los surtidos en los ultimos 30 dias
 			if ($acceso == 'surtidos') {
@@ -340,23 +340,23 @@ class ReportesController extends BaseController {
 			}
 		}
 
-		$sql = 'OCM_clave as id , 
+		$sql = 'OCM_clave as id ,
 				OCM_fechaReg as AltaOrden ,
 				OCM_fechaSurtida as SurtidaOrden ,
-				OCM_fechaCancelacion as CancelacionOrden , 
+				OCM_fechaCancelacion as CancelacionOrden ,
 				ucreo.USU_login as UsuarioCreo ,
 				usurtio.USU_login as UsuarioSurtio ,
-				ucancelo.USU_login as UsuarioCancelo , 
-				ordenCompra.updated_at as UltimoMovimiento , 
-				OCM_importeEsperado as importeEsperado , 
-				OCM_importeFinal as importeFinal , 
-				UNI_nombre as unidad , 
-				PRO_nombre as proveedor , 
+				ucancelo.USU_login as UsuarioCancelo ,
+				ordenCompra.updated_at as UltimoMovimiento ,
+				OCM_importeEsperado as importeEsperado ,
+				OCM_importeFinal as importeFinal ,
+				UNI_nombre as unidad ,
+				PRO_nombre as proveedor ,
 				CASE
-					WHEN OCM_cancelada = 1 THEN "Cancelada" 
+					WHEN OCM_cancelada = 1 THEN "Cancelada"
 					WHEN OCM_cerrada = 1 THEN "Cerrada"
 					WHEN OCM_surtida = 1 AND OCM_incompleta = 1 AND OCM_cerrada = 0 THEN "Incompleta"
-					ELSE "Abiertas" 
+					ELSE "Abiertas"
 				END as Estatus';
 
 		if (Input::has('unidad')) {
