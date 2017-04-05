@@ -16,6 +16,7 @@
 		$rootScope.atras = true;
 		$rootScope.menu = 'arrow_back';
         vm.items = info.data;
+        console.log(vm.items);
 
         vm.inicio = function(){
 			
@@ -26,7 +27,8 @@
 				orden:$stateParams.ordenId,
 				unidad:info.data[0].UNI_clave,
 				items:vm.items,
-				usuario:$rootScope.id
+				usuario:$rootScope.id,
+				precioFinal:info.data[0].OCM_importeEsperado
 			}
 
 			vm.verificaLotes();

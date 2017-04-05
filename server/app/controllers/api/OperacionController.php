@@ -86,6 +86,7 @@ class OperacionController extends BaseController {
 		$items = Input::get('items');
 		$unidad = Input::get('unidad');
 		$usuario = Input::get('usuario');
+		$precioFinal = Input::get('precioFinal');
 
 		//obtenemos el almacen principal de esa unidad
 		$resultado = Almacen::where('UNI_clave',$unidad)->where('TAL_clave',1)->first();
@@ -130,6 +131,7 @@ class OperacionController extends BaseController {
 		$orden->OCM_cerrada = 1;
 		$orden->OCM_fechaCerrada =  date('Y-m-d H:i:s');
 		$orden->USU_cerro = $usuario;
+		$orden->OCM_importeFinal = $precioFinal;
 		$orden->save();
 
 		return Response::json(array('respuesta' => 'Orden Completada Correctamente'));
