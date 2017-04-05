@@ -1,0 +1,27 @@
+<div layout="column">
+  <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
+    <table md-data-table>
+      <thead md-order="porSurtir.order" md-trigger="porSurtir.onOrderChange">
+        <tr>
+          <th name="#"></th>
+          <th name="Código" order-by="ITE_codigo"></th>
+          <th name="Item" order-by="ITE_nombre"></th>
+          <th name="Almacén" order-by="ALM_nombre"></th>
+          <th name="Cantidad Reservada" order-by="RES_cantidad"></th>
+          <th name="ID Reserva" order-by="RES_clave"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in porSurtir.listado | filter:query | orderBy:porSurtir.order | limitTo:porSurtir.limit: (porSurtir.page -1) * porSurtir.limit">
+          <td>{{ $index+1 }}</td>
+          <td>{{ item.ITE_codigo }}</td>
+          <td>{{ item.ITE_nombre }}</td>
+          <td>{{ item.ALM_nombre }}</td>
+          <td>{{ item.RES_cantidad }}</td>
+          <td>{{ item.RES_clave }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-data-table-container>
+  <md-data-table-pagination md-label="porSurtir.texto" md-row-select="porSurtir.paginacion" md-limit="porSurtir.limit" md-page="porSurtir.page" md-total="{{porSurtir.listado.length}}" class="animated fadeInUp"></md-data-table-pagination>
+</div>

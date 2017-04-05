@@ -36,7 +36,6 @@
 	      of: 'de'
 	    };
 
-
 		scope.paginacion = [10,20,30,40];
 
 		scope.onPaginationChange = function (page, limit) {
@@ -449,8 +448,15 @@
 			for(var i = 0; i < $scope.seleccionOrden.length; i++){
 
 				var item = $scope.seleccionOrden[i];
+				// console.log(item);
 
-	            var cantidad = (item.cantidad * item.ITE_cantidadCaja) * item.IPR_ultimoCosto;
+	            // var cantidad = (item.cantidad * item.ITE_cantidadCaja) * item.IPR_ultimoCosto;
+
+	            if (item.ITE_segmentable==1) {
+	            	var cantidad = (item.cantidad * item.ITE_cantidadCaja) * item.IPR_ultimoCosto;
+	            } else{
+	            	var cantidad = item.cantidad * item.IPR_ultimoCosto;
+	            };
 
 	            if (item.PRO_nombrecorto == proveedor) {
 	                total += cantidad;

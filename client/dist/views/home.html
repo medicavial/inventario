@@ -16,7 +16,7 @@
       </div>
   </div>
   <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
-      <div class="mini-charts-item bgm-bluegray">
+      <div class="mini-charts-item bgm-pink">
         <div class="clearfix">
             <div class="chart stats-bar"></div>
             <div class="count">
@@ -39,7 +39,7 @@
                 <h3>Por Caducar</h3>
                 <br>
                 <span> {{ datos.porCaducar }} </span>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irPorCaducar()">
                   Ver detalles
                 </a>
             </div>
@@ -55,12 +55,11 @@
                 <h3>Pendientes para receta</h3>
                 <br>
                 <span> {{ datos.porSurtir }} </span>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irPorSurtir()">
                   Ver detalles
                 </a>
             </div>
         </div>
       </div>
   </div>
-
 </div>

@@ -1,0 +1,68 @@
+{
+  "name": "angular-i18n",
+  "version": "1.6.4",
+  "description": "AngularJS module for internationalization",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.js.git"
+  },
+  "keywords": [
+    "angular",
+    "framework",
+    "browser",
+    "internationalization",
+    "i18n",
+    "client-side"
+  ],
+  "author": {
+    "name": "Angular Core Team",
+    "email": "angular-core+npm@google.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular.js/issues"
+  },
+  "homepage": "http://angularjs.org",
+  "jspm": {
+    "shim": {
+      "angular-i18n": {
+        "deps": [
+          "angular"
+        ]
+      }
+    }
+  },
+  "gitHead": "2cfeab26b13f2ac75580aea3200ff2f9ee3d8fcd",
+  "_id": "angular-i18n@1.6.4",
+  "_shasum": "5405d68e17b8639cce681575ae46d10d50c1ea1b",
+  "_from": "angular-i18n@latest",
+  "_npmVersion": "3.10.10",
+  "_nodeVersion": "6.10.1",
+  "_npmUser": {
+    "name": "angularcore",
+    "email": "angular-core+npm@google.com"
+  },
+  "dist": {
+    "shasum": "5405d68e17b8639cce681575ae46d10d50c1ea1b",
+    "tarball": "https://registry.npmjs.org/angular-i18n/-/angular-i18n-1.6.4.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "angularcore",
+      "email": "angular-core+npm@google.com"
+    },
+    {
+      "name": "petebd",
+      "email": "pete@bacondarwin.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/angular-i18n-1.6.4.tgz_1490952756965_0.6900922739878297"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/angular-i18n/-/angular-i18n-1.6.4.tgz"
+}

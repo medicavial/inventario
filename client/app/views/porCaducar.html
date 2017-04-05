@@ -1,0 +1,27 @@
+<div layout="column">
+  <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
+    <table md-data-table>
+      <thead md-order="porCaducar.order" md-trigger="porCaducar.onOrderChange">
+        <tr>
+          <th name="#"></th>
+          <th name="Código" order-by="ITE_codigo"></th>
+          <th name="Item" order-by="ITE_nombre"></th>
+          <th name="Almacén" order-by="ALM_nombre"></th>
+          <th name="Lote" order-by="LOT_numero"></th>
+          <th name="Caducidad" order-by="LOT_caducidad"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in porCaducar.listado | filter:query | orderBy:porCaducar.order | limitTo:porCaducar.limit: (porCaducar.page -1) * porCaducar.limit">
+          <td>{{ $index+1 }}</td>
+          <td>{{ item.ITE_codigo }}</td>
+          <td>{{ item.ITE_nombre }}</td>
+          <td>{{ item.ALM_nombre }}</td>
+          <td>{{ item.LOT_numero }}</td>
+          <td>{{ item.LOT_caducidad | limitTo:10 | date:"MMM yyyy" | uppercase }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-data-table-container>
+  <md-data-table-pagination md-label="porCaducar.texto" md-row-select="porCaducar.paginacion" md-limit="porCaducar.limit" md-page="porCaducar.page" md-total="{{porCaducar.listado.length}}" class="animated fadeInUp"></md-data-table-pagination>
+</div>

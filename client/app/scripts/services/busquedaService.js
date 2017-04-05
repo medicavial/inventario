@@ -171,6 +171,12 @@
             },
             inicial : function(unidades){
                 return $http.get(api + 'busquedas/inicial/'+unidades);
+            },
+            cunsultaCaducados : function(unidades){
+                return $http.get(api + 'busquedas/inicial/porCaducar/'+unidades);
+            },
+            cunsultaApartados : function(unidades){
+                return $http.get(api + 'busquedas/inicial/porSurtir/'+unidades);
             }
             // ,
             // traspasos : function(){

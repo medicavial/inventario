@@ -670,6 +670,30 @@
 			controllerAs: "pruebaSE"
 		})
 
+		.state('index.porCaducar',{
+			url:'porCaducar',
+			templateUrl :'views/porCaducar.html',
+			controller:'porCaducarCtrl',
+			controllerAs: "porCaducar",
+			resolve:{
+	            datos:function(busqueda,$rootScope){
+	                return busqueda.cunsultaCaducados($rootScope.unidadesAdmin);
+	            }
+	        }
+		})
+
+		.state('index.porSurtir',{
+			url:'porSurtir',
+			templateUrl :'views/porSurtir.html',
+			controller:'porSurtirCtrl',
+			controllerAs: "porSurtir",
+			resolve:{
+	            datos:function(busqueda,$rootScope){
+	                return busqueda.cunsultaApartados($rootScope.unidadesAdmin);
+	            }
+	        }
+		})
+
 
 
 		// Con esto nos indica que quitara de las rutas el #
