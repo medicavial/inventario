@@ -205,9 +205,12 @@ class BusquedasController extends BaseController {
 
 		//obtenemos la receta de la base de MV
 		$datosReceta = Receta::find($id);
-		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
+		// $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
+		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio);
 		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
 		$items = array();
+
+		// return $lesionado;
 
 		//recorremos item por item de la receta para obtener los datos del item en inventario
 		foreach ($datos as $dato) {
@@ -248,11 +251,68 @@ class BusquedasController extends BaseController {
 
 		}
 
+		$uniMV = $lesionado->Uni_ClaveActual;
+		$uniInventario = null;
+
+		switch ($uniMV) {
+			case 1:
+				$uniInventario=1;
+				break;
+
+			case 2:
+				$uniInventario=2;
+				break;
+
+			case 3:
+				$uniInventario=3;
+				break;
+
+			case 4:
+				$uniInventario=4;
+				break;
+
+			case 5:
+				$uniInventario=5;
+				break;
+
+			case 6:
+				$uniInventario=6;
+				break;
+
+			case 7:
+				$uniInventario=7;
+				break;
+
+			case 8:
+				$uniInventario=8;
+				break;
+
+			case 86:
+				$uniInventario=9;
+				break;
+
+			case 184:
+				$uniInventario=10;
+				break;
+
+			case 186:
+				$uniInventario=11;
+				break;
+			
+			default: //REVISAR
+				$uniInventario=12;
+				break;
+		}
+
+		// return $uniMV;
+
 		$respuesta = array(
 			'receta' 	=> $id,
 			'fecha' 	=> $datosReceta->RM_fecreg,
 			'folio' 	=> $datosReceta->Exp_folio,
-			'lesionado' => $lesionado,
+			'lesionado' => $lesionado->Exp_completo,
+			'unidad' 	=> $uniInventario,
+			'uniNombre' => Unidad::find($uniInventario)->UNI_nombrecorto,
 			'items' 	=> $items
 		);
 

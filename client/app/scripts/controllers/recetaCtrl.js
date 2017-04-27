@@ -204,6 +204,30 @@
 
 			busqueda.receta(scope.receta).success(function (data){
 				console.log(data);
+
+				/* FILTRADO DE RECETAS POR UNIDAD */
+				console.log("UniUsr:  "+ $rootScope.unidadesAdmin);
+				scope.uniNombre=data.uniNombre;
+
+				var unidades = $rootScope.unidadesAdmin.split(",");
+				// console.log(unidades);
+
+				console.log("UniReceta: "+data.unidad);
+				scope.autorizado=false;
+
+
+				for (var i = 0; i < unidades.length; i++) {
+					// console.log(unidades[i]);
+					if (data.unidad == unidades[i]) {
+						// console.log("UnidadReceta: "+data.unidad);
+						// console.log("UnidadUsuario: "+unidades[i]);
+						scope.autorizado=true;
+						break;
+					} else{
+						scope.autorizado=false;
+					};
+				};
+				
 				scope.datos = data;
 				scope.cargando = false;
 				scope.datosReceta = true;

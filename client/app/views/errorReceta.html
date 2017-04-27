@@ -1,0 +1,34 @@
+<md-dialog aria-label="Mango (Fruit)" flex-sm="65" flex-gt-md="60" flex="100" id="errorReceta">
+  <md-toolbar style="background-color: rgba(255, 128, 0, 0.96);">
+    <div class="md-toolbar-tools">
+      <ng-md-icon icon="warning" style="fill:white"></ng-md-icon>
+      <h2>Hay algo extraño con esta receta...</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cerrarDialogo()" aria-label="Cerrar Dialogo">
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <p style="font-size: 1.3em; text-align:center;">
+        La receta que está buscando fue expedida en otra unidad médica.
+        <br><br>
+        Por favor verifique que la receta que está buscando es la correcta.
+      </p>
+    </div>
+    <br>
+<!--     <div layout="column" layout-align="center center">
+      <md-button type="submit" class="md-primary" aria-label="Nuevo Estado" ng-click="cerrarDialogo()"
+                  style="color : rgb(255, 255, 255);
+                          background-color: rgba(255, 128, 0, 0.96);
+                          font-size: 18px;">
+          &nbsp;&nbsp;
+          Entendido
+          &nbsp;&nbsp;
+      </md-button>
+    </div> -->
+    <br>
+  </md-dialog-content>
+</md-dialog>
