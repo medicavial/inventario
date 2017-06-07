@@ -247,9 +247,13 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('movimientos', 'ReportesController@movimientos');
         Route::get('traspasos', 'ReportesController@traspasos');
         Route::post('ordenes', 'ReportesController@ordenes');
+        Route::get('ordenesAbiertas/{unidades}', 'ReportesController@ordenesAbiertas');
+        Route::get('expOrdenes/{unidades}', 'ReportesController@ordenesExcel');
+        Route::get('detalleOrden/{idOrden}', 'ReportesController@detalleOrden');
         Route::post('exportar/{tipo}', 'ReportesController@exportar');
         Route::post('exportarPDF/{tipo}', 'ReportesController@exportarPDF');
         Route::get('pdf/ordencompra/{id}','ReportesController@ordenCompraPDF');
+        Route::get('recetasComp','ReportesController@recetasComp');
 
     });
 

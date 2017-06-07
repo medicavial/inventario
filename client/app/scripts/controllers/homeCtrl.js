@@ -41,12 +41,15 @@
 
 		$scope.irPorCaducar = function(){
 			$state.go('index.porCaducar');
-		}
+		};
 
 		$scope.irPorSurtir = function(){
 			$state.go('index.porSurtir');
-		}
+		};
 
+		$scope.irOrdAbiertas = function(){
+			$state.go('index.ordenesAbiertas');
+		};
 	}
 
 })();

@@ -531,7 +531,7 @@ class OperacionController extends BaseController {
 					$operacion->orden = '';
 					$operacion->caducidad = $caducidad;
 					$operacion->usuario = Input::get('usuario');
-					$operacion->observaciones = 'Importación atravez de archivo de excel';
+					$operacion->observaciones = 'Importación a traves de archivo de excel';
 					$operacion->receta = '';
 					$operacion->alta();
 					$operacion->verificaLote();
@@ -829,7 +829,7 @@ class OperacionController extends BaseController {
 		$orden->OCM_bultos = Input::get('bultos');
 		$orden->OCM_cajas = Input::get('cajas');
 		$orden->OCM_guia = Input::get('guia');
-		$orden->OCM_incompleta = Input::get('incompleta');
+		// $orden->OCM_incompleta = Input::get('incompleta');
 		$orden->OCM_observacionEntrega = Input::get('observacionEntrega');
 		$orden->OCM_observacionesVerificacion = Input::get('observacionesVerificacion');
 		$orden->OCM_incompleta = Input::get('incompleta');

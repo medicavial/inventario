@@ -347,7 +347,7 @@
 
                     //verificamos item x item 
                     angular.forEach(items, function(value, key) {
-
+                        var item = value;
                         //si equivale al proveedor lo agregamos al arreglo de items por proveedor
                         if (proveedor == value.PRO_clave) {
 

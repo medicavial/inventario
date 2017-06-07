@@ -15,6 +15,39 @@
         </div>
       </div>
   </div>
+
+  <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
+      <div class="mini-charts-item bgm-orange">
+        <div class="clearfix">
+            <div class="chart stats-bar"></div>
+            <div class="count">
+                <h3>Items reservados</h3>
+                <br>
+                <span> {{ datos.porSurtir }} </span>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irPorSurtir()">
+                  Ver detalles
+                </a>
+            </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
+      <div class="mini-charts-item bgm-lightgreen">
+        <div class="clearfix">
+            <div class="chart stats-bar"></div>
+            <div class="count">
+                <h3>Items por Caducar</h3>
+                <br>
+                <span> {{ datos.porCaducar }} </span>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irPorCaducar()">
+                  Ver detalles
+                </a>
+            </div>
+        </div>
+      </div>
+  </div>
+
   <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
       <div class="mini-charts-item bgm-pink">
         <div class="clearfix">
@@ -32,14 +65,14 @@
   </div>
 
   <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
-      <div class="mini-charts-item bgm-lightgreen">
+      <div class="mini-charts-item bgm-purple">
         <div class="clearfix">
             <div class="chart stats-bar"></div>
             <div class="count">
-                <h3>Por Caducar</h3>
+                <h3>Ordenes Abiertas</h3>
                 <br>
-                <span> {{ datos.porCaducar }} </span>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irPorCaducar()">
+                <span> {{ datos.ordAbiertas }} </span>
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irOrdAbiertas()">
                   Ver detalles
                 </a>
             </div>
@@ -47,19 +80,4 @@
       </div>
   </div>
 
-  <div class="mdl-cell mdl-cell--12-col mdl-cell--3-col-desktop">
-      <div class="mini-charts-item bgm-orange">
-        <div class="clearfix">
-            <div class="chart stats-bar"></div>
-            <div class="count">
-                <h3>Pendientes para receta</h3>
-                <br>
-                <span> {{ datos.porSurtir }} </span>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect right" md-ink-ripple ng-click="irPorSurtir()">
-                  Ver detalles
-                </a>
-            </div>
-        </div>
-      </div>
-  </div>
 </div>

@@ -177,7 +177,13 @@
             },
             cunsultaApartados : function(unidades){
                 return $http.get(api + 'busquedas/inicial/porSurtir/'+unidades);
-            }
+            },
+            consultaOrdenesAbiertas : function(unidades){
+                return $http.get(api + 'reportes/ordenesAbiertas/'+unidades);
+            },
+            detalleOrdenAbierta : function(idOrden){
+                return $http.get(api + 'reportes/detalleOrden/'+idOrden);
+            },
             // ,
             // traspasos : function(){
             //     return $http.get(api + 'busquedas/traspasos');

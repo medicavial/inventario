@@ -694,6 +694,18 @@
 	        }
 		})
 
+		.state('index.ordenesAbiertas',{
+			url:'ordenesAbiertas',
+			templateUrl :'views/ordenesAbiertas.html',
+			controller:'ordenesAbiertasCtrl',
+			controllerAs: "ordenesAbiertas",
+			resolve:{
+	            datos:function(busqueda,$rootScope){
+	                return busqueda.consultaOrdenesAbiertas($rootScope.unidadesAdmin);
+	            }
+	        }
+		})
+
 
 
 		// Con esto nos indica que quitara de las rutas el #

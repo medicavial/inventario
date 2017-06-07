@@ -493,6 +493,7 @@
 		$scope.confirmaOrden = function(){
 
 			$scope.generandoTodas = true;
+			console.log($scope.seleccionOrden);
 			operacion.generaOrdenes($scope.seleccionOrden,$scope.proveedores,$scope.unidad,$scope.almacenes).then(
 				function (data){
 

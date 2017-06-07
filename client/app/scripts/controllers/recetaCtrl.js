@@ -7,10 +7,20 @@
 	.controller('recetaCtrl',recetaCtrl)
 	.controller('loteRecetaCtrl',loteRecetaCtrl)
 	.controller('itemRecetaCtrl',itemRecetaCtrl)
+	.controller('dialogoRecetaCtrl',dialogoRecetaCtrl)
 
 	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q','$filter'];
 	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion']
 	itemRecetaCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda','info'];
+	dialogoRecetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', '$mdDialog', 'mensajes'];
+
+	function dialogoRecetaCtrl($scope, $rootScope, busqueda, $mdDialog, mensajes){
+		console.log('Cerrar Dialogo Alerta');
+		
+		$scope.cerrarAlerta = function () {
+			$mdDialog.hide();
+		};
+	}
 
 	function recetaCtrl($scope, $rootScope, busqueda, datos, operacion, $mdDialog, mensajes, $q, $filter){
 
@@ -227,7 +237,11 @@
 						scope.autorizado=false;
 					};
 				};
-				
+
+				if (scope.autorizado == false) {
+					scope.abreModal();
+				};
+
 				scope.datos = data;
 				scope.cargando = false;
 				scope.datosReceta = true;
@@ -236,6 +250,16 @@
 				scope.cargando = false;
 			});
 		}
+
+		scope.abreModal = function () {
+			$mdDialog.show({
+				controller: dialogoRecetaCtrl,
+				templateUrl: 'views/errorReceta.html',
+				parent: angular.element(document.body),
+				// targetEvent: ev,
+				clickOutsideToClose: false
+			})
+		};
 
 		scope.filtraOrtesis = function(item){
 
@@ -351,8 +375,10 @@
 			}
 		};
 
-		$scope.cancel = function() {
-			$mdDialog.cancel();
+		$scope.cerrarDialogLote = function() {
+			// $mdDialog.cancel();
+			console.log('Cerrar Dialogo Lote');
+			$mdDialog.hide();
 		};
 		
 	}
@@ -557,6 +583,7 @@
 	    }
 
 		$scope.cancel = function() {
+			console.log('Cerrar dialogo item');
 			$mdDialog.hide();
 		};
 

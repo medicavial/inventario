@@ -11,11 +11,14 @@ class DatosIniciales extends \BaseController {
 
 		$porSurtir = DatosIniciales::porSurtir($unidades);
 
+		$ordAbiertas = DatosIniciales::ordenesAbiertas($unidades);
+
 		return array(
 					 'itemsTotal' 	=> sizeof($items),
 					 'ordenes'		=> sizeof($ordenes),
 					 'porCaducar'	=> sizeof($porCaducar), 
-					 'porSurtir'	=> sizeof($porSurtir)
+					 'porSurtir'	=> sizeof($porSurtir),
+					 'ordAbiertas'	=> sizeof($ordAbiertas)
 				);
 
 	}
@@ -59,6 +62,39 @@ class DatosIniciales extends \BaseController {
 						->get();
 
 		return $porSurtir;
+	}
+
+
+	public function ordenesAbiertas($unidades){
+
+		$select = 'OCM_clave as id, 
+				   OCM_fechaReg as AltaOrden, 
+				   ordenCompra.PRO_clave, 
+				   OCM_fechaSurtida as SurtidaOrden,
+				   USU_creo as UsuarioCreo, 
+				   usuarios.USU_nombrecompleto, 
+				   ordenCompra.UNI_clave, 
+				   UNI_nombrecorto, 
+				   usurtio.USU_login as UsuarioSurtio,
+				   PRO_nombrecorto, 
+				   OCM_importeEsperado,
+				   CASE
+					WHEN OCM_cancelada = 1 THEN "Cancelada"
+					WHEN OCM_cerrada = 1 THEN "Cerrada"
+					WHEN OCM_surtida = 1 AND OCM_incompleta = 1 AND OCM_cerrada = 0 THEN "Incompleta"
+					ELSE "Abierta"
+				   END as Estatus';
+
+		$ordAbiertas = OrdenCompra::join('usuarios', 'ordenCompra.USU_creo', '=', 'usuarios.USU_clave')
+							->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
+							->join('proveedores', 'ordenCompra.PRO_clave', '=', 'proveedores.PRO_clave')
+							->leftJoin('usuarios as usurtio', 'ordenCompra.USU_surtio', '=', 'usurtio.USU_clave')
+							->select(DB::raw($select))
+							->where('OCM_cerrada',0)
+							->where('OCM_cancelada',0)
+							->whereIn('ordenCompra.UNI_clave', explode(",",$unidades))
+							->get();
+		return $ordAbiertas;
 	}
 
 }

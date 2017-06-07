@@ -1,0 +1,58 @@
+<md-dialog aria-label="Detalle de orden de compra" flex-sm="65" flex-gt-md="60" flex="100">
+  <md-toolbar style="background-color: rgba(21, 166, 176, 0.96);">
+    <div class="md-toolbar-tools">
+      <h2>Detalle de Orden de Compra #{{ detalle[0].idOrden }}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cerrarDialogo()" aria-label="Cerrar Dialogo">
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon> 
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-progress-linear md-mode="query" ng-hide="detalle[0].items"></md-progress-linear>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <p>Orden generada el día {{ detalle[0].fechaOrden | limitTo : 10 | date:'d/MMM/yyyy' }} a las {{detalle[0].fechaOrden | limitTo: -8}}.</p>
+
+    <table md-data-table>
+      <thead>
+        <tr>
+          <th name="#"></th>
+          <th name="Código"></th>
+          <th name="Item"></th>
+          <th name="Pedido"></th>
+          <th name="Surtido"></th>
+          <th name="Estatus"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in detalle[0].items">
+          <td>{{ $index+1 }}</td>
+          <td>{{ item.ITE_codigo }}</td>
+          <td>{{ item.ITE_nombre }}</td>
+          <td>{{ item.OIT_cantidadPedida }}</td>
+          <td>{{ item.OIT_cantidadSurtida }}</td>
+          <td>
+            <span ng-if="item.OIT_cantidadSurtida==0" style="color: red">Sin surtir</span>
+            <span ng-if="item.OIT_cantidadSurtida != item.OIT_cantidadPedida && item.OIT_cantidadSurtida!=0" style="color: orange">Surtido parcial</span>
+            <span ng-if="item.OIT_cantidadSurtida == item.OIT_cantidadPedida" style="color: green">Surtido</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br><br>
+
+    <div align="center">
+      <md-button class="md-raised edgePadding" ng-click="cerrarDialogo()">
+        Cerrar ventana
+      </md-button>
+<!--       <md-button class="md-primary md-raised edgePadding" style="background-color: rgba(21, 166, 176, 0.96); font-size: 16px;" ng-click="mostrarDatos()" ng-disabled="solicitaPsw==true">
+        Si
+      </md-button> -->
+    </div>
+
+    </div>
+    
+  </md-dialog-content>
+</md-dialog>

@@ -1,0 +1,70 @@
+<div layout="column" ng-if=" permisos.PER_clave == '1' || permisos.PER_clave == '2' ">
+  <md-progress-linear md-mode="query" ng-hide="listaUnidades"></md-progress-linear>
+  <md-whiteframe  class="md-whiteframe-1dp white" layout layout-align="center center" layout-padding>
+    <md-input-container flex="100">
+      <label>Filtrar por Clínica</label>
+      <md-select name="type" ng-model="project.type" required >
+        <md-option value="0" ng-click="xUnidad(unidadesAdmin)">* TODAS</md-option>
+        <md-option ng-repeat="unidad in listaUnidades" value="{{ unidad.UNI_clave }}" 
+                   ng-click="xUnidad(unidad.UNI_clave)"
+                   ng-hide="unidad.UNI_clave==8 || unidad.UNI_clave==12">
+          {{ unidad.UNI_nombrecorto }}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </md-whiteframe>
+  <br><br>
+</div>
+
+<div layout="column">
+  <md-progress-linear md-mode="query" ng-hide="listado"></md-progress-linear>
+  <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
+    <table md-data-table>
+      <thead md-order="order" md-trigger="onOrderChange">
+        <tr>
+          <th name="#"></th>
+          <th name="No.Orden" order-by="id"></th>
+          <th name="Unidad" order-by="UNI_nombrecorto"></th>
+          <th name="Fecha Registro" order-by="AltaOrden"></th>
+          <th name="Proveedor" order-by="PRO_nombrecorto"></th>
+          <th name="Usuario" order-by="USU_nombrecompleto"></th>
+          <th name="Importe" order-by="OCM_importeEsperado"></th>
+          <th name="Estatus" order-by="Estatus"></th>
+          <th name="Surtida parcial" order-by="SurtidaOrden"></th>
+          <th name="Usuario Surtió" order-by="UsuarioSurtio"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in listado | filter:query | orderBy:order | limitTo:limit: (page -1) * limit" ng-click="abreModal(item.id)" style="cursor: pointer">
+          <td>{{ $index+1 }}</td>
+          <td> <strong> {{ item.id }} </strong> </td>
+          <td>{{ item.UNI_nombrecorto }}</td>
+          <td>{{ item.AltaOrden }}</td>
+          <td>{{ item.PRO_nombrecorto }}</td>
+          <td>{{ item.USU_nombrecompleto }}</td>
+          <td>{{ item.OCM_importeEsperado | currency }}</td>
+          <td>{{ item.Estatus }}</td>
+          <td> <span ng-hide="item.Estatus!='Incompleta'"> {{ item.SurtidaOrden }} </span> </td>
+          <td> <span ng-hide="item.Estatus!='Incompleta'"> {{ item.UsuarioSurtio }} </span> </td>
+        </tr>
+        <tr ng-if="listado==''">
+          <td colspan="10"> SIN RESULTADOS </td>
+        </tr>
+      </tbody>
+    </table>
+  </md-data-table-container>
+  <md-data-table-pagination md-label="texto" md-row-select="paginacion" md-limit="limit" md-page="page" md-total="{{listado.length}}" class="animated fadeInUp"></md-data-table-pagination>
+</div>
+
+
+<md-button id="opcionReporte" class="animated bounceInUp md-fab md-primary md-fab-bottom-right" 
+           ng-click="exportaExcel()" 
+           aria-label="Nuevo Estado"
+           style=" color : rgb(49, 46, 46);
+                  background-color: rgba(21, 166, 176, 0.96);
+                  font-size: 16px;">
+    <md-tooltip md-direction="top">
+      Exportar a excel
+    </md-tooltip>
+    <ng-md-icon icon="cloud_download" style="fill:white"></ng-md-icon> 
+</md-button>
