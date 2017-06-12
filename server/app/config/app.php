@@ -127,6 +127,7 @@ return array(
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Orchestra\Parser\XmlServiceProvider',
 		'Nathanmac\Utilities\Parser\ParserServiceProvider',
+		'Milon\Barcode\BarcodeServiceProvider',
 	),
 
 	/*
@@ -196,7 +197,8 @@ return array(
 		'PDF' 			  	=> 'Barryvdh\DomPDF\Facade',
     	'Excel' 		  	=> 'Maatwebsite\Excel\Facades\Excel',
     	'Parser' 		  	=> 'Nathanmac\Utilities\Parser\Facades\Parser',
-
+	    'DNS1D' 			=> 'Milon\Barcode\Facades\DNS1DFacade',
+	    'DNS2D' 			=> 'Milon\Barcode\Facades\DNS2DFacade',
 	),
 
 );

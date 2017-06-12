@@ -207,8 +207,8 @@ class OperacionController extends BaseController {
 
             $archivo =  public_path().'/ordenesCompra/'.$ordeCompra.'.pdf';
 
-            $pdf = helpers::ordenPDF($ordeCompra);
-            $pdf->save($archivo);
+            // $pdf = helpers::ordenPDF($ordeCompra);
+            // $pdf->save($archivo);
 
             $message->attach($archivo);
 
@@ -240,8 +240,8 @@ class OperacionController extends BaseController {
 	        	//generamos el pdf adjunto
 	        	$archivo =  public_path().'/ordenesCompra/'.$noOrden.'.pdf';
 
-	            $pdf = helpers::ordenPDF($noOrden);
-	            $pdf->save($archivo);
+	            // $pdf = helpers::ordenPDF($noOrden);
+	            // $pdf->save($archivo);
 
 
 	            $correoParametro = Parametro::find(1)->PAR_correoOrden;
@@ -531,7 +531,7 @@ class OperacionController extends BaseController {
 					$operacion->orden = '';
 					$operacion->caducidad = $caducidad;
 					$operacion->usuario = Input::get('usuario');
-					$operacion->observaciones = 'Importación a traves de archivo de excel';
+					$operacion->observaciones = 'Importación a través de archivo de excel';
 					$operacion->receta = '';
 					$operacion->alta();
 					$operacion->verificaLote();
@@ -717,7 +717,8 @@ class OperacionController extends BaseController {
 			array_push($ordenes, $claveOrden);
 
 		}
-
+		$pdf = helpers::ordenPDF($orden->OCM_clave);
+    	// return $pdf->stream();
 		return Response::json(array('respuesta' => 'Orden Generada Correctamente','ordenes' => $ordenes));
 
 	}

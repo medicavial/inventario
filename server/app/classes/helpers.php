@@ -35,7 +35,28 @@ class helpers {
 	        'items' => $items
 	    );
 
-	    $pdf = PDF::loadView('ordenes.ordenCompra', array('data' => $orden) );
+		$archivo =  public_path().'/ordenesCompra/'.$orden['OCM_clave'].'.pdf';
+
+		//VERIFICAMOS SI EXSITE EL ARCHIVO PDF GENERADO
+		if (file_exists($archivo)) {
+			/*
+			Esto genera la vista del PDF cargando los datos desde la DB
+			$pdf = PDF::loadView('ordenes.ordenCompra', array('data' => $orden) );
+			*/
+
+			//CUANDO YA EXISTE EL PDF GENERADO CARGAMOS DICHO PDF
+			//definimos header para mostrar documentos pdf
+			header("Content-type:application/pdf");
+			// definimos si se descargará o si se mostrará en el navegador el documento
+			header("Content-Disposition:inline;filename='".$orden['OCM_clave'].".pdf'");
+			// cargamos el pdf original
+			readfile($archivo);
+		} else{
+			//SI NO EXISTE EL PDF LO GENERAMOS
+			$pdf = PDF::loadView('ordenes.ordenCompra', array('data' => $orden) )->save($archivo);
+		}
+
+	    // $pdf = PDF::loadView('ordenes.ordenCompra', array('data' => $orden) )->save($archivo);
 	    return $pdf;
 
 	}

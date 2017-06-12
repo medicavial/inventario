@@ -10,7 +10,8 @@
 		"barryvdh/laravel-snappy": "0.1.x",
 		"softpampa/barcode": "dev-master",
 		"mccool/database-backup": "dev-master",
-		"backup-manager/backup-manager": "~1.0"
+		"backup-manager/backup-manager": "~1.0",
+		"milon/barcode": "~4.2"
 	},
 	"autoload": {
 		"classmap": [
