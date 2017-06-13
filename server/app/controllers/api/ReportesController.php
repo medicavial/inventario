@@ -58,7 +58,9 @@ class ReportesController extends BaseController {
 			->join('lote', function($join){
 	            $join->on('existencias.EXI_clave', '=', 'lote.EXI_clave');
 	        	$join->on('items.ITE_clave', '=', 'lote.ITE_clave');
-	        })->orderBy('ITE_codigo');
+	        })
+	        // ->where('LOT_cantidad','>',0)
+	        ->orderBy('ITE_codigo');
 
 
 		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad');

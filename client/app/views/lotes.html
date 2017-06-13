@@ -28,7 +28,7 @@
       </md-content>
       
       <div layout-gt-sm="row" layout="column"  layout-padding>
-        <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" ng-disabled="existeLote" required flex></md-datepicker>
+        <md-datepicker ng-model="datos.caducidad"  ng-change="cambio()" md-placeholder="Caducidad" ng-disabled="existeLote" required flex></md-datepicker>
         <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button" flex>Agregar Lote</md-button>
       </div>
 
@@ -44,7 +44,7 @@
           <md-list-item  ng-repeat="lote in lotes">
               <p> {{ lote.lote }} </p>
               <p> {{ lote.cantidad }} </p>
-              <p> {{ lote.caducidad | date:'dd/MM/yyyy'}} </p>
+              <p> {{ lote.caducidad | limitTo : 10 | date:'dd/MMMM/yyyy'}} </p>
           </md-list-item>
         </md-list>
         

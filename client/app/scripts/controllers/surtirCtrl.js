@@ -328,17 +328,16 @@
 		}
 
 		$scope.surtir = function(){
-			
-			console.log($scope.datos);
 			$scope.guardando = true;
+			console.log($scope.datos);
 
 			operacion.surtirOrden($scope.datos)
 			.success(function (data){
 
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
+				webStorage.local.remove(clave);
 				$scope.guardando = false;
 				$scope.surtido = true;
-				webStorage.local.remove(clave);
 
 			})
 			.error(function (data){
@@ -421,6 +420,22 @@
 				}
 				
 			};
+		}
+
+		$scope.cambio = function(){
+			console.log($scope.datos.caducidad);
+
+			var d = new Date($scope.datos.caducidad),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    $scope.datos.caducidad= year+'-'+month+'-'+day+' 00:00:00';
+
+			    console.log($scope.datos.caducidad);
 		}
 
 		$scope.inicio = function(){
