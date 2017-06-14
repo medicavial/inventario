@@ -158,6 +158,22 @@
 			};
 		}
 
+		scope.cambio = function(){
+			console.log(scope.datos.caducidad);
+
+			var d = new Date(scope.datos.caducidad),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    scope.datos.caducidad= year+'-'+month+'-'+day+' 00:00:00';
+
+			    console.log(scope.datos.caducidad);
+		}
+
 		scope.verificaCantidadLote = function(){
 
 			if (scope.item.TIT_forzoso == 1) {

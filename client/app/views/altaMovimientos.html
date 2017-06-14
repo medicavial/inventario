@@ -97,7 +97,7 @@
                 </md-select>
               </md-input-container>
 
-              <md-datepicker ng-model="am.datos.caducidad" ng-if="am.item.TIT_forzoso == '1' " md-placeholder="Caducidad" required ng-disabled="am.existeLote" flex></md-datepicker>
+              <md-datepicker ng-model="am.datos.caducidad" ng-if="am.item.TIT_forzoso == '1' "  ng-change="am.cambio()" md-placeholder="Caducidad" required ng-disabled="am.existeLote" flex></md-datepicker>
 
               <span flex></span>
               
