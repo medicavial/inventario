@@ -12,8 +12,16 @@
 		    <p> Lotes </p>
 		</md-list-item>
 		<md-divider></md-divider>
-		<md-list-item ng-click="agregaLote($index, $event)" ng-repeat="surtido in seleccionItems">
+		<md-list-item ng-click="agregaLote($index, $event)" ng-repeat="surtido in seleccionItems" ng-show="surtido.numerador==1">
 		    <p> {{ surtido.ITE_nombre }} </p>
+		    <p ng-if="surtido.OIT_cantidadSurtida == 0"> {{ surtido.OIT_cantidadPedida }} </p>
+		    <p ng-if="surtido.OIT_cantidadSurtida > 0"> {{ surtido.OIT_cantidadSurtida }} </p>
+		    <p ng-if="surtido.lotes.length > 0"> <ng-md-icon icon="done" style="fill:green"></ng-md-icon>  </p>
+		    <p ng-if="!surtido.lotes"> <ng-md-icon icon="clear" style="fill:red"></ng-md-icon>  </p>
+		</md-list-item>
+
+		<md-list-item ng-click="agregaLote($index, $event)" ng-repeat="surtido in seleccionItems" ng-if="surtido.numerador>1" ng-disabled="!seleccionItems[surtido.numerador-2].lotes">
+		    <p> {{ surtido.ITE_nombre }}</p>
 		    <p ng-if="surtido.OIT_cantidadSurtida == 0"> {{ surtido.OIT_cantidadPedida }} </p>
 		    <p ng-if="surtido.OIT_cantidadSurtida > 0"> {{ surtido.OIT_cantidadSurtida }} </p>
 		    <p ng-if="surtido.lotes.length > 0"> <ng-md-icon icon="done" style="fill:green"></ng-md-icon>  </p>

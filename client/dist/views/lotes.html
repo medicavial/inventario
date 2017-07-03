@@ -22,14 +22,14 @@
         
         <md-input-container flex>
           <label>Cantidad</label>
-          <input type="number" name="cantidad" min="0" max="{{maximo}}"  ng-model="datos.cantidad" required numero>
+          <input type="number" name="cantidad" min="1" max="{{maximo}}"  ng-model="datos.cantidad" required numero>
         </md-input-container>
 
       </md-content>
       
       <div layout-gt-sm="row" layout="column"  layout-padding>
         <md-datepicker ng-model="datos.caducidad"  ng-change="cambio()" md-placeholder="Caducidad" ng-disabled="existeLote" required flex></md-datepicker>
-        <md-button  class="md-raised md-primary" ng-disabled="maximo == 0" ng-click="agrega()" type="button" flex>Agregar Lote</md-button>
+        <md-button  class="md-raised md-primary" ng-disabled="maximo == 0 || datos.cantidad < 1" ng-click="agrega()" type="button" flex>Agregar Lote</md-button>
       </div>
 
       <md-content>

@@ -13,12 +13,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr  md-auto-select ng-repeat="item in items |filter:query | orderBy: items.order ">
+              <tr md-auto-select ng-repeat="item in items |filter:query | orderBy: items.order ">
                 <td ng-click="calculaTotal()">{{item.ITE_nombre}}</td>
                 <td ng-click="calculaTotal()">{{item.OIT_cantidadPedida}}  <span ng-if="item.OIT_cantidadSurtida > 0">/ {{ item.OIT_cantidadSurtida }}</span></td>
                 <td ng-click="calculaTotal()">{{item.OIT_precioEsperado | currency}} <span ng-if="item.OIT_precioFinal > 0">/ {{ item.OIT_precioFinal | currency }}</span> </td>
                 <td class="option-table">
-                    <md-menu md-position-mode="target-right target" >
+                    <md-menu md-position-mode="target-right target">
                       <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
                         <md-icon md-menu-origin>
                           <ng-md-icon icon="more_vert" style="fill:#3F51B5"></ng-md-icon> 
@@ -48,7 +48,7 @@
 
 
   <div layout="row" layout-align="center center">
-    <md-button class="md-raised md-primary" ng-disabled="seleccionItems.length == 0" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
+    <md-button class="md-raised md-primary" ng-disabled="seleccionItems.length == 0 || total()==0" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
   </div>
 
 </md-content>

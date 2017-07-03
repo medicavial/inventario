@@ -171,6 +171,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('almacenes/unidad/{unidad}', 'BusquedasController@almacenesUnidad');
         //ruta que manda la orden al sistema MV
         Route::get('existencias/unidad/{unidad}/{tipo}', 'BusquedasController@existenciasUnidad');
+        Route::get('exiCortaEst/unidad/{unidad}', 'BusquedasController@existenciasCortaEstancia');
+        Route::get('exiParticulares/unidad/{unidad}', 'BusquedasController@existenciasParticulares');
         Route::get('existencias/{usuario}', 'BusquedasController@existencias');
         Route::get('inicial/{unidades}', 'DatosIniciales@index');
         Route::get('inicial/porCaducar/{unidades}', 'DatosIniciales@porCaducar');

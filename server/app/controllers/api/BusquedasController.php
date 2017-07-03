@@ -88,7 +88,7 @@ class BusquedasController extends BaseController {
 
 		if ($tipo == 1) {
 			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
-		}else{
+		}elseif($tipo == 2){
 			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
 		}
 
@@ -104,6 +104,39 @@ class BusquedasController extends BaseController {
 	                     ->where('items.TIT_clave', $tipo)
 	                     ->get();
 
+	}
+
+	public function existenciasCortaEstancia($unidad){
+		$sql='existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
+
+		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+                 ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+                 ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+                 ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
+                 ->select(DB::raw($sql))
+                 ->groupBy('existencias.ITE_clave')
+                 ->where('unidades.UNI_claveMV', $unidad)
+                 // este condicional solo filtra el botiquin
+                 ->where('almacenes.TAL_clave', 4)
+                 // ->where('items.TIT_clave', $tipo)
+                 ->orderBy('ITE_nombre')
+                 ->get();
+	}
+
+	public function existenciasParticulares($unidad){
+		$sql='existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
+
+		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+                 ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+                 ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+                 ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
+                 ->select(DB::raw($sql))
+                 ->groupBy('existencias.ITE_clave')
+                 ->where('unidades.UNI_claveMV', $unidad)
+                 // este condicional solo filtra el botiquin
+                 ->where('almacenes.TAL_clave', 5)
+                 // ->where('items.TIT_clave', $tipo)
+                 ->get();
 	}
 
 	public function lote($lote){

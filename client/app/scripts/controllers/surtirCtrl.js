@@ -9,10 +9,9 @@
 
 	surtirCtrl.$inject = ['$scope','$rootScope','operacion','mensajes','datos','$mdDialog','$stateParams', 'webStorage', '$filter'];
 	modificaCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes'];
-	lotesCtrl.$inject = ['$scope','$mdDialog','info','operacion','mensajes','informacion'];
+	lotesCtrl.$inject = ['$scope','$rootScope','$mdDialog','info','operacion','mensajes','informacion','webStorage'];
 
 	function surtirCtrl($scope,$rootScope,operacion,mensajes,datos,$mdDialog, $stateParams, webStorage, $filter){
-
 
 		if (datos.data.OCM_surtida == 1 ) {
 			$rootScope.ir('index.ordenescompra');
@@ -34,8 +33,19 @@
 		$scope.info = datos.data;
 		$scope.items = datos.data.items;
 
+		console.log($scope.items);
+
 		$scope.seleccionItems = [];
 		$scope.lotes = [];
+		// $scope.ingresado=0;
+
+		// if (webStorage.local.get('ingresado')) {
+		// 	$scope.ingresado=webStorage.local.get('ingresado');
+		// } else{
+		// 	webStorage.local.add('ingresado',$scope.ingresado);
+		// };
+
+		// console.log($scope.ingresado);
 
 		// console.log(datos.data);
 
@@ -45,7 +55,7 @@
 		var clave = 'orden:' + $stateParams.ordenId;
 
 		$scope.inicio = function(){
-			
+
 			$scope.step1block = false;
 			$scope.step2block = true;
 			$scope.step3block = true;
@@ -57,9 +67,12 @@
 			$scope.muestra = false;
 
 			$scope.selectedIndex = 0;
+			$scope.numero=1;
 
 			angular.forEach($scope.items, function(value, key) {
 				$scope.seleccionItems.push(value);
+				$scope.seleccionItems[$scope.numero-1].numerador=$scope.numero;
+				$scope.numero++;
 			});
 
 			$scope.datos = {
@@ -69,7 +82,7 @@
 				bultos:0,
 				bolsas:0,
 				verificacion: '',
-				observacionEntrega : '',
+				observacionEntrega: 'Sin novedad',
 				tipoEntrega: '',
 				observacionesVerificacion: '',
 				surtidos: $scope.seleccionItems,
@@ -79,6 +92,8 @@
 				indice:0,
 				items:$scope.items
 			}
+
+			$scope.aSurtir=1;
 
 			$scope.total();
 
@@ -114,6 +129,8 @@
 				$scope.seleccionItems = [];
 				// console.log(datos)
 
+				$scope.numero=1;
+
 				angular.forEach(datos.items, function(value, key) {
 
 					var busqueda = $filter('filter')(datos.surtidos,value);
@@ -121,6 +138,8 @@
 					if (busqueda.length > 0) {
 						// console.log('existe item')
 						$scope.seleccionItems.push(value);
+						$scope.seleccionItems[$scope.numero-1].numerador=$scope.numero;
+						$scope.numero++;
 					};
 
 				});
@@ -149,6 +168,7 @@
 		}
 
 		$scope.calculaTotal = function(){
+
 			$scope.total();
 		}
 
@@ -156,25 +176,30 @@
 		// funcion que bloquea el boton de siguiente segun sea el caso
 		$scope.verificaLotes = function(){
 
+			console.log('verifica');
 			var items = $scope.seleccionItems.length;
 			var actual = 1;
 
 			angular.forEach($scope.seleccionItems, function (value,key){
 
-				// console.log(value);
+				console.log(value);
+				console.log('actual='+actual+'| |'+'items='+items);
+				console.log($scope.seleccionItems);
 
-				if (value.lotes != undefined) {
-
+				// if (value.lotes != undefined) {
+				if (value.lotes) {
+					console.log(actual+' con lote');
 					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
 
-						if (actual == items) {
+						if (actual === items) {
+							
 							$scope.lotesCompletos = true;
 						};
 
 					};
 
 				}else{
-
+					console.log(actual+' sin lote');
 					if (value.TIT_forzoso == 0) {
 
 						if (actual == items) {
@@ -192,8 +217,14 @@
 
 		}
 
+		$rootScope.reVerificaLote = function(){
+
+			$scope.verificaLotes();
+		}
+
 
 		$scope.siguiente = function(index){
+
 
 			if (index == 0) {
 				$scope.step2block = false;
@@ -227,22 +258,22 @@
 			};
 		}
 
-
 		$scope.total = function(){
-
+			
 			$scope.info.OCM_importeFinal = 0;
 			$scope.datos.total = 0;
 
+			// console.log($scope.items);
+
 			angular.forEach($scope.seleccionItems,function (value,key){
 
-				console.log(value);
+				// console.log(value);
 				var costoItem = parseFloat(value.OIT_precioFinal) > 0 ? parseFloat(value.OIT_precioFinal) : parseFloat(value.OIT_precioEsperado);
 				var cantidadItem = parseFloat(value.OIT_cantidadSurtida) > 0 ? Number(value.OIT_cantidadSurtida) : Number(value.OIT_cantidadPedida);
 				var totalItem = costoItem * cantidadItem;
 
 				$scope.info.OCM_importeFinal  += totalItem;
 				$scope.datos.total +=  totalItem;
-				
 			});
 
 
@@ -250,6 +281,7 @@
 		}
 
 		$scope.agregaLote = function(index,ev){
+
 
 			var itemSurtido = $scope.seleccionItems[index];
 
@@ -283,6 +315,7 @@
 		}
 
 		$scope.modifica = function(ev,index){
+
 
 			var item = $scope.items[index];
 
@@ -328,6 +361,8 @@
 		}
 
 		$scope.surtir = function(){
+
+
 			$scope.guardando = true;
 			console.log($scope.datos);
 
@@ -338,6 +373,7 @@
 				webStorage.local.remove(clave);
 				$scope.guardando = false;
 				$scope.surtido = true;
+				$rootScope.ir('index.ordenescompra');
 
 			})
 			.error(function (data){
@@ -353,6 +389,7 @@
 
 		$scope.confirmaOrden = function(){
 
+
 			operacion.generarOrden($scope.ordenNueva)
 			.success(function (data){
 				mensajes.alerta('Orden Generada Correctamente','success','top right','done_all');
@@ -367,8 +404,10 @@
 	}
 
 	function modificaCtrl($scope, $mdDialog, info, operacion, mensajes){
+		console.log('function modificaCtrl($scope, $mdDialog, info, operacion, mensajes)');
 
 		$scope.inicio = function(){
+
 
 			$scope.maximo = Number(info.OIT_cantidadPedida);
 
@@ -379,17 +418,21 @@
 		};
 
 		$scope.actualiza = function(){
+
+
 			$mdDialog.hide($scope.datos);
 		};
 
 		$scope.cancel = function() {
+
+
 			$mdDialog.cancel();
 		};
 		
 	}
 
-	function lotesCtrl($scope, $mdDialog, info, operacion, mensajes,informacion){
-		
+	function lotesCtrl($scope, $rootScope, $mdDialog, info, operacion, mensajes,informacion, webStorage, surtirCtrl){
+		console.log('function lotesCtrl($scope, $rootScope, $mdDialog, info, operacion, mensajes,informacion, webStorage, surtirCtrl)');
 		
 		$scope.lotes = info.lotes ? info.lotes : [];
 		$scope.maximo = info.OIT_cantidadSurtida > 0 ? info.OIT_cantidadSurtida : info.OIT_cantidadPedida ;
@@ -403,6 +446,8 @@
 		}
 		
 		$scope.datosLote = function(lote){
+
+
 			if (lote) {
 				
 				if(lote == 0){
@@ -423,6 +468,8 @@
 		}
 
 		$scope.cambio = function(){
+
+
 			console.log($scope.datos.caducidad);
 
 			var d = new Date($scope.datos.caducidad),
@@ -439,6 +486,7 @@
 		}
 
 		$scope.inicio = function(){
+
 
 			$scope.datos = {
 				idLote:'',
@@ -459,24 +507,44 @@
 
 		$scope.agrega = function(){
 
+
+
+			console.log($scope.modificaForm);
 			if ($scope.modificaForm.$valid) {
 				$scope.maximo -= $scope.datos.cantidad;
 
 				$scope.lotes.push($scope.datos);
 				$scope.inicio();
+			} else{
+				mensajes.alerta('Verifica que los datos sean correctos','error','top right','error');
 			};
 		}
 
 		$scope.ingresa = function(){
 
+
 			if ($scope.maximo == 0) {
+				// $scope.ingresado=webStorage.local.get('ingresado');
+				// console.log($scope.ingresado);
+
+				// $scope.ingresado=$scope.ingresado+1;
+				// webStorage.local.add('ingresado',$scope.ingresado);
+				// console.log($scope.ingresado);
+
 				$mdDialog.hide($scope.lotes);
+				// setTimeout(function() {
+				// 	$rootScope.reVerificaLote();
+				// }, 100);
+				
+
 			}else{
 				mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
 			}
 		};
 
 		$scope.cancel = function() {
+
+
 			$mdDialog.cancel();
 		};
 		

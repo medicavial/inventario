@@ -57,7 +57,7 @@
   
 
   <div layout="row" layout-align="center center">
-    <md-button ng-disabled="!datos.tipoEntrega" class="md-raised md-primary" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
+    <md-button ng-disabled="!datos.tipoEntrega || !datos.verificacion" class="md-raised md-primary" ng-click="siguiente(selectedIndex)" type="submit">Siguiente</md-button>
   </div>
 
 </md-content>
