@@ -7,7 +7,7 @@
     .controller('lotesItemCtrl',lotesItemCtrl);
 
     completarCtrl.$inject = ['$rootScope','info','$mdDialog','$stateParams','operacion','mensajes'];
-	lotesItemCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion'];
+	lotesItemCtrl.$inject = ['$scope', '$mdDialog', 'info', 'busqueda', 'mensajes', 'informacion'];
     
     function completarCtrl($rootScope,info,$mdDialog,$stateParams,operacion,mensajes) {
         var vm = this;
@@ -15,7 +15,14 @@
 		$rootScope.titulo = 'Completar Orden';
 		$rootScope.atras = true;
 		$rootScope.menu = 'arrow_back';
+		$rootScope.numero=0;
         vm.items = info.data;
+
+        angular.forEach(vm.items, function(value, key){
+        	vm.items[$rootScope.numero].numerador=$rootScope.numero;
+        	$rootScope.numero++;
+        });
+
         console.log(vm.items);
 
         vm.inicio = function(){
@@ -54,19 +61,24 @@
 		    	console.log(datos);
 		    	item.cantidadSurtida = datos.cantidad;
 		    	item.lotes = datos.lotes;
+		    	console.log(item.lotes);
 		    	vm.verificaLotes();
 		    });
 		}; 
 
 		vm.verificaLotes = function(){
+			console.log('verifica');
 
 			var items = vm.items.length;
 			var actual = 1;
 
 			angular.forEach(vm.items, function (value,key){
+				console.log(value);
+				console.log('actual='+actual+'| |'+'items='+items);
+
 				// console.log(items);
 				if (value.lotes != undefined) {
-
+					console.log(actual+' con lote');
 					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
 						if (actual == items) {
 							vm.lotesCompletos = true;
@@ -74,7 +86,7 @@
 					};
 
 				}else{
-
+					console.log(actual+' sin lote');
 					if (value.TIT_forzoso == 0) {
 
 						if (actual == items) {
@@ -100,9 +112,10 @@
 				vm.guardando = false;
 				vm.lotesCompletos = false;
 				mensajes.alerta(data.respuesta,'success','top right','done_all');
+				$rootScope.ir('index.ordenescompra');
 			}).error(function (data){
 				vm.guardando = false;
-				mensajes.alerta('Ocurrio un error de conexión intenta nuevamnete','error','top right','error');
+				mensajes.alerta('Ocurrio un error de conexión intenta nuevamente','error','top right','error');
 			});
 
 		} 
@@ -111,8 +124,6 @@
     }
 	
 	function lotesItemCtrl($scope, $mdDialog, info, operacion, mensajes,informacion){
-		
-		
 		// console.log(info);
 		$scope.cantidad = 0;
 		$scope.lotes = info.lotes ? info.lotes : [];
@@ -167,30 +178,86 @@
 		};
 
 		$scope.agrega = function(){
-
+			// console.log($scope.modificaForm);
 			if ($scope.modificaForm.$valid) {
 				$scope.maximo -= $scope.datos.cantidad;
 
 				$scope.cantidad += $scope.datos.cantidad;
 
 				$scope.lotes.push($scope.datos);
+				console.log($scope.lotes);
 				$scope.inicio();
+			} else {
+				mensajes.alerta('Verifica que los datos sean correctos','error','top right','error');
 			};
 		}
 
 		$scope.ingresa = function(){
-
-			var datos = {
-				lotes:$scope.lotes,
-				cantidad:$scope.cantidad
-			}
-			$mdDialog.hide(datos);
+			if ($scope.maximo == 0) {
+				var datos = {
+					lotes:$scope.lotes,
+					cantidad:$scope.cantidad
+				}
+				$mdDialog.hide(datos);
+			} else{
+				mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
+			};
 			
 		};
+
+
+		// $scope.ingresa = function(){
+
+		// 	var datos = {
+		// 		lotes:$scope.lotes,
+		// 		cantidad:$scope.cantidad
+		// 	}
+		// 	$mdDialog.hide(datos);
+			
+		// };
+
+
+		// $scope.ingresa = function(){
+		// 	if ($scope.maximo == 0) {
+		// 		// $scope.ingresado=webStorage.local.get('ingresado');
+		// 		// console.log($scope.ingresado);
+
+		// 		// $scope.ingresado=$scope.ingresado+1;
+		// 		// webStorage.local.add('ingresado',$scope.ingresado);
+		// 		// console.log($scope.ingresado);
+
+		// 		$mdDialog.hide($scope.lotes);
+		// 		// setTimeout(function() {
+		// 		// 	$rootScope.reVerificaLote();
+		// 		// }, 100);
+				
+
+		// 	}else{
+		// 		mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
+		// 	}
+		// };
 
 		$scope.cancel = function() {
 			$mdDialog.cancel();
 		};
+
+
+		$scope.cambio = function(){
+
+			console.log($scope.datos.caducidad);
+
+			var d = new Date($scope.datos.caducidad),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) month = '0' + month;
+			    if (day.length < 2) day = '0' + day;
+
+			    $scope.datos.caducidad= year+'-'+month+'-'+day+' 00:00:00';
+
+			    console.log($scope.datos.caducidad);
+		}
 		
 	}
 

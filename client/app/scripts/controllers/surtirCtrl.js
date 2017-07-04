@@ -175,8 +175,16 @@
 
 		// funcion que bloquea el boton de siguiente segun sea el caso
 		$scope.verificaLotes = function(){
+			// console.log('verifica');
+			// console.log($scope.seleccionItems);
+			$scope.numero=1;
 
-			console.log('verifica');
+			angular.forEach($scope.seleccionItems, function (value,key){
+				$scope.seleccionItems[$scope.numero-1].numerador=$scope.numero;
+				$scope.numero++;
+			});
+			// console.log($scope.seleccionItems);
+
 			var items = $scope.seleccionItems.length;
 			var actual = 1;
 
@@ -506,9 +514,6 @@
 		};
 
 		$scope.agrega = function(){
-
-
-
 			console.log($scope.modificaForm);
 			if ($scope.modificaForm.$valid) {
 				$scope.maximo -= $scope.datos.cantidad;

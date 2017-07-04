@@ -9,11 +9,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in completa.items">
+          <tr ng-repeat="item in completa.items" ng-show="item.numerador==0">
             <td>{{item.ITE_nombre}}</td>
             <td>{{ item.OIT_cantidadPedida - item.OIT_cantidadSurtida }}</td>
             <td ng-if="item.TIT_forzoso == 1">
-                <md-button  ng-disabled="item.lotes.length > 0" ng-click="completa.ingresaLote(item,$event)">Agregar Lote(s)</md-button>
+<!--               <md-button ng-disabled="item.lotes.length > 0" ng-click="completa.ingresaLote(item,$event)"> -->
+              <md-button ng-disabled="item.lotes.length > 0" ng-click="completa.ingresaLote(item,$event)">
+                <span ng-hide="item.lotes.length > 0">Agregar Lote(s)</span>
+                <span ng-show="item.lotes.length > 0"><ng-md-icon icon="done" style="fill:green"></span>
+              </md-button>
+            </td>
+          </tr>
+
+          <tr ng-repeat="item in completa.items" ng-show="item.numerador>0">
+            <td>{{item.ITE_nombre}}</td>
+            <td>{{ item.OIT_cantidadPedida - item.OIT_cantidadSurtida }}</td>
+            <td ng-if="item.TIT_forzoso == 1">
+<!--               <md-button ng-disabled="item.lotes.length > 0" ng-click="completa.ingresaLote(item,$event)"> -->
+              <md-button ng-disabled="!completa.items[item.numerador-1].lotes || item.lotes.length > 0" ng-click="completa.ingresaLote(item,$event)">
+                <span ng-hide="item.lotes.length > 0">Agregar Lote(s)</span>
+                <span ng-show="item.lotes.length > 0"><ng-md-icon icon="done" style="fill:green"></span>
+              </md-button>
             </td>
           </tr>
         </tbody>
@@ -26,7 +42,7 @@
 
 <md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-disabled="!completa.lotesCompletos"  ng-click="completa.guardar()" aria-label="Completa Orden">
     <md-tooltip md-direction="top">
-      Completar
+      Guardar
     </md-tooltip>
     <ng-md-icon icon="save" style="fill:white" ng-hide="completa.guardando"></ng-md-icon> 
     <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="completa.guardando"></md-progress-circular>
