@@ -63,7 +63,7 @@ class ReportesController extends BaseController {
 	        ->orderBy('ITE_codigo');
 
 
-		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad');
+		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad','lote.EXI_clave','LOT_clave');
 
 	 // 	if (Input::has('unidad')) {
 	 // 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
