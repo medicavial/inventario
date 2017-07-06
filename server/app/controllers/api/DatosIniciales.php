@@ -52,7 +52,7 @@ class DatosIniciales extends \BaseController {
 
 	public function porSurtir($unidades){
 		$porSurtir = DB::table('reservas')
-						->select(DB::raw('reservas.RES_clave, items.ITE_codigo, items.ITE_nombre, almacenes.ALM_nombre, unidades.UNI_nombrecorto, reservas.RES_cantidad'))
+						->select(DB::raw('reservas.RES_clave, items.ITE_codigo, items.ITE_nombre, almacenes.ALM_nombre, unidades.UNI_nombrecorto, reservas.RES_cantidad, RES_fecha'))
 						->join('items', 'reservas.ITE_clave', '=', 'items.ITE_clave')
 						->join('almacenes', 'reservas.ALM_clave', '=', 'almacenes.ALM_clave')
 						->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')

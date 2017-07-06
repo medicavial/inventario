@@ -22,8 +22,8 @@
     <table md-data-table>
       <thead md-order="order" md-trigger="onOrderChange">
         <tr>
-          <th name="#"></th>
-          <th name="No.Orden" order-by="id"></th>
+          <!-- <th name="#"></th> -->
+          <th name="# Orden" order-by="id"></th>
           <th name="Unidad" order-by="UNI_nombrecorto"></th>
           <th name="Fecha Registro" order-by="AltaOrden"></th>
           <th name="Proveedor" order-by="PRO_nombrecorto"></th>
@@ -36,7 +36,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="item in listado | filter:query | orderBy:order | limitTo:limit: (page -1) * limit" ng-click="abreModal(item.id)" style="cursor: pointer">
-          <td>{{ $index+1 }}</td>
+          <!-- <td>{{ $index+1 }}</td> -->
           <td> <strong> {{ item.id }} </strong> </td>
           <td>{{ item.UNI_nombrecorto }}</td>
           <td>{{ item.AltaOrden }}</td>

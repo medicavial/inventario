@@ -757,6 +757,7 @@ class OperacionController extends BaseController {
 		$reserva->RES_cantidad = $cantidad;
 		$reserva->ITE_clave = $item;
 		$reserva->ALM_clave = $almacen;
+		$reserva->RES_fecha = date('Y-m-d H:i:s');
 		$reserva->save();
 
 		return $reserva->RES_clave;

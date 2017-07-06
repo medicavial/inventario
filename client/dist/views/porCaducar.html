@@ -3,9 +3,10 @@
     <table md-data-table>
       <thead md-order="porCaducar.order" md-trigger="porCaducar.onOrderChange">
         <tr>
-          <th name="#"></th>
+          <!-- <th name="#"></th> -->
           <th name="Código" order-by="ITE_codigo"></th>
           <th name="Item" order-by="ITE_nombre"></th>
+          <th name="Cantidad" order-by="LOT_cantidad"></th>
           <th name="Almacén" order-by="ALM_nombre"></th>
           <th name="Lote" order-by="LOT_numero"></th>
           <th name="Caducidad" order-by="LOT_caducidad"></th>
@@ -13,9 +14,10 @@
       </thead>
       <tbody>
         <tr ng-repeat="item in porCaducar.listado | filter:query | orderBy:porCaducar.order | limitTo:porCaducar.limit: (porCaducar.page -1) * porCaducar.limit">
-          <td>{{ $index+1 }}</td>
+          <!-- <td>{{ $index+1 }}</td> -->
           <td>{{ item.ITE_codigo }}</td>
           <td>{{ item.ITE_nombre }}</td>
+          <td>{{ item.LOT_cantidad }}</td>
           <td>{{ item.ALM_nombre }}</td>
           <td>{{ item.LOT_numero }}</td>
           <td>{{ item.LOT_caducidad | limitTo:10 | date:"MMM yyyy" | uppercase }}</td>
