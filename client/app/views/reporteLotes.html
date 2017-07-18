@@ -39,11 +39,13 @@
           <md-select ng-model="lot.datos.item" placeholder="Selecciona Item" flex>
             <md-option ng-repeat="item in lot.items" ng-click="lot.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
           </md-select>
-          
-        
         </div>
-        
+
         <div layout="column" layout-paddin layout-align="center center" flex>
+          <md-checkbox ng-model="lot.datos.verCeros" ng-if="permisos.PER_clave<3"><!-- Solo los permisos 1 y 2 pueden ver el checkbox -->
+            Ver lotes en cero
+          </md-checkbox>
+
           <md-progress-circular md-mode="indeterminate" ng-if="lot.consultando"></md-progress-circular>
           <md-button class="md-raised md-primary" ng-if="!lot.consultando" ng-click="lot.buscar()">Buscar</md-button>
         </div>

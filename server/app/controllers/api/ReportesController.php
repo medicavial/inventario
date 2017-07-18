@@ -59,15 +59,29 @@ class ReportesController extends BaseController {
 	            $join->on('existencias.EXI_clave', '=', 'lote.EXI_clave');
 	        	$join->on('items.ITE_clave', '=', 'lote.ITE_clave');
 	        })
-	        // ->where('LOT_cantidad','>',0)
 	        ->orderBy('ITE_codigo');
 
 
 		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad','lote.EXI_clave','LOT_clave');
 
-	 // 	if (Input::has('unidad')) {
-	 // 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
+		// if (Input::has('unidad')) {
+		// 	$query->where('almacenes.UNI_clave', Input::get('unidad') );
 		// }
+
+		/* Permiso 1 y 2 pueden ver Lotes en cero, los demas permisos no deben verlos */
+		/* Además, debe venir en True la variable verCeros */
+		if ( Input::has('permiso') ) {
+			if ( Input::get('permiso') > 2 ) {
+				$query->where('LOT_cantidad','>',0);
+			} 
+		}
+
+		if (Input::has('verCeros')) {
+			// return Input::get('verCeros');
+			if (Input::get('verCeros') == 'false') {
+				$query->where('LOT_cantidad','>',0);
+			}
+		}
 
 		if (Input::has('almacen')) {
 			$query->where('existencias.ALM_clave', Input::get('almacen') );
@@ -80,6 +94,7 @@ class ReportesController extends BaseController {
 		if (Input::has('tipo')) {
 			$query->where('items.TIT_clave', Input::get('tipo') );
 		}
+
 		return $query->get();
 
 	}

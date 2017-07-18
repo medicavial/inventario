@@ -20,7 +20,6 @@
 		scope.page = 1;
 		scope.busqueda = '';
 
-
 		scope.texto = {
 	      text: 'Resultados por pagina:',
 	      of: 'de'
@@ -37,9 +36,13 @@
 				unidad:'',
 				almacen:'',
 				item:'',
-				tipo:''
+				tipo:'',
+				permiso: $rootScope.permisos.PER_clave,
+				verCeros: false,
 			}
+			console.log(scope.datos);
 		}
+
 
 		scope.agregaUnidad = function(unidad){
 			scope.unidadB = ' ' + unidad;
@@ -71,6 +74,8 @@
 
 
 			if (scope.datos.unidad) {
+
+				console.log(scope.datos);
 
 				scope.consultando = true;
 				scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
