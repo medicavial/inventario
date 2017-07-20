@@ -58,24 +58,26 @@
             <tr>
               <th name="Codigo"  order-by="ITE_codigo"></th>
               <th name="Item"  order-by="ITE_nombre"></th>
-              <th name="Almacen" order-by="ALM_nombre"></th>
+              <th name="Sustancia"  order-by="ITE_sustancia"></th>
               <th name="Cantidad" order-by="EXI_cantidad"></th>
-              <th name="Unidad"  order-by="UNI_nombrecorto"></th>
-              <th name="Ultimo Movimiento"  order-by="EXI_ultimoMovimiento"></th>
               <th name="Tipo Item"  order-by="TIT_nombre"></th>
               <th name="Precio Venta"  order-by="ITE_precioventa"></th>
+              <th name="Almacen" order-by="ALM_nombre"></th>
+              <th name="Unidad"  order-by="UNI_nombrecorto"></th>
+              <th name="Ultimo Movimiento"  order-by="EXI_ultimoMovimiento"></th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="existencia in existencia.info |filter:query | orderBy: existencia.order | limitTo: existencia.limit: (existencia.page - 1) * existencia.limit">
               <td>{{existencia.ITE_codigo}}</td>
               <td>{{existencia.ITE_nombre}}</td>
-              <td>{{existencia.ALM_nombre}}</td>
+              <td>{{existencia.ITE_sustancia | uppercase}}</td>
               <td>{{existencia.EXI_cantidad}}</td>
+              <td>{{existencia.TIT_nombre}}</td>
+              <td>{{existencia.ITE_precioventa | currency }}</td>
+              <td>{{existencia.ALM_nombre}}</td>
               <td>{{existencia.UNI_nombrecorto}}</td>
               <td>{{existencia.EXI_ultimoMovimiento}}</td>
-              <td>{{existencia.TIT_nombre}}</td>
-              <td>{{existencia.ITE_precioventa}}</td>
             </tr>
           </tbody>
         </table>

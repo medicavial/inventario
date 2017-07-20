@@ -223,6 +223,7 @@
 			$scope.items = [];
 			$scope.ordenesListas = [];
 			$scope.ordenes = [];
+			$scope.verTodo=true;
 		}
 
 
@@ -278,16 +279,19 @@
 			});
 		};
 
-		$scope.toggle = function (item, list) {
-			var idx = list.indexOf(item);
+		$scope.toggle = function (almacen, selected) {
+			var idx = selected.indexOf(almacen);
 			console.log(idx);
-	        if (idx > -1) list.splice(idx, 1);
-	        else list.push(item);
-	        $scope.muestraItems(list);
+	        if (idx > -1) selected.splice(idx, 1);
+	        else selected.push(almacen);
+	        $scope.muestraItems(selected);
 		};
 
-		$scope.exists = function (item, list) {
-			return list.indexOf(item) > -1;
+		$scope.exists = function (almacen, selected) {
+			console.log(almacen);
+			// console.log(selected);
+			console.log(selected.indexOf(almacen) > -1);
+			return selected.indexOf(almacen) > -1;
 		};
 
 
