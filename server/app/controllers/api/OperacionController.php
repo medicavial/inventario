@@ -884,6 +884,7 @@ class OperacionController extends BaseController {
 
 		//preparamos los movimientos que se involucran el el traspaso del item
 		$datos =  Input::all();
+		$obs=' ';
 
 		foreach ($datos as $dato) {
 			# code...
@@ -892,6 +893,7 @@ class OperacionController extends BaseController {
 			$idLote = $dato['lote'];
 			$item = $dato['item'];
 			$cantidad = $dato['cantidad'];
+			$obs = $dato['obs'];
 
 
 			//baja de cantidad en almacenOrigen
@@ -904,7 +906,7 @@ class OperacionController extends BaseController {
 			$operacion1->idLote = $dato['lote'];
 			$operacion1->usuario = $dato['usuario'];
 			$operacion1->traspaso = 1;
-			$operacion1->observaciones = 'Disminución por traspaso';
+			$operacion1->observaciones = 'Disminución por traspaso '.$obs;
 
 			$operacion1->salida();
 
@@ -920,7 +922,7 @@ class OperacionController extends BaseController {
 			$operacion2->idLote = $dato['lote'];
 			$operacion2->usuario = $dato['usuario'];
 			$operacion2->traspaso = 1;
-			$operacion2->observaciones = 'Incremento por traspaso';
+			$operacion2->observaciones = 'Incremento por traspaso '.$obs;
 
 			$operacion2->entrada();
 

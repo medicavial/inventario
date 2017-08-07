@@ -21,7 +21,7 @@
               <md-input-container flex>
                 <label>Almacen Origen</label>
                 <md-select placeholder="Almacen Origen" ng-model="datos.almacenOrigen" name="origen" md-on-close="itemsxalmacen(datos.almacenOrigen)" flex>
-                  <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+                  <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}" ng-click="origen(almacen.ALM_nombre)">{{almacen.ALM_nombre}}</md-option>
                 </md-select>
 
               </md-input-container>
@@ -29,7 +29,7 @@
               <md-input-container flex>
                 <label>Almacen Destino</label>
                 <md-select placeholder="Almacen Destino" ng-model="datos.almacenDestino" name="almacenDestino" required md-on-close="verificaAlmacen($event)" flex>
-                  <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+                  <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}" ng-click="destino(almacen.ALM_nombre)">{{almacen.ALM_nombre}}</md-option>
                 </md-select>
                 <div ng-messages="traspasoForm.almacenDestino.$error" ng-if="traspasoForm.$submitted">
                   <div ng-message="required">Campo obligatorio.</div>

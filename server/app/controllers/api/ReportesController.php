@@ -62,7 +62,7 @@ class ReportesController extends BaseController {
 	        ->orderBy('ITE_codigo');
 
 
-		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad','lote.EXI_clave','LOT_clave');
+		$query->select('ITE_codigo','ITE_nombre','ALM_nombre','EXI_cantidad','LOT_numero','LOT_cantidad','LOT_caducidad','lote.EXI_clave','LOT_clave', 'lote.updated_at');
 
 		// if (Input::has('unidad')) {
 		// 	$query->where('almacenes.UNI_clave', Input::get('unidad') );
@@ -496,8 +496,8 @@ class ReportesController extends BaseController {
 	public function recetasComp(){
 
 		$respuesta=array();
-		$fechaInicio='2017-04-01 00:00:00';
-		$fechaFin='2017-04-30 23:59:59';
+		$fechaInicio='2017-07-01 00:00:00';
+		$fechaFin='2017-07-31 23:59:59';
 
 		$recetasComp = Receta::join('Usuario','RecetaMedica.Usu_login','=','Usuario.Usu_login')
 							->join('Unidad','RecetaMedica.Uni_clave','=','Unidad.Uni_clave')

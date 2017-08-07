@@ -39,13 +39,26 @@
 				itemNombre:'',
 				cantidad:'',
 				lote:'',
-				usuario:$rootScope.id
+				usuario:$rootScope.id,
+				obs:''
 			}
+			console.log($scope.datos);
 
 			$scope.guardando = false;
 
 		}
 
+		$scope.origen = function(origen){
+			$scope.obsOrigen = origen;
+			$scope.datos.obs = $scope.obsOrigen+' a '+$scope.obsDestino;
+			console.log($scope.datos.obs);
+		}
+
+		$scope.destino = function(destino){
+			$scope.obsDestino = destino;
+			$scope.datos.obs = $scope.obsOrigen+' a '+$scope.obsDestino;
+			console.log($scope.datos.obs);
+		}
 
 		$scope.datosLote = function(lote){
 			if (lote) {
@@ -76,8 +89,11 @@
 				itemNombre:$scope.datos.itemNombre,
 				cantidad:$scope.datos.cantidad,
 				lote:$scope.datos.lote,
-				usuario:$rootScope.id
+				usuario:$rootScope.id,
+				obs:$scope.datos.obs
 			});
+
+			console.log($scope.traspasos);
 
 			$scope.datos.item = '';
 			$scope.datos.cantidad = '';
@@ -85,6 +101,7 @@
 			$scope.item = '';
     		$scope.disponible = '';
     		$scope.busqueda = '';
+    		$scope.datos.obs = '';
 		}
 
 		$scope.guardar = function(){
