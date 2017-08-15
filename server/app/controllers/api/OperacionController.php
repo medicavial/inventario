@@ -766,6 +766,14 @@ class OperacionController extends BaseController {
 
 	public function surtirItem($usuario){
 
+		$timeReceta = Receta::where('id_receta',Input::get('receta'))->select( DB::raw('IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))->get();
+		$timeReceta = $timeReceta[0];
+
+		$tardio="";
+
+		if ($timeReceta->tardio=="1") {
+			$tardio=" (Surtido Tardio)";
+		} 
 
 		$operacion = new Operacion;
 
@@ -783,7 +791,7 @@ class OperacionController extends BaseController {
 		$operacion->orden = '';
 		$operacion->idLote = '';
 		$operacion->usuario = $usuario;
-		$operacion->observaciones = 'Surtido Receta MV con numero: ' . Input::get('receta');
+		$operacion->observaciones = 'Surtido Receta MV con numero: ' . Input::get('receta').$tardio;
 
 		//actualizamos en la tabla mv el item surtido
 		//en caso de que se haya cambiado las ortesis
@@ -884,7 +892,16 @@ class OperacionController extends BaseController {
 
 		//preparamos los movimientos que se involucran el el traspaso del item
 		$datos =  Input::all();
-		$obs=' ';
+		$cveTraspaso = date("YmdHis").'-'.$datos[0]['usuario'];
+
+		//insertamos en la table de traspasos
+		DB::table('traspasos')->insert(array(
+		    array(
+		    	'TRA_codigo' 	=> $cveTraspaso,
+		     	'TRA_usuario' 	=> $datos[0]['usuario'],
+		     	'TRA_fecha' 	=> DB::raw('now()')
+		     	),
+		));
 
 		foreach ($datos as $dato) {
 			# code...
@@ -894,6 +911,7 @@ class OperacionController extends BaseController {
 			$item = $dato['item'];
 			$cantidad = $dato['cantidad'];
 			$obs = $dato['obs'];
+			$usuario = $dato['usuario'];
 
 
 			//baja de cantidad en almacenOrigen
@@ -907,6 +925,7 @@ class OperacionController extends BaseController {
 			$operacion1->usuario = $dato['usuario'];
 			$operacion1->traspaso = 1;
 			$operacion1->observaciones = 'Disminución por traspaso '.$obs;
+			$operacion1->cveTraspaso = $cveTraspaso;
 
 			$operacion1->salida();
 
@@ -923,16 +942,25 @@ class OperacionController extends BaseController {
 			$operacion2->usuario = $dato['usuario'];
 			$operacion2->traspaso = 1;
 			$operacion2->observaciones = 'Incremento por traspaso '.$obs;
+			$operacion2->cveTraspaso = $cveTraspaso;
 
 			$operacion2->entrada();
 
 			$operacion2->verificaLote();
-
-
 		}
 
+		$cve = Movimiento::where('USU_clave', $usuario)
+							->where('MOV_traspaso', 1)
+							->select('CVE_traspaso')
+							->orderBy('MOV_clave', 'desc')
+							->take(1)
+							->get();
 
-		return Response::json(array('respuesta' => 'Traspaso efectuado Correctamente'));
+		$pdf = helpers::traspasoPDF($cve[0]['CVE_traspaso']);
+    	// return $pdf->stream();
+
+		return Response::json(array('respuesta' => 'Traspaso efectuado Correctamente',
+									'datos' => $pdf));
 
 	}
 

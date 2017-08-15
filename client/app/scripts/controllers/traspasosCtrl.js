@@ -101,7 +101,7 @@
 			$scope.item = '';
     		$scope.disponible = '';
     		$scope.busqueda = '';
-    		$scope.datos.obs = '';
+    		// $scope.datos.obs = '';
 		}
 
 		$scope.guardar = function(){

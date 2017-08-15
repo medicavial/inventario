@@ -36,6 +36,7 @@
 		scope.cancelando = false;
 		scope.filtro = '';
 		scope.itemssurtidos = [];
+		scope.tardio = null;
 
 		console.log(datos);
 
@@ -187,7 +188,7 @@
 			    });
 
 			}else{
-				mensajes.alerta('Ya no puedes ingresar items une vez surtida la receta','error','top right','error');
+				mensajes.alerta('Ya no puedes ingresar items una vez surtida la receta','error','top right','error');
 			}
 
 				// else{
@@ -225,6 +226,7 @@
 				console.log("UniReceta: "+data.unidad);
 				scope.autorizado=false;
 
+				scope.tardio=parseInt(data.tardio);
 
 				for (var i = 0; i < unidades.length; i++) {
 					// console.log(unidades[i]);

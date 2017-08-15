@@ -22,7 +22,15 @@
 
     <md-whiteframe ng-if="receta.datosReceta"  class="muestras md-whiteframe-4dp white" layout="column" layout-padding>
 
-		<h3>Detalles de Receta <small style="color: #AF0000;" ng-show="receta.autorizado == false">(No tiene autorización para manejar recetas de {{ receta.uniNombre }})</small> </h3>
+		<h3>Detalles de Receta
+			<small style="color: #AF0000;" ng-show="receta.autorizado == false">
+				(No tiene autorización para manejar recetas de {{ receta.uniNombre }})
+			</small>
+
+			<small style="color: #FF8000;" ng-if="receta.tardio==1 && receta.datos.items.length>0">
+				Se marcará como SURTIDA TARDÍA
+			</small>
+		</h3>
 
 		<md-content layout="row" flex>
 			<div flex flex-gt-sm="35">ITEMS</div>

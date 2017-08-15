@@ -211,6 +211,11 @@ class Operacion {
 		$movimiento->LOT_clave = $this->idLote;
 		$movimiento->id_receta = $this->receta;
 		$movimiento->MOV_traspaso = $this->traspaso;
+		if ($movimiento->MOV_traspaso==1) {
+				$movimiento->CVE_traspaso = $this->cveTraspaso;
+				// $movimiento->TRA_origen = $this->almacenOrigen;
+				// $movimiento->TRA_destino = $this->almacenDestino;
+		}
 
 		$movimiento->save();
 

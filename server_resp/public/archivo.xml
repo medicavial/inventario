@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" serie="DBME" folio="195717" fecha="2015-01-27T14:49:47" sello="KBeP6ktBrYVHGy7b40ZW46Ak4BSNJVXGYFoIz0MEj6SXY3qEtZSNfktt22AIXP05JNBHmUBxORG0W2kFM4na0QUTAW0o+8Xw4X/O/fACGVEeLT5nU/BxddVugNHgNtRyfPPNYMDLkFzlx+Jy4uV6IrMcHGMEFujidIROXzfSgfs=" formaDePago="CONTADO PAGO EN UNA SOLA EXHIBICION" noCertificado="00001000000301361099" certificado="MIIEkjCCA3qgAwIBAgIUMDAwMDEwMDAwMDAzMDEzNjEwOTkwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzExMjExNTUzMzhaFw0xNzExMjExNTUzMzhaMIHeMSswKQYDVQQDEyJESVNUUklCVUNJT04gSU5URVJDRVJBTUlDIFNBIERFIENWMSswKQYDVQQpEyJESVNUUklCVUNJT04gSU5URVJDRVJBTUlDIFNBIERFIENWMSswKQYDVQQKEyJESVNUUklCVUNJT04gSU5URVJDRVJBTUlDIFNBIERFIENWMSUwIwYDVQQtExxESU45NzExMTlHRzYgLyBMQVBSODExMjE1M1E5MR4wHAYDVQQFExUgLyBMQVBSODExMjE1SFZaTlJEMDAxDjAMBgNVBAsTBURJTlNBMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7vG/C49LqDH/eerqkc2FpNXH205a2t+hv/fDKjlC6dEkLR2orUbxEXsZeIftYEdfUazZFDAHeosxoS7Vd51OZrStmbfk5/ViRyLsj45prkJGPRAleHEhrwcXk1yRFOIOLbbPUUVnTpVY1GaoWbETzKPekSZtcMgPLm0tmT2I4wwIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQUFAAOCAQEAfcUjGmuRXvCq9i7rtjx6H4DMX+aEt0UfxgEFLpEUmBqBv3XrOAVXbEgkx13LsKQjuI0UISZtASeJrj/wb6Q2iogAGOtSY1fehJwe0ucpynaX73jXCEMwyqmxivWBKrsWxd+ayKLFK4kVoWSUWQCUurX4gFEisNJ1SImVuYx5YZYSeCb43Yj+RIWjyl7XWldCIjW9YNVHDQYDAGNIyKZ5OfedtF5iS9ZggUz6PeOPUedYdQw/klRf2MGTQybV+uFg3lXNvcluRVGrYDv/gXeP9sIAPIH0NHDRMCtCZ9lmYcKAzDXuvuhMy+EJdlyxtCTe3AjRSb9U4dW3jtU0NAt8mQ==" condicionesDePago="Contado" subTotal="724.86" descuento="0" TipoCambio="1" Moneda="MXP" total="840.84" tipoDeComprobante="ingreso" metodoDePago="TARJETA DE CREDITO" LugarExpedicion="BENITO JUAREZ, DISTRITO FEDERAL" NumCtaPago="3288" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <cfdi:Emisor rfc="DIN971119GG6" nombre="DISTRIBUCION INTERCERAMIC S.A. DE C.V.">
+    <cfdi:DomicilioFiscal calle="BLVD. MANUEL AVILA CAMACHO" noExterior="2239" colonia="PLAZAS DE LA COLINA" localidad="TLALNEPANTLA" municipio="TLALNEPANTLA" estado="ESTADO DE MEXICO" pais="MEXICO" codigoPostal="54080"/>
+    <cfdi:ExpedidoEn calle="AV. DIVISION DEL NORTE" noExterior="714" colonia="COL. DEL VALLE" localidad="Benito Juarez" municipio="BENITO JUAREZ" estado="DISTRITO FEDERAL" pais="MEXICO" codigoPostal="3100"/>
+    <cfdi:RegimenFiscal Regimen="General de Ley Personas Morales"/>
+  </cfdi:Emisor>
+  <cfdi:Receptor rfc="GUGA770919GB4" nombre=" ALFREDO GUTIERREZ GARATE">
+    <cfdi:Domicilio calle="MONTEALBAN" noExterior="311" colonia="NARVARTE" localidad="DF" municipio="BENITO JUAREZ" estado="DISTRITO FEDERAL" pais="MEXICO" codigoPostal="3020"/>
+  </cfdi:Receptor>
+  <cfdi:Conceptos>
+    <cfdi:Concepto cantidad="3" unidad="Saco" noIdentificacion="160669" descripcion="DS^BOQUILLA SIN ARENA BRICK SACO 5 KGS^TN^^M2^^PXM2^^DE^^" valorUnitario="78.69" importe="236.07"/>
+    <cfdi:Concepto cantidad="2" unidad="Pieza" noIdentificacion="208396" descripcion="DS^INTERCERAMIC ANTIBACTERIAL PARA BOQUILLA ADITIVO 1.9 LITROS^TN^^M2^^PXM2^^DE^^" valorUnitario="162.93" importe="325.86"/>
+    <cfdi:Concepto cantidad="1" unidad="Pieza" noIdentificacion="208396" descripcion="DS^INTERCERAMIC ANTIBACTERIAL PARA BOQUILLA ADITIVO 1.9 LITROS^TN^^M2^^PXM2^^DE^^" valorUnitario="162.93" importe="162.93"/>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos totalImpuestosTrasladados="115.98">
+    <cfdi:Traslados>
+      <cfdi:Traslado impuesto="IVA" tasa="16" importe="115.98"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital version="1.0" UUID="66b86e6d-7a71-4b45-aa8c-372ad3f237f2" FechaTimbrado="2015-01-27T15:49:48" selloCFD="KBeP6ktBrYVHGy7b40ZW46Ak4BSNJVXGYFoIz0MEj6SXY3qEtZSNfktt22AIXP05JNBHmUBxORG0W2kFM4na0QUTAW0o+8Xw4X/O/fACGVEeLT5nU/BxddVugNHgNtRyfPPNYMDLkFzlx+Jy4uV6IrMcHGMEFujidIROXzfSgfs=" noCertificadoSAT="00001000000301251152" selloSAT="CNB/t0EW/7SCBYEXhL/auzD6/0GEWQOWUK8BsIH8I4qJR+zLJtfrwhuh57+QFKwSLWhyTgU2uNtdsH+MD24T4HMgw5C0esTNAImPJ9nJBkTI4A86RWirQy/qP//PD/tlv0gD6L13uNGlLY79ASxEKJ9EOihn2MZ0dNote1s98F4=" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

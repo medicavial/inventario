@@ -133,9 +133,15 @@ class BusquedasController extends BaseController {
                  ->select(DB::raw($sql))
                  ->groupBy('existencias.ITE_clave')
                  ->where('unidades.UNI_claveMV', $unidad)
-                 // este condicional solo filtra el botiquin
+                 // traemos del almacen particulares y ortesis del almacen 'botiquin' 
                  ->where('almacenes.TAL_clave', 5)
+	             ->orWhere(function($query)
+	             {
+	                $query->where('almacenes.TAL_clave', 2)
+	                      ->where('items.TIT_clave', 2);
+	             })
                  // ->where('items.TIT_clave', $tipo)
+                 ->orderBy('ITE_nombre', 'asc')
                  ->get();
 	}
 
@@ -237,7 +243,9 @@ class BusquedasController extends BaseController {
 	public function receta($id){
 
 		//obtenemos la receta de la base de MV
-		$datosReceta = Receta::find($id);
+		// $datosReceta = Receta::find($id);
+		$datosReceta = Receta::where('id_receta',$id)->select( DB::raw('RecetaMedica.*, IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))->get();
+		$datosReceta = $datosReceta[0];
 		// $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
 		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio);
 		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
@@ -337,11 +345,10 @@ class BusquedasController extends BaseController {
 				break;
 		}
 
-		// return $uniMV;
-
 		$respuesta = array(
 			'receta' 	=> $id,
 			'fecha' 	=> $datosReceta->RM_fecreg,
+			'tardio' 	=> $datosReceta->tardio,
 			'folio' 	=> $datosReceta->Exp_folio,
 			'lesionado' => $lesionado->Exp_completo,
 			'unidad' 	=> $uniInventario,
