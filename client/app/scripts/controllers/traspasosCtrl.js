@@ -5,9 +5,9 @@
 	angular.module('app')
 	.controller('traspasoCtrl',traspasoCtrl)
 
-	traspasoCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','datos','$filter','$q'];
+	traspasoCtrl.$inject = ['$scope','$rootScope','$mdDialog','busqueda','operacion','mensajes','datos','$filter','$q','reportes'];
 
-	function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,datos,$filter,$q){
+	function traspasoCtrl($scope,$rootScope,$mdDialog,busqueda,operacion,mensajes,datos,$filter,$q,reportes){
 
 		if ($rootScope.permisos.PER_traspasos==0) {
 			console.clear();
@@ -81,7 +81,6 @@
 
 		$scope.agregar = function(){
 
-
 			$scope.traspasos.push({
 				almacenOrigen:$scope.datos.almacenOrigen,
 				almacenDestino:$scope.datos.almacenDestino,
@@ -116,6 +115,7 @@
 				$scope.guardando = false;
 				$scope.traspasoForm.$setPristine();
 				$scope.inicio();
+				reportes.traspasoPdf(data.cveTraspaso);
 			}).error(function (data){
 				mensajes.alerta('Ocurrio un error vuelve a intentarlo','error','top right','error');
 				$scope.guardando = false;

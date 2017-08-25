@@ -12,7 +12,12 @@
 
 
 	function altaMovimientosCtrl($rootScope,datos,operacion,mensajes,$q,$filter,busqueda){
-		
+		// solo los usuarios con permiso 1 y 2 pueden entrar a esta sección
+		if ($rootScope.permisos.PER_clave>2) {
+			console.clear();
+			console.error('No tiene permiso para estar en esta sección');
+			$rootScope.ir('index.home');
+		} else{};
 		// console.log(datos);
 		$rootScope.cargando = false;
 		$rootScope.tema = 'theme1';

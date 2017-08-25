@@ -7,9 +7,9 @@
 	.controller('reporteTraspasosCtrl',reporteTraspasosCtrl)
 
 
-	reporteTraspasosCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes', '$mdBottomSheet'];
+	reporteTraspasosCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes', '$mdBottomSheet','$mdDialog'];
 
-	function reporteTraspasosCtrl($rootScope,busqueda,mensajes,datos,reportes, $mdBottomSheet){
+	function reporteTraspasosCtrl($rootScope,busqueda,mensajes,datos,reportes, $mdBottomSheet, $mdDialog){
 
 		var scope = this;
 		$rootScope.tema = 'theme4';
@@ -105,6 +105,7 @@
 
 		scope.buscar = function(){
 			console.log(scope.datos);
+			mensajes.alerta('Esto tardará un poco','warning','top right','warning');
 			if (scope.datos.fechaInicio==null || scope.datos.fechaFinal==null) {
 				mensajes.alerta('Se requiere fecha de inicio y final para generar el reporte','error','top right','error');
 			} else{
@@ -161,6 +162,34 @@
 			});
 		};
 
+		scope.seleccion = function (traspaso, ev) {
+			$mdDialog.show({
+				controller: detalleTraspasoCtrl,
+				templateUrl: 'views/detalleTraspaso.html',
+				data: traspaso,
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				clickOutsideToClose: false
+			})
+		};
+
 	}
+
+
+	function detalleTraspasoCtrl($rootScope,$scope,$mdDialog, reportes, data){
+		console.log(data);
+
+		$scope.detalleTras = data;
+
+		$scope.cerrarDialogo = function(){
+			$mdDialog.cancel();
+			$scope.detalleTras=null;
+		};
+
+		$scope.descargaPdf = function(){
+			reportes.traspasoPdf($scope.detalleTras.TRA_codigo);
+		};
+
+	};
 
 })();

@@ -248,6 +248,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('lotes', 'ReportesController@lotes');
         Route::get('movimientos', 'ReportesController@movimientos');
         Route::get('traspasos', 'ReportesController@traspasos');
+        Route::get('pdfTraspaso/{cveTraspaso}', 'ReportesController@traspasoPDF');
         Route::post('ordenes', 'ReportesController@ordenes');
         Route::get('ordenesAbiertas/{unidades}', 'ReportesController@ordenesAbiertas');
         Route::get('expOrdenes/{unidades}', 'ReportesController@ordenesExcel');

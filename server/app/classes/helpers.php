@@ -189,15 +189,15 @@ class helpers {
 	}
 
 	public static function traspasoPDF($cveTraspaso){
-		
+		$pdf=null;
 		$datos = Movimiento::join('usuarios', 'movimientos.USU_clave', '=', 'usuarios.USU_clave')
 								->join('items', 'movimientos.ITE_clave', '=', 'items.ITE_clave')
-								->join('lote', 'movimientos.LOT_clave', '=', 'lote.LOT_clave')
+								->leftJoin('lote', 'movimientos.LOT_clave', '=', 'lote.LOT_clave')
 								->join('traspasos', 'movimientos.CVE_traspaso', '=', 'traspasos.TRA_codigo')
 								->where('CVE_traspaso', $cveTraspaso)
 								->where('MOV_traspaso', 1)
 								->where('TIM_clave', 2)
-								->select('movimientos.*','ITE_nombre','USU_nombrecompleto','LOT_numero','CVE_traspaso','TRA_id')
+								->select('movimientos.*','ITE_nombre','USU_nombrecompleto', DB::Raw('IFNULL( LOT_numero, "N/A" ) as LOT_numero'), 'CVE_traspaso','TRA_id')
 								->get();
 
 		$archivo =  public_path().'/acusesTraspasos/'.'traspaso_'.$cveTraspaso.'.pdf';
@@ -206,6 +206,7 @@ class helpers {
 		if (file_exists($archivo)) {
 			//CUANDO YA EXISTE EL PDF GENERADO CARGAMOS DICHO PDF
 			//definimos header para mostrar documentos pdf
+			header('Access-Control-Allow-Origin: *');
 			header("Content-type:application/pdf");
 			// definimos si se descargará o si se mostrará en el navegador el documento
 			header("Content-Disposition:inline;filename='".'traspaso_'.$cveTraspaso.".pdf'");

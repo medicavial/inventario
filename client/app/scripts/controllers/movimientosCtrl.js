@@ -12,7 +12,6 @@
 
 
 	function movimientosCtrl($rootScope,$mdDialog,datos,busqueda,mensajes,reportes){
-
 		if ($rootScope.permisos.PER_movimientos==0) {
 			console.clear();
 			console.error('No tiene permiso para estar en esta sección');

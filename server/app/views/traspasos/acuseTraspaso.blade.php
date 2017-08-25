@@ -130,7 +130,7 @@
 	<tr class="filasTbl">
 		<td align="center"><?php echo $i ?></td>
 		<td><?php echo $traspaso['ITE_nombre'] ?></td>
-		<td><?php echo $traspaso['LOT_numero'] ?></td>
+		<td align="right"><?php echo $traspaso['LOT_numero'] ?></td>
 		<td align="center"><?php echo $traspaso['MOV_cantidad'] ?></td>
 		<td><?php echo substr( $traspaso['MOV_observaciones'] , 24 ) ?></td>
 	</tr>

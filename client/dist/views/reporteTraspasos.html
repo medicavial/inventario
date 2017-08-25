@@ -52,6 +52,9 @@
 
         <div layout="column" layout-paddin layout-align="center center" flex>
           <md-progress-circular md-mode="indeterminate" ng-if="tras.consultando"></md-progress-circular>
+          <div ng-if="tras.consultando" layout-paddin layout-align="center center">
+            Esto tardará un poco
+          </div>
           <md-button class="md-raised md-primary" ng-if="!tras.consultando" ng-click="tras.buscar()">Buscar</md-button>
         </div>
 
@@ -60,33 +63,26 @@
 
 
     <div flex ng-if="tras.info.length > 0">
-      <p>Busqueda: {{ tras.unidadB + tras.almacenB + tras.itemB }} </p>
+      <p>Busqueda: {{ tras.unidadB + tras.almacenB + tras.itemB}} </p>
       <md-data-table-container class="md-whiteframe-5dp white">
         <table md-data-table>
           <thead md-order="tras.order" md-trigger="tras.onOrderChange">
             <tr>
-              <th name="Codigo"  order-by="ITE_codigo"></th>
-              <th name="Item"  order-by="ITE_nombre"></th>
-              <th name="Almacen" order-by="ALM_nombre"></th>
-              <th name="Usuario" order-by="USU_login"></th>
-              <th name="Tipo Movimiento" order-by="TIM_nombre"></th>
-              <!-- <th name="Tipo Ajuste" order-by="TIA_nombre"></th> -->
-              <th name="Observaciones"  order-by="MOV_observaciones"></th>
-              <th name="Cantidad"  order-by="MOV_cantidad"></th>
-              <th name="Fecha"  order-by="created_at"></th>
+              <th name="#"  order-by="TRA_id"></th>
+              <th name="Unidad" order-by="UNI_nombre"></th>
+              <th name="Usuario" order-by="USU_nombre"></th>
+              <th name="Cantidad"  order-by="numItems"></th>
+              <th name="Fecha"  order-by="TRA_fecha"></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="data in tras.info |filter:query | orderBy: tras.order | limitTo: tras.limit: (tras.page - 1) * tras.limit">
-              <td>{{data.ITE_codigo}}</td>
-              <td>{{data.ITE_nombre}}</td>
-              <td>{{data.ALM_nombre}}</td>
-              <td>{{data.USU_login}}</td>
-              <td>{{data.TIM_nombre}}</td>
-              <!-- <td>{{data.TIA_nombre}}</td> -->
-              <td>{{data.MOV_observaciones}}</td>
-              <td>{{data.MOV_cantidad}}</td>
-              <td>{{data.created_at}}</td>
+            <tr ng-repeat="data in tras.info |filter:query | orderBy: tras.order | limitTo: tras.limit: (tras.page - 1) * tras.limit"
+                style="cursor: pointer" ng-click="tras.seleccion(data)">
+              <td>{{data.TRA_id}}</td>
+              <td>{{data.UNI_nombre}}</td>
+              <td>{{data.USU_nombre}}</td>
+              <td>{{data.numItems}}</td>
+              <td>{{data.TRA_fecha}}</td>
             </tr>
           </tbody>
         </table>

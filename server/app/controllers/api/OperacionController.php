@@ -904,7 +904,7 @@ class OperacionController extends BaseController {
 		));
 
 		foreach ($datos as $dato) {
-			# code...
+			// return $dato;
 			$almacenOrigen = $dato['almacenOrigen'];
 			$almacenDestino = $dato['almacenDestino'];
 			$idLote = $dato['lote'];
@@ -960,6 +960,7 @@ class OperacionController extends BaseController {
     	// return $pdf->stream();
 
 		return Response::json(array('respuesta' => 'Traspaso efectuado Correctamente',
+									'cveTraspaso' => $cveTraspaso,
 									'datos' => $pdf));
 
 	}

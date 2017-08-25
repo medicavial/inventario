@@ -149,20 +149,24 @@ class ReportesController extends BaseController {
 
 	}
 
+
 	public function traspasos(){
 		$query = Movimiento::query();
 
         $query->join('items', 'movimientos.ITE_clave', '=', 'items.ITE_clave')
 				->join('almacenes', 'movimientos.ALM_clave', '=', 'almacenes.ALM_clave')
+				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
 				->join('usuarios', 'movimientos.USU_clave', '=', 'usuarios.USU_clave')
 				->join('tiposMovimiento', 'movimientos.TIM_clave', '=', 'tiposMovimiento.TIM_clave')
+				->join('traspasos', 'movimientos.CVE_traspaso','=','traspasos.TRA_codigo')
 				->leftJoin('tiposAjuste', 'movimientos.TIA_clave', '=', 'tiposAjuste.TIA_clave')
-				->select('ITE_codigo','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre','MOV_observaciones','MOV_cantidad','movimientos.created_at')
-				->where('movimientos.MOV_traspaso', 1 )
+				->select('ITE_codigo','ITE_nombre','ALM_nombre','USU_login','USU_nombrecompleto','TIM_nombre', 'TIA_nombre','MOV_observaciones','MOV_cantidad','movimientos.created_at', 'TRA_id', 'TRA_codigo','TRA_fecha','MOV_clave','UNI_nombrecorto')
+				->where('movimientos.MOV_traspaso', 1 ) //filtramos los traspasos
+				->where('movimientos.TIM_clave', 2 ) // solo nos interesan las entradas aunque se registran tambien las salidas en los traspasos
 				->whereBetween('movimientos.created_at', array(Input::has('fechaInicio') ? Input::get('fechaInicio') : date('Y-m-d') . ' 00:00:00' , Input::has('fechaFinal') ? Input::get('fechaFinal') : date('Y-m-d') . ' 23:59:59'));
 
 	 	if (Input::has('unidad')) {
-	 		$query->where('UNI_clave', Input::get('unidad') );
+	 		$query->where('almacenes.UNI_clave', Input::get('unidad') );
 		}
 
 		if (Input::has('almacen')) {
@@ -177,8 +181,49 @@ class ReportesController extends BaseController {
 			$query->where('items.TIT_clave', Input::get('tipo') );
 		}
 
-		return $query->get();
+		$movimientos = $query->get();
+		$i=0;
 
+		$respuesta=array();
+		foreach ($movimientos as $traspaso) {
+			if ( ($i==0 && $movimientos[$i]['TRA_codigo'] == $traspaso['TRA_codigo']) || ($i>0 && $movimientos[$i-1]['TRA_codigo'] != $traspaso['TRA_codigo']) ) {
+
+				//recopilamos los datos de los items por id de traspaso
+				for ($numItem=0; $numItem < sizeof($movimientos) ; $numItem++) { 
+					if ($traspaso['TRA_codigo'] == $movimientos[$numItem]['TRA_codigo']) {
+						$datos[] = array(
+											'ITE_codigo' 	=> $movimientos[$numItem]['ITE_codigo'],
+											'ITE_nombre' 	=> $movimientos[$numItem]['ITE_nombre'],
+											'MOV_cantidad' 	=> $movimientos[$numItem]['MOV_cantidad'],
+											'MOV_clave' 	=> $movimientos[$numItem]['MOV_clave'],
+											'TIM_nombre' 	=> $movimientos[$numItem]['TIM_nombre'],
+											'MOV_obs' 		=> substr($movimientos[$numItem]['MOV_observaciones'], 24),
+										);
+					}
+				}
+
+				//preparamos los datos que se mostrarán al usuario
+				$respuesta[]=array(
+									'TRA_id' 		=> $traspaso['TRA_id'],
+									'TRA_codigo' 	=> $traspaso['TRA_codigo'],
+									'TRA_fecha' 	=> $traspaso['TRA_fecha'],
+									'USU_nombre' 	=> $traspaso['USU_nombrecompleto'],
+									'UNI_nombre' 	=> $traspaso['UNI_nombrecorto'],
+									'numItems'		=> sizeof($datos),
+									'datos' 		=> $datos,
+									);
+			}
+			$datos=null;
+			$i++;
+		}
+		return $respuesta;
+	}
+
+	public function traspasoPDF($cveTraspaso){
+		// return $cveTraspaso;
+		$pdf = helpers::traspasoPDF($cveTraspaso);
+
+		// return $pdf;
 	}
 
 	public function items(){

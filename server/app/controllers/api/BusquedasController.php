@@ -134,12 +134,12 @@ class BusquedasController extends BaseController {
                  ->groupBy('existencias.ITE_clave')
                  ->where('unidades.UNI_claveMV', $unidad)
                  // traemos del almacen particulares y ortesis del almacen 'botiquin' 
-                 ->where('almacenes.TAL_clave', 5)
-	             ->orWhere(function($query)
-	             {
-	                $query->where('almacenes.TAL_clave', 2)
-	                      ->where('items.TIT_clave', 2);
-	             })
+                 ->whereRaw('((almacenes.TAL_clave = 5) or (almacenes.TAL_clave = 2 and items.TIT_clave = 2))')
+	             // ->orWhere(function($query)
+	             // {
+	             //    $query->where('almacenes.TAL_clave', 2)
+	             //          ->where('items.TIT_clave', 2);
+	             // })
                  // ->where('items.TIT_clave', $tipo)
                  ->orderBy('ITE_nombre', 'asc')
                  ->get();

@@ -142,7 +142,9 @@
   
 </div>
 
-<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.altaMovimientos')" aria-label="Nuevo Movimiento">
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" aria-label="Nuevo Movimiento"
+            ng-click="ir('index.altaMovimientos')" ng-if="permisos.PER_movimientos==1">
+            <!-- Solo los usuarios con permiso 1 y 2 pueden hacer nuevos movimientos -->
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>
