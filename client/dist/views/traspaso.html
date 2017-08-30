@@ -46,12 +46,14 @@
         
         <md-subheader class="md-primary">Traspasar</md-subheader>
         <md-divider></md-divider>
-        <md-content layout-align="center center" flex-gt-sm="50">
+        <md-content layout-align="center center" flex-gt-sm="100">
 
           <md-list>
             <md-list-item ng-repeat="traspaso in traspasos">
               <p>{{ traspaso.itemNombre }}</p>
               <p>Cantidad: {{ traspaso.cantidad }}</p>
+              <p>{{ traspaso.nombreOrigen }}</p>
+              <p>{{ traspaso.nombreDestino }}</p>
               <md-button class="md-secondary md-icon-button" ng-click="eliminar($index)" aria-label="Eliminar">
                 <md-tooltip md-direction="top">
                   Eliminar
@@ -70,7 +72,8 @@
           
           <div layout-gt-sm="row" layout="column">
             
-            <md-autocomplete
+            <md-autocomplete 
+                md-no-cache="true"
                 md-input-name="item"
                 md-selected-item="item"
                 md-search-text="busqueda"
@@ -91,7 +94,7 @@
             <md-input-container flex ng-if="item.TIT_forzoso == '1'">
               <label>Lote</label>
               <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)" ng-required="item.TIT_forzoso == '1'">
-                <md-option ng-repeat="lote in lotes" value="{{lote}}">{{lote.LOT_numero}} - Disponible:{{ lote.LOT_cantidad }}</md-option>
+                <md-option ng-repeat="lote in lotes" value="{{lote}}" ng-disabled="lote.LOT_cantidad<1">{{lote.LOT_numero}} - Disponible:{{ lote.LOT_cantidad }}</md-option>
               </md-select>
             </md-input-container>
 

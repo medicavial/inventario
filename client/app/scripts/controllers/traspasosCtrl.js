@@ -40,7 +40,9 @@
 				cantidad:'',
 				lote:'',
 				usuario:$rootScope.id,
-				obs:''
+				obs:'',
+				nombreOrigen:null,
+				nombreDestino:null
 			}
 			console.log($scope.datos);
 
@@ -51,12 +53,14 @@
 		$scope.origen = function(origen){
 			$scope.obsOrigen = origen;
 			$scope.datos.obs = $scope.obsOrigen+' a '+$scope.obsDestino;
+			$scope.datos.nombreOrigen=origen;
 			console.log($scope.datos.obs);
 		}
 
 		$scope.destino = function(destino){
 			$scope.obsDestino = destino;
 			$scope.datos.obs = $scope.obsOrigen+' a '+$scope.obsDestino;
+			$scope.datos.nombreDestino=destino;
 			console.log($scope.datos.obs);
 		}
 
@@ -89,7 +93,9 @@
 				cantidad:$scope.datos.cantidad,
 				lote:$scope.datos.lote,
 				usuario:$rootScope.id,
-				obs:$scope.datos.obs
+				obs:$scope.datos.obs,
+				nombreOrigen: $scope.datos.nombreOrigen,
+				nombreDestino: $scope.datos.nombreDestino
 			});
 
 			console.log($scope.traspasos);
@@ -104,10 +110,7 @@
 		}
 
 		$scope.guardar = function(){
-
 			// console.log($scope.datos);
-
-
 			// console.log($scope.traspasos);
 			$scope.guardando = true;
 			operacion.altaTraspaso($scope.traspasos).success(function (data){
@@ -153,7 +156,45 @@
 				$scope.datos.itemNombre = item.ITE_nombre;
 				$scope.disponible = Number(item.EXI_cantidad);
 				busqueda.lotesAlmacenXitem($scope.datos.almacenOrigen,item.ITE_clave).success(function (data){
-					$scope.lotes = data;
+					$scope.lotes = data; // originalmente solo es esta linea
+					//verificamos si es un item que requiere lote
+					// if ($scope.lotes.length > 0) {
+					if (item.TIT_forzoso == '1') {
+						//verificamos si ya hay traspasos almacenados
+						if ($scope.traspasos.length>0) {
+							//verificamos si hay traspasos del mismo item con el mismo almacén de origen
+							for (var i = 0; i < $scope.traspasos.length; i++) {
+								if (($scope.traspasos[i].item == $scope.lotes[0].ITE_clave) && ($scope.traspasos[i].almacenOrigen == $scope.datos.almacenOrigen)) {
+									console.log('son iguales');
+									//actualizamos la existencia total
+									$scope.disponible=$scope.disponible-$scope.traspasos[i].cantidad;
+									//verificamos si es el mismo lote
+									for (var j = 0; j < $scope.lotes.length; j++) {
+										if ($scope.lotes[j].LOT_clave == $scope.traspasos[i].lote) {
+											//hacemos la resta
+											$scope.lotes[j].LOT_cantidad = $scope.lotes[j].LOT_cantidad - $scope.traspasos[i].cantidad;
+										};
+									};
+								};
+							};
+						};
+					};
+					//verificamos si es un item que no requiere lote
+					// if ($scope.lotes.length == 0) {
+					if (item.TIT_forzoso == '0') {
+						console.log('este item no tiene lote');
+						//verificamos si ya hay traspasos almacenados
+						if ($scope.traspasos.length>0) {
+							//verificamos si hay traspasos del mismo item con el mismo almacén de origen
+							for (var i = 0; i < $scope.traspasos.length; i++) {
+								if (($scope.traspasos[i].item == $scope.datos.item) && ($scope.traspasos[i].almacenOrigen == $scope.datos.almacenOrigen)) {
+									console.log('mismo item y mismo origen');
+									//actualizamos la existencia total
+									$scope.disponible=$scope.disponible-$scope.traspasos[i].cantidad;
+								};
+							};
+						};
+					};
 				});
 			};
 		}
