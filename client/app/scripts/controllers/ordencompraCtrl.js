@@ -288,9 +288,9 @@
 		};
 
 		$scope.exists = function (almacen, selected) {
-			console.log(almacen);
+			// console.log(almacen);
 			// console.log(selected);
-			console.log(selected.indexOf(almacen) > -1);
+			// console.log(selected.indexOf(almacen) > -1);
 			return selected.indexOf(almacen) > -1;
 		};
 
@@ -545,8 +545,11 @@
 					$scope.ordenes.push(idOrden);
 
 					pdf.enviaOrden(idOrden).success(function (data){
+						console.log(idOrden);
+						console.log(data);
 						$scope.respuestasCorreos.push(data.respuesta);
 					}).error(function (error){
+						console.log(error);
 						$scope.respuestasCorreos.push(error.respuesta);
 					});
 

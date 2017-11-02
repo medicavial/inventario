@@ -238,6 +238,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('traspaso', 'OperacionController@traspaso');
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
+        Route::get('reservasantiguas', 'OperacionController@reservasAntiguas');
     });
 
 
@@ -257,6 +258,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('exportarPDF/{tipo}', 'ReportesController@exportarPDF');
         Route::get('pdf/ordencompra/{id}','ReportesController@ordenCompraPDF');
         Route::get('recetasComp','ReportesController@recetasComp');
+        Route::post('pruebaCorreo/{parametro}','ReportesController@pruebaCorreo');
 
     });
 

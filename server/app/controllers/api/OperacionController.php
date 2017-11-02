@@ -219,8 +219,40 @@ class OperacionController extends BaseController {
 	}
 
 	// funcion que ayuda a mandar correo al proveedor de la orden creada
-	public function enviaCorreoOrden($orden){
+	public function enviaCorreoOrden($idOrden){
+		$orden 			= OrdenCompra::find($idOrden);
+    	$nombreUnidad 	= Unidad::find($orden['UNI_clave'])->UNI_nombrecorto;
+    	$datosProv 		= Proveedor::find($orden['PRO_clave']);
 
+    	//estos datos se van a enviar a la vista
+    	$datos = array( 'numOrden' 		=> $idOrden,
+    					'unidad' 		=> $nombreUnidad,
+    					'datosOrden' 	=> $orden,
+    					'datosProv' 	=> $datosProv,
+    					);
+
+    	//preparamos el correo
+		Mail::send('emails.orden', $datos, function($message) use ($datos)
+		{
+    		$archivo=public_path().'/ordenesCompra/'.$datos['numOrden'].'.pdf';
+
+			$message->from('mvcompras@medicavial.com.mx', 'Médica Vial');
+		    $message->to($datos['datosProv']->PRO_correo1, $datos['datosProv']->PRO_nombre)->subject('Orden de Compra '.$datos['numOrden']);
+
+		    if ($datos['datosProv']->PRO_correo2 != '') {
+				$message->cc(array('auxcompras@medicavial.com.mx', $datos['datosProv']->PRO_correo2));
+		    } else{
+				$message->cc('auxcompras@medicavial.com.mx');
+		    }
+		    
+    		$message->bcc(array('alozano@medicavial.com.mx','mvcompras@medicavial.com.mx','sramirez@medicavial.com.mx'));
+		    $message->attach($archivo);
+		});
+
+        return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $datos['datosProv']->PRO_correo1));
+
+
+/*
         $datos = OrdenCompra::find($orden);
         // return json_decode($datos, true);
 
@@ -239,10 +271,6 @@ class OperacionController extends BaseController {
 
 	        	//generamos el pdf adjunto
 	        	$archivo =  public_path().'/ordenesCompra/'.$noOrden.'.pdf';
-
-	            // $pdf = helpers::ordenPDF($noOrden);
-	            // $pdf->save($archivo);
-
 
 	            $correoParametro = Parametro::find(1)->PAR_correoOrden;
 
@@ -270,7 +298,7 @@ class OperacionController extends BaseController {
 
 	        });
 
-        	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));
+        	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));*/
 
 /*        try{
 
@@ -904,7 +932,7 @@ class OperacionController extends BaseController {
 		));
 
 		foreach ($datos as $dato) {
-			// return $dato;
+			# code...
 			$almacenOrigen = $dato['almacenOrigen'];
 			$almacenDestino = $dato['almacenDestino'];
 			$idLote = $dato['lote'];
@@ -1036,6 +1064,23 @@ class OperacionController extends BaseController {
 		}
 
 		return $respuesta;
+
+	}
+
+	public function reservasAntiguas(){
+
+		$reservas = DB::table('reservas')
+						->where('RES_fecha', '<', DB::raw('DATE(DATE_SUB(NOW(), INTERVAL 30 DAY))'))
+						->delete();
+        
+        Mail::send('emails.reservas', array('cantidad' => $reservas), function($message)
+        {
+
+            $message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+            $message->subject('Reservas Eliminadas');
+            $message->to('sramirez@medicavial.com.mx');
+            $message->cc('samuel11rr@gmail.com');
+        });
 
 	}
 

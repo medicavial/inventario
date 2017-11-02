@@ -697,4 +697,32 @@ class ReportesController extends BaseController {
 		})->download('xlsx');
 
 	}
+
+	public function pruebaCorreo($parametro){
+		$data 	= Input::all(); //recogemos los datos que se enviaron por post
+		$orden 	= OrdenCompra::find($parametro);
+    	$nombreUnidad 	= Unidad::find($orden['UNI_clave'])->UNI_nombrecorto;
+    	$datosProv 		= Proveedor::find($orden['PRO_clave']);
+
+    	//estos datos se van a enviar a la vista
+    	$datos = array( 'numOrden' 		=> $parametro,
+    					'unidad' 		=> $nombreUnidad,
+    					'datosOrden' 	=> $orden,
+    					'datosProv' 	=> $datosProv,
+    					);
+
+		// Mail::send('emails.prueba', array('datos'=>$datos), function($message)
+		Mail::send('emails.prueba', $datos, function($message) use ($datos)
+		{
+    		$archivo=public_path().'/ordenesCompra/'.$datos['numOrden'].'.pdf';
+
+			$message->from('sramirez@medicavial.com.mx', 'Médica Vial');
+		    $message->to('sramirez@medicavial.com.mx', 'Nombre')->subject('Orden de Compra '.$datos['numOrden']);
+			// $message->cc('jacortes@medicavial.com.mx');
+    		// $message->bcc(array('samuel11rr@gmail.com','samuel_ramirez@live.com.mx'));
+		    $message->attach($archivo);
+		});
+
+        return Response::json(array('respuesta' => 'Correo enviado Correctamente'));
+	}
 }
