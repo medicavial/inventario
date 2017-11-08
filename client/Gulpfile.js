@@ -2,7 +2,7 @@ var gulp      = require('gulp'),
     connect   = require('gulp-connect'),
     stylus    = require('gulp-stylus'),
     nib       = require('nib'),
-    jshint    = require('gulp-jshint'),
+    // jshint    = require('gulp-jshint'),
     stylish   = require('jshint-stylish'),
     inject    = require('gulp-inject'),
     wiredep   = require('wiredep').stream,
@@ -41,12 +41,12 @@ gulp.task('server-produccion', function() {
 
 
 // Busca errores en el JS y nos los muestra en el terminal 
-gulp.task('jshint', function() {  
-	return gulp.src('./app/scripts/**/*.js')    
-	.pipe(jshint('.jshintrc'))    
-	.pipe(jshint.reporter('jshint-stylish'))    
-	.pipe(jshint.reporter('fail')); 
-});
+// gulp.task('jshint', function() {  
+// 	return gulp.src('./app/scripts/**/*.js')    
+// 	.pipe(jshint('.jshintrc'))    
+// 	.pipe(jshint.reporter('jshint-stylish'))    
+// 	.pipe(jshint.reporter('fail')); 
+// });
 
 // Recarga el navegador cuando hay cambios en el HTML 
 gulp.task('html', function() {  

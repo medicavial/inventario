@@ -608,6 +608,20 @@ class OperacionController extends BaseController {
 	// agrega unnuevo movminiento
 	public function movimiento(){
 
+		//si es SALIDA verificamos si se trata de un item agregado a receta
+		if ( Input::get('tipomov') == 3 ) {
+			if ( Input::has('receta') ) {
+				$receta = Input::get('receta');
+				//agregamos el detalle de la receta en las observaciones
+				$obs =  "Surtido Receta MV con numero: ".$receta." (desde Sistema de Inventario)";
+			} else {
+				// si no es salida por receta dejamos en blanco la receta y las observaciones del movimiento
+				$receta ='';
+				$obs = Input::get('observaciones');
+			}
+		}
+
+
 		//preparamos los movimientos del item
 		$operacion = new Operacion;
 
@@ -621,8 +635,11 @@ class OperacionController extends BaseController {
 		$operacion->orden = Input::get('orden');
 		$operacion->caducidad = Input::get('caducidad');
 		$operacion->usuario = Input::get('usuario');
-		$operacion->observaciones = Input::get('observaciones');
-		$operacion->receta = Input::has('receta') ? Input::get('receta') : '';
+		// $operacion->observaciones = Input::get('observaciones');
+		$operacion->observaciones = $obs;
+		// $operacion->receta = Input::has('receta') ? Input::get('receta') : '';
+		$operacion->receta = $receta;
+
 
 		// si es un ajuste no importa las cantidades en el item exitentes se resetean
 		if ($operacion->tipomovimiento == 1) {

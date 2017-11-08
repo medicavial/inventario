@@ -276,14 +276,17 @@ class BusquedasController extends BaseController {
 
 		//obtenemos la receta de la base de MV
 		// $datosReceta = Receta::find($id);
-		$datosReceta = Receta::where('id_receta',$id)->select( DB::raw('RecetaMedica.*, IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))->get();
+		$datosReceta = Receta::where('id_receta',$id)
+								->select( DB::raw('RecetaMedica.*, TIR_nombre, IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))
+								->join('TipoReceta', 'RecetaMedica.tipo_receta', '=', 'TipoReceta.TIR_id')
+								->get();
 		$datosReceta = $datosReceta[0];
+		// return $datosReceta;
+
 		// $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
 		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio);
 		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
 		$items = array();
-
-		// return $lesionado;
 
 		//recorremos item por item de la receta para obtener los datos del item en inventario
 		foreach ($datos as $dato) {
@@ -325,57 +328,7 @@ class BusquedasController extends BaseController {
 		}
 
 		$uniMV = $lesionado->Uni_ClaveActual;
-		$uniInventario = null;
-
-		switch ($uniMV) {
-			case 1:
-				$uniInventario=1;
-				break;
-
-			case 2:
-				$uniInventario=2;
-				break;
-
-			case 3:
-				$uniInventario=3;
-				break;
-
-			case 4:
-				$uniInventario=4;
-				break;
-
-			case 5:
-				$uniInventario=5;
-				break;
-
-			case 6:
-				$uniInventario=6;
-				break;
-
-			case 7:
-				$uniInventario=7;
-				break;
-
-			case 8:
-				$uniInventario=8;
-				break;
-
-			case 86:
-				$uniInventario=9;
-				break;
-
-			case 184:
-				$uniInventario=10;
-				break;
-
-			case 186:
-				$uniInventario=11;
-				break;
-			
-			default: //REVISAR
-				$uniInventario=12;
-				break;
-		}
+		$uniInventario = Unidad::where('UNI_claveMV', $uniMV)->get();
 
 		$respuesta = array(
 			'receta' 	=> $id,
@@ -383,9 +336,10 @@ class BusquedasController extends BaseController {
 			'tardio' 	=> $datosReceta->tardio,
 			'folio' 	=> $datosReceta->Exp_folio,
 			'lesionado' => $lesionado->Exp_completo,
-			'unidad' 	=> $uniInventario,
-			'uniNombre' => Unidad::find($uniInventario)->UNI_nombrecorto,
-			'items' 	=> $items
+			'unidad' 	=> $uniInventario[0]['UNI_clave'],
+			'uniNombre' => $uniInventario[0]['UNI_nombrecorto'],
+			'items' 	=> $items,
+			'recetaInf'	=> $datosReceta
 		);
 
 		return $respuesta;
