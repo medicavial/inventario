@@ -113,7 +113,7 @@ class Operacion {
 			$datosLote->ITE_clave = $this->item;
 			$datosLote->LOT_numero = $this->lote;
 			$datosLote->LOT_cantidad = $catidadIngresada;
-			$datosLote->LOT_caducidad = $this->caducidad;
+			$datosLote->LOT_caducidad = $this->caducidad;			
 			$datosLote->save();
 
 		//caso contrario agregamos lote

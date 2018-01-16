@@ -87,9 +87,9 @@ class BusquedasController extends BaseController {
 	public function existenciasUnidad($unidad,$tipo){
 
 		if ($tipo == 1) {
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, CONCAT(1) as tipoItem';
 		}elseif($tipo == 2){
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
+			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, CONCAT(2) as tipoItem';
 		}
 
 		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
@@ -102,14 +102,15 @@ class BusquedasController extends BaseController {
 	                     // este condicional solo filtra el botiquin
 	                     ->where('almacenes.TAL_clave', 2)
 	                     ->where('items.TIT_clave', $tipo)
+	                     ->orderBy('Descripcion')
 	                     ->get();
 
 	}
 
 	public function existenciasCortaEstancia($unidad){
-		$sql='existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable';
+		$sql='existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, almacenes.TAL_clave';
 
-		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+		$listado = Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
                  ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
                  ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
                  ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
@@ -131,6 +132,15 @@ class BusquedasController extends BaseController {
                  ->orderBy('ITE_nombre')
                  ->get();
 
+        for ($i=0; $i <sizeof($listado) ; $i++) { 
+        	if ( $listado[$i]->Stock == 0 ) {
+        		// unset($listado[$i]);
+        		$listado[$i]->Descripcion = 'SIN EXISTENCIA '.$listado[$i]->Descripcion;
+        		$listado[$i]->Clave_producto = -1;
+        	}
+        }
+
+        return $listado;
 
 		// return DB::select(DB::raw('select existencias.ALM_clave as almacen, EXI_clave as id, items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,
 		// 							EXI_cantidad - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,

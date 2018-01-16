@@ -855,6 +855,7 @@ class OperacionController extends BaseController {
 
 			$operacion->idLote 		= $lote['idLote'];
 			$operacion->lote 		= $lote['lote'];
+			// $operacion->caducidad 	= substr($lote['caducidad'], 0, 8).'01 00:00:00';
 			$operacion->caducidad 	= $lote['caducidad'];
 			$operacion->cantidad 	= $lote['cantidad'];
 			$operacion->verificaLote();
@@ -1085,12 +1086,50 @@ class OperacionController extends BaseController {
 	}
 
 	public function reservasAntiguas(){
+		//traemos el listado de reservas agrupadas por unidad
+		$reservas = DB::table('reservas')
+						->select('reservas.*', 'almacenes.UNI_clave', 'unidades.UNI_claveMV')
+						->join('almacenes', 'reservas.ALM_clave', '=', 'almacenes.ALM_clave')
+						->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+						->groupBy('UNI_claveMV')
+						->get();
 
+		//verificamos si hay recetas pendientes por unidad
+		$resumen = array();
+		$cantidad = 0;
+
+		foreach ($reservas as $reserva) {
+			$apiURL = 'http://medicavial.net/mvnuevo/api/notaMedica.php?funcion=listadoRecetasSinSurtir&uni='.$reserva->UNI_claveMV;
+			$datosURL = file_get_contents($apiURL);
+			$recetasPendientes = json_decode($datosURL, true);
+
+			//si en la unidad actual existe reserva
+			//pero no hay recetas pendientes procedemos
+			//a eliminar las reservas de esta unidad
+			if ( sizeof($recetasPendientes) == 0 ) {
+				$resumen[] = array( 'UNI_claveMV'	=> $reserva->UNI_claveMV,
+									'UNI_clave'		=> $reserva->UNI_clave,
+									'pendientes'	=> sizeof($recetasPendientes),
+									'almacen'		=> $reserva->ALM_clave
+									);
+
+				$eliminados = DB::table('reservas')
+								->where('ALM_clave', '=', $reserva->ALM_clave)
+								->delete();
+				$cantidad = $eliminados + $cantidad;
+			}
+		};
+		// return $resumen;
+
+		//eliminamos las reservas que tengan más de 30 días
 		$reservas = DB::table('reservas')
 						->where('RES_fecha', '<', DB::raw('DATE(DATE_SUB(NOW(), INTERVAL 30 DAY))'))
 						->delete();
         
-        Mail::send('emails.reservas', array('cantidad' => $reservas), function($message)
+		$totalEliminados = $reservas + $cantidad;
+
+		//generamos el correo informativo
+        Mail::send('emails.reservas', array('cantidad' => $totalEliminados), function($message)
         {
 
             $message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
@@ -1099,6 +1138,67 @@ class OperacionController extends BaseController {
             $message->cc('samuel11rr@gmail.com');
         });
 
+	}
+
+	public function corrigeObs(){
+		//buscamos el ultimo registro sin observaciones
+		$ultimo = Movimiento::where('id_receta', '<>', 0)
+								->where('TIM_clave', 3)
+								->where('MOV_observaciones', '')
+								->orderBy('created_at', 'desc')
+								->take(1)
+								->get(); 
+
+		
+		if ( sizeof( $ultimo ) > 0 ) {
+			//buscamos los ultimos registros a partir de la fecha del ultimo
+			$porActualizar = Movimiento::where('id_receta', '<>', 0)
+									->where('TIM_clave', 3)
+									->where('MOV_observaciones', '')
+									->where('created_at', '<=', $ultimo[0]['created_at'])
+									->orderBy('created_at', 'desc')
+									->take(10)
+									->get();
+
+			//iniciamos un ciclo por la cantidad de registros a actualizar
+			for ($i=0; $i <sizeof( $porActualizar ) ; $i++) { 
+				DB::table('movimientos')
+				    ->where('MOV_clave', $porActualizar[$i]['MOV_clave'])
+				    ->update(array('MOV_observaciones' => 'Surtido Receta MV con numero: '.$porActualizar[$i]['id_receta'].' (desde Sistema de Inventario)'));
+			}
+
+			$respuesta = array( 'resumen' => sizeof( $porActualizar )." registros actualizados",
+								'detalle' => $porActualizar );
+		} else{
+			$respuesta = 'No hay nada para actualizar';
+		}
+
+
+		return $respuesta;
+	}
+
+
+	public function ajusteLoteCaducidad(){
+		//buscamos los lotes cuya caducidad no esté registrado el dia 01 a las 00 horas
+		$lotes = Lote::whereRaw("substr(LOT_caducidad, 9, 5) <> '01 00'")
+						->orderBy('created_at', 'asc')
+						// ->take(10)
+						->get(); 
+
+		$respuesta = array();
+
+		for ($i=0; $i < sizeof($lotes) ; $i++) { 
+			DB::table('lote')
+			    ->where('LOT_clave', $lotes[$i]['LOT_clave'])
+			    ->update(array('LOT_caducidad' => substr($lotes[$i]['LOT_caducidad'], 0, 8).'01 00:00:00'));
+
+
+			$respuesta[] = array( 	'id_lote' 				=> $lotes[$i]['LOT_clave'],
+									'caducidad original' 	=> $lotes[$i]['LOT_caducidad'],
+									'caducidad correccion'	=> substr($lotes[$i]['LOT_caducidad'], 0, 8).'01 00:00:00');
+		}
+
+		return $respuesta;
 	}
 
 

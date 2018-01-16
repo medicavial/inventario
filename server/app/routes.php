@@ -169,7 +169,6 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('almacenes', 'BusquedasController@almacenes');
         Route::get('almacenes/{usuario}', 'BusquedasController@almacenesUsuario');
         Route::get('almacenes/unidad/{unidad}', 'BusquedasController@almacenesUnidad');
-        //ruta que manda la orden al sistema MV
         Route::get('existencias/unidad/{unidad}/{tipo}', 'BusquedasController@existenciasUnidad');
         Route::get('exiCortaEst/unidad/{unidad}', 'BusquedasController@existenciasCortaEstancia');
         Route::get('exiParticulares/unidad/{unidad}', 'BusquedasController@existenciasParticulares');
@@ -210,6 +209,7 @@ Route::group(array('prefix' => 'api'), function()
 
     Route::group(array('prefix' => 'operacion'), function()
     {
+        Route::get('ajusteobs', 'OperacionController@corrigeObs');
         Route::post('cancelarorden', 'OperacionController@cancelarOrden');
         Route::post('cancelar/item/{usuario}', 'OperacionController@cancelarItem');
         Route::post('cerrarorden', 'OperacionController@cerrarOrden');
@@ -239,6 +239,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
         Route::get('reservasantiguas', 'OperacionController@reservasAntiguas');
+        Route::get('ajuste-lotes-caducidad', 'OperacionController@ajusteLoteCaducidad');
     });
 
 

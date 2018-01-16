@@ -104,10 +104,15 @@
 		}
 
 		scope.buscar = function(){
+			scope.datos.fechaInicio = scope.datos.fechaInicio.substring(0, 10);
+			scope.datos.fechaFinal = scope.datos.fechaFinal.substring(0, 10);
+
+			// console.log( scope.datos.fechaInicio, scope.datos.fechaFinal );
+
 			if (scope.datos.fechaInicio==null || scope.datos.fechaFinal==null) {
 				mensajes.alerta('Se requiere fecha de inicial y final para generar el reporte','error','top right','error');
 			} else{
-				if (scope.datos.unidad) {
+				// if (scope.datos.unidad) {
 
 					scope.consultando = true;
 					scope.unidadB = scope.datos.unidad ? scope.unidadB : '';
@@ -131,9 +136,9 @@
 						mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
 					})
 					
-				}else{
-					mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
-				}
+				// }else{
+				// 	mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
+				// }
 			}
 		}
 
