@@ -21,7 +21,7 @@ class Operacion {
 	private $idExistencia;
 
 
-	//funcion para verificar existencia 
+	//funcion para verificar existencia
 	private function existenciaAlmacen(){
 
 		//verificamos si existe algo registrado como exstencia del item en el almacen
@@ -63,7 +63,7 @@ class Operacion {
 
 
 		//actualizamos los lotes encontrados a cero
-		$lotes = Lote::where( $parametros )->update(array('LOT_cantidad' => 0));	
+		$lotes = Lote::where( $parametros )->update(array('LOT_cantidad' => 0));
 
 	}
 
@@ -91,11 +91,11 @@ class Operacion {
 		$existencia = Lote::find($this->idLote)->EXI_clave;
 
 
-		// cuando verificamos el lote manda un id pero es para otro almacen 
+		// cuando verificamos el lote manda un id pero es para otro almacen
 
-		// verificamos que sea para el mismo almacen 
+		// verificamos que sea para el mismo almacen
 		if ($existencia == $this->idExistencia) {
-			
+
 			//ajuste
 			if ($this->tipomovimiento == 1) {
 				$this->reseteaLotes();
@@ -113,7 +113,7 @@ class Operacion {
 			$datosLote->ITE_clave = $this->item;
 			$datosLote->LOT_numero = $this->lote;
 			$datosLote->LOT_cantidad = $catidadIngresada;
-			$datosLote->LOT_caducidad = $this->caducidad;			
+			$datosLote->LOT_caducidad = $this->caducidad;
 			$datosLote->save();
 
 		//caso contrario agregamos lote
@@ -127,7 +127,7 @@ class Operacion {
 
 	private function traspasoLote(){
 
-		
+
 
 		//entrada
 		if ($this->tipomovimiento == 2) {
@@ -138,7 +138,7 @@ class Operacion {
 			$this->lote = $loteDato->LOT_numero;
 			$this->caducidad = $loteDato->LOT_caducidad;
 
-			//consultamos si existe numero de lote con el almacen y el item 
+			//consultamos si existe numero de lote con el almacen y el item
 			$parametros = array(
 				'EXI_clave'	=> $this->idExistencia,
 				'ITE_clave'	=> $this->item,
@@ -169,7 +169,7 @@ class Operacion {
 			$this->caducidad = $loteDato->LOT_caducidad;
 			$catidadActualLote = $loteDato->LOT_cantidad;
 			$catidadIngresada = $catidadActualLote  - $this->cantidad;
-			$datosLote = Lote::find($this->idLote);	
+			$datosLote = Lote::find($this->idLote);
 
 		}
 
@@ -241,7 +241,7 @@ class Operacion {
 
 		// buscamos la cantidad total del item
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
-		
+
 		// calculamos la cantidad total del item
 		$itemActualiza = Item::find($this->item);
 		$itemActualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidadActual + $this->cantidad;
@@ -267,7 +267,7 @@ class Operacion {
 		$this->idExistencia = $this->existencia->EXI_clave;
 
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
-		
+
 		$itemactualiza = Item::find($this->item);
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal + $this->cantidad;
 		$itemactualiza->save();
@@ -292,7 +292,7 @@ class Operacion {
 		$this->idExistencia = $this->existencia->EXI_clave;
 
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
-		
+
 		$itemactualiza = Item::find($this->item);
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidad;
 		$itemactualiza->save();

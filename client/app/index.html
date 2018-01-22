@@ -2,9 +2,9 @@
 <html lang="es-MX" ng-app="app">
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"> 
-	<title>Sistema de Inventario MV Ver. 0.1</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">  
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<title>Sistema de Inventario MV 0.9</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 	<!-- TODO add manifest here -->
   	<link rel="manifest" href="/manifest.json">
@@ -16,27 +16,27 @@
 	<link rel="apple-touch-icon" href="img/icons/icon-152x152.png">
 	<meta name="msapplication-TileImage" content="img/icons/icon-144x144.png">
 	<meta name="msapplication-TileColor" content="#3f51b5">
-	
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic"/>
 	<!-- build:css css/style.min.css -->
-	
+
 	<!-- bower:css -->
 	<link rel="stylesheet" href="lib/angular-material/angular-material.css" />
 	<link rel="stylesheet" href="lib/angular-material-data-table/dist/md-data-table.min.css" />
 	<link rel="stylesheet" href="lib/animate.css/animate.css" />
 	<link rel="stylesheet" href="lib/material-design-lite/material.min.css" />
-	<!-- endbower -->  
-	
-	<!-- inject:css -->      
-	<link rel="stylesheet" href="/stylesheets/animaciones.css">      
-	<link rel="stylesheet" href="/stylesheets/barcode.css">      
-	<link rel="stylesheet" href="/stylesheets/colores.css">      
-	<link rel="stylesheet" href="/stylesheets/main.css">      
-	<link rel="stylesheet" href="/stylesheets/minicharts.css">      
-	<link rel="stylesheet" href="/stylesheets/wishitems.css">      
-	<!-- endinject --> 
-	
-	
+	<!-- endbower -->
+
+	<!-- inject:css -->
+	<link rel="stylesheet" href="/stylesheets/animaciones.css">
+	<link rel="stylesheet" href="/stylesheets/barcode.css">
+	<link rel="stylesheet" href="/stylesheets/colores.css">
+	<link rel="stylesheet" href="/stylesheets/main.css">
+	<link rel="stylesheet" href="/stylesheets/minicharts.css">
+	<link rel="stylesheet" href="/stylesheets/wishitems.css">
+	<!-- endinject -->
+
+
 	<!-- endbuild -->
 	<base href="/">
 
@@ -44,7 +44,7 @@
 <body>
 
 	<ui-view class="base" layout="column" md-theme="{{ tema }}" md-theme-watch></ui-view>
-	
+
 	<!-- build:js js/vendor.min.js -->
 	<!-- bower:js -->
 	<script src="lib/angular/angular.js"></script>
@@ -63,87 +63,87 @@
 	<script src="lib/svg-morpheus/compile/minified/svg-morpheus.js"></script>
 	<script src="lib/material-design-lite/material.min.js"></script>
 	<script src="lib/moment/moment.js"></script>
-	<!-- endbower --> 
+	<!-- endbower -->
 	<!-- endbuild -->
 
 
-	<!-- build:js js/app.min.js --> 
-	<!-- inject:js -->    
-	<script src="/scripts/app.js"></script>    
-	<script src="/scripts/config.js"></script>    
-	<script src="/scripts/run.js"></script>    
-	<script src="/scripts/app-modules/barcodeGenerator.js"></script>    
-	<script src="/scripts/directives/arrastrar.js"></script>    
-	<script src="/scripts/directives/atras.js"></script>    
-	<script src="/scripts/directives/folioMV.js"></script>    
-	<script src="/scripts/directives/mayuscula.js"></script>    
-	<script src="/scripts/directives/money.js"></script>    
-	<script src="/scripts/directives/numero.js"></script>    
-	<script src="/scripts/controllers/agranelCtrl.js"></script>    
-	<script src="/scripts/controllers/almacenesCtrl.js"></script>    
-	<script src="/scripts/controllers/altaMovimientosCtrl.js"></script>    
-	<script src="/scripts/controllers/completarCtrl.js"></script>    
-	<script src="/scripts/controllers/configuracionCtrl.js"></script>    
-	<script src="/scripts/controllers/existenciaCtrl.js"></script>    
-	<script src="/scripts/controllers/homeCtrl.js"></script>    
-	<script src="/scripts/controllers/importarCtrl.js"></script>    
-	<script src="/scripts/controllers/itemproCtrl.js"></script>    
-	<script src="/scripts/controllers/itemsCtrl.js"></script>    
-	<script src="/scripts/controllers/loginCtrl.js"></script>    
-	<script src="/scripts/controllers/loteRecetaCtrl.js"></script>    
-	<script src="/scripts/controllers/movimientosCtrl.js"></script>    
-	<script src="/scripts/controllers/opcionesCtrl.js"></script>    
-	<script src="/scripts/controllers/ordencompraCtrl.js"></script>    
-	<script src="/scripts/controllers/ordenesAbiertasCtrl.js"></script>    
-	<script src="/scripts/controllers/perfilesCtrl.js"></script>    
-	<script src="/scripts/controllers/porCaducarCtrl.js"></script>    
-	<script src="/scripts/controllers/porSurtirCtrl.js"></script>    
-	<script src="/scripts/controllers/proveedoresCtrl.js"></script>    
-	<script src="/scripts/controllers/pruebaCtrl.js"></script>    
-	<script src="/scripts/controllers/pruebaSECtrl.js"></script>    
-	<script src="/scripts/controllers/recetaCtrl.js"></script>    
-	<script src="/scripts/controllers/reporteExistenciaCtrl.js"></script>    
-	<script src="/scripts/controllers/reporteItemsCtrl.js"></script>    
-	<script src="/scripts/controllers/reporteLotesCtrl.js"></script>    
-	<script src="/scripts/controllers/reporteMovimientosCtrl.js"></script>    
-	<script src="/scripts/controllers/reporteOrdenesCtrl.js"></script>    
-	<script src="/scripts/controllers/reporteTraspasosCtrl.js"></script>    
-	<script src="/scripts/controllers/subtipoItemCtrl.js"></script>    
-	<script src="/scripts/controllers/surtirCtrl.js"></script>    
-	<script src="/scripts/controllers/tipoAlmacenCtrl.js"></script>    
-	<script src="/scripts/controllers/tipoItemCtrl.js"></script>    
-	<script src="/scripts/controllers/tipoajusteCtrl.js"></script>    
-	<script src="/scripts/controllers/tipomovimientoCtrl.js"></script>    
-	<script src="/scripts/controllers/tipoordenCtrl.js"></script>    
-	<script src="/scripts/controllers/traspasosCtrl.js"></script>    
-	<script src="/scripts/controllers/unidadItemCtrl.js"></script>    
-	<script src="/scripts/controllers/unidadesCtrl.js"></script>    
-	<script src="/scripts/controllers/usualmCtrl.js"></script>    
-	<script src="/scripts/controllers/usuariosCtrl.js"></script>    
-	<script src="/scripts/filters/string.js"></script>    
-	<script src="/scripts/services/almacenService.js"></script>    
-	<script src="/scripts/services/archivosService.js"></script>    
-	<script src="/scripts/services/authService.js"></script>    
-	<script src="/scripts/services/busquedaService.js"></script>    
-	<script src="/scripts/services/intercepta.js"></script>    
-	<script src="/scripts/services/itemService.js"></script>    
-	<script src="/scripts/services/mensajeService.js"></script>    
-	<script src="/scripts/services/operacionService.js"></script>    
-	<script src="/scripts/services/pdfService.js"></script>    
-	<script src="/scripts/services/permisoService.js"></script>    
-	<script src="/scripts/services/proveedorService.js"></script>    
-	<script src="/scripts/services/pruebaService.js"></script>    
-	<script src="/scripts/services/reporteService.js"></script>    
-	<script src="/scripts/services/segundapruebaService.js"></script>    
-	<script src="/scripts/services/subtipositemService.js"></script>    
-	<script src="/scripts/services/tiposajusteService.js"></script>    
-	<script src="/scripts/services/tiposalmacenService.js"></script>    
-	<script src="/scripts/services/tipositemService.js"></script>    
-	<script src="/scripts/services/tiposmovimientoService.js"></script>    
-	<script src="/scripts/services/tiposordenService.js"></script>    
-	<script src="/scripts/services/unidadItemService.js"></script>    
-	<script src="/scripts/services/unidadService.js"></script>    
-	<script src="/scripts/services/usuarioService.js"></script>    
+	<!-- build:js js/app.min.js -->
+	<!-- inject:js -->
+	<script src="/scripts/app.js"></script>
+	<script src="/scripts/config.js"></script>
+	<script src="/scripts/run.js"></script>
+	<script src="/scripts/app-modules/barcodeGenerator.js"></script>
+	<script src="/scripts/controllers/agranelCtrl.js"></script>
+	<script src="/scripts/controllers/almacenesCtrl.js"></script>
+	<script src="/scripts/controllers/altaMovimientosCtrl.js"></script>
+	<script src="/scripts/controllers/completarCtrl.js"></script>
+	<script src="/scripts/controllers/configuracionCtrl.js"></script>
+	<script src="/scripts/controllers/existenciaCtrl.js"></script>
+	<script src="/scripts/controllers/homeCtrl.js"></script>
+	<script src="/scripts/controllers/importarCtrl.js"></script>
+	<script src="/scripts/controllers/itemproCtrl.js"></script>
+	<script src="/scripts/controllers/itemsCtrl.js"></script>
+	<script src="/scripts/controllers/loginCtrl.js"></script>
+	<script src="/scripts/controllers/loteRecetaCtrl.js"></script>
+	<script src="/scripts/controllers/movimientosCtrl.js"></script>
+	<script src="/scripts/controllers/opcionesCtrl.js"></script>
+	<script src="/scripts/controllers/ordencompraCtrl.js"></script>
+	<script src="/scripts/controllers/ordenesAbiertasCtrl.js"></script>
+	<script src="/scripts/controllers/perfilesCtrl.js"></script>
+	<script src="/scripts/controllers/porCaducarCtrl.js"></script>
+	<script src="/scripts/controllers/porSurtirCtrl.js"></script>
+	<script src="/scripts/controllers/proveedoresCtrl.js"></script>
+	<script src="/scripts/controllers/pruebaCtrl.js"></script>
+	<script src="/scripts/controllers/pruebaSECtrl.js"></script>
+	<script src="/scripts/controllers/recetaCtrl.js"></script>
+	<script src="/scripts/controllers/reporteExistenciaCtrl.js"></script>
+	<script src="/scripts/controllers/reporteItemsCtrl.js"></script>
+	<script src="/scripts/controllers/reporteLotesCtrl.js"></script>
+	<script src="/scripts/controllers/reporteMovimientosCtrl.js"></script>
+	<script src="/scripts/controllers/reporteOrdenesCtrl.js"></script>
+	<script src="/scripts/controllers/reporteTraspasosCtrl.js"></script>
+	<script src="/scripts/controllers/subtipoItemCtrl.js"></script>
+	<script src="/scripts/controllers/surtirCtrl.js"></script>
+	<script src="/scripts/controllers/tipoAlmacenCtrl.js"></script>
+	<script src="/scripts/controllers/tipoItemCtrl.js"></script>
+	<script src="/scripts/controllers/tipoajusteCtrl.js"></script>
+	<script src="/scripts/controllers/tipomovimientoCtrl.js"></script>
+	<script src="/scripts/controllers/tipoordenCtrl.js"></script>
+	<script src="/scripts/controllers/traspasosCtrl.js"></script>
+	<script src="/scripts/controllers/unidadItemCtrl.js"></script>
+	<script src="/scripts/controllers/unidadesCtrl.js"></script>
+	<script src="/scripts/controllers/usualmCtrl.js"></script>
+	<script src="/scripts/controllers/usuariosCtrl.js"></script>
+	<script src="/scripts/directives/arrastrar.js"></script>
+	<script src="/scripts/directives/atras.js"></script>
+	<script src="/scripts/directives/folioMV.js"></script>
+	<script src="/scripts/directives/mayuscula.js"></script>
+	<script src="/scripts/directives/money.js"></script>
+	<script src="/scripts/directives/numero.js"></script>
+	<script src="/scripts/filters/string.js"></script>
+	<script src="/scripts/services/almacenService.js"></script>
+	<script src="/scripts/services/archivosService.js"></script>
+	<script src="/scripts/services/authService.js"></script>
+	<script src="/scripts/services/busquedaService.js"></script>
+	<script src="/scripts/services/intercepta.js"></script>
+	<script src="/scripts/services/itemService.js"></script>
+	<script src="/scripts/services/mensajeService.js"></script>
+	<script src="/scripts/services/operacionService.js"></script>
+	<script src="/scripts/services/pdfService.js"></script>
+	<script src="/scripts/services/permisoService.js"></script>
+	<script src="/scripts/services/proveedorService.js"></script>
+	<script src="/scripts/services/pruebaService.js"></script>
+	<script src="/scripts/services/reporteService.js"></script>
+	<script src="/scripts/services/segundapruebaService.js"></script>
+	<script src="/scripts/services/subtipositemService.js"></script>
+	<script src="/scripts/services/tiposajusteService.js"></script>
+	<script src="/scripts/services/tiposalmacenService.js"></script>
+	<script src="/scripts/services/tipositemService.js"></script>
+	<script src="/scripts/services/tiposmovimientoService.js"></script>
+	<script src="/scripts/services/tiposordenService.js"></script>
+	<script src="/scripts/services/unidadItemService.js"></script>
+	<script src="/scripts/services/unidadService.js"></script>
+	<script src="/scripts/services/usuarioService.js"></script>
 	<!-- endinject -->
 	<!-- endbuild -->
 </body>

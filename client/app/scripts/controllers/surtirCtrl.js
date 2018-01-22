@@ -1,7 +1,7 @@
 (function(){
 
 	'use strict';
-	
+
 	angular.module('app')
 	.controller('surtirCtrl',surtirCtrl)
 	.controller('modificaCtrl',modificaCtrl)
@@ -33,7 +33,9 @@
 		$scope.info = datos.data;
 		$scope.items = datos.data.items;
 
-		console.log($scope.items);
+		for (var i = 0; i < $scope.items.length; i++) {
+			$scope.items[i].habilitado = true;
+		}
 
 		$scope.seleccionItems = [];
 		$scope.lotes = [];
@@ -55,7 +57,6 @@
 		var clave = 'orden:' + $stateParams.ordenId;
 
 		$scope.inicio = function(){
-
 			$scope.step1block = false;
 			$scope.step2block = true;
 			$scope.step3block = true;
@@ -75,6 +76,8 @@
 				$scope.numero++;
 			});
 
+			console.log( $scope.seleccionItems );
+
 			$scope.datos = {
 				orden:$stateParams.ordenId,
 				guia:'',
@@ -93,12 +96,41 @@
 				items:$scope.items
 			}
 
+
+
 			$scope.aSurtir=1;
 
 			$scope.total();
 
 			$scope.verificaMovimiento();
 
+			$scope.prueba = function( num, status ){
+				console.log( num, status );
+				!$scope.items[num - 1].habilitado;
+				// $scope.items[num - 1].habilitado = !$scope.items[num - 1].habilitado;
+				// $scope.seleccionItems[num - 1].habilitado = !$scope.seleccionItems[num - 1].habilitado;
+
+				//si el status es true procedemos a eliminar el item de la seleccionItems
+				if (status == true) {
+					//recorremos el arreglo para buscar el item
+					for (var i = 0; i < $scope.seleccionItems.length; i++) {
+						if ( $scope.items[num -1].numerador == $scope.seleccionItems[i].numerador ) {
+								// console.log('eliminar');
+								// console.log($scope.seleccionItems[i].numerador);
+								// console.log($scope.items[num -1 ].numerador);
+								$scope.seleccionItems.splice( i, 1 );
+								break;
+							}
+					}
+				}
+
+        // si el status el false agregamos el item a la seleccionItems
+				if (status == false) {
+					$scope.seleccionItems.push( $scope.items[num - 1] );
+				}
+
+				console.log( $scope.seleccionItems );
+			}// termina la funcion prueba
 		}
 
 		$scope.verificaMovimiento = function(){
@@ -145,9 +177,9 @@
 				});
 
 				if (datos.indice == 1) {
-					
+
 					$scope.step2block = false;
-				
+
 				}else if (datos.indice == 2) {
 
 					$scope.step2block = true;
@@ -168,10 +200,13 @@
 		}
 
 		$scope.calculaTotal = function(){
-
+			console.log( $scope.seleccionItems );
 			$scope.total();
 		}
 
+		$scope.miTotal = function(){
+
+		}
 
 		// funcion que bloquea el boton de siguiente segun sea el caso
 		$scope.verificaLotes = function(){
@@ -200,7 +235,7 @@
 					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
 
 						if (actual === items) {
-							
+
 							$scope.lotesCompletos = true;
 						};
 
@@ -213,7 +248,7 @@
 						if (actual == items) {
 							$scope.lotesCompletos = true;
 						};
-						
+
 					}else{
 						$scope.lotesCompletos = false;
 					}
@@ -267,7 +302,7 @@
 		}
 
 		$scope.total = function(){
-			
+			// console.log( $scope.seleccionItems );
 			$scope.info.OCM_importeFinal = 0;
 			$scope.datos.total = 0;
 
@@ -290,6 +325,25 @@
 
 		$scope.agregaLote = function(index,ev){
 
+			var d = new Date;
+			var anioInicio = d.getFullYear();
+			var anioFinal = anioInicio + 10;
+
+			var meses = new Array();
+			meses[0] = "Enero";
+			meses[1] = "Febrero";
+			meses[2] = "Marzo";
+			meses[3] = "Abril";
+			meses[4] = "Mayo";
+			meses[5] = "Junio";
+			meses[6] = "Julio";
+			meses[7] = "Agosto";
+			meses[8] = "Septiembre";
+			meses[9] = "Octubre";
+			meses[10] = "Noviembre";
+			meses[11] = "Diciembre";
+
+			console.log( anioInicio, anioFinal, meses );
 
 			var itemSurtido = $scope.seleccionItems[index];
 
@@ -339,7 +393,7 @@
 		    }).then(function(modificacion){
 
 		    	console.log(modificacion);
-		    	//aqui es cuando le dieron actualizar al boton 
+		    	//aqui es cuando le dieron actualizar al boton
 
 		    	//aqui verificamos si cambio la cantidad que se pidio por una inferior
 		    	if (modificacion.cantidad < item.OIT_cantidadPedida) {
@@ -347,7 +401,7 @@
 		    		//se activa el bit de orden incompleta
 		    		$scope.datos.incompleta = true;
 		    	};
-		    	
+
 		    	//se asignan las nuevas cantidades
 		    	item.OIT_cantidadSurtida = modificacion.cantidad;
 
@@ -416,7 +470,6 @@
 
 		$scope.inicio = function(){
 
-
 			$scope.maximo = Number(info.OIT_cantidadPedida);
 
 			$scope.datos = {
@@ -436,12 +489,12 @@
 
 			$mdDialog.cancel();
 		};
-		
+
 	}
 
 	function lotesCtrl($scope, $rootScope, $mdDialog, info, operacion, mensajes,informacion, webStorage, surtirCtrl){
 		console.log('function lotesCtrl($scope, $rootScope, $mdDialog, info, operacion, mensajes,informacion, webStorage, surtirCtrl)');
-		
+
 		$scope.lotes = info.lotes ? info.lotes : [];
 		$scope.maximo = info.OIT_cantidadSurtida > 0 ? info.OIT_cantidadSurtida : info.OIT_cantidadPedida ;
 
@@ -452,12 +505,12 @@
 			});
 
 		}
-		
+
 		$scope.datosLote = function(lote){
 
 
 			if (lote) {
-				
+
 				if(lote == 0){
 					$scope.existeLote = false;
 					$scope.datos.lote = '';
@@ -471,7 +524,7 @@
 					$scope.cantidadLote = dato.LOT_cantidad;
 					$scope.existeLote = true;
 				}
-				
+
 			};
 		}
 
@@ -502,7 +555,7 @@
 				lote : '',
 				caducidad : ''
 			}
-			
+
 			if(informacion.data.length > 0){
 				$scope.lotesUnidad = informacion.data;
 				$scope.existeLote = true;
@@ -510,7 +563,7 @@
 				$scope.lotesUnidad = [];
 				$scope.existeLote = false;
 			}
-			
+
 		};
 
 		$scope.agrega = function(){
@@ -540,7 +593,7 @@
 				// setTimeout(function() {
 				// 	$rootScope.reVerificaLote();
 				// }, 100);
-				
+
 
 			}else{
 				mensajes.alerta('No has ingresado todos los items a lotes','error','top right','error');
@@ -552,7 +605,7 @@
 
 			$mdDialog.cancel();
 		};
-		
+
 	}
 
 })();

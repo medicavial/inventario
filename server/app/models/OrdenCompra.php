@@ -14,6 +14,7 @@ class OrdenCompra extends Eloquent {
                      ->join('unidades', 'ordenCompra.UNI_clave', '=', 'unidades.UNI_clave')
                      ->select('ordenCompra.*','PRO_nombrecorto','TOR_nombre','USU_nombrecompleto','UNI_nombrecorto')
                      ->whereIn('ordenCompra.UNI_clave', explode(",",$unidades))
+                     ->orderBy('OCM_clave', 'desc')
                      ->get();
     }
 

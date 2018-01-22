@@ -1,7 +1,7 @@
 (function(){
 
 	'use strict';
-	
+
 	angular
 	.module('app')
 	.controller('movimientoCtrl',movimientoCtrl)
@@ -29,7 +29,7 @@
 			text: 'Movimientos por pagina:',
 			of: 'de'
 	    };
-	    
+
 		scope.paginacion = [10,20,30,40];
 
 		scope.inicio = function(){
@@ -69,7 +69,7 @@
 					scope.consultando = false;
 					mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
 				})
-				
+
 			}else{
 				mensajes.alerta('debes ingresar unidad y tipo','error','top right','error');
 			}
@@ -82,7 +82,7 @@
 
 		scope.onOrderChange = function (order) {
 			// console.log(scope.query);
-		    //return $nutrition.desserts.get(scope.query, success).$promise; 
+		    //return $nutrition.desserts.get(scope.query, success).$promise;
 		};
 
 		scope.cargaAlmacenes = function(unidad){
@@ -171,7 +171,8 @@
 				idLote:'',
 				caducidad:'',
 				usuario:$rootScope.id,
-				observaciones:''
+				observaciones:'',
+				exiActual:0
 			}
 
 			$scope.guardando = false;
@@ -210,12 +211,12 @@
 		}
 
 		$scope.verificaLote = function(){
-			
+
 
 			var lote = $scope.datos.lote;
-			
+
 			if (lote != '') {
-				
+
 				mensajes.alerta('Verificando Lote','info','top right','search');
 				busqueda.lote(lote).success(function (data){
 
@@ -254,7 +255,7 @@
 				}else if ($scope.disponible == 0 && $scope.datos.cantidad > 0 && $scope.datos.idLote != '' && $scope.datos.tipomov == 3) {
 					mensajes.alerta('No hay cantidad disponible','error','top right','error');
 				};
-				
+
 			}
 		}
 
@@ -299,7 +300,7 @@
 		$scope.guardar = function(){
 
 			if ($scope.movimientoForm.$valid && $scope.item) {
-			
+
 				$scope.datos.item = $scope.item.ITE_clave;
 
 				// console.log($scope.datos);
@@ -315,7 +316,7 @@
 				});
 
 			};
-			
+
 		}
 
 		$scope.detalleItem = function(item){

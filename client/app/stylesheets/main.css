@@ -18,7 +18,7 @@ html, body  {
 }
 
 html {
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 body {
@@ -45,7 +45,15 @@ body {
   -webkit-align-content: stretch;
       -ms-flex-line-pack: stretch;
           align-content: stretch;
-  background: #ececec; 
+  background: #ececec;
+}
+
+.seleccion{
+  cursor: pointer;
+}
+
+.deshabilitado{
+  cursor: not-allowed;
 }
 
 h1,h2,h3,h4{
@@ -87,33 +95,33 @@ h1,h2,h3,h4{
   padding-right: 10px;
   margin-top: -10px;
   height: 24px;
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 .bottomSheetdemoBasicUsage .md-grid-item-content {
-  height: 96px; 
+  height: 96px;
 }
 .bottomSheetdemoBasicUsage .md-grid-item-content md-icon {
   height: 48px;
-  width: 48px; 
+  width: 48px;
 }
 .bottomSheetdemoBasicUsage .md-grid-text {
-  padding-bottom: 5px; 
+  padding-bottom: 5px;
 }
 .bottomSheetdemoBasicUsage md-list-item, .bottomSheetdemoBasicUsage md-list-item .md-list-item-inner {
-  min-height: 48px; 
+  min-height: 48px;
 }
 .bottomSheetdemoBasicUsage h2 {
   line-height: 36px;
-  padding-top: 10px; 
+  padding-top: 10px;
 }
 .bottomSheetdemoBasicUsage .md-subheader .md-subheader-inner {
-  padding: 0px; 
+  padding: 0px;
 }
 .bottomSheetdemoBasicUsage md-toast {
-  background-color: #B14141; 
+  background-color: #B14141;
 }
 .bottomSheetdemoBasicUsage md-toast > * {
-  font-weight: bolder; 
+  font-weight: bolder;
 }
 
 md-input-container{
@@ -152,11 +160,11 @@ md-input-container.md-theme1-theme .md-input[disabled], md-input-container.md-th
 md-sidenav {
     width: 250px !important;
     min-width: 250px !important;
-    max-width: 250px !important; 
+    max-width: 250px !important;
 }
 
 md-list-item, md-list-item .md-list-item-inner {
-  min-height: 54px; 
+  min-height: 54px;
 }
 
 md-toolbar{
@@ -180,9 +188,9 @@ md-grid-list .purple {
   background: #b388ff; }
 md-grid-list .red {
   background: #ff8a80; }
-  
+
 md-grid-list md-grid-tile {
-  transition: all 400ms ease-out 50ms; 
+  transition: all 400ms ease-out 50ms;
 }
 
 md-tooltip{
@@ -190,7 +198,7 @@ md-tooltip{
 }
 
 .md-button.md-fab,.md-button.md-icon-button {
-  line-height: 0; 
+  line-height: 0;
 }
 
 /*::-webkit-scrollbar {
@@ -265,7 +273,7 @@ md-toast.info md-toast-content{
   color: rgb(250,250,250);
 }
 
- 
+
 
 
 
@@ -325,7 +333,7 @@ md-toast.info .md-toast-content {
    left: 50%;
    margin-top: -15%;
    margin-left: -15%;
-} 
+}
 
 .no-padding{
   padding: 0;
@@ -334,18 +342,18 @@ md-toast.info .md-toast-content {
 .veggie-option {
   box-sizing: border-box;
   margin-bottom: 5px;
-  padding: 0; 
+  padding: 0;
   width: 100%;
 }
 .veggie-option .md-item-text {
   padding: 0 5px;
   background: #f0f0f0;
-  border-radius: 8px; 
+  border-radius: 8px;
 }
 .veggie-option .md-item-text h3, .chipsdemoCustomInputs .veggie-option .md-item-text p {
   font-size: 16px;
   padding: 0;
-  margin: 0; 
+  margin: 0;
 }
 
 .md-title{
@@ -355,14 +363,14 @@ md-toast.info .md-toast-content {
 
 /*.md-chip {
   position: relative;
-  padding-right: 45px; 
+  padding-right: 45px;
 }
 .md-chip .md-chip-remove-container {
     position: absolute;
     right: 4px;
     top: 4px;
     margin-right: 0;
-    height: 30px; 
+    height: 30px;
 }*/
 
 .md-chip .md-chip-remove-container button.vegetablechip {
@@ -378,7 +386,7 @@ md-toast.info .md-toast-content {
   padding: 0;
   margin: 0;
   transition: background 0.15s linear;
-  display: block; 
+  display: block;
 }
 /*.md-chip .md-chip-remove-container button.vegetablechip ng-md-icon {
   position: absolute;
@@ -386,7 +394,7 @@ md-toast.info .md-toast-content {
   left: 50%;
   transform: translate3d(-50%, -50%, 0) scale(0.7);
   color: white;
-  fill: white; 
+  fill: white;
 }
 */
 
@@ -462,7 +470,7 @@ md-toast.info .md-toast-content {
 
 .categoria:hover, .categoria:active, .categoria:focus{
   outline: 0;
-  border: 0; 
+  border: 0;
   cursor: pointer;
 }
 

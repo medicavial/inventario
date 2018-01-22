@@ -1,7 +1,7 @@
 (function(){
 
 	'use strict';
-	
+
 	angular
 	.module('app')
 	.controller('recetaCtrl',recetaCtrl)
@@ -16,7 +16,7 @@
 
 	function dialogoRecetaCtrl($scope, $rootScope, busqueda, $mdDialog, mensajes){
 		console.log('Cerrar Dialogo Alerta');
-		
+
 		$scope.cerrarAlerta = function () {
 			$mdDialog.hide();
 		};
@@ -68,7 +68,7 @@
 		scope.cancelarItem = function(valor){
 
 			console.log(valor);
-			
+
 			scope.cancelando = true;
 			operacion.cancelarItem(valor).success(function (data){
 
@@ -80,7 +80,7 @@
 				scope.cancelando = false;
 				mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
 			});
-			
+
 		}
 
 		scope.verificaExistencia = function(item,ev){
@@ -102,7 +102,7 @@
 		            .ok('SI')
 		            .cancel('NO');
 		        $mdDialog.show(confirm).then(function() {
-		            
+
 		            mensajes.alerta('Verificando Existencia','','top right','search');
 		            operacion.cambiaItem(item).then(
 	            	function (data){
@@ -114,7 +114,7 @@
 	            		item.item = scope.valorAnterior;
 	            		item.surtido = false;
 	            	})
-		        	
+
 
 		        }, function() {
 		            item.item = scope.valorAnterior;
@@ -314,14 +314,14 @@
 
 		$scope.datosLote = function(lote){
 			if (lote) {
-				
+
 				var dato = JSON.parse(lote);
 
 				$scope.datos.idLote = dato.LOT_clave;
 				$scope.datos.lote = dato.LOT_numero;
 				$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
 				$scope.cantidadLote = dato.LOT_cantidad;
-				
+
 			};
 		}
 
@@ -336,9 +336,9 @@
 
 		$scope.verificaLote = function(){
 			var lote = $scope.datos.lote;
-			
+
 			if (lote != '') {
-				
+
 				mensajes.alerta('Verificando Lote','info','top right','search');
 				busqueda.lote(lote).success(function (data){
 
@@ -382,7 +382,7 @@
 			console.log('Cerrar Dialogo Lote');
 			$mdDialog.hide();
 		};
-		
+
 	}
 
 	function itemRecetaCtrl($scope,$rootScope,$mdDialog,informacion,operacion,mensajes,$q,$filter,busqueda,info){
@@ -444,6 +444,7 @@
 				$scope.datos.idLote = dato.LOT_clave;
 				$scope.datos.lote = dato.LOT_numero;
 				$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
+				console.log( $scope.datos.caducidad );
 				$scope.cantidadLote = dato.LOT_cantidad;
 				$scope.existeLote = true;
 
@@ -452,12 +453,12 @@
 		}
 
 		$scope.verificaLote = function(){
-			
+
 
 			var lote = $scope.datos.lote;
-			
+
 			if (lote != '') {
-				
+
 				mensajes.alerta('Verificando Lote','info','top right','search');
 				busqueda.lote(lote).success(function (data){
 
@@ -526,7 +527,7 @@
 		$scope.guardar = function(){
 
 			if ($scope.movimientoForm.$valid && $scope.item) {
-			
+
 				$scope.datos.item = $scope.item.ITE_clave;
 
 				// console.log($scope.datos);
@@ -542,7 +543,7 @@
 				})
 
 			};
-			
+
 		}
 
 		$scope.detalleItem = function(item){

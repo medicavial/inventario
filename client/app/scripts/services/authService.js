@@ -63,8 +63,9 @@
             logout : function()
             {
             	webStorage.session.clear();
+              localStorage.clear();
               $rootScope.unidadesAdmin=null;
-                $http.get(api+'logout');
+              $http.get(api+'logout');
             	$state.go('login');
             },
             verify : function(url)

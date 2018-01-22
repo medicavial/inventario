@@ -244,130 +244,12 @@ class OperacionController extends BaseController {
 		    } else{
 				$message->cc('auxcompras@medicavial.com.mx');
 		    }
-		    
+
     		$message->bcc(array('alozano@medicavial.com.mx','mvcompras@medicavial.com.mx','sramirez@medicavial.com.mx'));
 		    $message->attach($archivo);
 		});
 
         return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $datos['datosProv']->PRO_correo1));
-
-
-/*
-        $datos = OrdenCompra::find($orden);
-        // return json_decode($datos, true);
-
-        // con esta funcion preparamos el cuerpo del correo
-
-	        Mail::send('emails.orden', array($datos) , function($message) use ($datos)
-	        {
-	        	$noOrden=$datos->OCM_clave;
-	        	//generamos lo necesario para el envio
-	        	$datosOrden = OrdenCompra::find($noOrden);
-	        	// return $datosOrden;
-	        	$unidad = $datosOrden->UNI_clave;
-	        	$proveedor = $datosOrden->PRO_clave;
-
-	        	$nombreUnidad = Unidad::find($unidad)->UNI_nombrecorto;
-
-	        	//generamos el pdf adjunto
-	        	$archivo =  public_path().'/ordenesCompra/'.$noOrden.'.pdf';
-
-	            $correoParametro = Parametro::find(1)->PAR_correoOrden;
-
-	            // preparamos el correo a enviar
-	            $correoProveedor = Proveedor::find($proveedor)->PRO_correo1;
-
-	            if ($correoProveedor != '') {
-	            	$correo = $correoProveedor;
-	            	$correoCopia = $correoParametro;
-	            }else{
-	            	$correo = $correoParametro;
-	            }
-
-	            $message->from('no-reply@medicavial.com.mx', 'Sistema de Inventario MV');
-	            $message->subject('Orden de compra ' . $noOrden . ' ,' . $nombreUnidad);
-	            // $message->to($correo);
-	            $message->to('sistemasaxa@medicavial.com.mx');
-	            $message->bcc(array('mvcompras@medicavial.com.mx','sramirez@medicavial.com.mx'));
-
-	            if ($correoCopia != '') {
-	            	$message->cc($correoCopia);
-	            }
-
-	            $message->attach($archivo);
-
-	        });
-
-        	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));*/
-
-/*        try{
-
-	        Mail::send('emails.orden', $datos , function($message) use ($orden)
-	        {
-
-	        	//generamos lo necesario para el envio
-	        	$datosOrden = OrdenCompra::find($orden);
-	        	$unidad = $datosOrden->UNI_clave;
-	        	$proveedor = $datosOrden->PRO_clave;
-
-	        	$nombreUnidad = Unidad::find($unidad)->UNI_nombrecorto;
-
-	        	//generamos el pdf adjunto
-	        	$archivo =  public_path().'/ordenesCompra/'.$orden.'.pdf';
-
-	            $pdf = helpers::ordenPDF($orden);
-	            $pdf->save($archivo);
-
-
-	            $correoParametro = Parametro::find(1)->PAR_correoOrden;
-
-	            // preparamos el correo a enviar
-	            $correoProveedor = Proveedor::find($proveedor)->PRO_correo1;
-
-	            if ($correoProveedor != '') {
-	            	$correo = $correoProveedor;
-	            	$correoCopia = $correoParametro;
-	            }else{
-	            	$correo = $correoParametro;
-	            }
-
-	            $message->from('no-reply@medicavial.com.mx', 'Sistema de Inventario MV');
-	            $message->subject('Orden de compra ' . $orden . ' ,' . $nombreUnidad);
-	            // $message->to($correo);
-	            $message->to('sistemasaxa@medicavial.com.mx');
-
-	            if ($correoCopia != '') {
-	            	$message->cc($correoCopia);
-	            }
-
-	            $message->attach($archivo);
-
-	        });
-
-        	return Response::json(array('respuesta' => 'Correo enviado Correctamente a '. $correo));
-
-        }catch(Exception $e){
-        		return $e;
-
-        	$datosOrden = OrdenCompra::find($orden);
-        	$unidad = $datosOrden->UNI_clave;
-        	$proveedor = $datosOrden->PRO_clave;
-
-    		$correoParametro = Parametro::find(1)->PAR_correoOrden;
-
-            // preparamos el correo a enviar
-            $correoProveedor = Proveedor::find($proveedor)->PRO_correo1;
-
-            if ($correoProveedor != '') {
-            	$correo = $correoProveedor;
-            }else{
-            	$correo = $correoParametro;
-            }
-
-        	return Response::json(array('respuesta' => 'Correo no se logro mandar a '. $correo),500);
-
-        }*/
-
 
 	}
 
@@ -603,11 +485,8 @@ class OperacionController extends BaseController {
 
 	}
 
-
-
 	// agrega unnuevo movminiento
 	public function movimiento(){
-
 		//si es SALIDA verificamos si se trata de un item agregado a receta
 		if ( Input::get('tipomov') == 3 ) {
 			if ( Input::has('receta') ) {
@@ -666,43 +545,40 @@ class OperacionController extends BaseController {
 
 	// agrega varios movminientos
 	public function movimientos(){
-
-
 		$datos = Input::all();
-
 		foreach ($datos as $dato) {
-			# code...
+			if ( $dato['caducidad'] != '' ) {
+				$dato['caducidad'] = substr( $dato['caducidad'], 0, 10 ) . ' 00:00:00';
+			}
 			//preparamos los movimientos del item
 			$operacion = new Operacion;
 
-			$operacion->tipomovimiento = $dato['tipomov'];
-			$operacion->item = $dato['item'];
-			$operacion->almacen = $dato['almacen'];
-			$operacion->cantidad = $dato['cantidad'];
-			$operacion->tipoajuste = $dato['tipoa'];
-			$operacion->idLote = $dato['idLote'];
-			$operacion->lote = $dato['lote'];
-			$operacion->orden = $dato['orden'];
-			$operacion->caducidad = $dato['caducidad'];
-			$operacion->usuario = $dato['usuario'];
-			$operacion->observaciones = $dato['observaciones'];
-			$operacion->receta = '';
+			$operacion->tipomovimiento 	= $dato['tipomov'];
+			$operacion->item 	 					= $dato['item'];
+			$operacion->almacen 	 			= $dato['almacen'];
+			$operacion->cantidad 	 			= $dato['cantidad'];
+			$operacion->tipoajuste 	 		= $dato['tipoa'];
+			$operacion->idLote 	 				= $dato['idLote'];
+			$operacion->lote 	 					= $dato['lote'];
+			$operacion->orden 	 				= $dato['orden'];
+			$operacion->caducidad 	 		= $dato['caducidad'];
+			$operacion->usuario 	 			= $dato['usuario'];
+			$operacion->observaciones 	= $dato['observaciones'];
+			$operacion->receta 	 				= '';
 
 			// si es un ajuste no importa las cantidades en el item exitentes se resetean
 			if ($operacion->tipomovimiento == 1) {
-
 				$operacion->alta();
+			}
 
 			// en este se toma que es una alta de item
-			}else if($operacion->tipomovimiento == 2){
-
+			if($operacion->tipomovimiento == 2){
 				$operacion->entrada();
+			}
 
 			// en este se toma que es una baja de item
-			}else if ($operacion->tipomovimiento == 3) {
-
+			if ($operacion->tipomovimiento == 3) {
 				$operacion->salida();
-
 			}
 
 			$operacion->verificaLote();
@@ -818,7 +694,7 @@ class OperacionController extends BaseController {
 
 		if ($timeReceta->tardio=="1") {
 			$tardio=" (Surtido Tardio)";
-		} 
+		}
 
 		$operacion = new Operacion;
 
@@ -1125,7 +1001,7 @@ class OperacionController extends BaseController {
 		$reservas = DB::table('reservas')
 						->where('RES_fecha', '<', DB::raw('DATE(DATE_SUB(NOW(), INTERVAL 30 DAY))'))
 						->delete();
-        
+
 		$totalEliminados = $reservas + $cantidad;
 
 		//generamos el correo informativo
@@ -1147,9 +1023,9 @@ class OperacionController extends BaseController {
 								->where('MOV_observaciones', '')
 								->orderBy('created_at', 'desc')
 								->take(1)
-								->get(); 
+								->get();
 
-		
+
 		if ( sizeof( $ultimo ) > 0 ) {
 			//buscamos los ultimos registros a partir de la fecha del ultimo
 			$porActualizar = Movimiento::where('id_receta', '<>', 0)
@@ -1161,7 +1037,7 @@ class OperacionController extends BaseController {
 									->get();
 
 			//iniciamos un ciclo por la cantidad de registros a actualizar
-			for ($i=0; $i <sizeof( $porActualizar ) ; $i++) { 
+			for ($i=0; $i <sizeof( $porActualizar ) ; $i++) {
 				DB::table('movimientos')
 				    ->where('MOV_clave', $porActualizar[$i]['MOV_clave'])
 				    ->update(array('MOV_observaciones' => 'Surtido Receta MV con numero: '.$porActualizar[$i]['id_receta'].' (desde Sistema de Inventario)'));
@@ -1183,11 +1059,11 @@ class OperacionController extends BaseController {
 		$lotes = Lote::whereRaw("substr(LOT_caducidad, 9, 5) <> '01 00'")
 						->orderBy('created_at', 'asc')
 						// ->take(10)
-						->get(); 
+						->get();
 
 		$respuesta = array();
 
-		for ($i=0; $i < sizeof($lotes) ; $i++) { 
+		for ($i=0; $i < sizeof($lotes) ; $i++) {
 			DB::table('lote')
 			    ->where('LOT_clave', $lotes[$i]['LOT_clave'])
 			    ->update(array('LOT_caducidad' => substr($lotes[$i]['LOT_caducidad'], 0, 8).'01 00:00:00'));

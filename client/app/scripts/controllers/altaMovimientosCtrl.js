@@ -1,12 +1,12 @@
 (function(){
 
 	'use strict';
-	
+
 	angular
 	.module('app')
 	.controller('altaMovimientosCtrl',altaMovimientosCtrl)
 
-	
+
 	altaMovimientosCtrl.$inject = ['$rootScope','datos','operacion','mensajes','$q','$filter','busqueda'];
 
 
@@ -25,7 +25,7 @@
 
 		$rootScope.atras = true;
 		$rootScope.menu = 'arrow_back';
-		
+
 		var scope = this;
 
 		scope.items = datos[0].data;
@@ -37,7 +37,17 @@
 		// console.log(scope.items);
 
 		scope.agregaMovimiento = function(){
-
+			for (var i = 0; i < scope.tiposmovimiento.length; i++) {
+				if ( scope.tiposmovimiento[i].TIM_clave == scope.datos.tipomov ) {
+					// console.log('entra '+scope.tiposmovimiento[i].TIM_nombre);
+						if ( scope.datos.observaciones != '' ) {
+							scope.datos.observaciones = scope.tiposmovimiento[i].TIM_nombre + ': ' +scope.datos.observaciones;
+						}
+						if ( scope.datos.observaciones == '' ) {
+							scope.datos.observaciones = scope.tiposmovimiento[i].TIM_nombre;
+						}
+				}
+			}
 			console.log(scope.datos);
 
 			scope.movimientos.push({
@@ -70,7 +80,6 @@
 		}
 
 		scope.inicio = function(){
-
 			scope.movimientos = [];
 			scope.existeLote = false;
 			scope.busqueda = null;
@@ -102,7 +111,7 @@
 
 		scope.selectedItemChange= function(){
 
-			console.log(scope.datos.almacen);
+			// console.log(scope.datos.almacen);
 			console.log(scope.item);
 			if (scope.datos.almacen != '' && scope.item) {
 				scope.datos.lote = '';
@@ -136,13 +145,13 @@
 		}
 
 		scope.verificaLote = function(){
-			
+
 
 			var lote = scope.datos.lote;
-				console.log(lote);	
-			
+				console.log(lote);
+
 			if (lote != '') {
-				
+
 
 				mensajes.alerta('Verificando Lote','info','top right','search');
 				busqueda.lote(lote).success(function (data){
@@ -265,7 +274,7 @@
 				});
 
 			};
-			
+
 		}
 
 		scope.detalleItem = function(item){
