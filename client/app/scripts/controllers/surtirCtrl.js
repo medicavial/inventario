@@ -216,6 +216,13 @@
 
 			angular.forEach($scope.seleccionItems, function (value,key){
 				$scope.seleccionItems[$scope.numero-1].numerador=$scope.numero;
+
+				if ( $scope.seleccionItems[$scope.numero-1].TIT_forzoso == 0 ) {
+					$scope.seleccionItems[$scope.numero-1].lotes = [{
+						lote: 'N/A'
+					}];
+				}
+
 				$scope.numero++;
 			});
 			// console.log($scope.seleccionItems);
@@ -223,40 +230,40 @@
 			var items = $scope.seleccionItems.length;
 			var actual = 1;
 
-			angular.forEach($scope.seleccionItems, function (value,key){
-
-				console.log(value);
-				console.log('actual='+actual+'| |'+'items='+items);
-				console.log($scope.seleccionItems);
-
-				// if (value.lotes != undefined) {
-				if (value.lotes) {
-					console.log(actual+' con lote');
-					if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
-
-						if (actual === items) {
-
-							$scope.lotesCompletos = true;
-						};
-
-					};
-
-				}else{
-					console.log(actual+' sin lote');
-					if (value.TIT_forzoso == 0) {
-
-						if (actual == items) {
-							$scope.lotesCompletos = true;
-						};
-
-					}else{
-						$scope.lotesCompletos = false;
-					}
+			// recorremos los items para verificar si ya están los lotes completos
+			$scope.lotesCompletos = true;
+			for (var i = 0; i < $scope.seleccionItems.length; i++) {
+				if ( $scope.seleccionItems[i].lotes == undefined ) {
+					$scope.lotesCompletos = false;
+					break;
 				}
+			}
 
-				actual++;
-
-			});
+			// // Esto funciona mas o menos
+			// angular.forEach($scope.seleccionItems, function (value,key){
+			// 	console.log(value);
+			// 	console.log('actual='+actual+'| |'+'items='+items);
+			// 	console.log($scope.seleccionItems);
+			// 	// if (value.lotes != undefined) {
+			// 	if (value.lotes) {
+			// 		console.log(actual+' con lote');
+			// 		if (value.lotes.length > 0 || value.TIT_forzoso == 0) {
+			// 			if (actual === items) {
+			// 				$scope.lotesCompletos = true;
+			// 			};
+			// 		};
+			// 	}else{
+			// 		console.log(actual+' sin lote');
+			// 		if (value.TIT_forzoso == 0) {
+			// 			if (actual == items) {
+			// 				$scope.lotesCompletos = true;
+			// 			};
+			// 		}else{
+			// 			$scope.lotesCompletos = false;
+			// 		}
+			// 	}
+			// 	actual++;
+			// });
 
 		}
 

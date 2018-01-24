@@ -78,7 +78,7 @@ class helpers {
 			$existencia = Existencia::find($claveExistencia);
 
 		}else{
-			
+
 			//si no existe la cantidad es 0 por que no hay nada registrado aun
 			$existencia = new Existencia;
 			$cantidadActual = 0;
@@ -89,9 +89,9 @@ class helpers {
 		$existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
 		$existencia->save();
 
-		//buscamos la cantidad total del item 
+		//buscamos la cantidad total del item
 		$cantidadTotal = Item::find($item)->ITE_cantidadtotal;
-		
+
 		// actualizamos la cantidad global del item
 		$itemactualiza = Item::find($item);
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal + $cantidad;
@@ -119,7 +119,7 @@ class helpers {
 	}
 
 	public static function ingresaLotes($item,$lotes,$orden,$existencia){
-		
+
 
 		foreach ($lotes as $valor) {
 			# code...
@@ -152,12 +152,13 @@ class helpers {
 		$operacion->entrada();
 
 		if ($loteForzoso == 1) {
-			
+
 			foreach ($lotes as $lote) {
-				$operacion->idLote 		= $lote['idLote'];
-				$operacion->lote 		= $lote['lote'];
-				$operacion->caducidad 	= $lote['caducidad'];
-				$operacion->cantidad 	= $lote['cantidad'];
+				$operacion->idLote 			= $lote['idLote'];
+				$operacion->lote 				= $lote['lote'];
+				$operacion->caducidad 	= substr( $lote['caducidad'], 0, 10 ) . ' 00:00:00';
+				// $operacion->caducidad 	= $lote['caducidad'];
+				$operacion->cantidad 		= $lote['cantidad'];
 				$operacion->verificaLote();
 			}
 		}
