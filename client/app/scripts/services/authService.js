@@ -13,7 +13,12 @@
 
                 $http.post(api+'login',credenciales)
                 .success(function (data){
-
+                  //SI EL USUARIO NO TIENE ALMACENES ASIGNADOS EVITAMOS EL INICIO SESION
+                  if ( data.unidades.length < 1) {
+                    mensajes.alerta('No tiene almacenes asignados','error','top right','warning');
+                    $rootScope.cargando = false;
+                  }
+                  else{
                     $rootScope.cargando = false;
 
                     webStorage.session.add('username',data.USU_login);
@@ -25,6 +30,7 @@
                     $rootScope.id = webStorage.session.get('id');
 
                     webStorage.session.add('permisos',JSON.stringify(data));
+                    $rootScope.permisos = data;
 
                     //EXTRAEMOS LAS UNIDADES QUE TIENE EL USUARIO Y LAS GUARDAMOS EN WEBSTORAGE
                     var clinicas=data.unidades;
@@ -41,15 +47,15 @@
                     $rootScope.unidadesAdmin=webStorage.session.get('unidades');
                     //TERMINA EL GUARDADO DE UNIDADES
 
-                    $rootScope.permisos = data;
-
                     if (credenciales.guardar) {
                         webStorage.local.add('usuario',JSON.stringify(data));
                     }
 
                     $state.go('index.home');
-
+                  }
                 }).error(function (data){
+                    webStorage.clear();
+                    localStorage.clear();
 
                     if (data) {
                         mensajes.alerta(data.flash,'error center-dialog','top','error');
@@ -58,11 +64,10 @@
                     }
                     $rootScope.cargando = false;
                 });
-
             },
             logout : function()
             {
-            	webStorage.session.clear();
+            	webStorage.clear();
               localStorage.clear();
               $rootScope.unidadesAdmin=null;
               $http.get(api+'logout');
