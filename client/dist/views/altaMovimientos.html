@@ -8,14 +8,14 @@
           <md-tooltip md-direction="bottom">
             Limpiar
           </md-tooltip>
-        <ng-md-icon icon="refresh" style="fill:gray" aria-label="Limpiar Datos"></ng-md-icon> 
+        <ng-md-icon icon="refresh" style="fill:gray" aria-label="Limpiar Datos"></ng-md-icon>
       </md-button>
     </div>
 
   <form name="am.movimientoForm" novalidate ng-submit="am.agregaMovimiento()">
 
     <md-content layout-padding>
-        
+
         <md-content layout="column">
 
             <md-autocomplete
@@ -35,13 +35,13 @@
                 No se encontro "{{am.busqueda}}".
               </md-not-found>
             </md-autocomplete>
-            
+
         </md-content>
 
         <md-content layout="column">
-            
+
             <div layout-gt-sm="row" layout="column">
-              
+
               <md-input-container flex>
                 <md-select placeholder="Tipo de Movimiento" ng-model="am.datos.tipomov" name="tipo" ng-disabled="am.bloqueoMov" required flex>
                   <md-option ng-repeat="tipomov in am.tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
@@ -65,7 +65,7 @@
                   <div ng-message="required">Campo obligatorio.</div>
                 </div>
               </md-input-container>
-              
+
               <md-input-container flex>
                 <label>Cantidad Actual</label>
                 <input type="text" name="cantidad" required ng-model="am.disponible" disabled>
@@ -74,8 +74,8 @@
             </div>
 
             <div layout-gt-sm="row" layout="column">
-              
-              
+
+
               <md-input-container flex>
                 <label>Cantidad</label>
                 <input type="number" name="cantidad" ng-model="am.datos.cantidad" min="1" ng-change="am.verificaCantidadLote()" numero required>
@@ -97,13 +97,15 @@
                 </md-select>
               </md-input-container>
 
-              <md-datepicker ng-model="am.datos.caducidad" ng-if="am.item.TIT_forzoso == '1' "  ng-change="am.cambio()" md-placeholder="Caducidad" required ng-disabled="am.existeLote" flex></md-datepicker>
+              <md-datepicker ng-model="am.datos.caducidad" ng-if="am.item.TIT_forzoso == '1' "
+                             ng-disabled="am.item.TIT_forzoso == '1' && am.datos.lote == ''"
+                             ng-change="am.cambio()" md-placeholder="Caducidad" required ng-disabled="am.existeLote" flex></md-datepicker>
 
               <span flex></span>
-              
+
             </div>
 
-            <!-- <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="am.item.TIT_forzoso == '1' ">  
+            <!-- <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="am.item.TIT_forzoso == '1' ">
 
               <md-input-container flex ng-if="am.lotes.length == 0">
                 <label>Lote</label>
@@ -118,28 +120,28 @@
               </md-input-container>
 
               <md-datepicker ng-model="am.datos.caducidad" md-placeholder="Caducidad" required ng-disabled="am.existeLote" flex></md-datepicker>
-              
+
               <span flex></span>
             </div> -->
-        
+
 
             <md-input-container flex>
               <label>Observaciones</label>
               <textarea  columns="1" name="observaciones" ng-model="am.datos.observaciones"></textarea>
             </md-input-container>
 
-        </md-content>  
-    
+        </md-content>
+
         <div layout="row" layout-align="center center">
 
           <md-button class="md-raised md-primary" ng-disabled="am.movimientoForm.$invalid" type="submit">
             Agregar
           </md-button>
-          
+
         </div>
     </md-content>
   </form>
-  
+
 
   <md-content layout-align="center center" flex-offset-gt-sm="25" flex-gt-sm="50">
 
@@ -152,7 +154,7 @@
           <md-tooltip md-direction="top">
             Eliminar
           </md-tooltip>
-          <ng-md-icon icon="delete" style="fill:red" ></ng-md-icon> 
+          <ng-md-icon icon="delete" style="fill:red" ></ng-md-icon>
         </md-button>
       </md-list-item>
     </md-list>
@@ -170,6 +172,6 @@
     <md-tooltip md-direction="top">
       Aplicar
     </md-tooltip>
-    <ng-md-icon icon="done" style="fill:white" ng-if="!am.guardando"></ng-md-icon> 
+    <ng-md-icon icon="done" style="fill:white" ng-if="!am.guardando"></ng-md-icon>
     <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="am.guardando"></md-progress-circular>
 </md-button>

@@ -4,7 +4,7 @@
       <h2>Detalle de Orden de Compra #{{ detalle[0].idOrden }}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cerrarDialogo()" aria-label="Cerrar Dialogo">
-        <ng-md-icon icon="close" style="fill:white"></ng-md-icon> 
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon>
       </md-button>
     </div>
   </md-toolbar>
@@ -12,47 +12,97 @@
   <md-progress-linear md-mode="query" ng-hide="detalle[0].items"></md-progress-linear>
   <md-dialog-content>
     <div class="md-dialog-content">
-      <p>Orden generada el día {{ detalle[0].fechaOrden | limitTo : 10 | date:'d/MMM/yyyy' }} a las {{detalle[0].fechaOrden | limitTo: -8}}.</p>
 
-    <table md-data-table>
-      <thead>
-        <tr>
-          <th name="#"></th>
-          <th name="Código"></th>
-          <th name="Item"></th>
-          <th name="Pedido"></th>
-          <th name="Surtido"></th>
-          <th name="Estatus"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="item in detalle[0].items">
-          <td>{{ $index+1 }}</td>
-          <td>{{ item.ITE_codigo }}</td>
-          <td>{{ item.ITE_nombre }}</td>
-          <td>{{ item.OIT_cantidadPedida }}</td>
-          <td>{{ item.OIT_cantidadSurtida }}</td>
-          <td>
-            <span ng-if="item.OIT_cantidadSurtida==0" style="color: red">Sin surtir</span>
-            <span ng-if="item.OIT_cantidadSurtida != item.OIT_cantidadPedida && item.OIT_cantidadSurtida!=0" style="color: orange">Surtido parcial</span>
-            <span ng-if="item.OIT_cantidadSurtida == item.OIT_cantidadPedida" style="color: green">Surtido</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div layout="row" layout-align="space-between center">
+        <div>
+          Orden generada el día {{ detalle[0].fechaOrden | limitTo : 10 | date:'d/MMM/yyyy' }} a las {{detalle[0].fechaOrden | limitTo: -8}}.
+        </div>
 
-    <br><br>
+        <div ng-if="permiso.PER_surtirOrden == 1">
+          <md-menu md-position-mode="target-right target">
+            <md-button class="md-icon-button md-fab"
+                       ng-click="$mdOpenMenu()"
+                       aria-label="Opciones"
+                       style=" color : rgb(49, 46, 46);
+                              background-color: rgba(21, 166, 176, 0.96);
+                              font-size: 16px;">
+                <md-tooltip md-direction="top">
+                  Opciones
+                </md-tooltip>
+                <ng-md-icon icon="add" style="fill:white"></ng-md-icon>
+            </md-button>
 
-    <div align="center">
-      <md-button class="md-raised edgePadding" ng-click="cerrarDialogo()">
-        Cerrar ventana
-      </md-button>
-<!--       <md-button class="md-primary md-raised edgePadding" style="background-color: rgba(21, 166, 176, 0.96); font-size: 16px;" ng-click="mostrarDatos()" ng-disabled="solicitaPsw==true">
-        Si
-      </md-button> -->
+            <md-menu-content width="2">
+              <md-menu-item ng-if="detalle[0].detalles.OCM_cancelada == 0 && detalle[0].detalles.OCM_cerrada == 0 && detalle[0].detalles.OCM_surtida == 0">
+                <md-button ng-click="cerrarDialogo()" ui-sref="index.surtir({ordenId:detalle[0].idOrden})" >
+                  Surtir
+                </md-button>
+              </md-menu-item>
+              <md-menu-item ng-if="detalle[0].detalles.OCM_surtida == 1 && detalle[0].detalles.OCM_incompleta == 1 && detalle[0].detalles.OCM_cerrada == 0">
+                <md-button ui-sref="index.completar({ordenId:detalle[0].idOrden})">
+                  Completar
+                </md-button>
+              </md-menu-item>
+              <md-menu-item ng-if="detalle[0].detalles.OCM_surtida == 1 && detalle[0].detalles.OCM_incompleta == 1 && detalle[0].detalles.OCM_cerrada == 0">
+                <md-button ng-click="cerrar($event,detalle[0].detalles)">
+                  Cerrar Orden
+                </md-button>
+              </md-menu-item>
+              <!-- <md-menu-item>
+                <md-button ng-click="pdf(detalle[0].detalles.OCM_clave)">
+                  <p>Descargar PDF</p>
+                </md-button>
+              </md-menu-item> -->
+              <!-- <md-menu-item ng-if="detalle[0].detalles.OCM_surtida == 1">
+                <md-button ng-click="ordenescompra.correo(orden,$event)">
+                  <p>Enviar por correo</p>
+                </md-button>
+              </md-menu-item> -->
+              <md-menu-item ng-if="detalle[0].detalles.OCM_surtida == 0">
+                <md-button ng-click="cancelar($event, detalle[0].detalles)">
+                  <p>Cancelar</p>
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </div>
+      </div>
+
+      <table md-data-table>
+        <thead>
+          <tr>
+            <th name="#"></th>
+            <th name="Código"></th>
+            <th name="Item"></th>
+            <th name="Pedido"></th>
+            <th name="Surtido"></th>
+            <th name="Estatus"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in detalle[0].items">
+            <td>{{ $index+1 }}</td>
+            <td>{{ item.ITE_codigo }}</td>
+            <td>{{ item.ITE_nombre }}</td>
+            <td>{{ item.OIT_cantidadPedida }}</td>
+            <td>{{ item.OIT_cantidadSurtida }}</td>
+            <td>
+              <span ng-if="item.OIT_cantidadSurtida==0" style="color: red">Sin surtir</span>
+              <span ng-if="item.OIT_cantidadSurtida != item.OIT_cantidadPedida && item.OIT_cantidadSurtida!=0" style="color: orange">Surtido parcial</span>
+              <span ng-if="item.OIT_cantidadSurtida == item.OIT_cantidadPedida" style="color: green">Surtido</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- <br><br> -->
+
+      <!-- <div align="center">
+        <md-button class="md-raised edgePadding" ng-click="cerrarDialogo()">
+          Cerrar ventana
+        </md-button>
+      </div> -->
     </div>
 
-    </div>
-    
   </md-dialog-content>
 </md-dialog>

@@ -73,7 +73,7 @@ class ReportesController extends BaseController {
 		if ( Input::has('permiso') ) {
 			if ( Input::get('permiso') > 2 ) {
 				$query->where('LOT_cantidad','>',0);
-			} 
+			}
 		}
 
 		if (Input::has('verCeros')) {
@@ -189,7 +189,7 @@ class ReportesController extends BaseController {
 			if ( ($i==0 && $movimientos[$i]['TRA_codigo'] == $traspaso['TRA_codigo']) || ($i>0 && $movimientos[$i-1]['TRA_codigo'] != $traspaso['TRA_codigo']) ) {
 
 				//recopilamos los datos de los items por id de traspaso
-				for ($numItem=0; $numItem < sizeof($movimientos) ; $numItem++) { 
+				for ($numItem=0; $numItem < sizeof($movimientos) ; $numItem++) {
 					if ($traspaso['TRA_codigo'] == $movimientos[$numItem]['TRA_codigo']) {
 						$datos[] = array(
 											'ITE_codigo' 	=> $movimientos[$numItem]['ITE_codigo'],
@@ -453,16 +453,16 @@ class ReportesController extends BaseController {
 
 	public function ordenesAbiertas($unidades){
 
-		$select = 'OCM_clave as id, 
-				   OCM_fechaReg as AltaOrden, 
-				   ordenCompra.PRO_clave, 
+		$select = 'OCM_clave as id,
+				   OCM_fechaReg as AltaOrden,
+				   ordenCompra.PRO_clave,
 				   OCM_fechaSurtida as SurtidaOrden,
-				   USU_creo as UsuarioCreo, 
-				   usuarios.USU_nombrecompleto, 
-				   ordenCompra.UNI_clave, 
-				   UNI_nombrecorto, 
+				   USU_creo as UsuarioCreo,
+				   usuarios.USU_nombrecompleto,
+				   ordenCompra.UNI_clave,
+				   UNI_nombrecorto,
 				   usurtio.USU_login as UsuarioSurtio,
-				   PRO_nombrecorto, 
+				   PRO_nombrecorto,
 				   OCM_importeEsperado,
 				   CASE
 					WHEN OCM_cancelada = 1 THEN "Cancelada"
@@ -488,7 +488,7 @@ class ReportesController extends BaseController {
 		$datos = ReportesController::ordenesAbiertas($unidades);
 
 		return Excel::create('Ordenes_Abiertas', function($excel) use($datos) {
-			
+
 			//SE ESTABLECE EL TÍTULO
 			$excel->setTitle('Ordenes de Compra Abiertas');
 
@@ -507,15 +507,15 @@ class ReportesController extends BaseController {
 	}
 
 	public function detalleOrden($idOrden){
-		$select = 'OIT_clave, 
-				   ordenItems.ITE_clave, 
-				   ITE_codigo,
-				   ITE_nombre, 
-				   OCM_clave, 
-				   OIT_cantidadPedida, 
-				   OIT_cantidadSurtida, 
-				   OIT_precioEsperado, 
-				   OIT_precioFinal';
+		$select = 'OIT_clave,
+						   ordenItems.ITE_clave,
+						   ITE_codigo,
+						   ITE_nombre,
+						   OCM_clave,
+						   OIT_cantidadPedida,
+						   OIT_cantidadSurtida,
+						   OIT_precioEsperado,
+						   OIT_precioFinal';
 
 		$orden = OrdenCompra::find($idOrden);
 		$items = DB::table('ordenItems')
@@ -523,11 +523,12 @@ class ReportesController extends BaseController {
 					->select(DB::raw($select))
 					->where('OCM_clave', $idOrden)
 					->get();
-    	
+
     	$respuesta[] = array(
     		'idOrden' 		=> $idOrden,
     		'fechaOrden' 	=> $orden['OCM_fechaReg'],
-    		'items' 		=> $items
+				'detalles'		=> $orden,
+    		'items' 			=> $items
     		);
 
     	return $respuesta;
@@ -570,14 +571,14 @@ class ReportesController extends BaseController {
 
 			$listaItems="";
 			$lista="";
-			
+
 			if (sizeof($items>0)) {
 				// $listaItems = $items;
 				foreach ($items as $item) {
 					$listaItems = $item;
 				}
 
-				for ($i=0; $i <sizeof($listaItems) ; $i++) { 
+				for ($i=0; $i <sizeof($listaItems) ; $i++) {
 					if ($lista=="") {
 						$lista = $lista.$listaItems[$i]['ITE_nombre'];
 					} else{
@@ -599,7 +600,7 @@ class ReportesController extends BaseController {
 			$listaSurtidos="";
 			$surtidos="";
 			$cantidadSurtidos=0;
-			
+
 			if (sizeof($itemSurtido>0)) {
 				// $listaSurtidos = $items;
 				foreach ($itemSurtido as $item) {
@@ -607,7 +608,7 @@ class ReportesController extends BaseController {
 				}
 				$cantidadSurtidos = sizeof($listaSurtidos);
 
-				for ($i=0; $i<sizeof($listaSurtidos) ; $i++) { 
+				for ($i=0; $i<sizeof($listaSurtidos) ; $i++) {
 					if ($surtidos=="") {
 						$surtidos = $surtidos.$listaSurtidos[$i]['NS_descripcion'];
 
@@ -680,7 +681,7 @@ class ReportesController extends BaseController {
 		// return $respuesta;
 
 		return Excel::create('Medicamentos_entregados_sin_receta', function($excel) use($respuesta) {
-			
+
 			//SE ESTABLECE EL TÍTULO
 			$excel->setTitle('Medicamentos entregados sin receta');
 
