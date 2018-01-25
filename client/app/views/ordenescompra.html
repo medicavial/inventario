@@ -3,12 +3,12 @@
     <md-data-table-toolbar class="md-whiteframe-z1 animated fadeInUp">
       <md-input-container md-no-float flex class="no-padding">
         <md-icon>
-          <ng-md-icon icon="search"></ng-md-icon> 
+          <ng-md-icon icon="search"></ng-md-icon>
         </md-icon>
         <input ng-model="query" type="text" placeholder="Buscar Orden" mayusculas flex>
       </md-input-container>
       <md-button class="md-icon-button" aria-label="limpiar" ng-show="query" ng-click="query = ''">
-        <ng-md-icon icon="close"></ng-md-icon> 
+        <ng-md-icon icon="close"></ng-md-icon>
       </md-button>
     </md-data-table-toolbar>
     <br>
@@ -57,7 +57,7 @@
                 <md-menu md-position-mode="target-right target">
                   <md-button aria-label="Opciones" class="md-icon-button" ng-click="$mdOpenMenu()">
                     <md-icon md-menu-origin>
-                      <ng-md-icon icon="more_vert"></ng-md-icon> 
+                      <ng-md-icon icon="more_vert"></ng-md-icon>
                     </md-icon>
                   </md-button>
                   <md-menu-content width="2">
@@ -98,17 +98,16 @@
         </tbody>
       </table>
     </md-data-table-container>
-    
+
     <br>
-    
+
     <md-data-table-pagination md-label="ordenescompra.texto" md-row-select="ordenescompra.paginacion" md-limit="ordenescompra.limit" md-page="ordenescompra.page" md-total="{{ordenescompra.info.length}}" class="animated fadeInUp"></md-data-table-pagination>
-
-
 </div>
+
 
 <md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ir('index.nuevaorden')" aria-label="Nuevo Estado" ng-if=" permisos.PER_generarOrden == '1' ">
     <md-tooltip md-direction="top">
       Nuevo
     </md-tooltip>
-    <ng-md-icon icon="add" style="fill:white"></ng-md-icon> 
+    <ng-md-icon icon="add" style="fill:white"></ng-md-icon>
 </md-button>

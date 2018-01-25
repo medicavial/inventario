@@ -8,12 +8,14 @@
 	homeCtrl.$inject = ['$rootScope','$scope','datos','$state','mensajes','busqueda'];
 
 	function homeCtrl($rootScope, $scope, datos, $state, mensajes, busqueda){
-
 		//funcion que actualiza automaticamente los datos
 		setTimeout( function(){
-			$state.reload();
-			console.log('Datos actualizados');
-			mensajes.alerta('Actualizando datos','info','bottom right','refresh');
+			console.log($state.is('index.home'));
+			if ( $state.is('index.home') ) {
+				$state.reload();
+				console.log('Datos actualizados');
+				mensajes.alerta('Actualizando datos','info','bottom right','refresh');
+			}
 		}, 180000); //se ejecuta cada 3 minutos (3x60x1000)
 
 		$scope.datos=datos.data;

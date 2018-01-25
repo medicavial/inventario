@@ -744,7 +744,6 @@ class OperacionController extends BaseController {
 
 	//funcion que surte la orden de compra
 	public function surtirOrden(){
-
 		//obtenemos los datos
 		$ordenClave = Input::get('orden');
 		$usuario = Input::get('usuario');

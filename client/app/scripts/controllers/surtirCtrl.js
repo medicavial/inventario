@@ -350,7 +350,7 @@
 			meses[10] = "Noviembre";
 			meses[11] = "Diciembre";
 
-			console.log( anioInicio, anioFinal, meses );
+			// console.log( anioInicio, anioFinal, meses );
 
 			var itemSurtido = $scope.seleccionItems[index];
 
@@ -367,12 +367,12 @@
 				},
 				locals: { info: itemSurtido }
 		    }).then(function(lotes){
-
 		    	itemSurtido.lotes = lotes;
-		    	$scope.datos.surtidos = $scope.seleccionItems;
-	        	$scope.datos.items = $scope.items;
 
-	        	webStorage.local.add(clave,JSON.stringify($scope.datos));
+		    	$scope.datos.surtidos = $scope.seleccionItems;
+	        $scope.datos.items = $scope.items;
+
+	        webStorage.local.add(clave,JSON.stringify($scope.datos));
 		    	console.log($scope.datos);
 
 		    	$scope.verificaLotes();
@@ -514,7 +514,7 @@
 		}
 
 		$scope.datosLote = function(lote){
-
+			// console.log(lote);
 
 			if (lote) {
 
@@ -524,7 +524,7 @@
 				}else{
 					var dato = JSON.parse(lote);
 
-					console.log(dato);
+					// console.log(dato);
 					$scope.datos.idLote = dato.LOT_clave;
 					$scope.datos.lote = dato.LOT_numero;
 					$scope.datos.caducidad = moment(dato.LOT_caducidad).toDate();
@@ -536,10 +536,6 @@
 		}
 
 		$scope.cambio = function(){
-
-
-			console.log($scope.datos.caducidad);
-
 			var d = new Date($scope.datos.caducidad),
 			        month = '' + (d.getMonth() + 1),
 			        day = '' + d.getDate(),
@@ -574,7 +570,7 @@
 		};
 
 		$scope.agrega = function(){
-			console.log($scope.modificaForm);
+			// console.log($scope.modificaForm);
 			if ($scope.modificaForm.$valid) {
 				$scope.maximo -= $scope.datos.cantidad;
 
