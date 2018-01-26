@@ -706,6 +706,25 @@
 	        }
 		})
 
+		.state('index.ajusteLotes',{
+			url:'ajusteLotes',
+			templateUrl :'views/ajusteLotes.html',
+			controller:'ajusteLotesCtrl',
+			controllerAs: "ajusteLotes",
+			resolve:{
+	            datos:function(busqueda,$q,$rootScope){
+	                var promesa   = $q.defer(),
+	            		unidades  = busqueda.unidadesUsuario($rootScope.id),
+	            		tipoitems = busqueda.tiposItem(),
+	            		items 	  = busqueda.items();
+	            	$q.all([unidades,items,tipoitems]).then(function (data){
+	            		promesa.resolve(data);
+	            	});
+
+	                return promesa.promise;
+	            }
+	        }
+		})
 
 
 		// Con esto nos indica que quitara de las rutas el #
@@ -736,6 +755,11 @@
 	    $mdThemingProvider.theme('theme6')
 		.primaryPalette('deep-purple')
 	    .accentPalette('red');
+
+			$mdThemingProvider.theme('theme7')
+			.primaryPalette('purple')
+	    .accentPalette('amber')
+			.warnPalette('red');
 
 	    $mdThemingProvider.theme('docs-dark')
 		.primaryPalette('red')

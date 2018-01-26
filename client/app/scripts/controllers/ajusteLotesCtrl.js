@@ -1,19 +1,24 @@
 (function(){
-
 	'use strict';
-
 	angular
 	.module('app')
-	.controller('reporteLotesCtrl',reporteLotesCtrl)
+	.controller('ajusteLotesCtrl',ajusteLotesCtrl)
 
+	ajusteLotesCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes', '$mdBottomSheet', '$state'];
 
-	reporteLotesCtrl.$inject = ['$rootScope','busqueda','mensajes','datos','reportes', '$mdBottomSheet'];
+	function ajusteLotesCtrl($rootScope,busqueda,mensajes,datos,reportes, $mdBottomSheet, $state){
 
-	function reporteLotesCtrl($rootScope,busqueda,mensajes,datos,reportes, $mdBottomSheet){
+		if ( $rootScope.permisos.PER_clave === 1 ) {
+			// console.log($rootScope.permisos);
+			console.log('Permitido');
+		} else {
+			console.log('Prohibido');
+			$state.go('index.home')
+		}
 
 		var scope = this;
-		$rootScope.tema = 'theme4';
-		$rootScope.titulo = 'Lotes';
+		$rootScope.tema = 'theme7';
+		$rootScope.titulo = 'Ajuste de lotes';
 		scope.unidades = datos[0].data;
 		scope.total = 0;
 		scope.limit = 10;

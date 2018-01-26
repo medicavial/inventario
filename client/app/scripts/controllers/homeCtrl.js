@@ -8,7 +8,7 @@
 	homeCtrl.$inject = ['$rootScope','$scope','datos','$state','mensajes','busqueda'];
 
 	function homeCtrl($rootScope, $scope, datos, $state, mensajes, busqueda){
-		//funcion que actualiza automaticamente los datos
+		//funcion que actualiza automaticamente los datos SOLO CUANDO ESTAMOS EN EL HOME
 		setTimeout( function(){
 			console.log($state.is('index.home'));
 			if ( $state.is('index.home') ) {
