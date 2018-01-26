@@ -239,7 +239,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::post('usuario/almacenes', 'OperacionController@usuarioAlmacen');
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
         Route::get('reservasantiguas', 'OperacionController@reservasAntiguas');
-        Route::get('ajuste-lotes-caducidad', 'OperacionController@ajusteLoteCaducidad');
+				Route::get('ajuste-lotes-caducidad', 'OperacionController@ajusteLoteCaducidad');
+        Route::post('ajuste-lote', 'OperacionController@ajusteLote');
     });
 
 

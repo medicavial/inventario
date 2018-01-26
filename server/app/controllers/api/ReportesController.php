@@ -48,8 +48,6 @@ class ReportesController extends BaseController {
 
 
 	public function lotes(){
-
-
 		$query = Existencia::query();
 
         $query->join('almacenes', 'almacenes.ALM_clave', '=', 'existencias.ALM_clave')
@@ -80,6 +78,13 @@ class ReportesController extends BaseController {
 			// return Input::get('verCeros');
 			if (Input::get('verCeros') == 'false') {
 				$query->where('LOT_cantidad','>',0);
+			}
+		}
+
+		//esto debe de funcionar solo en el ajuste de lotes
+		if (Input::has('lote')) {
+			if (Input::get('lote') != '') {
+				$query->where('LOT_numero','=',Input::get('lote'));
 			}
 		}
 

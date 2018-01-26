@@ -500,6 +500,10 @@ class OperacionController extends BaseController {
 			}
 		}
 
+		$caducidad = Input::get('caducidad');
+		if ( $caducidad != '' || $caducidad != null ) {
+			$caducidad = substr( $caducidad, 0, 10 ) . ' 00:00:00';
+		}
 
 		//preparamos los movimientos del item
 		$operacion = new Operacion;
@@ -510,9 +514,10 @@ class OperacionController extends BaseController {
 		$operacion->cantidad = Input::get('cantidad');
 		$operacion->tipoajuste = Input::get('tipoa');
 		$operacion->idLote = Input::get('idLote');
+		// $operacion->caducidad = Input::get('caducidad');
+		$operacion->caducidad = $caducidad;
 		$operacion->lote = Input::get('lote');
 		$operacion->orden = Input::get('orden');
-		$operacion->caducidad = Input::get('caducidad');
 		$operacion->usuario = Input::get('usuario');
 		// $operacion->observaciones = Input::get('observaciones');
 		$operacion->observaciones = $obs;
@@ -1076,5 +1081,8 @@ class OperacionController extends BaseController {
 		return $respuesta;
 	}
 
+	public function ajusteLote(){
+		return Input::All();
+	}
 
 }

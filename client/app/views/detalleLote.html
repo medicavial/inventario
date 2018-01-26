@@ -1,0 +1,71 @@
+<md-dialog aria-label="Detalle de traspaso" flex-sm="65" flex-gt-md="60" flex="100">
+  <md-toolbar style="background-color: rgba(156,39,176, 0.96);">
+    <div class="md-toolbar-tools">
+      <h2>Detalle de Lote {{ loteEditor.LOT_numero }}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cerrarDialogo()" aria-label="Cerrar Dialogo" ng-if="!trabajando">
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <form name="editorForm" ng-submit="guardaCambios()">
+
+      <div layout-gt-sm="row" layout="column" layout-padding>
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Item</b></label>
+            <input ng-model="loteEditor.ITE_nombre" disabled class="deshabilitado">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Lote</b></label>
+            <input ng-model="loteEditor.ALM_nombre" disabled class="deshabilitado">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Existencias Almacén</b></label>
+            <input type="number" ng-model="loteEditor.EXI_cantidad" disabled class="deshabilitado">
+          </md-input-container>
+        </div>
+      </div>
+
+      <div layout-gt-sm="row" layout="column" layout-padding>
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Existencias Lote</b></label>
+            <input type="number" ng-model="loteEditor.LOT_cantidad" min="0">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Caducidad</b></label>
+            <input ng-model="loteEditor.LOT_caducidad">
+          </md-input-container>
+        </div>
+      </div>
+
+      <div layout="column" layout-paddin layout-align="center center" flex>
+        <md-progress-circular md-mode="indeterminate" ng-if="trabajando"></md-progress-circular>
+      </div>
+
+      <div layout="row" layout-paddin layout-align="end center" flex>
+        <md-button type="button" ng-if="!trabajando" ng-click="cerrarDialogo()">
+          Cancelar
+        </md-button>
+        <md-button type="submit" class="md-raised md-primary"
+                   ng-if="!trabajando"
+                   ng-disabled="loteEditor.LOT_cantidad > loteEditor.EXI_cantidad"
+                   style="background-color: rgba(156,39,176, 0.96)">
+          Guardar Cambios
+        </md-button>
+      </div>
+    </form>
+  </md-dialog-content>
+</md-dialog>

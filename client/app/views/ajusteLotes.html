@@ -1,89 +1,99 @@
 <div layout="column" ng-init="ajusteLotes.inicio()">
-
     <md-content ng-if="ajusteLotes.nuevaBusqueda" class="md-whiteframe-5dp white" layout-gt-sm="row" layout="column" layout-padding>
-
         <div layout="column" flex>
-
-          <md-subheader class="c-bluegray">X Unidad</md-subheader>
+          <md-subheader class="c-bluegray">Unidad</md-subheader>
           <md-divider class="bgm-bluegray"></md-divider>
-          <md-select ng-model="lot.datos.unidad" md-on-close="lot.cargaAlmacenes(lot.datos.unidad)" required placeholder="Selecciona Unidad" flex>
-            <md-option ng-repeat="unidad in lot.unidades" ng-click="lot.agregaUnidad(unidad.UNI_nombre)" ng-value="{{unidad.UNI_clave}}">{{unidad.UNI_nombre}}</md-option>
+          <md-select ng-model="ajusteLotes.datos.unidad"
+                     md-on-close="ajusteLotes.cargaAlmacenes(ajusteLotes.datos.unidad)"
+                     placeholder="Selecciona Unidad"
+                     required flex>
+            <md-option ng-repeat="unidad in ajusteLotes.unidades"
+                       ng-click="ajusteLotes.agregaUnidad(unidad.UNI_nombre)"
+                       ng-value="{{unidad.UNI_clave}}">
+              {{unidad.UNI_nombre}}
+            </md-option>
           </md-select>
-
         </div>
 
         <div layout="column" flex>
-
-          <md-subheader class="c-bluegray">X Almacen</md-subheader>
+          <md-subheader class="c-bluegray">Almacen</md-subheader>
           <md-divider class="bgm-bluegray"></md-divider>
-          <md-select ng-model="lot.datos.almacen" placeholder="Selecciona Almacen" md-on-close="lot.cargaItems(lot.datos.almacen)" flex>
-            <md-option ng-repeat="almacen in lot.almacenes" ng-click="lot.agregaAlmacen(almacen.ALM_nombre)" ng-value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+          <md-select ng-model="ajusteLotes.datos.almacen"
+                     placeholder="Selecciona Almacen"
+                     md-on-close="ajusteLotes.cargaItems(ajusteLotes.datos.almacen)"
+                     ng-disabled="ajusteLotes.datos.unidad == ''"
+                     required flex>
+            <md-option ng-repeat="almacen in ajusteLotes.almacenes"
+                       ng-click="ajusteLotes.agregaAlmacen(almacen.ALM_nombre)"
+                       ng-value="{{almacen.ALM_clave}}">
+              {{almacen.ALM_nombre}}
+            </md-option>
           </md-select>
-
         </div>
 
         <div layout="column" flex>
-
-          <md-subheader class="c-bluegray">X Tipo Item</md-subheader>
+          <md-subheader class="c-bluegray">Item especifico</md-subheader>
           <md-divider class="bgm-bluegray"></md-divider>
-          <md-select placeholder="Tipo de Item" ng-model="lot.datos.tipo" name="tipo" flex >
-            <md-option ng-repeat="tipoitem in lot.tiposItem" value="{{tipoitem.TIT_clave}}">{{tipoitem.TIT_nombre}}</md-option>
+          <md-select placeholder="Selecciona Item"
+                     ng-model="ajusteLotes.datos.item"
+                     ng-disabled="ajusteLotes.datos.unidad == '' || ajusteLotes.datos.almacen == ''"
+                     required flex>
+            <md-option ng-repeat="item in ajusteLotes.items" ng-click="ajusteLotes.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
           </md-select>
-
         </div>
 
         <div layout="column" flex>
-
-          <md-subheader class="c-bluegray">X Item especifico</md-subheader>
+          <md-subheader class="c-bluegray"># Lote</md-subheader>
           <md-divider class="bgm-bluegray"></md-divider>
-          <md-select ng-model="lot.datos.item" placeholder="Selecciona Item" flex>
-            <md-option ng-repeat="item in lot.items" ng-click="lot.agregaItem(item.ITE_nombre)" ng-value="{{item.ITE_clave}}">{{item.ITE_nombre}}</md-option>
-          </md-select>
+          <md-input-container>
+            <input placeholder="Lote"
+                   ng-model="ajusteLotes.datos.lote"
+                   ng-disabled="ajusteLotes.datos.unidad == '' || ajusteLotes.datos.almacen == '' "
+                   ng-change="ajusteLotes.agregaLote(ajusteLotes.datos.lote)"
+                   flex>
+          </md-input-container>
         </div>
 
         <div layout="column" layout-paddin layout-align="center center" flex>
-          <md-checkbox ng-model="lot.datos.verCeros" ng-if="permisos.PER_clave<3"><!-- Solo los permisos 1 y 2 pueden ver el checkbox -->
-            Ver lotes en cero
-          </md-checkbox>
-
-          <md-progress-circular md-mode="indeterminate" ng-if="lot.consultando"></md-progress-circular>
-          <md-button class="md-raised md-primary" ng-if="!lot.consultando" ng-click="lot.buscar()">Buscar</md-button>
+          <md-progress-circular md-mode="indeterminate" ng-if="ajusteLotes.consultando"></md-progress-circular>
+          <md-button class="md-raised md-primary" ng-if="!ajusteLotes.consultando" ng-click="ajusteLotes.buscar()">Buscar</md-button>
         </div>
 
     </md-content>
 
 
 
-    <div flex ng-if="lot.info.length > 0">
-      <p>Busqueda: {{ lot.unidadB + lot.almacenB + lot.itemB }} </p>
+    <div flex ng-if="ajusteLotes.info.length > 0">
+      <p>
+        Busqueda: {{ ajusteLotes.almacenB + ajusteLotes.itemB + ajusteLotes.loteB }}
+      </p>
       <md-data-table-container class="md-whiteframe-5dp white">
         <table md-data-table>
-          <thead md-order="lot.order" md-trigger="lot.onOrderChange">
+          <thead md-order="ajusteLotes.order" md-trigger="ajusteLotes.onOrderChange">
             <tr>
-              <th name="Codigo"  order-by="ITE_codigo"></th>
               <th name="Item"  order-by="ITE_nombre"></th>
               <th name="Almacen" order-by="ALM_nombre"></th>
-              <th name="Existencia Almacen" order-by="EXI_cantidad"></th>
+              <th name="En Almacen" order-by="EXI_cantidad"></th>
               <th name="Lote" order-by="LOT_numero"></th>
-              <th name="Cantidad" order-by="LOT_cantidad"></th>
+              <th name="En Lote" order-by="LOT_cantidad"></th>
               <th name="Caducidad"  order-by="LOT_caducidad"></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="data in lot.info |filter:query | orderBy: lot.order | limitTo: lot.limit: (lot.page - 1) * lot.limit">
-              <td>{{data.ITE_codigo}}</td>
+            <tr ng-repeat="data in ajusteLotes.info |filter:query | orderBy: ajusteLotes.order | limitTo: ajusteLotes.limit: (ajusteLotes.page - 1) * ajusteLotes.limit"
+                class="seleccion" ng-click="ajusteLotes.detalleLote( data )">
               <td>{{data.ITE_nombre}}</td>
               <td>{{data.ALM_nombre}}</td>
               <td>{{data.EXI_cantidad}}</td>
               <td>{{data.LOT_numero}}</td>
               <td>{{data.LOT_cantidad}}</td>
-              <td>{{data.LOT_caducidad}}</td>
+              <td>{{data.LOT_caducidad | limitTo: 10 | date:"MMM/yyyy" | uppercase}}</td>
             </tr>
           </tbody>
         </table>
       </md-data-table-container>
       <br>
-      <md-data-table-pagination md-label="lot.texto" md-row-select="lot.paginacion" md-limit="lot.limit" md-page="lot.page" md-total="{{lot.info.length}}"></md-data-table-pagination>
+      <md-data-table-pagination md-label="ajusteLotes.texto" md-row-select="ajusteLotes.paginacion" md-limit="ajusteLotes.limit" md-page="ajusteLotes.page" md-total="{{ajusteLotes.info.length}}"></md-data-table-pagination>
 
     </div>
     <br>
@@ -91,7 +101,7 @@
 
 </div>
 
-<md-button id="nuevo" ng-if="lot.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="lot.opciones()" aria-label="Opciones">
+<md-button id="nuevo" ng-if="ajusteLotes.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ajusteLotes.opciones()" aria-label="Opciones">
     <md-tooltip md-direction="top">
       Opciones
     </md-tooltip>

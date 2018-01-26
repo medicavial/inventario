@@ -756,9 +756,9 @@
 		.primaryPalette('deep-purple')
 	    .accentPalette('red');
 
-			$mdThemingProvider.theme('theme7')
+			$mdThemingProvider.theme('purple')
 			.primaryPalette('purple')
-	    .accentPalette('amber')
+	    .accentPalette('blue')
 			.warnPalette('red');
 
 	    $mdThemingProvider.theme('docs-dark')

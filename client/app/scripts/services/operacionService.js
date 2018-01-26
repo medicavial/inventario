@@ -1,7 +1,7 @@
 (function(){
 
     'use strict';
-    
+
     angular
     .module('app')
     .factory('operacion',operacion);
@@ -13,6 +13,9 @@
             },
             actualizaItempro :function(datos){
                 return $http.put(api + 'operacion/item/proveedor',datos);
+            },
+            ajusteLote :function(datos){
+                return $http.post(api + 'operacion/ajuste-lote',datos);
             },
             altaAlmacenes : function(datos){
                 return $http.post(api + 'operacion/usuario/almacenes',datos);
@@ -56,7 +59,7 @@
                 .catch(function (error){
                     defer.reject('Existio un error de conexion intentalo nuevamente');
                 });
-                
+
                 return defer.promise;
 
             },
@@ -148,7 +151,7 @@
                 });
 
                 return promesa.promise;
-                
+
             },
             eliminaItempro :function(datos){
                 return $http.delete(api + 'operacion/item/proveedor',datos);
@@ -162,15 +165,15 @@
                 items = $filter('filter')(catalogo, proveedor);
 
                 angular.forEach(items, function(value, key) {
-                    
+
                     var id = catalogo.indexOf(value);
                     catalogo.splice(id, 1);
-                    
+
                 });
 
             },
             generaCantidades : function(items){
-                
+
                 var promesa = $q.defer(),
                     seleccionOrden = [];
 
@@ -189,13 +192,13 @@
 
 
                     //calculamos la cantidad que debe ser proporcional segun el numero de proveedores
-                    //y la redondeamos 
+                    //y la redondeamos
                     var cantidadProporcionada = parseInt(cantidad/proveedores);
 
-                    // esta multiplicacion es necesaria para saber si quedo menor o igual el numero de veces al total  
+                    // esta multiplicacion es necesaria para saber si quedo menor o igual el numero de veces al total
                     var cantidadSegunProporcion = cantidadProporcionada * proveedores;
 
-                    //se genera una diferencia para que esa cantidad sea para el item mas barato 
+                    //se genera una diferencia para que esa cantidad sea para el item mas barato
                     var diferencia = cantidad - cantidadSegunProporcion;
 
 
@@ -210,7 +213,7 @@
                         }
 
                         seleccionOrden.push(value);
-                    
+
                     });
 
                 });
@@ -251,7 +254,7 @@
                             value.cantidad = 0;
                             seleccionOrden.push(value);
                         }
-                    
+
                     });
 
                 });
@@ -295,16 +298,16 @@
                     total += cantidad;
                     // agregamos item al arreglo
                     itemsproveedor.push(value);
-                    
+
                     var id = catalogo.indexOf(value);
                     catalogo.splice(id, 1);
 
-                    
+
                 });
 
                 $q.when(itemsproveedor).then(function (data){
 
-                    //preparamos el arreglo que se mandara 
+                    //preparamos el arreglo que se mandara
                     var preorden = {
                             proveedor:proveedorClave,
                             items:itemsproveedor,
@@ -324,7 +327,7 @@
                         promesa.reject('Se encontro un error intentalo nuevamente');
                     });
 
-                    
+
                 });
 
                 return promesa.promise;
@@ -334,7 +337,7 @@
                 return $http.post(api + 'operacion/ordencompra',datos);
             },
             generaOrdenes : function(items,proveedores,unidad,almacenes){
-                
+
                 var promesa = $q.defer(),
                     ordenes   = [];
 
@@ -345,7 +348,7 @@
                         total = 0,
                         itemsproveedor = [];
 
-                    //verificamos item x item 
+                    //verificamos item x item
                     angular.forEach(items, function(value, key) {
                         var item = value;
                         //si equivale al proveedor lo agregamos al arreglo de items por proveedor
@@ -370,7 +373,7 @@
 
                     // si tenemos items de ese proveedor significa que si tiene registro de items para ese proveedor
                     if (itemsproveedor.length > 0) {
-                        //preparamos el objeto json para mandar al servidor el tipo es 1 debido a que es manual 
+                        //preparamos el objeto json para mandar al servidor el tipo es 1 debido a que es manual
                         var preorden = {
                                 proveedor:proveedor,
                                 items:itemsproveedor,
@@ -388,7 +391,7 @@
 
 
                 });
-                
+
                 // aqui termina el procesado de las ordenes para mandarlas al server
                 $q.when(ordenes).then(function (data){
 
@@ -406,7 +409,7 @@
 
             },
             generaTotales : function(items,proveedor){
-                
+
                 var promesa = $q.defer(),
                     seleccionOrden = [],
                     total = 0;
@@ -461,7 +464,7 @@
                     almacenes = busqueda.almacenesUnidad(unidad),
                     items     = busqueda.itemsUnidad(unidad);
 
-                $q.all([almacenes,items]).then( 
+                $q.all([almacenes,items]).then(
                     function (data){
                         promesa.resolve(data);
                     },
@@ -471,7 +474,7 @@
                         if (error.data.respuesta) {
                             msg = error.data.respuesta;
                         }else{
-                            msg = 'Hubo un problema favor de reintentarlo';                            
+                            msg = 'Hubo un problema favor de reintentarlo';
                         }
                         promesa.reject(msg);
                     }
@@ -510,7 +513,7 @@
 
                                     var caja = Number(cantidad)/Number(value.ITE_cantidadCaja);
                                     value.cantidad = Number(caja.toFixed());
-        
+
                                 }else{
                                     // console.log('entro');
                                     value.cantidad = Number(cantidad);
@@ -563,13 +566,13 @@
                     };
 
                     //calculamos la cantidad que debe ser proporcional segun el numero de proveedores
-                    //y la redondeamos 
+                    //y la redondeamos
                     var cantidadProporcionada = parseInt(cantidad/proveedores);
 
-                    // esta multiplicacion es necesaria para saber si quedo menor o igual el numero de veces al total  
+                    // esta multiplicacion es necesaria para saber si quedo menor o igual el numero de veces al total
                     var cantidadSegunProporcion = cantidadProporcionada * proveedores;
 
-                    //se genera una diferencia para que esa cantidad sea para el item mas barato 
+                    //se genera una diferencia para que esa cantidad sea para el item mas barato
                     var diferencia = cantidad - cantidadSegunProporcion;
 
                     var id = items.indexOf(value);
