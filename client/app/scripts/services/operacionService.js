@@ -626,6 +626,40 @@
 
                 return promesa.promise;
 
+            },
+            fechas : function(){
+              $rootScope.fechas = {};
+      				var d = new Date;
+      				var anioInicio = d.getFullYear();
+      				var anioFinal = anioInicio + 20;
+
+      				var numerador = 0;
+      				var anios = new Array();
+      				for (var i = anioInicio; i < anioFinal; i++) {
+                // anios[numerador] = i;
+                anios[numerador] = {"anio":i};
+      					numerador ++;
+      				}
+      				$rootScope.fechas.anios = anios;
+
+      				var meses = new Array();
+      				meses[0] = {"id":"01" ,"nombre": "Enero" };
+      				meses[1] = {"id":"02" ,"nombre": "Febrero" };
+      				meses[2] = {"id":"03" ,"nombre": "Marzo" };
+      				meses[3] = {"id":"04" ,"nombre": "Abril" };
+      				meses[4] = {"id":"05" ,"nombre": "Mayo" };
+      				meses[5] = {"id":"06" ,"nombre": "Junio" };
+      				meses[6] = {"id":"07" ,"nombre": "Julio" };
+      				meses[7] = {"id":"08" ,"nombre": "Agosto" };
+      				meses[8] = {"id":"09" ,"nombre": "Septiembre" };
+      				meses[9] = {"id":"10" ,"nombre": "Octubre" };
+      				meses[10] = {"id":"11" ,"nombre": "Noviembre" };
+      				meses[11] = {"id":"12" ,"nombre": "Diciembre" };
+
+      				$rootScope.fechas.meses = meses;
+      				// console.log($rootScope.fechas);
+
+              return $rootScope.fechas;
             }
         };
 

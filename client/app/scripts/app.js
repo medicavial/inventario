@@ -1,6 +1,6 @@
 (function(){
 
-	/** Sergio Alcala (2016), Samuel Ramirez (2017)
+	/** Sergio Alcala (2016), Samuel Ramirez (2017-2018)
     *Inicio de proyecto Inventarios
     *
     */

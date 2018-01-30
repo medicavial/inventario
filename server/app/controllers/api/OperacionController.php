@@ -1082,7 +1082,99 @@ class OperacionController extends BaseController {
 	}
 
 	public function ajusteLote(){
-		return Input::All();
+		$ALM_nombre 						= Input::get('ALM_nombre');
+		$EXI_cantidad 					= Input::get('EXI_cantidad');
+		$EXI_clave 							= Input::get('EXI_clave');
+		$ITE_codigo 						= Input::get('ITE_codigo');
+		$ITE_nombre 						= Input::get('ITE_nombre');
+		$LOT_caducidad 					= Input::get('LOT_caducidad').'-01 00:00:00';
+		$LOT_caducidadOriginal 	= Input::get('LOT_caducidadOriginal').'-01 00:00:00';
+		$LOT_cantidad 					= Input::get('LOT_cantidad');
+		$LOT_cantidadOriginal 	= Input::get('LOT_cantidadOriginal');
+		$LOT_clave 							= Input::get('LOT_clave');
+		$LOT_numero 						= Input::get('LOT_numero');
+		$LOT_obsAjuste 					= Input::get('LOT_obsAjuste');
+		$USU_clave 							= Input::get('USU_clave');
+		$anioNuevo 							= Input::get('anioNuevo');
+		$mesNuevo 							= Input::get('mesNuevo');
+		$updated_at 						= Input::get('updated_at');
+
+		$actualizaciones = array('updated_at' => DB::raw('now()'));
+
+		if ( $LOT_caducidad != $LOT_caducidadOriginal ) {
+			$actualizaciones['LOT_caducidad'] = $LOT_caducidad;
+		}
+		if ( $LOT_cantidad != $LOT_cantidadOriginal ) {
+			$actualizaciones['LOT_cantidad'] = $LOT_cantidad;
+		}
+
+		$verifica = DB::table('usuarios')
+									 ->select('USU_login', 'USU_nombrecompleto', DB::raw('CONCAT(1) as existe'))
+									 ->where('USU_clave', $USU_clave)
+									 ->where('USU_activo', 1)
+									 ->get();
+
+		if ( sizeof($verifica)>0 && $verifica[0]->existe == '1') {
+			try {
+				$actualizacion = DB::table('lote')
+													 ->where('LOT_clave', $LOT_clave)
+													 ->where('EXI_clave', $EXI_clave)
+													 ->where('LOT_numero', $LOT_numero)
+													 ->update($actualizaciones);
+
+				if ($actualizacion == 1) {
+					$log = DB::table('ajusteLote')
+									 ->insertGetId(array('USU_clave' 							=> $USU_clave,
+									 										 'EXI_clave' 							=> $EXI_clave,
+																			 'EXI_cantidad' 					=> $EXI_cantidad,
+																			 'LOT_clave' 							=> $LOT_clave,
+																			 'LOT_cantidadOriginal' 	=> $LOT_cantidadOriginal,
+																			 'LOT_cantidadNueva' 			=> $LOT_cantidad,
+																			 'LOT_caducidadOriginal' 	=> $LOT_caducidadOriginal,
+																			 'LOT_caducidadNueva' 		=> $LOT_caducidad,
+																			 'ALO_fecha' 							=> DB::raw('now()'),
+																			 'ALO_observaciones' 			=> $LOT_obsAjuste));
+
+					$respuesta = array('respuesta' 	=> $actualizacion,
+														 'info' 			=> $log);
+
+					 //generamos el correo informativo
+					 $datosMail = array( 'usuario' 				=> $verifica[0]->USU_nombrecompleto,
+															 'almacen' 				=> $ALM_nombre,
+															 'item' 					=> $ITE_nombre,
+															 'cantidad0' 			=> $LOT_cantidadOriginal,
+															 'cantidad1' 			=> $LOT_cantidad,
+															 'caducidad0' 		=> $LOT_caducidadOriginal,
+															 'caducidad1' 		=> $LOT_caducidad,
+															 'lote' 					=> $LOT_numero,
+															 'loteId' 				=> $LOT_clave,
+															 'observaciones'	=> $LOT_obsAjuste,
+															 'fecha' 					=> date('Y-m-d H:i:s')
+														 );
+						try {
+							Mail::send('emails.ajusteLote', $datosMail, function($message)
+		 	         {
+		 	             $message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+		 	             $message->subject('Ajuste a lote');
+		 	             $message->to('sramirez@medicavial.com.mx');
+		 	             $message->cc('samuel11rr@gmail.com');
+		 	         });
+						} catch (Exception $e) {
+							
+						}
+				} else{
+					$respuesta = array('respuesta' 	=> $actualizacion,
+														 'info' 			=> 'Hubo un error y no se hicieron cambios');
+				}
+			} catch (Exception $e) {
+				$respuesta = array('respuesta' => $e,
+													 'info' 		 => 'Problemas en el servidor'); //cuando hay problemas de codigo o del servidor
+			}
+		} else {
+			$respuesta = array('respuesta' => 'no permitido'); // cuando no encuentra al usuario
+		}
+
+		return $respuesta;
 	}
 
 }

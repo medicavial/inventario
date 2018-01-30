@@ -8,7 +8,7 @@
 
 	function ajusteLotesCtrl($rootScope, $scope, busqueda,mensajes,datos,reportes, $mdBottomSheet, $state, $mdDialog, operacion){
 
-		if ( $rootScope.permisos.PER_clave === 1 || $rootScope.permisos.PER_clave === 2 ) {
+		if ( $rootScope.permisos.PER_clave == 1 || $rootScope.permisos.PER_clave == 2 ) {
 			// console.log($rootScope.permisos);
 			console.info('Permitido');
 		} else {
@@ -126,13 +126,21 @@
 
 		function revisionLotesCtrl ($scope, datos, $mdDialog, operacion ) {
 				$scope.trabajando = false;
-		    $scope.loteEditor = datos;
+				$scope.loteEditor = datos;
 				$scope.loteEditor.LOT_cantidadOriginal = datos.LOT_cantidad;
 				$scope.loteEditor.LOT_caducidad = datos.LOT_caducidad.substr(0, 7);
 				$scope.loteEditor.LOT_caducidadOriginal = datos.LOT_caducidad.substr(0, 7);
+				$scope.loteEditor.mesNuevo =datos.LOT_caducidad.substr(5, 7);
+				$scope.loteEditor.anioNuevo = parseInt(datos.LOT_caducidad.substr(0, 4));
+				$scope.loteEditor.LOT_obsAjuste = '';
+				$scope.fechas = operacion.fechas();
+
+				$scope.nuevaCaducidad = function (){
+					$scope.loteEditor.LOT_caducidad = $scope.loteEditor.anioNuevo+'-'+$scope.loteEditor.mesNuevo;
+					console.log($scope.loteEditor.LOT_caducidad);
+				}
 
 				$scope.guardaCambios = function(){
-
 					if ( $scope.loteEditor.LOT_cantidad == $scope.loteEditor.LOT_cantidadOriginal
 							 && $scope.loteEditor.LOT_caducidad == $scope.loteEditor.LOT_caducidadOriginal ) {
 								 	mensajes.alerta('No hay cambios','warning','top right','warning');
@@ -144,21 +152,33 @@
 
 							operacion.ajusteLote( $scope.loteEditor ).success(function (data){
 								$scope.trabajando = false;
-								mensajes.alerta('Datos procesados','success','top right','check_circle');
 								console.log(data);
-								$rootScope.buscaNuevamente();
-								$scope.cerrarDialogo();
+
+								if (data.respuesta == 1) {
+									mensajes.alerta('Datos procesados correctamente','success','top right','check_circle');
+									$rootScope.buscaNuevamente();
+									$scope.cerrarDialogo();
+								} else{
+									if (data.info) {
+										mensajes.alerta(data.info,'warning','top right','warning');
+									}
+									else{
+										mensajes.alerta('No se hicieron cambios','warning','top right','warning');
+									}
+								}
 							}).error(function (error){
 								scope.info = [];
 								$scope.trabajando = false;
-								mensajes.alerta('Ocurrio un error vuelva a intentarlo','error','top right','error');
+								mensajes.alerta('Ocurrio un error, vuelva a intentarlo','error','top right','error');
+								console.log(error);
 							})
 					}
 				};
 
 				$scope.cerrarDialogo = function (){
-					$mdDialog.hide();
 					$scope.loteEditor={};
+					$rootScope.buscaNuevamente();
+					$mdDialog.hide();
 				};
 		}
 
