@@ -4,7 +4,7 @@ class DatosIniciales extends \BaseController {
 
 	public function index($unidades) {
 		$ordenes =  OrdenCompra::todos($unidades);
-		
+
 		$items = Item::todos();
 
 		$porCaducar = DatosIniciales::porCaducar($unidades);
@@ -16,7 +16,7 @@ class DatosIniciales extends \BaseController {
 		return array(
 					 'itemsTotal' 	=> sizeof($items),
 					 'ordenes'		=> sizeof($ordenes),
-					 'porCaducar'	=> sizeof($porCaducar), 
+					 'porCaducar'	=> sizeof($porCaducar),
 					 'porSurtir'	=> sizeof($porSurtir),
 					 'ordAbiertas'	=> sizeof($ordAbiertas)
 				);
@@ -51,6 +51,7 @@ class DatosIniciales extends \BaseController {
 
 
 	public function porSurtir($unidades){
+
 		$porSurtir = DB::table('reservas')
 						->select(DB::raw('reservas.RES_clave, items.ITE_codigo, items.ITE_nombre, almacenes.ALM_nombre, unidades.UNI_nombrecorto, reservas.RES_cantidad, RES_fecha'))
 						->join('items', 'reservas.ITE_clave', '=', 'items.ITE_clave')
@@ -64,19 +65,37 @@ class DatosIniciales extends \BaseController {
 		return $porSurtir;
 	}
 
+	public function porSurtirDetalles( $unidades ){
+		set_time_limit(180);// limite de tiempo en tiempo en segundos
+
+		$porSurtir = DatosIniciales::porSurtir($unidades);
+
+		foreach ($porSurtir as $item) {
+			$respuesta[] = array( 'RES_clave'				=> $item->RES_clave,
+														'ITE_codigo'			=> $item->ITE_codigo,
+														'ITE_nombre'			=> $item->ITE_nombre,
+														'ALM_nombre'			=> $item->ALM_nombre,
+														'UNI_nombrecorto'	=> $item->UNI_nombrecorto,
+														'RES_cantidad'		=> $item->RES_cantidad,
+														'RES_fecha'				=> $item->RES_fecha,
+														'receta'					=> DB::connection('mv')->table('NotaSuministros')->where('id_reserva', $item->RES_clave)->first()
+														);
+		}
+		return $respuesta;
+	}
 
 	public function ordenesAbiertas($unidades){
 
-		$select = 'OCM_clave as id, 
-				   OCM_fechaReg as AltaOrden, 
-				   ordenCompra.PRO_clave, 
+		$select = 'OCM_clave as id,
+				   OCM_fechaReg as AltaOrden,
+				   ordenCompra.PRO_clave,
 				   OCM_fechaSurtida as SurtidaOrden,
-				   USU_creo as UsuarioCreo, 
-				   usuarios.USU_nombrecompleto, 
-				   ordenCompra.UNI_clave, 
-				   UNI_nombrecorto, 
+				   USU_creo as UsuarioCreo,
+				   usuarios.USU_nombrecompleto,
+				   ordenCompra.UNI_clave,
+				   UNI_nombrecorto,
 				   usurtio.USU_login as UsuarioSurtio,
-				   PRO_nombrecorto, 
+				   PRO_nombrecorto,
 				   OCM_importeEsperado,
 				   CASE
 					WHEN OCM_cancelada = 1 THEN "Cancelada"

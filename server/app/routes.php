@@ -205,6 +205,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('unidades/usuario/{id}', 'BusquedasController@unidadesUsuario');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
+				Route::get('inicial/porSurtirDetalles/{unidades}', 'DatosIniciales@porSurtirDetalles');
     });
 
     Route::group(array('prefix' => 'operacion'), function()
@@ -240,7 +241,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('usuarios/almacen', 'OperacionController@usuariosAlm');
         Route::get('reservasantiguas', 'OperacionController@reservasAntiguas');
 				Route::get('ajuste-lotes-caducidad', 'OperacionController@ajusteLoteCaducidad');
-        Route::post('ajuste-lote', 'OperacionController@ajusteLote');
+				Route::post('ajuste-lote', 'OperacionController@ajusteLote');
+        Route::get('reservaSurtida-{id}', 'OperacionController@reservaSurtida');
     });
 
 

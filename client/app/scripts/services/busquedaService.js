@@ -176,7 +176,7 @@
                 return $http.get(api + 'busquedas/inicial/porCaducar/'+unidades);
             },
             cunsultaApartados : function(unidades){
-                return $http.get(api + 'busquedas/inicial/porSurtir/'+unidades);
+                return $http.get(api + 'busquedas/inicial/porSurtirDetalles/'+unidades);
             },
             consultaOrdenesAbiertas : function(unidades){
                 return $http.get(api + 'reportes/ordenesAbiertas/'+unidades);

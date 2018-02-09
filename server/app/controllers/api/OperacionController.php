@@ -726,8 +726,10 @@ class OperacionController extends BaseController {
 		$recetaMV->save();
 
 		//eliminamos reserva
-		$reserva = Reserva::find($claveReserva);
-		$reserva->delete();
+		// $reserva = Reserva::find($claveReserva);
+		// $reserva->delete();
+		$surteReserva = OperacionController::reservaSurtida( $claveReserva );
+
 
 		//damos salida al item surtido
 		$operacion->salida();
@@ -746,6 +748,16 @@ class OperacionController extends BaseController {
 
 	}
 
+	public function reservaSurtida( $claveReserva ) {
+		if ( ( $claveReserva != null || $claveReserva !='' ) && $claveReserva > 0 ) {
+			$respuesta = DB::table('reservas')
+											->where('RES_clave', '=', $claveReserva)
+											->delete();
+		} else {
+			$respuesta = 0;
+		}
+		return $respuesta;
+	}
 
 	//funcion que surte la orden de compra
 	public function surtirOrden(){
@@ -966,58 +978,102 @@ class OperacionController extends BaseController {
 	}
 
 	public function reservasAntiguas(){
+		set_time_limit(180);// limite de tiempo en tiempo en segundos
+
+		//obtenemos todas las reservas
+		$url = 'http://api.medicavial.mx/api/busquedas/inicial/porSurtirDetalles/1,2,3,4,5,6,7,8,9,10,11,12';
+		$todoURL = file_get_contents($url);
+		$todo = json_decode($todoURL, true);
+
+		/***
+		Recorremos el array eliminando las reservas en la base de inventarios
+		que ya no estén en la base de mv
+		***/
+		$cantidad = 0;
+
+		foreach ($todo as $item) {
+			/* si los detalles de la receta estan vacios
+			o si ya fue surtido el item, o si fue cancelado el item
+			procedemos a eliminar la reserva en la base de inventario*/
+			if ( $item['receta'] == null || $item['receta']['NS_surtida'] != 0 || $item['receta']['NS_cancelado'] == 1) {
+				// return $item;
+				//se eliminan todas las reservas de los almacenes en esta unidad
+				$elimina = DB::table('reservas')
+											->where('RES_clave', '=', $item['RES_clave'])
+											->delete();
+				//si se eliminó la reserva correctamente incrementamos el contador
+				if ( $elimina == 1 ) {
+					$cantidad++;
+				}
+			}
+		}
+
+
+
 		//traemos el listado de reservas agrupadas por unidad
 		$reservas = DB::table('reservas')
-						->select('reservas.*', 'almacenes.UNI_clave', 'unidades.UNI_claveMV')
-						->join('almacenes', 'reservas.ALM_clave', '=', 'almacenes.ALM_clave')
-						->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-						->groupBy('UNI_claveMV')
-						->get();
+									->select('reservas.*', 'almacenes.UNI_clave', 'unidades.UNI_claveMV')
+									->join('almacenes', 'reservas.ALM_clave', '=', 'almacenes.ALM_clave')
+									->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+									->groupBy('UNI_claveMV')
+									->get();
 
 		//verificamos si hay recetas pendientes por unidad
 		$resumen = array();
-		$cantidad = 0;
+		// $cantidad = 0;
 
 		foreach ($reservas as $reserva) {
 			$apiURL = 'http://medicavial.net/mvnuevo/api/notaMedica.php?funcion=listadoRecetasSinSurtir&uni='.$reserva->UNI_claveMV;
 			$datosURL = file_get_contents($apiURL);
 			$recetasPendientes = json_decode($datosURL, true);
 
-			//si en la unidad actual existe reserva
-			//pero no hay recetas pendientes procedemos
-			//a eliminar las reservas de esta unidad
+			/* si en la unidad actual existen reservados
+					pero NO hay recetas pendientes procedemos
+					a eliminar las reservas de esta unidad */
 			if ( sizeof($recetasPendientes) == 0 ) {
+				//esto lo utilizamos cuando hacemos pruebas
 				$resumen[] = array( 'UNI_claveMV'	=> $reserva->UNI_claveMV,
-									'UNI_clave'		=> $reserva->UNI_clave,
-									'pendientes'	=> sizeof($recetasPendientes),
-									'almacen'		=> $reserva->ALM_clave
-									);
+														'UNI_clave'		=> $reserva->UNI_clave,
+														'pendientes'	=> sizeof($recetasPendientes),
+														'almacen'			=> $reserva->ALM_clave
+														);
 
+				//obtenemos los almacenes que están en esta unidad
+				$almacenes = DB::table('almacenes')
+											 ->select('ALM_clave')
+											 ->where('UNI_clave', $reserva->UNI_clave)
+											 ->get();
+
+				//se eliminan todas las reservas de los almacenes en esta unidad
 				$eliminados = DB::table('reservas')
-								->where('ALM_clave', '=', $reserva->ALM_clave)
-								->delete();
+												// ->where('ALM_clave', '=', $reserva->ALM_clave)
+												->whereBetween('ALM_clave', array($almacenes[0]->ALM_clave, $almacenes[sizeof($almacenes)-1]->ALM_clave))
+												->delete();
 				$cantidad = $eliminados + $cantidad;
 			}
 		};
 		// return $resumen;
 
 		//eliminamos las reservas que tengan más de 30 días
+		//donde SI hay recetas pendientes
 		$reservas = DB::table('reservas')
 						->where('RES_fecha', '<', DB::raw('DATE(DATE_SUB(NOW(), INTERVAL 30 DAY))'))
 						->delete();
 
 		$totalEliminados = $reservas + $cantidad;
 
-		//generamos el correo informativo
-        Mail::send('emails.reservas', array('cantidad' => $totalEliminados), function($message)
-        {
-
-            $message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
-            $message->subject('Reservas Eliminadas');
-            $message->to('sramirez@medicavial.com.mx');
-            $message->cc('samuel11rr@gmail.com');
-        });
-
+		//generamos el correo informativo solo si se eliminaron reservas
+		if ($totalEliminados > 0) {
+			Mail::send('emails.reservas', array('cantidad' => $totalEliminados), function($message)
+			{
+					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+					$message->subject('Reservas Eliminadas');
+					$message->to('sramirez@medicavial.com.mx');
+					$message->cc('samuel11rr@gmail.com');
+			});
+		} else {
+			return 'Sin eliminados';
+		}
 	}
 
 	public function corrigeObs(){
@@ -1071,7 +1127,6 @@ class OperacionController extends BaseController {
 			DB::table('lote')
 			    ->where('LOT_clave', $lotes[$i]['LOT_clave'])
 			    ->update(array('LOT_caducidad' => substr($lotes[$i]['LOT_caducidad'], 0, 8).'01 00:00:00'));
-
 
 			$respuesta[] = array( 	'id_lote' 				=> $lotes[$i]['LOT_clave'],
 									'caducidad original' 	=> $lotes[$i]['LOT_caducidad'],
@@ -1160,7 +1215,7 @@ class OperacionController extends BaseController {
 		 	             $message->cc('samuel11rr@gmail.com');
 		 	         });
 						} catch (Exception $e) {
-							
+
 						}
 				} else{
 					$respuesta = array('respuesta' 	=> $actualizacion,

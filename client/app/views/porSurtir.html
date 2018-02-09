@@ -3,19 +3,21 @@
     <table md-data-table>
       <thead md-order="porSurtir.order" md-trigger="porSurtir.onOrderChange">
         <tr>
-          <th name="ID Reserva" order-by="RES_clave"></th>
-          <th name="Código" order-by="ITE_codigo"></th>
+          <!-- <th name="Código" order-by="ITE_codigo"></th> -->
+          <th name="Receta" order-by="receta.id_receta"></th>
           <th name="Item" order-by="ITE_nombre"></th>
+          <th name="Clave" order-by="RES_clave"></th>
           <th name="Almacén" order-by="ALM_nombre"></th>
-          <th name="Cantidad Reservada" order-by="RES_cantidad"></th>
+          <th name="Cantidad" order-by="RES_cantidad"></th>
           <th name="Fecha Reserva" order-by="RES_fecha"></th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="item in porSurtir.listado | filter:query | orderBy:porSurtir.order | limitTo:porSurtir.limit: (porSurtir.page -1) * porSurtir.limit">
-          <td>{{ item.RES_clave }}</td>
-          <td>{{ item.ITE_codigo }}</td>
+          <!-- <td>{{ item.ITE_codigo }}</td> -->
+          <td> <b>{{ item.receta.id_receta }}</b> </td>
           <td>{{ item.ITE_nombre }}</td>
+          <td>{{ item.RES_clave }}</td>
           <td>{{ item.ALM_nombre }}</td>
           <td>{{ item.RES_cantidad }}</td>
           <td><span ng-if="item.RES_fecha != '0000-00-00 00:00:00'">{{ item.RES_fecha | limitTo:10 | date:"d/MMM/yyyy" }}</span></td>
