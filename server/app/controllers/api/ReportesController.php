@@ -131,9 +131,11 @@ class ReportesController extends BaseController {
 				->join('usuarios', 'movimientos.USU_clave', '=', 'usuarios.USU_clave')
 				->join('tiposMovimiento', 'movimientos.TIM_clave', '=', 'tiposMovimiento.TIM_clave')
 				->leftJoin('tiposAjuste', 'movimientos.TIA_clave', '=', 'tiposAjuste.TIA_clave')
-				->select('ITE_codigo','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre','MOV_observaciones','MOV_cantidad','movimientos.created_at')
-				->whereBetween('movimientos.created_at', array(Input::has('fechaInicio') ? Input::get('fechaInicio') : date('Y-m-d') . ' 00:00:00' , Input::has('fechaFinal') ? Input::get('fechaFinal') : date('Y-m-d') . ' 23:59:59'));;
+				->select('ITE_codigo','ITE_nombre','ALM_nombre','USU_login','TIM_nombre', 'TIA_nombre','MOV_observaciones','MOV_cantidad','movimientos.created_at');
+				// ->whereBetween('movimientos.created_at', array(Input::has('fechaInicio') ? Input::get('fechaInicio') : date('Y-m-d') . ' 00:00:00' , Input::has('fechaFinal') ? Input::get('fechaFinal') : date('Y-m-d') . ' 23:59:59'));
 
+				$query->where('movimientos.created_at', '>', Input::get('fechaInicio').' 00:00:00');
+				$query->where('movimientos.created_at', '<', Input::get('fechaFinal').' 23:59:59');
 	 	if (Input::has('unidad')) {
 	 		$query->where('UNI_clave', Input::get('unidad') );
 		}
