@@ -242,7 +242,8 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('reservasantiguas', 'OperacionController@reservasAntiguas');
 				Route::get('ajuste-lotes-caducidad', 'OperacionController@ajusteLoteCaducidad');
 				Route::post('ajuste-lote', 'OperacionController@ajusteLote');
-        Route::get('reservaSurtida-{id}', 'OperacionController@reservaSurtida');
+				Route::get('reservaSurtida-{id}', 'OperacionController@reservaSurtida');
+        Route::get('correominimo/{almacen}/{item}', 'OperacionController@mailMinimos');
     });
 
 
@@ -263,7 +264,6 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('pdf/ordencompra/{id}','ReportesController@ordenCompraPDF');
         Route::get('recetasComp','ReportesController@recetasComp');
         Route::post('pruebaCorreo/{parametro}','ReportesController@pruebaCorreo');
-
     });
 
     Route::group(array('prefix' => 'mv'), function()

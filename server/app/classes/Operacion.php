@@ -95,7 +95,6 @@ class Operacion {
 
 		// verificamos que sea para el mismo almacen
 		if ($existencia == $this->idExistencia) {
-
 			//ajuste
 			if ($this->tipomovimiento == 1) {
 				$this->reseteaLotes();
@@ -292,11 +291,15 @@ class Operacion {
 		$this->idExistencia = $this->existencia->EXI_clave;
 
 		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
-
 		$itemactualiza = Item::find($this->item);
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidad;
 		$itemactualiza->save();
+		try {
+			$url = 'http://api.medicavial.mx/api/operacion/correominimo/'.$this->almacen.'/'.$this->item;
+			$todoURL = file_get_contents($url);
+		} catch (Exception $e) {
 
+		}
 	}
 
 

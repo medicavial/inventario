@@ -319,15 +319,11 @@ class OperacionController extends BaseController {
 	}
 
 	public function itemsUnidad($unidad){
-
-
-
 		$datos =  Existencia::configuracion($unidad);
+
 		$respuesta = array();
 
-
 		foreach ($datos as $dato) {
-
 			$claveItem = $dato['ITE_clave'];
 			$consulta = OrdenCompra::porSurtir($claveItem,$unidad);
 
@@ -339,9 +335,7 @@ class OperacionController extends BaseController {
 
 			$conf = Configuracion::where(array( 'ITE_clave' => $claveItem,'UNI_clave' => $unidad ))->first();
 
-
 			if ($conf) {
-
 				$nivelCompra = $conf->CON_nivelCompra;
 				$nivelMaximo = $conf->CON_nivelMaximo;
 				$nivelMinimo = $conf->CON_nivelMinimo;
@@ -1230,6 +1224,49 @@ class OperacionController extends BaseController {
 		}
 
 		return $respuesta;
+	}
+
+	public function mailMinimos($almacen, $item){
+		$unidad = DB::table('almacenes')
+								->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
+								->where('ALM_clave', $almacen)
+								->get();
+
+	  $almacenes = DB::table('almacenes')
+									 ->where('UNI_clave', $unidad[0]->UNI_clave)
+									 ->get();
+
+		$existencias = Existencia::join('almacenes','existencias.ALM_clave','=','almacenes.ALM_clave')
+														 ->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
+														 ->where('ITE_clave', $item)
+														 ->where('almacenes.UNI_clave', $unidad[0]->UNI_clave)
+														 ->select(DB::raw('SUM(EXI_cantidad) as total'))
+														 ->get();
+		$datosItem = Item::where('ITE_clave', $item)->first();
+
+		$conf = Configuracion::where(array( 'ITE_clave' => $item,'UNI_clave' => $unidad[0]->UNI_clave ))->first();
+		if ($conf != '') {
+			$datos = array('ITE_codigo' 	=> $datosItem->ITE_codigo,
+										 'ITE_nombre' 	=> $datosItem->ITE_nombre,
+									 	 'existencias'	=> $existencias[0]->total,
+									 	 'minimo' 			=> $conf->CON_nivelMinimo,
+									 	 'maximo' 			=> $conf->CON_nivelMaximo,
+									   'uniClave' 		=> $unidad[0]->UNI_clave,
+									 	 'unidad' 			=> $unidad[0]->UNI_nombrecorto);
+
+			 if ( $existencias[0]->total <= $conf->CON_nivelMinimo ) {
+	 			Mail::send('emails.minimo', $datos, function($message)
+	 			{
+	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+	 					$message->subject('Item en nivel minimo');
+	 					$message->to('alozano@medicavial.com.mx');
+						$message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						$message->bcc('sramirez@medicavial.com.mx');
+	 			});
+	 		}
+		}else{
+			return 'no hay configuracion';
+		}
 	}
 
 }
