@@ -1066,9 +1066,12 @@ class OperacionController extends BaseController {
 					$message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
 					$message->bcc('sramirez@medicavial.com.mx');
 			});
-		} else {
-			return 'Sin eliminados';
 		}
+		// else {
+		// 	return $totalEliminados;
+		// }
+
+		return $totalEliminados;
 	}
 
 	public function corrigeObs(){

@@ -660,7 +660,10 @@
       				// console.log($rootScope.fechas);
 
               return $rootScope.fechas;
-            }
+            },
+            eliminaReservasAntiguas : function(){
+                return $http.get(api + 'operacion/reservasantiguas');
+            },
         };
 
     };

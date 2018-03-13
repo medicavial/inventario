@@ -5,14 +5,16 @@
 	angular.module('app')
 	.controller('porSurtirCtrl',porSurtirCtrl)
 
-	porSurtirCtrl.$inject = ['$rootScope','$scope','busqueda','datos','proveedores','segundaprueba','mensajes'];
+	porSurtirCtrl.$inject = ['$rootScope','$scope','busqueda','datos','proveedores','segundaprueba','mensajes', 'operacion', '$state'];
 
-	function porSurtirCtrl($rootScope,$scope,busqueda,datos,proveedores, segundaprueba, mensajes){
+	function porSurtirCtrl($rootScope,$scope,busqueda,datos,proveedores, segundaprueba, mensajes, operacion, $state){
 
 		var porSurtir = this;
 
 		$rootScope.tema = 'theme4';
 		$rootScope.titulo = 'Items por surtir';
+
+		$scope.trabajando = false;
 
 		porSurtir.listado=datos.data;
 		porSurtir.total=0;
@@ -32,6 +34,15 @@
 			// console.log(scope.query);
 		};
 
+		$scope.actualizaPorSurtir = function(){
+			console.info('actualiza');
+			$scope.trabajando = true;
+			operacion.eliminaReservasAntiguas().success(function (data){
+					console.log(data);
+					$scope.trabajando = false;
+					$state.reload();
+			});
+		}
 	}
 
 })();
