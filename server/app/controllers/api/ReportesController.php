@@ -547,6 +547,7 @@ class ReportesController extends BaseController {
 	}
 
 	public function recetasComp(){
+		set_time_limit(300); // limite de tiempo en tiempo en segundos
 
 		$respuesta=array();
 		$fechaInicio='2017-07-01 00:00:00';
@@ -724,10 +725,10 @@ class ReportesController extends BaseController {
 		{
     		$archivo=public_path().'/ordenesCompra/'.$datos['numOrden'].'.pdf';
 
-			$message->from('sramirez@medicavial.com.mx', 'Médica Vial');
+				$message->from('sramirez@medicavial.com.mx', 'Médica Vial');
 		    $message->to('sramirez@medicavial.com.mx', 'Nombre')->subject('Orden de Compra '.$datos['numOrden']);
-			// $message->cc('jacortes@medicavial.com.mx');
-    		// $message->bcc(array('samuel11rr@gmail.com','samuel_ramirez@live.com.mx'));
+				// $message->cc('jacortes@medicavial.com.mx');
+    		// $message->bcc(array('egutierrez@medicavial.com.mx','adominguez@medicavial.com.mx'));
 		    $message->attach($archivo);
 		});
 

@@ -1062,8 +1062,9 @@ class OperacionController extends BaseController {
 			{
 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 					$message->subject('Reservas Eliminadas');
-					$message->to('sramirez@medicavial.com.mx');
-					$message->cc('samuel11rr@gmail.com');
+					$message->to('alozano@medicavial.com.mx');
+					$message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+					$message->bcc('sramirez@medicavial.com.mx');
 			});
 		} else {
 			return 'Sin eliminados';
@@ -1205,8 +1206,9 @@ class OperacionController extends BaseController {
 		 	         {
 		 	             $message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 		 	             $message->subject('Ajuste a lote');
-		 	             $message->to('sramirez@medicavial.com.mx');
-		 	             $message->cc('samuel11rr@gmail.com');
+		 	             $message->to('alozano@medicavial.com.mx');
+									 $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+			 				 		 $message->bcc('sramirez@medicavial.com.mx');
 		 	         });
 						} catch (Exception $e) {
 
