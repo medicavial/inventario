@@ -664,6 +664,9 @@
             eliminaReservasAntiguas : function(){
                 return $http.get(api + 'operacion/reservasantiguas');
             },
+            altaLote : function(datos){
+                return $http.post(api + 'operacion/alta-lote',datos);
+            }
         };
 
     };

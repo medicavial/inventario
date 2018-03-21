@@ -242,6 +242,7 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('reservasantiguas', 'OperacionController@reservasAntiguas');
 				Route::get('ajuste-lotes-caducidad', 'OperacionController@ajusteLoteCaducidad');
 				Route::post('ajuste-lote', 'OperacionController@ajusteLote');
+				Route::post('alta-lote', 'OperacionController@altaLote');
 				Route::get('reservaSurtida-{id}', 'OperacionController@reservaSurtida');
         Route::get('correominimo/{almacen}/{item}', 'OperacionController@mailMinimos');
     });

@@ -81,6 +81,22 @@
 			});
 		};
 
+		scope.nombreAlmacen = function( cveAlmacen ){
+			for (var i = 0; i < scope.almacenes.length; i++) {
+				if ( scope.almacenes[i].ALM_clave == cveAlmacen ) {
+					return scope.almacenes[i];
+				}
+			}
+		};
+
+		scope.detallesItem = function( cveItem ){
+			for (var i = 0; i < scope.items.length; i++) {
+				if ( scope.items[i].ITE_clave == cveItem ) {
+					return scope.items[i];
+				}
+			}
+		};
+
 		scope.buscar = function(){
 			if (scope.datos.unidad && scope.datos.almacen && scope.datos.item) {
 				// console.log(scope.datos);
@@ -123,6 +139,85 @@
 				locals:{datos: lote},
 			});
 		};
+
+		scope.registraLote = function(){
+			var datos = {
+				ITE_clave: scope.datos.item,
+				ALM_clave: scope.datos.almacen,
+				EXI_clave: 0,
+				EXI_cantidad: 0,
+				numLote:'',
+				LOT_cantidad:null,
+				LOT_caducidad: '',
+				cadAnio: '',
+				cadMes: '',
+				observaciones: '',
+				precaucion: false,
+				modificaExistencias: false,
+				USU_clave: $rootScope.id,
+				item: scope.detallesItem( scope.datos.item ),
+				almacen: scope.nombreAlmacen( scope.datos.almacen ),
+				parametros: scope.datos,
+			};
+
+			if ( scope.info.length > 0 ) {
+				datos.EXI_cantidad = scope.info[0].EXI_cantidad;
+				datos.EXI_clave = scope.info[0].EXI_clave;
+			}
+
+			console.log('nuevo');
+			$mdDialog.show({
+				controller: creacionLoteCtrl,
+				templateUrl: 'views/altaLote.html',
+				parent: angular.element(document.body),
+				clickOutsideToClose: false,
+				escapeToClose: false,
+				locals:{datos: datos},
+			});
+		}
+
+		function creacionLoteCtrl ($scope, datos, $mdDialog, operacion ) {
+			$scope.trabajando = false;
+			$scope.nuevos = datos;
+			$scope.fechas = operacion.fechas();
+
+			$scope.guardaAlta = function(){
+				// console.log($scope.nuevos);
+				operacion.altaLote( $scope.nuevos ).success(function (data){
+					$scope.trabajando = false;
+					console.log(data);
+
+					if (data.respuesta == 'Registrado') {
+						mensajes.alerta('Lote registrado correctamente','success','top right','check_circle');
+						$rootScope.buscaNuevamente();
+						$scope.cerrarDialogo();
+					} else{
+						if (data.info) {
+							mensajes.alerta(data.info,'warning','top right','warning');
+						}
+						else{
+							mensajes.alerta('No se hicieron cambios','warning','top right','warning');
+						}
+					}
+				}).error(function (error){
+					scope.info = [];
+					$scope.trabajando = false;
+					mensajes.alerta('Ocurrio un error, vuelva a intentarlo','error','top right','error');
+					console.log(error);
+				})
+			}
+
+			$scope.nuevaCaducidad = function (){
+				$scope.nuevos.LOT_caducidad = $scope.nuevos.cadAnio+'-'+$scope.nuevos.cadMes;
+				console.log($scope.nuevos.LOT_caducidad);
+			}
+
+			$scope.cerrarDialogo = function(){
+				$scope.nuevos={};
+				$rootScope.buscaNuevamente();
+				$mdDialog.hide();
+			}
+		}
 
 		function revisionLotesCtrl ($scope, datos, $mdDialog, operacion ) {
 				$scope.trabajando = false;

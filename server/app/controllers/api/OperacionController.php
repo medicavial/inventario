@@ -1134,6 +1134,95 @@ class OperacionController extends BaseController {
 		return $respuesta;
 	}
 
+	public function altaLote(){
+		$ITE_clave			= Input::get('ITE_clave');
+		$ALM_clave			= Input::get('ALM_clave');
+		$EXI_clave			= Input::get('EXI_clave');
+		$EXI_cantidad		= Input::get('EXI_cantidad');
+		$LOT_numero			= Input::get('numLote');
+		$LOT_cantidad		= Input::get('LOT_cantidad');
+		$LOT_caducidad	= Input::get('LOT_caducidad'). '-01 00:00:00';
+		$observaciones	= Input::get('observaciones');
+		$USU_clave			= Input::get('USU_clave');
+		$modExi					= Input::get('modificaExistencias');
+
+		// $respuesta = array('ITE_clave' 			=> $ITE_clave,
+		// 									 'ALM_clave'			=> $ALM_clave,
+		// 									 'EXI_clave'			=> $EXI_clave,
+		// 									 'EXI_cantidad'		=> $EXI_cantidad,
+		// 									 'LOT_numero' 		=> $LOT_numero,
+		// 									 'LOT_cantidad'		=> $LOT_cantidad,
+		// 								 	 'LOT_caducidad'	=> $LOT_caducidad,
+		// 									 'observaciones'	=> $observaciones,
+		// 								 	 'USU_clave'			=> $USU_clave);
+
+		// verificamos el usuario que realiza el alta
+	  $verificaUsuario = DB::table('usuarios')
+													->select('USU_login', 'USU_nombrecompleto', DB::raw('CONCAT(1) as existe'))
+													->where('USU_clave', $USU_clave)
+													->where('USU_activo', 1)
+													->get();
+
+		if ( sizeof($verificaUsuario)>0 && $verificaUsuario[0]->existe == '1' ) {
+			// si no hay registro de existencias creamos un nuevo registro
+			if ( $EXI_clave == 0 ) {
+					$EXI_clave = DB::table('existencias')
+													->insertGetId(array('ITE_clave' 						=> $ITE_clave,
+																							'ALM_clave' 						=> $ALM_clave,
+																							'EXI_cantidad' 					=> $EXI_cantidad,
+																							'EXI_ultimoMovimiento'	=> DB::raw('now()'),
+																							'created_at' 						=> DB::raw('now()'),
+																							'updated_at' 						=> DB::raw('now()') ));
+
+					$altaExistencia = 'Nueva '.$EXI_clave;
+			} else{
+				//solo cuando ya hay registro de existencia
+				$altaExistencia = 'Existente '.$EXI_clave;
+			};
+
+			//damos de alta el lote
+			try {
+				$altaLote = DB::table('lote')
+											->insertGetId(array('ITE_clave'			=> $ITE_clave,
+																					'EXI_clave'			=> $EXI_clave,
+																					'LOT_numero'		=> $LOT_numero,
+																					'LOT_cantidad'	=> $LOT_cantidad,
+																					'LOT_caducidad' => $LOT_caducidad,
+																					'created_at'		=> DB::raw('now()'),
+																					'updated_at'		=> DB::raw('now()')));
+
+				if ( $altaLote > 0 ) {
+					$respuesta = array('respuesta'	=> 'Registrado',
+														 'info' 			=> $altaLote,
+													 	 'existencia'	=> $altaExistencia); //cuando se pudo registrar el lote
+				}
+				
+				//se actualiza la cantidad de existencias en almacen
+				//solo si se solicitó
+				if ( $altaLote > 0 && $modExi == true ) {
+					$EXI_nueva = $LOT_cantidad+$EXI_cantidad;
+
+					$actualiza = DB::table('existencias')
+												 ->where('EXI_clave', $EXI_clave)
+												 ->update( array('EXI_cantidad' => $EXI_nueva,
+											 									 'updated_at' 	=> DB::raw('now()')) );
+
+					if ( $actualiza > 0 ) {
+	 					$respuesta['EXI_mod'] = $actualiza;
+	 				}
+				}
+			} catch (Exception $e) {
+				$respuesta = array('respuesta' => $e,
+													 'info' 		 => 'Problemas en el servidor'); //cuando hay problemas de codigo o del servidor
+			}
+
+		} else{
+			$respuesta = array('respuesta' => 'no permitido'); // cuando no encuentra al usuario
+		}
+
+		return $respuesta;
+	}
+
 	public function ajusteLote(){
 		$ALM_nombre 						= Input::get('ALM_nombre');
 		$EXI_cantidad 					= Input::get('EXI_cantidad');

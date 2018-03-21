@@ -108,9 +108,18 @@
 
 </div>
 
-<md-button id="nuevo" ng-if="ajusteLotes.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="ajusteLotes.opciones()" aria-label="Opciones" style="background-color: rgba(156,39,176, 0.96)">
+<md-button id="nuevo" ng-if="ajusteLotes.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-left accent"
+           ng-click="ajusteLotes.registraLote()" aria-label="Opciones" >
     <md-tooltip md-direction="top">
-      Opciones
+      Registrar Lote Nuevo
+    </md-tooltip>
+    <ng-md-icon icon="add" style="fill:white"></ng-md-icon>
+</md-button>
+
+<md-button id="nuevo" ng-if="ajusteLotes.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right"
+           ng-click="ajusteLotes.opciones()" aria-label="Opciones" style="background-color: rgba(156,39,176, 0.96)">
+    <md-tooltip md-direction="top">
+      Opciones de reporte
     </md-tooltip>
     <ng-md-icon icon="assignment_returned" style="fill:white"></ng-md-icon>
 </md-button>

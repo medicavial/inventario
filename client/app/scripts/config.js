@@ -761,6 +761,11 @@
 	    .accentPalette('blue')
 			.warnPalette('red');
 
+			$mdThemingProvider.theme('blue')
+			.primaryPalette('blue')
+	    .accentPalette('amber')
+			.warnPalette('red');
+
 	    $mdThemingProvider.theme('docs-dark')
 		.primaryPalette('red')
 		.dark();
