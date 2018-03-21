@@ -26,8 +26,8 @@ return array(
 	|
 	*/
 
-	// 'default' => 'mysql',
-	'default' => 'local',
+	'default' => 'mysql',
+	// 'default' => 'local',
 
 	/*
 	|--------------------------------------------------------------------------

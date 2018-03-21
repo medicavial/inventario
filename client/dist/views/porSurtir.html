@@ -1,4 +1,4 @@
-<div layout="column">
+<div layout="column" ng-if="!trabajando">
   <md-data-table-container class="md-whiteframe-z1 animated fadeInUp">
     <table md-data-table>
       <thead md-order="porSurtir.order" md-trigger="porSurtir.onOrderChange">
@@ -27,3 +27,20 @@
   </md-data-table-container>
   <md-data-table-pagination md-label="porSurtir.texto" md-row-select="porSurtir.paginacion" md-limit="porSurtir.limit" md-page="porSurtir.page" md-total="{{porSurtir.listado.length}}" class="animated fadeInUp"></md-data-table-pagination>
 </div>
+
+<div layout="column" layout-paddin layout-align="center center" flex ng-if="trabajando">
+  <h5 style="color:grey">
+    <ng-md-icon icon="info_outline" style="fill:grey"></ng-md-icon>
+    Esto puede tardar hasta 2 minutos.
+  </h5>
+  <md-progress-circular md-mode="indeterminate" class="md-warn" md-diameter="150"></md-progress-circular>
+</div>
+
+<md-button id="nuevo" ng-if=" permisos.PER_clave == '1' || permisos.PER_clave == '2'" ng-click="actualizaPorSurtir()"
+           ng-disabled="trabajando"
+           class="animated bounceInUp md-fab md-fab-bottom-right" aria-label="Opciones">
+    <md-tooltip md-direction="top">
+      Actualizar
+    </md-tooltip>
+    <ng-md-icon icon="refresh" style="fill:white"></ng-md-icon>
+</md-button>

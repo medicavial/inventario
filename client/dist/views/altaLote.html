@@ -1,0 +1,120 @@
+<md-dialog aria-label="Detalle de traspaso" flex-sm="65" flex-gt-md="60" flex="100" md-theme="blue">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Alta de Lote</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cerrarDialogo()" aria-label="Cerrar Dialogo" ng-if="!trabajando">
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <form name="altaForm" ng-submit="guardaAlta()">
+
+      <div layout-gt-sm="row" layout="column" layout-padding>
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Item</b></label>
+            <input ng-model="nuevos.item.ITE_nombre" disabled class="deshabilitado">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Almacén</b></label>
+            <input ng-model="nuevos.almacen.ALM_nombre" disabled class="deshabilitado">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label class="c-bluegray"><b>Existencias en Almacén</b></label>
+            <input type="text" ng-model="nuevos.EXI_cantidad" disabled class="deshabilitado">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container class="md-block" align="center">
+            <md-checkbox ng-model="nuevos.modificaExistencias">
+              Sumar a existencias
+            </md-checkbox>
+          </md-input-container>
+        </div>
+      </div>
+
+      <div layout-gt-sm="row" layout="column" layout-padding>
+        <div layout="column" flex>
+          <md-input-container>
+            <label>Número de Lote</label>
+            <input ng-model="nuevos.numLote" ng-required="true">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label>Existencias en Lote</label>
+            <input type="number" ng-model="nuevos.LOT_cantidad" min="0" ng-required="true">
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label>Caducidad (Mes)</label>
+            <md-select name="mes" ng-model="nuevos.cadMes" ng-change="nuevaCaducidad()">
+              <md-option ng-repeat="mes in fechas.meses" value="{{mes.id}}">{{mes.nombre}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+
+        <div layout="column" flex>
+          <md-input-container>
+            <label>Caducidad (Año)</label>
+            <md-select name="anio" ng-model="nuevos.cadAnio" ng-change="nuevaCaducidad()">
+              <md-option ng-repeat="anio in fechas.anios" value="{{anio.anio}}">{{anio.anio}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+
+      <div layout-gt-sm="row" layout="column" layout-padding>
+        <div layout="column" flex>
+          <md-input-container class="md-block">
+            <label>Observaciones</label>
+            <textarea ng-model="nuevos.observaciones"
+                      md-mixlength="10" md-maxlength="500" rows="2" md-select-on-focus required></textarea>
+          </md-input-container>
+        </div>
+      </div>
+
+      <!-- <div layout-gt-sm="row" layout="column" layout-padding ng-if="nuevos.LOT_cantidad > nuevos.EXI_cantidad">
+        <div layout="column" flex>
+          <md-input-container class="md-block" align="center">
+            <div class="warn">
+              Se afectará la cantidad en almacén.
+            </div>
+            <md-checkbox ng-model="nuevos.precaucion">
+              Lo comprendo
+            </md-checkbox>
+          </md-input-container>
+        </div>
+      </div> -->
+
+      <div layout="column" layout-paddin layout-align="center center" flex>
+        <md-progress-circular md-mode="indeterminate" ng-if="trabajando"></md-progress-circular>
+      </div>
+
+      <div layout="row" layout-paddin layout-align="end center" flex>
+        <md-button type="button" ng-if="!trabajando" ng-click="cerrarDialogo()">
+          Cancelar
+        </md-button>
+        <md-button type="submit" class="md-raised md-primary"
+                   ng-if="!trabajando"
+                   ng-disabled="nuevos.cadAnio === '' || nuevos.cadMes === '' || nuevos.observaciones === ''">
+                   <!-- ng-disabled="nuevos.cadAnio === '' || nuevos.cadMes === '' || nuevos.observaciones === '' || ( !nuevos.precaucion && nuevos.LOT_cantidad > nuevos.EXI_cantidad )"> -->
+          Guardar Cambios
+        </md-button>
+      </div>
+    </form>
+  </md-dialog-content>
+</md-dialog>
