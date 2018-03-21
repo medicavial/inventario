@@ -1136,25 +1136,17 @@ class OperacionController extends BaseController {
 
 	public function altaLote(){
 		$ITE_clave			= Input::get('ITE_clave');
+		$ITE_nombre			= Input::get('ITE_nombre');
 		$ALM_clave			= Input::get('ALM_clave');
+		$ALM_nombre			= Input::get('ALM_nombre');
 		$EXI_clave			= Input::get('EXI_clave');
 		$EXI_cantidad		= Input::get('EXI_cantidad');
 		$LOT_numero			= Input::get('numLote');
 		$LOT_cantidad		= Input::get('LOT_cantidad');
-		$LOT_caducidad	= Input::get('LOT_caducidad'). '-01 00:00:00';
+		$LOT_caducidad	= Input::get('LOT_caducidad').'-01 00:00:00';
 		$observaciones	= Input::get('observaciones');
 		$USU_clave			= Input::get('USU_clave');
 		$modExi					= Input::get('modificaExistencias');
-
-		// $respuesta = array('ITE_clave' 			=> $ITE_clave,
-		// 									 'ALM_clave'			=> $ALM_clave,
-		// 									 'EXI_clave'			=> $EXI_clave,
-		// 									 'EXI_cantidad'		=> $EXI_cantidad,
-		// 									 'LOT_numero' 		=> $LOT_numero,
-		// 									 'LOT_cantidad'		=> $LOT_cantidad,
-		// 								 	 'LOT_caducidad'	=> $LOT_caducidad,
-		// 									 'observaciones'	=> $observaciones,
-		// 								 	 'USU_clave'			=> $USU_clave);
 
 		// verificamos el usuario que realiza el alta
 	  $verificaUsuario = DB::table('usuarios')
@@ -1192,11 +1184,25 @@ class OperacionController extends BaseController {
 																					'updated_at'		=> DB::raw('now()')));
 
 				if ( $altaLote > 0 ) {
+					$log = DB::table('ajusteLote')
+									 ->insertGetId(array('USU_clave' 							=> $USU_clave,
+									 										 'EXI_clave' 							=> $EXI_clave,
+																			 'EXI_cantidad' 					=> $EXI_cantidad,
+																			 'LOT_clave' 							=> $altaLote, // la insercion devuelve LOT_clave
+																			 'LOT_cantidadOriginal' 	=> $LOT_cantidad,
+																			 'LOT_cantidadNueva' 			=> $LOT_cantidad,
+																			 'LOT_caducidadOriginal' 	=> $LOT_caducidad,
+																			 'LOT_caducidadNueva' 		=> $LOT_caducidad,
+																			 'ALO_fecha' 							=> DB::raw('now()'),
+																			 'ALO_observaciones' 			=> 'LOTE NUEVO. '.$observaciones));
+
+					//cuando se pudo registrar el lote
 					$respuesta = array('respuesta'	=> 'Registrado',
 														 'info' 			=> $altaLote,
-													 	 'existencia'	=> $altaExistencia); //cuando se pudo registrar el lote
+													 	 'existencia'	=> $altaExistencia,
+													 	 'log' 				=> $log);
 				}
-				
+
 				//se actualiza la cantidad de existencias en almacen
 				//solo si se solicitó
 				if ( $altaLote > 0 && $modExi == true ) {
@@ -1211,6 +1217,33 @@ class OperacionController extends BaseController {
 	 					$respuesta['EXI_mod'] = $actualiza;
 	 				}
 				}
+
+				//generamos el correo informativo
+				$datosMail = array( 'usuario' 			=> $verificaUsuario[0]->USU_nombrecompleto,
+														'almacen' 			=> $ALM_nombre,
+														'item' 					=> $ITE_nombre,
+														'cantidad0' 		=> 'N/A',
+														'cantidad1' 		=> $LOT_cantidad,
+														'caducidad0' 		=> 'N/A',
+														'caducidad1' 		=> $LOT_caducidad,
+														'lote' 					=> $LOT_numero,
+														'loteId' 				=> $altaLote, // la insercion devuelve LOT_clave
+														'observaciones'	=> 'LOTE NUEVO. '.$observaciones,
+														'fecha' 				=> date('Y-m-d H:i:s')
+													);
+				 try {
+					 Mail::send('emails.ajusteLote', $datosMail, function($message)
+						{
+								$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+								$message->subject('Ajuste a lote');
+								$message->to('sramirez@medicavial.com.mx');
+								// $message->to('alozano@medicavial.com.mx');
+								// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+								// $message->bcc('sramirez@medicavial.com.mx');
+						});
+				 } catch (Exception $e) {
+
+				 }
 			} catch (Exception $e) {
 				$respuesta = array('respuesta' => $e,
 													 'info' 		 => 'Problemas en el servidor'); //cuando hay problemas de codigo o del servidor

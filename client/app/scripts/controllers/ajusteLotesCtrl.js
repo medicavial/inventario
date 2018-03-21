@@ -143,7 +143,9 @@
 		scope.registraLote = function(){
 			var datos = {
 				ITE_clave: scope.datos.item,
+				// ITE_nombre: scope.datos.item.ITE_nombre,
 				ALM_clave: scope.datos.almacen,
+				// ALM_nombre: scope.datos.almacen.ALM_nombre,
 				EXI_clave: 0,
 				EXI_cantidad: 0,
 				numLote:'',
@@ -159,6 +161,9 @@
 				almacen: scope.nombreAlmacen( scope.datos.almacen ),
 				parametros: scope.datos,
 			};
+
+			datos.ITE_nombre = datos.item.ITE_nombre;
+			datos.ALM_nombre = datos.almacen.ALM_nombre;
 
 			if ( scope.info.length > 0 ) {
 				datos.EXI_cantidad = scope.info[0].EXI_cantidad;
@@ -194,6 +199,8 @@
 					} else{
 						if (data.info) {
 							mensajes.alerta(data.info,'warning','top right','warning');
+							$rootScope.buscaNuevamente();
+							$scope.cerrarDialogo();
 						}
 						else{
 							mensajes.alerta('No se hicieron cambios','warning','top right','warning');
