@@ -1332,7 +1332,7 @@ class OperacionController extends BaseController {
 		 	             $message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 		 	             $message->subject('Ajuste a lote');
 		 	             $message->to('alozano@medicavial.com.mx');
-									 $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+									 $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx', 'auxcompras2@medicavial.com.mx'));
 			 				 		 $message->bcc('sramirez@medicavial.com.mx');
 		 	         });
 						} catch (Exception $e) {
@@ -1387,7 +1387,8 @@ class OperacionController extends BaseController {
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 	 					$message->subject('Item en nivel minimo');
 	 					$message->to('alozano@medicavial.com.mx');
-						$message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						$message->cc('mvcompras@medicavial.com.mx');
 						$message->bcc('sramirez@medicavial.com.mx');
 	 			});
 	 		}

@@ -27,10 +27,13 @@ class DatosIniciales extends \BaseController {
 
 	public function porCaducar($unidades) {
 
-		$porCaducar = DB::table('existencias')
+		// $porCaducar = DB::table('existencias')
+		// ->select(DB::raw('existencias.EXI_clave, existencias.ITE_clave, items.ITE_nombre, items.ITE_codigo ,existencias.ALM_clave, almacenes.ALM_nombre, existencias.EXI_cantidad,
+		// 					unidades.UNI_nombrecorto, lote.LOT_clave, lote.EXI_clave, lote.LOT_numero, lote.LOT_cantidad, lote.LOT_caducidad'))
+		$porCaducar = DB::table('lote')
 						->select(DB::raw('existencias.EXI_clave, existencias.ITE_clave, items.ITE_nombre, items.ITE_codigo ,existencias.ALM_clave, almacenes.ALM_nombre, existencias.EXI_cantidad,
 											unidades.UNI_nombrecorto, lote.LOT_clave, lote.EXI_clave, lote.LOT_numero, lote.LOT_cantidad, lote.LOT_caducidad'))
-						->join('lote', 'existencias.ITE_clave', '=', 'lote.ITE_clave')
+						->join('existencias', 'lote.ITE_clave', '=', 'existencias.ITE_clave')
 						->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
 						->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
 						->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')

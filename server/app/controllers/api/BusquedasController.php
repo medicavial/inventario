@@ -118,13 +118,13 @@ class BusquedasController extends BaseController {
                  ->where('unidades.UNI_claveMV', $unidad)
                  // ->where('almacenes.TAL_clave', 4)// este condicional solo filtra el botiquin
                  ->whereRaw('(
-                 				(almacenes.TAL_clave = 4) 
-                 				or 
+                 				(almacenes.TAL_clave = 4)
+                 				or
                  				(almacenes.TAL_clave = 2 and items.TIT_clave = 2)
                  				or
                  				(almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
-																				  "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046", 
-																				  "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056", 
+																				  "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
+																				  "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
 																				  "CUR0057", "CUR0059", "CUR0060", "CUR0061", "CUR0062", "CUR0063"
 																				  ))
                  			)')
@@ -132,7 +132,7 @@ class BusquedasController extends BaseController {
                  ->orderBy('ITE_nombre')
                  ->get();
 
-        for ($i=0; $i <sizeof($listado) ; $i++) { 
+        for ($i=0; $i <sizeof($listado) ; $i++) {
         	if ( $listado[$i]->Stock == 0 ) {
         		// unset($listado[$i]);
         		$listado[$i]->Descripcion = 'SIN EXISTENCIA '.$listado[$i]->Descripcion;
@@ -144,7 +144,7 @@ class BusquedasController extends BaseController {
 
 		// return DB::select(DB::raw('select existencias.ALM_clave as almacen, EXI_clave as id, items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,
 		// 							EXI_cantidad - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,
-		// 							ITE_posologia as posologia, ITE_cantidadCaja as Caja, ITE_noSegmentableReceta as segmentable 
+		// 							ITE_posologia as posologia, ITE_cantidadCaja as Caja, ITE_noSegmentableReceta as segmentable
 		// 							from existencias
 		// 							inner join almacenes on existencias.ALM_clave = almacenes.ALM_clave
 		// 							inner join unidades on almacenes.UNI_clave = unidades.UNI_clave
@@ -166,15 +166,15 @@ class BusquedasController extends BaseController {
                  ->select(DB::raw($sql))
                  ->groupBy('existencias.ITE_clave')
                  ->where('unidades.UNI_claveMV', $unidad)
-                 // traemos del almacen particulares y ortesis del almacen 'botiquin' 
+                 // traemos del almacen particulares y ortesis del almacen 'botiquin'
                  ->whereRaw('(
-                 				(almacenes.TAL_clave = 5) 
-                 				or 
+                 				(almacenes.TAL_clave = 5)
+                 				or
                  				(almacenes.TAL_clave = 2 and items.TIT_clave = 2)
                  				or
                  				(almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
-																				  "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046", 
-																				  "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056", 
+																				  "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
+																				  "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
 																				  "CUR0057"))
                  			)')
 	             // ->orWhere(function($query)
@@ -340,15 +340,26 @@ class BusquedasController extends BaseController {
 		$uniMV = $lesionado->Uni_ClaveActual;
 		$uniInventario = Unidad::where('UNI_claveMV', $uniMV)->get();
 
+		if ( sizeof($uniInventario) > 0 ) {
+			$claveUnidad = $uniInventario[0]['UNI_clave'];
+			$nombreUnidad = $uniInventario[0]['UNI_nombrecorto'];
+		} else{
+			$claveUnidad = -1;
+			$nombreUnidad = ' [EL PACIENTE FUE TRASLADADO A OTRA UNIDAD] ';
+		}
+
 		$respuesta = array(
-			'receta' 	=> $id,
-			'fecha' 	=> $datosReceta->RM_fecreg,
-			'tardio' 	=> $datosReceta->tardio,
-			'folio' 	=> $datosReceta->Exp_folio,
+			'receta' 		=> $id,
+			'fecha' 		=> $datosReceta->RM_fecreg,
+			'tardio' 		=> $datosReceta->tardio,
+			'folio' 		=> $datosReceta->Exp_folio,
+			'tipo' 			=> $datosReceta->TIR_nombre,
 			'lesionado' => $lesionado->Exp_completo,
-			'unidad' 	=> $uniInventario[0]['UNI_clave'],
-			'uniNombre' => $uniInventario[0]['UNI_nombrecorto'],
-			'items' 	=> $items,
+			// 'unidad' 	=> $uniInventario[0]['UNI_clave'],
+			// 'uniNombre' => $uniInventario[0]['UNI_nombrecorto'],
+			'unidad' 		=> $claveUnidad,
+			'uniNombre' => $nombreUnidad,
+			'items' 		=> $items,
 			'recetaInf'	=> $datosReceta
 		);
 

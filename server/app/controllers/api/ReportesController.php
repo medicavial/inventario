@@ -11,7 +11,7 @@ class ReportesController extends BaseController {
     			->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
 				->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
 				->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-				->select('ITE_codigo','ITE_nombre','items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa','existencias.EXI_clave','ITE_sustancia')
+				->select('ITE_codigo','ITE_nombre', 'items.ITE_clave','almacenes.UNI_clave','almacenes.ALM_nombre','EXI_cantidad','EXI_ultimoMovimiento','UNI_nombrecorto','almacenes.ALM_clave','TIT_nombre','ITE_precioventa','existencias.EXI_clave','ITE_sustancia', 'ITE_presentacion')
 				->where('EXI_cantidad','>',0);
 
 	 	if (Input::has('unidad')) {
@@ -240,7 +240,7 @@ class ReportesController extends BaseController {
         $query->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
                      ->join('subTiposItem', 'items.STI_clave', '=', 'subTiposItem.STI_clave')
                      ->select(DB::raw(
-                 			'ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre,
+                 			'ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre, ITE_sustancia as activo, ITE_presentacion as presentacion,
 							ITE_precioventa as Precio_venta, IF(ITE_segmentable = 0,"NO","SI") as Segmentable,
 							ITE_cantidadtotal as Existencia,ITE_codigoean as CodigoBarras , TIT_nombre as Tipo,
 							STI_nombre as Subtipo, IF(ITE_talla = 0, "NO","SI") as ConTalla,
@@ -285,7 +285,7 @@ class ReportesController extends BaseController {
 
 		        }else if ($tipo == 'items'){
 		        	$sheet->row(1, array(
-				    	'ID_sistema','Codigo','Nombre','Precio venta','Segmentable',
+				    	'ID_sistema','Codigo','Nombre', 'Sustancia', 'Presentacion','Precio venta','Segmentable',
 				    	'Existencia','CodigoBarras','Tipo','Subtipo','ConTalla','Adicionable receta'
 					));
 		        }else if ($tipo == 'ordenes'){

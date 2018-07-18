@@ -215,7 +215,14 @@ class Operacion {
 				// $movimiento->TRA_origen = $this->almacenOrigen;
 				// $movimiento->TRA_destino = $this->almacenDestino;
 		}
+		if ($movimiento->TIM_clave == 3 && $movimiento->MOV_traspaso != 1) {
+			try {
+				$url = 'http://api.medicavial.mx/api/operacion/correominimo/'.$this->almacen.'/'.$this->item;
+				$todoURL = file_get_contents($url);
+			} catch (Exception $e) {
 
+			}
+		}
 		$movimiento->save();
 
 	}
@@ -294,12 +301,12 @@ class Operacion {
 		$itemactualiza = Item::find($this->item);
 		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidad;
 		$itemactualiza->save();
-		try {
-			$url = 'http://api.medicavial.mx/api/operacion/correominimo/'.$this->almacen.'/'.$this->item;
-			$todoURL = file_get_contents($url);
-		} catch (Exception $e) {
-
-		}
+		// try {
+		// 	$url = 'http://api.medicavial.mx/api/operacion/correominimo/'.$this->almacen.'/'.$this->item;
+		// 	$todoURL = file_get_contents($url);
+		// } catch (Exception $e) {
+		//
+		// }
 	}
 
 

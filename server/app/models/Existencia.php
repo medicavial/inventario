@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Existencia extends Eloquent {
 
@@ -15,8 +15,9 @@ class Existencia extends Eloquent {
     {
         return $query->join('items', 'items.ITE_clave', '=', 'existencias.ITE_clave')
                      ->join('tiposItem','items.TIT_clave','=','tiposItem.TIT_clave')
-                     ->select('ITE_nombre','EXI_cantidad','EXI_ultimoMovimiento','TIT_forzoso', 'existencias.updated_at','existencias.ITE_clave')
+                     ->select('ITE_nombre','EXI_cantidad','EXI_ultimoMovimiento','TIT_forzoso', 'existencias.updated_at','existencias.ITE_clave', 'ITE_activo')
                      ->where('ALM_clave',$almacen)
+										 ->where('ITE_activo', 1)
                      ->orderBy('ITE_nombre')
                      ->get();
 
@@ -94,4 +95,4 @@ class Existencia extends Eloquent {
 
     }
 
-}		
+}
