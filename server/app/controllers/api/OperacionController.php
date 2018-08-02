@@ -1384,7 +1384,7 @@ class OperacionController extends BaseController {
 									 	 'unidad' 			=> $unidad[0]->UNI_nombrecorto);
 
 			 // if ( intval($existencias[0]->total) <= $conf->CON_nivelMinimo ) {
-			 if ( intval($existencias[0]->total) == $conf->CON_nivelMinimo ) {
+			 if ( intval($existencias[0]->total) <= $conf->CON_nivelMinimo && $conf->CON_correos == 1 ) {
 	 			Mail::send('emails.minimo', $datos, function($message)
 	 			{
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
@@ -1394,7 +1394,7 @@ class OperacionController extends BaseController {
 						$message->cc('mvcompras@medicavial.com.mx');
 						$message->bcc('sramirez@medicavial.com.mx');
 	 			});
-	 		} elseif( intval($existencias[0]->total) == ( $conf->CON_nivelMinimo + 1 ) ){
+	 		} elseif( intval($existencias[0]->total) == ( $conf->CON_nivelMinimo + 1 ) && $conf->CON_correos == 1 ){
 				Mail::send('emails.minimo', $datos, function($message) {
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 	 					$message->subject('Prealerta minimo');
