@@ -1369,9 +1369,11 @@ class OperacionController extends BaseController {
 														 ->where('almacenes.UNI_clave', $unidad[0]->UNI_clave)
 														 ->select(DB::raw('SUM(EXI_cantidad) as total'))
 														 ->get();
+
 		$datosItem = Item::where('ITE_clave', $item)->first();
 
 		$conf = Configuracion::where(array( 'ITE_clave' => $item,'UNI_clave' => $unidad[0]->UNI_clave ))->first();
+
 		if ($conf != '') {
 			$datos = array('ITE_codigo' 	=> $datosItem->ITE_codigo,
 										 'ITE_nombre' 	=> $datosItem->ITE_nombre,
@@ -1381,7 +1383,8 @@ class OperacionController extends BaseController {
 									   'uniClave' 		=> $unidad[0]->UNI_clave,
 									 	 'unidad' 			=> $unidad[0]->UNI_nombrecorto);
 
-			 if ( $existencias[0]->total <= $conf->CON_nivelMinimo ) {
+			 // if ( intval($existencias[0]->total) <= $conf->CON_nivelMinimo ) {
+			 if ( intval($existencias[0]->total) == $conf->CON_nivelMinimo ) {
 	 			Mail::send('emails.minimo', $datos, function($message)
 	 			{
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
@@ -1391,7 +1394,16 @@ class OperacionController extends BaseController {
 						$message->cc('mvcompras@medicavial.com.mx');
 						$message->bcc('sramirez@medicavial.com.mx');
 	 			});
-	 		}
+	 		} elseif( intval($existencias[0]->total) == ( $conf->CON_nivelMinimo + 1 ) ){
+				Mail::send('emails.minimo', $datos, function($message) {
+	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+	 					$message->subject('Prealerta minimo');
+	 					$message->to('alozano@medicavial.com.mx');
+						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						$message->cc('mvcompras@medicavial.com.mx');
+						$message->bcc('sramirez@medicavial.com.mx');
+	 			});
+			}
 		}else{
 			return 'no hay configuracion';
 		}
