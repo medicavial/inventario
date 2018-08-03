@@ -260,11 +260,10 @@ class OperacionController extends BaseController {
 		foreach ($datos as $dato) {
 			array_push($almacenes, $dato['ALM_clave']);
 		}
-
 		// return Existencia::almacenes($unidad,$almacenes);
 
 		$datos =  Existencia::almacenes($unidad,$almacenes);
-
+		
 		$respuesta = array();
 
 		foreach ($datos as $dato) {

@@ -270,7 +270,7 @@
 
 
 		$scope.muestraItems = function(datos){
-
+			console.log(datos);
 			$scope.consultaUnidad = true;
 
 			operacion.itemsAlmacenes($scope.unidad,datos).success(function (data){
