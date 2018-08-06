@@ -32,12 +32,12 @@
 		'angular.filter'
 	])
 
-	/* EN LOCAL */
-	// .constant('api', 'http://localhost/inventario/server/public/api/')
-	// .constant('publicfiles','http://localhost/inventario/server/public/exports/');
+	// /* EN LOCAL */
+	.constant('api', 'http://localhost/inventario/server/public/api/')
+	.constant('publicfiles','http://localhost/inventario/server/public/exports/');
 
-	/* PARA PRODUCCIÓN */
-	.constant('api', 'http://api.medicavial.mx/api/')
-	.constant('publicfiles','http://api.medicavial.mx/exports/');
+	// /* PARA PRODUCCIÓN */
+	// .constant('api', 'http://api.medicavial.mx/api/')
+	// .constant('publicfiles','http://api.medicavial.mx/exports/');
 
 })();

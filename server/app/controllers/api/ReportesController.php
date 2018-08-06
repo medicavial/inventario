@@ -229,7 +229,6 @@ class ReportesController extends BaseController {
 	public function traspasoPDF($cveTraspaso){
 		// return $cveTraspaso;
 		$pdf = helpers::traspasoPDF($cveTraspaso);
-
 		// return $pdf;
 	}
 
@@ -238,13 +237,14 @@ class ReportesController extends BaseController {
 		$query = Item::query();
 
         $query->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
-                     ->join('subTiposItem', 'items.STI_clave', '=', 'subTiposItem.STI_clave')
+										 ->join('subTiposItem', 'items.STI_clave', '=', 'subTiposItem.STI_clave')
+                     ->leftJoin('configuraciones', 'items.ITE_clave', '=', 'configuraciones.ITE_clave')
                      ->select(DB::raw(
-                 			'ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre, ITE_sustancia as activo, ITE_presentacion as presentacion,
-							ITE_precioventa as Precio_venta, IF(ITE_segmentable = 0,"NO","SI") as Segmentable,
-							ITE_cantidadtotal as Existencia,ITE_codigoean as CodigoBarras , TIT_nombre as Tipo,
-							STI_nombre as Subtipo, IF(ITE_talla = 0, "NO","SI") as ConTalla,
-							IF(ITE_receta = 0,"NO","SI") as Adicionable_receta'
+                 			 'items.ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre, ITE_sustancia as activo, ITE_presentacion as presentacion,
+												ITE_precioventa as Precio_venta, IF(ITE_segmentable = 0,"NO","SI") as Segmentable,
+												ITE_cantidadtotal as Existencia,ITE_codigoean as CodigoBarras , TIT_nombre as Tipo,
+												STI_nombre as Subtipo, IF(ITE_talla = 0, "NO","SI") as ConTalla,
+												IF(ITE_receta = 0,"NO","SI") as Adicionable_receta, ifnull(id, 0) as configItem, CON_correos as Alertas'
                      	));
 
 		return $query->get();

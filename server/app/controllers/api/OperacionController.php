@@ -254,16 +254,16 @@ class OperacionController extends BaseController {
 	}
 
 	public function itemsAlmacenes($unidad){
+		set_time_limit(300); // limite de tiempo en tiempo en segundos
+
 		$datos = Input::all();
 		$almacenes = array();
 
 		foreach ($datos as $dato) {
 			array_push($almacenes, $dato['ALM_clave']);
 		}
-		// return Existencia::almacenes($unidad,$almacenes);
 
 		$datos =  Existencia::almacenes($unidad,$almacenes);
-		
 		$respuesta = array();
 
 		foreach ($datos as $dato) {
@@ -278,10 +278,17 @@ class OperacionController extends BaseController {
 			}
 
 			$conf = Configuracion::where(array( 'ITE_clave' => $claveItem,'UNI_clave' => $unidad ))->first();
-
-			$nivelCompra = $conf->CON_nivelCompra;
-			$nivelMaximo = $conf->CON_nivelMaximo;
-			$nivelMinimo = $conf->CON_nivelMinimo;
+			if ($conf) {
+				$nivelCompra = $conf->CON_nivelCompra;
+				$nivelMaximo = $conf->CON_nivelMaximo;
+				$nivelMinimo = $conf->CON_nivelMinimo;
+				$iteConfig   = 1;
+			}elseif(!$conf){
+				$nivelCompra = 100;
+				$nivelMaximo = 1000;
+				$nivelMinimo = 1;
+				$iteConfig 	 = 0;
+			}
 
 			$existencia = $dato['EXI_cantidad'];
 
@@ -299,17 +306,20 @@ class OperacionController extends BaseController {
 			}
 
 			$respuesta[] = array(
-				'ITE_clave' => $dato['ITE_clave'],
-				'ITE_nombre' => $dato['ITE_nombre'],
-				'UNI_clave' => $dato['UNI_clave'],
-				'EXI_cantidad' => $existencia,
-				'POR_surtir' => $cantidad,
+				'ITE_clave' 			=> $dato['ITE_clave'],
+				'ITE_nombre' 			=> $dato['ITE_nombre'],
+				'UNI_clave' 			=> $dato['UNI_clave'],
+				'EXI_cantidad' 		=> $existencia,
+				'POR_surtir' 			=> $cantidad,
 				'CON_nivelCompra' => $nivelCompra,
 				'CON_nivelMinimo' => $nivelMinimo,
 				'CON_nivelMaximo' => $nivelMaximo,
-				'ITE_codigo' => $dato['ITE_codigo'],
-				'semaforo'	=> $semaforo,
-				'compra' => $comprar,
+				'ITE_codigo' 			=> $dato['ITE_codigo'],
+				'semaforo'				=> $semaforo,
+				'compra' 					=> $comprar,
+				'ALM_clave' 			=> $dato['ALM_clave'],
+				'ALM_nombre' 			=> $dato['ALM_nombre'],
+				'configuracion' 	=> $iteConfig
 			);
 		}
 
@@ -318,6 +328,8 @@ class OperacionController extends BaseController {
 	}
 
 	public function itemsUnidad($unidad){
+		set_time_limit(300); // limite de tiempo en tiempo en segundos
+
 		$datos =  Existencia::configuracion($unidad);
 
 		$respuesta = array();
@@ -338,6 +350,18 @@ class OperacionController extends BaseController {
 				$nivelCompra = $conf->CON_nivelCompra;
 				$nivelMaximo = $conf->CON_nivelMaximo;
 				$nivelMinimo = $conf->CON_nivelMinimo;
+				$iteConfig   = 1;
+			}elseif(!$conf){
+				$nivelCompra = 100;
+				$nivelMaximo = 1000;
+				$nivelMinimo = 1;
+				$iteConfig 	 = 0;
+			}
+
+			// if ($conf) {
+				// $nivelCompra = $conf->CON_nivelCompra;
+				// $nivelMaximo = $conf->CON_nivelMaximo;
+				// $nivelMinimo = $conf->CON_nivelMinimo;
 
 				$existencia = $dato['EXI_cantidad'];
 
@@ -356,23 +380,26 @@ class OperacionController extends BaseController {
 				}
 
 				$respuesta[] = array(
-					'ITE_clave' => $dato['ITE_clave'],
-					'ITE_nombre' => $dato['ITE_nombre'],
-					'UNI_clave' => $dato['UNI_clave'],
-					'EXI_cantidad' => $existencia,
-					'POR_surtir' => $cantidad,
+					'ITE_clave' 			=> $dato['ITE_clave'],
+					'ITE_nombre' 			=> $dato['ITE_nombre'],
+					'UNI_clave' 			=> $dato['UNI_clave'],
+					'EXI_cantidad' 		=> $existencia,
+					'POR_surtir' 			=> $cantidad,
 					'CON_nivelCompra' => $nivelCompra,
 					'CON_nivelMinimo' => $nivelMinimo,
 					'CON_nivelMaximo' => $nivelMaximo,
-					'ITE_codigo' => $dato['ITE_codigo'],
-					'semaforo'	=> $semaforo,
-					'compra' => $comprar,
+					'ITE_codigo' 			=> $dato['ITE_codigo'],
+					'semaforo'				=> $semaforo,
+					'compra' 					=> $comprar,
+					'ALM_clave' 			=> $dato['ALM_clave'],
+					'ALM_nombre' 			=> $dato['ALM_nombre'],
+					'configuracion' 	=> $iteConfig
 				);
 
-			}else{
+			// }else{
 				// return Response::json(array('respuesta' => 'Algunos items no tienen alertas favor de verificar'),500);
 				//cambio
-			}
+			// }
 		}
 
 		return $respuesta;

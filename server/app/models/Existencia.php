@@ -40,7 +40,7 @@ class Existencia extends Eloquent {
 
         return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
                      ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
-                     ->select(DB::raw('existencias.ITE_clave,ITE_nombre,almacenes.UNI_clave,sum(EXI_cantidad) as EXI_cantidad,ITE_codigo'))
+                     ->select(DB::raw('existencias.ITE_clave,ITE_nombre,almacenes.UNI_clave,sum(EXI_cantidad) as EXI_cantidad,ITE_codigo, existencias.ALM_clave, ALM_nombre'))
                      ->groupBy('ITE_clave')
                      ->where('almacenes.UNI_clave', $unidad)
                      ->whereIn('almacenes.ALM_clave', $almacenes)
@@ -88,7 +88,7 @@ class Existencia extends Eloquent {
     {
         return $query->join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
                      ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
-                     ->select(DB::raw('existencias.ITE_clave,ITE_nombre,almacenes.UNI_clave,sum(EXI_cantidad) as EXI_cantidad,ITE_codigo'))
+                     ->select(DB::raw('existencias.ITE_clave,ITE_nombre,almacenes.UNI_clave,sum(EXI_cantidad) as EXI_cantidad,ITE_codigo, existencias.ALM_clave, ALM_nombre'))
                      ->groupBy('ITE_clave')
                      ->where('almacenes.UNI_clave', $unidad)
                      ->get();
