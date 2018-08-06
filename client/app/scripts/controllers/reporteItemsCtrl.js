@@ -1,7 +1,7 @@
 (function(){
 
 	'use strict';
-	
+
 	angular
 	.module('app')
 	.controller('reporteItemsCtrl',reporteItemsCtrl)
@@ -10,7 +10,6 @@
 	reporteItemsCtrl.$inject = ['$rootScope','busqueda','mensajes','reportes', '$mdBottomSheet'];
 
 	function reporteItemsCtrl($rootScope,busqueda,mensajes,reportes, $mdBottomSheet){
-
 		var scope = this;
 		$rootScope.tema = 'theme4';
 		$rootScope.titulo = 'Reporte de Items';
@@ -58,7 +57,7 @@
 
 			mensajes.alerta('Preparando Exportación','info','top right','wb_cloudy');
 			reportes.exportar('items',scope.datos);
-		
+
 		};
 
 	}

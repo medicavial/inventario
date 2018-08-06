@@ -1,8 +1,8 @@
 <md-content layout-padding>
-  
+
 
   <div layout="row" layout-sm="column">
-      
+
       <div flex flex-gt-sm="30">
           <md-select ng-model="unidad" placeholder="Selecciona Unidad" md-on-close="info(unidad)" flex required>
             <md-option ng-repeat="unidad in unidades" ng-value="unidad">{{unidad.UNI_nombre}}</md-option>
@@ -14,7 +14,7 @@
   </div>
 
   <div flex>
-      
+
       <div layout="row" layout-wrap>
         <div flex flex-gt-sm="20" ng-repeat="almacen in almacenes">
           <md-checkbox aria-label="{{almacen.ALM_nombre}}" ng-checked="exists(almacen, selected)" ng-click="toggle(almacen, selected)">
@@ -22,9 +22,9 @@
           </md-checkbox>
         </div>
       </div>
-      
+
   </div>
-  
+
   <md-data-table-container class="md-whiteframe-z1">
     <table md-data-table md-row-select="seleccionItems" >
       <thead md-order="existencias.order" md-trigger="existencias.onOrderChange">
@@ -41,9 +41,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order" md-disable-select="existencia.POR_surtir > 0 || existencia.compra < 1">
+        <tr md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order"
+            md-disable-select="existencia.POR_surtir > 0 || existencia.compra < 1">
           <td>{{existencia.ITE_codigo}}</td>
-          <td>{{existencia.ITE_nombre}}</td>
+          <td>{{existencia.ITE_nombre}} <br>  <span ng-if="existencia.configuracion == 0" style="color:red">*SIN CONFIGURACION</span> </td>
           <td>{{ existencia.EXI_cantidad }}</td>
           <td>{{existencia.POR_surtir}}</td>
           <td>{{existencia.CON_nivelMinimo}}</td>
@@ -61,10 +62,10 @@
       </tbody>
     </table>
   </md-data-table-container>
-  
+
   <br>
   <br>
-  
+
 <!--   <div layout="row" layout-sm="column">
     <span>Aplicar todos al</span>
     <input type="number" ng-model="porcentaje">
@@ -73,7 +74,7 @@
 
   <br>
   <br> -->
-  
+
   <div layout="row" layout-align="center center">
     <md-button ng-disabled="seleccionItems.length == 0" class="md-raised md-primary" ng-click="ir2(seleccionItems)" type="submit" ng-if="!prepara2">Ir a la Orden</md-button>
     <md-progress-circular md-mode="indeterminate" ng-if="prepara2"></md-progress-circular>

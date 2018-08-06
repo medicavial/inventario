@@ -237,8 +237,9 @@ class ReportesController extends BaseController {
 		$query = Item::query();
 
         $query->join('tiposItem', 'items.TIT_clave', '=', 'tiposItem.TIT_clave')
+										 ->leftJoin('configuraciones', 'items.ITE_clave', '=', 'configuraciones.ITE_clave')
 										 ->join('subTiposItem', 'items.STI_clave', '=', 'subTiposItem.STI_clave')
-                     ->leftJoin('configuraciones', 'items.ITE_clave', '=', 'configuraciones.ITE_clave')
+										 ->groupBy('ITE_nombre')
                      ->select(DB::raw(
                  			 'items.ITE_clave as ID_sistema,ITE_codigo as Codigo, ITE_nombre as nombre, ITE_sustancia as activo, ITE_presentacion as presentacion,
 												ITE_precioventa as Precio_venta, IF(ITE_segmentable = 0,"NO","SI") as Segmentable,

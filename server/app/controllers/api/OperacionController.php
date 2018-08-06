@@ -284,8 +284,8 @@ class OperacionController extends BaseController {
 				$nivelMinimo = $conf->CON_nivelMinimo;
 				$iteConfig   = 1;
 			}elseif(!$conf){
-				$nivelCompra = 100;
-				$nivelMaximo = 1000;
+				$nivelCompra = 0;
+				$nivelMaximo = 0;
 				$nivelMinimo = 1;
 				$iteConfig 	 = 0;
 			}
@@ -352,8 +352,8 @@ class OperacionController extends BaseController {
 				$nivelMinimo = $conf->CON_nivelMinimo;
 				$iteConfig   = 1;
 			}elseif(!$conf){
-				$nivelCompra = 100;
-				$nivelMaximo = 1000;
+				$nivelCompra = 0;
+				$nivelMaximo = 0;
 				$nivelMinimo = 1;
 				$iteConfig 	 = 0;
 			}

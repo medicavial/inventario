@@ -1,5 +1,10 @@
+<style media="screen">
+  .alerta{
+    background-color: #ffecb3;
+  }
+</style>
 <div layout="column" ng-init="itm.inicio()">
-      
+
       <md-data-table-container class="md-whiteframe-5dp white">
         <table md-data-table>
           <thead md-order="itm.order" md-trigger="itm.onOrderChange">
@@ -7,6 +12,7 @@
               <th name="ID"  order-by="ID_sistema"></th>
               <th name="Codigo" order-by="Codigo"></th>
               <th name="Nombre" order-by="nombre"></th>
+              <th name="Alertas" order-by="Alertas" ng-if="permisos.PER_clave < 3"></th>
               <th name="Precio Venta"  order-by="Precio_venta"></th>
               <th name="Segmentable"  order-by="Segmentable"></th>
               <th name="Existencia"  order-by="Existencia"></th>
@@ -21,7 +27,12 @@
             <tr ng-repeat="item in itm.info |filter:query | orderBy: itm.order | limitTo: itm.limit: (itm.page - 1) * itm.limit">
               <td>{{item.ID_sistema}}</td>
               <td>{{item.Codigo}}</td>
-              <td>{{item.nombre}}</td>
+              <td ng-class="{'alerta': item.configItem == 0 && permisos.PER_clave < 3}">{{item.nombre}}</td>
+              <td ng-if="permisos.PER_clave < 3">
+                <span ng-if="item.Alertas == 1"><ng-md-icon icon="check_circle" style="fill:green"></ng-md-icon></span>
+                <span ng-if="item.Alertas == 0"><ng-md-icon icon="block" style="fill:red"></ng-md-icon></span>
+                <span ng-if="item.Alertas == null"><ng-md-icon icon="warning" style="fill:orange"></ng-md-icon></span>
+              </td>
               <td>{{item.Precio_venta}}</td>
               <td>{{item.Segmentable}}</td>
               <td>{{item.Existencia}}</td>
@@ -36,16 +47,16 @@
       </md-data-table-container>
       <br>
       <md-data-table-pagination md-label="itm.texto" md-row-select="itm.paginacion" md-limit="itm.limit" md-page="itm.page" md-total="{{itm.info.length}}"></md-data-table-pagination>
-      
+
 
     <br>
 
-  
+
 </div>
 
 <md-button id="exportar" ng-if="itm.info.length > 0" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="itm.exportar()" aria-label="Descargar">
     <md-tooltip md-direction="top">
       Descargar
     </md-tooltip>
-    <ng-md-icon icon="cloud_download" style="fill:white"></ng-md-icon> 
+    <ng-md-icon icon="cloud_download" style="fill:white"></ng-md-icon>
 </md-button>

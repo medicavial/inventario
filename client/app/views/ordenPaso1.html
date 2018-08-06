@@ -41,9 +41,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr  md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order" md-disable-select="existencia.POR_surtir > 0 || existencia.compra < 1">
+        <tr md-auto-select ng-repeat="existencia in items |filter:query | orderBy: existencias.order"
+            md-disable-select="existencia.POR_surtir > 0 || existencia.compra < 1">
           <td>{{existencia.ITE_codigo}}</td>
-          <td>{{existencia.ITE_nombre}}</td>
+          <td>{{existencia.ITE_nombre}} <br>  <span ng-if="existencia.configuracion == 0" style="color:red">*SIN CONFIGURACION</span> </td>
           <td>{{ existencia.EXI_cantidad }}</td>
           <td>{{existencia.POR_surtir}}</td>
           <td>{{existencia.CON_nivelMinimo}}</td>
