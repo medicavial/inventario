@@ -283,35 +283,41 @@ class BusquedasController extends BaseController {
 	}
 
 	public function receta($id){
+		// obtenemos los datos de receta y paciente de la base mv
+		$datosReceta = DB::connection('mv')
+											 ->table('RecetaMedica')
+											 ->select('RecetaMedica.*', 'TIR_nombre', 'RecetaMedica.Exp_folio', 'Expediente.Exp_completo', 'Expediente.Uni_ClaveActual',
+											 					'uniPaciente.Uni_nombrecorto as uniPaciente', 'uniReceta.Uni_nombrecorto as uniReceta', 'Usu_nombre',
+											 					DB::raw( 'IF( ( RM_fecreg + INTERVAL 30 MINUTE < now() ), 1, 0 ) as tardio,
+																					CONCAT(RM_fecreg + INTERVAL 3 HOUR) as vigencia,
+																					IF(NOW() > RM_fecreg + INTERVAL 3 Hour, 0, 1) as vigente,
+																					IF( TIMEDIFF( now(), RM_fecreg + INTERVAL 3 Hour ) < 0, 0, TIMEDIFF( now(), RM_fecreg + INTERVAL 3 Hour ) ) as diferenciaTiempo' )
+																)
+											 ->join('TipoReceta', 'RecetaMedica.tipo_receta', '=', 'TipoReceta.TIR_id')
+											 ->join('Expediente', 'RecetaMedica.Exp_folio', '=', 'Expediente.Exp_folio')
+											 ->join('Usuario', 'RecetaMedica.Usu_login', '=', 'Usuario.Usu_login')
+											 ->join('Unidad as uniPaciente', 'Expediente.Uni_ClaveActual', '=', 'uniPaciente.Uni_clave')
+											 ->join('Unidad as uniReceta', 'RecetaMedica.Uni_clave', '=', 'uniReceta.Uni_clave')
+											 ->where('id_receta', $id)
+											 ->get();
 
-		//obtenemos la receta de la base de MV
-		// $datosReceta = Receta::find($id);
-		$datosReceta = Receta::where('id_receta',$id)
-								->select( DB::raw('RecetaMedica.*, TIR_nombre, IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))
-								->join('TipoReceta', 'RecetaMedica.tipo_receta', '=', 'TipoReceta.TIR_id')
-								->get();
-		$datosReceta = $datosReceta[0];
-		// return $datosReceta;
+		// obtenemos los datos de los items recetados
+		$datosItems = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
 
-		// $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
-		$lesionado = ExpedienteWeb::find($datosReceta->Exp_folio);
-		$datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
+		// preparamos el array de items
 		$items = array();
 
 		//recorremos item por item de la receta para obtener los datos del item en inventario
-		foreach ($datos as $dato) {
-
+		foreach ($datosItems as $dato) {
 			$item = $dato['id_item'];
-
-			//buscamos el item y con esto decimo si sera editable en caso de ser ortesis
-			$valoresItem = Item::find($item);
-			$modificable = $valoresItem->ITE_talla;
-			$familia = $valoresItem->TIT_clave;
-			$segmentable = $valoresItem->ITE_segmentable;
-			$segmentableReceta = $valoresItem->ITE_noSegmentableReceta;
-			$caja = $valoresItem->ITE_cantidadCaja;
-
-			$forzoso = TipoItem::find($familia)->TIT_forzoso;
+			//buscamos el item y con esto decimos si SERA EDITABLE EN CASO DE SER ORTESIS
+			$valoresItem 				= Item::find($item);
+			$modificable 				= $valoresItem->ITE_talla;
+			$familia 						= $valoresItem->TIT_clave;
+			$segmentable 				= $valoresItem->ITE_segmentable;
+			$segmentableReceta	= $valoresItem->ITE_noSegmentableReceta;
+			$caja 							= $valoresItem->ITE_cantidadCaja;
+			$forzoso 						= TipoItem::find($familia)->TIT_forzoso;
 
 			if ($segmentable == 1 && $segmentableReceta == 0) {
 				$cantidad = $dato['NS_cantidad'] * $caja;
@@ -320,50 +326,144 @@ class BusquedasController extends BaseController {
 			}
 
 			$items[] = array(
-				'receta' => $id,
-				'recetaItem' => $dato['NS_id'],
-				'item' => $item,
-				'forzoso' => $forzoso,
-				'familia' => $familia,
-				'cantidad' => $cantidad,
-				'caja' => 0,
-				'editable' => $modificable,
-				'existencia' => $dato['id_existencia'],
-				'reserva' => $dato['id_reserva'],
-				'almacen' => $dato['id_almacen'],
-				'surtido' => false,
-				'lote' => ''
+				'receta' 			=> $id,
+				'recetaItem' 	=> $dato['NS_id'],
+				'item' 				=> $item,
+				'forzoso' 		=> $forzoso,
+				'familia' 		=> $familia,
+				'cantidad' 		=> $cantidad,
+				'caja' 				=> 0,
+				'editable' 		=> $modificable,
+				'existencia'	=> $dato['id_existencia'],
+				'reserva' 		=> $dato['id_reserva'],
+				'almacen' 		=> $dato['id_almacen'],
+				'surtido' 		=> false,
+				'lote' 				=> ''
 			);
-
 		}
 
-		$uniMV = $lesionado->Uni_ClaveActual;
-		$uniInventario = Unidad::where('UNI_claveMV', $uniMV)->get();
+		$uniInventario = Unidad::where('UNI_claveMV', $datosReceta[0]->Uni_ClaveActual)->get();
 
 		if ( sizeof($uniInventario) > 0 ) {
-			$claveUnidad = $uniInventario[0]['UNI_clave'];
-			$nombreUnidad = $uniInventario[0]['UNI_nombrecorto'];
+			$claveUnidad = $uniInventario[0]->UNI_clave;
+			$nombreUnidad = $uniInventario[0]->UNI_nombrecorto;;
 		} else{
 			$claveUnidad = -1;
-			$nombreUnidad = ' [EL PACIENTE FUE TRASLADADO A OTRA UNIDAD] ';
+			$nombreUnidad = $datosReceta[0]->uniPaciente;
 		}
 
+		// mandamos la diferecia de tiempo entendible
+		$difTiempo=null;
+		if ( strlen($datosReceta[0]->diferenciaTiempo > 1) ) {
+			if ( intval( substr($datosReceta[0]->diferenciaTiempo, 0, 2) ) < 24 ) {
+				$difTiempo = intval( substr($datosReceta[0]->diferenciaTiempo, 3, 2) ). ' minutos';
+			}elseif( intval( substr($datosReceta[0]->diferenciaTiempo, 0, 2) ) > 23 ){
+				$difTiempo = bcdiv(intval(substr($datosReceta[0]->diferenciaTiempo, 0, 2)) / 24, '1', 0).' día(s)';
+			}
+		}
+
+		$uniReceta[]	= array('nombre' => $datosReceta[0]->uniReceta, 'clave' => $datosReceta[0]->Uni_clave);
+		$uniActual[]	= array('nombre' => $datosReceta[0]->uniPaciente, 'clave' => $datosReceta[0]->Uni_ClaveActual);
+
 		$respuesta = array(
-			'receta' 		=> $id,
-			'fecha' 		=> $datosReceta->RM_fecreg,
-			'tardio' 		=> $datosReceta->tardio,
-			'folio' 		=> $datosReceta->Exp_folio,
-			'tipo' 			=> $datosReceta->TIR_nombre,
-			'lesionado' => $lesionado->Exp_completo,
-			// 'unidad' 	=> $uniInventario[0]['UNI_clave'],
-			// 'uniNombre' => $uniInventario[0]['UNI_nombrecorto'],
+			'receta' 		=> $datosReceta[0]->id_receta,
+			'fecha' 		=> $datosReceta[0]->RM_fecreg,
+			'tardio' 		=> $datosReceta[0]->tardio,
+			'limite'		=> $datosReceta[0]->vigencia,
+			'vigente'		=> $datosReceta[0]->vigente,
+			'tiempo'		=> $difTiempo,
+			'folio' 		=> $datosReceta[0]->Exp_folio,
+			'tipo' 			=> $datosReceta[0]->TIR_nombre,
+			'lesionado' => $datosReceta[0]->Exp_completo,
 			'unidad' 		=> $claveUnidad,
-			'uniNombre' => $nombreUnidad,
-			'items' 		=> $items,
-			'recetaInf'	=> $datosReceta
+			'uniNombre' => strtoupper($nombreUnidad),
+			'usuario' 	=> $datosReceta[0]->Usu_nombre,
+			'uniReceta'	=> $uniReceta,
+			'uniActual'	=> $uniActual,
+			'items' 		=> $items
 		);
 
 		return $respuesta;
+
+		// //obtenemos la receta de la base de MV
+		// $datosReceta = Receta::where('id_receta',$id)
+		// 						->select( DB::raw('RecetaMedica.*, TIR_nombre, IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))
+		// 						->join('TipoReceta', 'RecetaMedica.tipo_receta', '=', 'TipoReceta.TIR_id')
+		// 						->get();
+		// $datosReceta = $datosReceta[0];
+		//
+		// // $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
+		// $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio);
+		// $datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
+		// $items = array();
+		//
+		// //recorremos item por item de la receta para obtener los datos del item en inventario
+		// foreach ($datos as $dato) {
+		//
+		// 	$item = $dato['id_item'];
+		//
+		// 	//buscamos el item y con esto decimo si sera editable en caso de ser ortesis
+		// 	$valoresItem = Item::find($item);
+		// 	$modificable = $valoresItem->ITE_talla;
+		// 	$familia = $valoresItem->TIT_clave;
+		// 	$segmentable = $valoresItem->ITE_segmentable;
+		// 	$segmentableReceta = $valoresItem->ITE_noSegmentableReceta;
+		// 	$caja = $valoresItem->ITE_cantidadCaja;
+		//
+		// 	$forzoso = TipoItem::find($familia)->TIT_forzoso;
+		//
+		// 	if ($segmentable == 1 && $segmentableReceta == 0) {
+		// 		$cantidad = $dato['NS_cantidad'] * $caja;
+		// 	}else{
+		// 		$cantidad = $dato['NS_cantidad'];
+		// 	}
+		//
+		// 	$items[] = array(
+		// 		'receta' => $id,
+		// 		'recetaItem' => $dato['NS_id'],
+		// 		'item' => $item,
+		// 		'forzoso' => $forzoso,
+		// 		'familia' => $familia,
+		// 		'cantidad' => $cantidad,
+		// 		'caja' => 0,
+		// 		'editable' => $modificable,
+		// 		'existencia' => $dato['id_existencia'],
+		// 		'reserva' => $dato['id_reserva'],
+		// 		'almacen' => $dato['id_almacen'],
+		// 		'surtido' => false,
+		// 		'lote' => ''
+		// 	);
+		//
+		// }
+		//
+		// $uniMV = $lesionado->Uni_ClaveActual;
+		// $uniInventario = Unidad::where('UNI_claveMV', $uniMV)->get();
+		//
+		// if ( sizeof($uniInventario) > 0 ) {
+		// 	$claveUnidad = $uniInventario[0]['UNI_clave'];
+		// 	$nombreUnidad = $uniInventario[0]['UNI_nombrecorto'];
+		// } else{
+		// 	$claveUnidad = -1;
+		// 	$nombreUnidad = ' [EL PACIENTE FUE TRASLADADO A OTRA UNIDAD] ';
+		// }
+		//
+		// $respuesta = array(
+		// 	'receta' 		=> $id,
+		// 	'fecha' 		=> $datosReceta->RM_fecreg,
+		// 	'tardio' 		=> $datosReceta->tardio,
+		// 	'folio' 		=> $datosReceta->Exp_folio,
+		// 	'tipo' 			=> $datosReceta->TIR_nombre,
+		// 	'lesionado' => $lesionado->Exp_completo,
+		// 	// 'unidad' 	=> $uniInventario[0]['UNI_clave'],
+		// 	// 'uniNombre' => $uniInventario[0]['UNI_nombrecorto'],
+		// 	'unidad' 		=> $claveUnidad,
+		// 	'uniNombre' => $nombreUnidad,
+		// 	'items' 		=> $items,
+		// 	'recetaInf'	=> $datosReceta
+		// );
+		//
+		// return $respuesta;
+
 	}
 
 	public function subtipositem(){
