@@ -2,23 +2,29 @@
   <md-toolbar style="background-color: rgba(255, 128, 0, 0.96);">
     <div class="md-toolbar-tools">
       <ng-md-icon icon="warning" style="fill:white"></ng-md-icon>
-      <h2>Hay algo extraño con esta receta...</h2>
+      <h2>Receta bloqueada</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cerrarAlerta()" aria-label="Cerrar Dialogo">
-        <ng-md-icon icon="close" style="fill:white"></ng-md-icon> 
+        <ng-md-icon icon="close" style="fill:white"></ng-md-icon>
       </md-button>
     </div>
   </md-toolbar>
 
   <md-dialog-content>
     <div class="md-dialog-content">
-      <p style="font-size: 1.3em; text-align:center;">
-        La receta que está buscando fue expedida en otra unidad médica.
+      <p style="font-size: 1.3em; text-align:center;" ng-if="receta.vigente == 0">
+        La receta ha sido bloqueada debido a que pasaron mas de 3 horas desde que fue emitida.
         <br><br>
-        Por favor verifique que la receta que está buscando es la correcta.
+        <span ng-if="!esAdmin">Por favor contacte a la administración de inventarios.</span>
+        <span ng-if="esAdmin">Sólo los usuarios administradores podrán dar salida a esta receta.</span>
+      </p>
+      <p style="font-size: 1.3em; text-align:center;" ng-if="receta.vigente == 1 && receta.unidad == -1">
+        La receta ha sido bloqueada debido a que el paciente fue trasladado a {{ receta.uniNombre }}.
+        <small> <br><br> </small>
+        <span ng-if="!esAdmin">Por favor contacte a la administración de inventarios.</span>
+        <span ng-if="esAdmin">Sólo los usuarios administradores podrán dar salida a esta receta.</span>
       </p>
     </div>
-    <br>
     <div layout="column" layout-align="center center">
       <md-button type="submit" class="md-primary" aria-label="Nuevo Estado" ng-click="cerrarAlerta()"
                   style="color : rgb(255, 255, 255);

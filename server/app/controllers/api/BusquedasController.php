@@ -286,7 +286,7 @@ class BusquedasController extends BaseController {
 		// obtenemos los datos de receta y paciente de la base mv
 		$datosReceta = DB::connection('mv')
 											 ->table('RecetaMedica')
-											 ->select('RecetaMedica.*', 'TIR_nombre', 'RecetaMedica.Exp_folio', 'Expediente.Exp_completo', 'Expediente.Uni_ClaveActual',
+											 ->select('RecetaMedica.*', 'TIR_nombre', 'RecetaMedica.Exp_folio', 'Expediente.Exp_completo', 'Expediente.Uni_ClaveActual', 'RecetaMedica.Uni_clave',
 											 					'uniPaciente.Uni_nombrecorto as uniPaciente', 'uniReceta.Uni_nombrecorto as uniReceta', 'Usu_nombre',
 											 					DB::raw( 'IF( ( RM_fecreg + INTERVAL 30 MINUTE < now() ), 1, 0 ) as tardio,
 																					CONCAT(RM_fecreg + INTERVAL 3 HOUR) as vigencia,
@@ -342,7 +342,8 @@ class BusquedasController extends BaseController {
 			);
 		}
 
-		$uniInventario = Unidad::where('UNI_claveMV', $datosReceta[0]->Uni_ClaveActual)->get();
+		$uniInventario 	= Unidad::where('UNI_claveMV', $datosReceta[0]->Uni_ClaveActual)->get();
+		$uniAdmin 			= Unidad::where('UNI_claveMV', $datosReceta[0]->Uni_clave)->get();
 
 		if ( sizeof($uniInventario) > 0 ) {
 			$claveUnidad = $uniInventario[0]->UNI_clave;
@@ -380,90 +381,11 @@ class BusquedasController extends BaseController {
 			'usuario' 	=> $datosReceta[0]->Usu_nombre,
 			'uniReceta'	=> $uniReceta,
 			'uniActual'	=> $uniActual,
+			'uniAdmin'	=> $uniAdmin,
 			'items' 		=> $items
 		);
 
 		return $respuesta;
-
-		// //obtenemos la receta de la base de MV
-		// $datosReceta = Receta::where('id_receta',$id)
-		// 						->select( DB::raw('RecetaMedica.*, TIR_nombre, IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))
-		// 						->join('TipoReceta', 'RecetaMedica.tipo_receta', '=', 'TipoReceta.TIR_id')
-		// 						->get();
-		// $datosReceta = $datosReceta[0];
-		//
-		// // $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio)->Exp_completo;
-		// $lesionado = ExpedienteWeb::find($datosReceta->Exp_folio);
-		// $datos = Suministros::where('id_receta',$id)->where('NS_surtida',0)->where('NS_cancelado',0)->get();
-		// $items = array();
-		//
-		// //recorremos item por item de la receta para obtener los datos del item en inventario
-		// foreach ($datos as $dato) {
-		//
-		// 	$item = $dato['id_item'];
-		//
-		// 	//buscamos el item y con esto decimo si sera editable en caso de ser ortesis
-		// 	$valoresItem = Item::find($item);
-		// 	$modificable = $valoresItem->ITE_talla;
-		// 	$familia = $valoresItem->TIT_clave;
-		// 	$segmentable = $valoresItem->ITE_segmentable;
-		// 	$segmentableReceta = $valoresItem->ITE_noSegmentableReceta;
-		// 	$caja = $valoresItem->ITE_cantidadCaja;
-		//
-		// 	$forzoso = TipoItem::find($familia)->TIT_forzoso;
-		//
-		// 	if ($segmentable == 1 && $segmentableReceta == 0) {
-		// 		$cantidad = $dato['NS_cantidad'] * $caja;
-		// 	}else{
-		// 		$cantidad = $dato['NS_cantidad'];
-		// 	}
-		//
-		// 	$items[] = array(
-		// 		'receta' => $id,
-		// 		'recetaItem' => $dato['NS_id'],
-		// 		'item' => $item,
-		// 		'forzoso' => $forzoso,
-		// 		'familia' => $familia,
-		// 		'cantidad' => $cantidad,
-		// 		'caja' => 0,
-		// 		'editable' => $modificable,
-		// 		'existencia' => $dato['id_existencia'],
-		// 		'reserva' => $dato['id_reserva'],
-		// 		'almacen' => $dato['id_almacen'],
-		// 		'surtido' => false,
-		// 		'lote' => ''
-		// 	);
-		//
-		// }
-		//
-		// $uniMV = $lesionado->Uni_ClaveActual;
-		// $uniInventario = Unidad::where('UNI_claveMV', $uniMV)->get();
-		//
-		// if ( sizeof($uniInventario) > 0 ) {
-		// 	$claveUnidad = $uniInventario[0]['UNI_clave'];
-		// 	$nombreUnidad = $uniInventario[0]['UNI_nombrecorto'];
-		// } else{
-		// 	$claveUnidad = -1;
-		// 	$nombreUnidad = ' [EL PACIENTE FUE TRASLADADO A OTRA UNIDAD] ';
-		// }
-		//
-		// $respuesta = array(
-		// 	'receta' 		=> $id,
-		// 	'fecha' 		=> $datosReceta->RM_fecreg,
-		// 	'tardio' 		=> $datosReceta->tardio,
-		// 	'folio' 		=> $datosReceta->Exp_folio,
-		// 	'tipo' 			=> $datosReceta->TIR_nombre,
-		// 	'lesionado' => $lesionado->Exp_completo,
-		// 	// 'unidad' 	=> $uniInventario[0]['UNI_clave'],
-		// 	// 'uniNombre' => $uniInventario[0]['UNI_nombrecorto'],
-		// 	'unidad' 		=> $claveUnidad,
-		// 	'uniNombre' => $nombreUnidad,
-		// 	'items' 		=> $items,
-		// 	'recetaInf'	=> $datosReceta
-		// );
-		//
-		// return $respuesta;
-
 	}
 
 	public function subtipositem(){

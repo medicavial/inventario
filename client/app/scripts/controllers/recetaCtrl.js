@@ -12,11 +12,15 @@
 	recetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', 'datos', 'operacion', '$mdDialog', 'mensajes', '$q','$filter'];
 	loteRecetaCtrl.$inject = ['$scope', '$mdDialog', 'info', 'mensajes','busqueda','informacion']
 	itemRecetaCtrl.$inject = ['$scope','$rootScope','$mdDialog','informacion','operacion','mensajes','$q','$filter','busqueda','info'];
-	dialogoRecetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', '$mdDialog', 'mensajes'];
+	dialogoRecetaCtrl.$inject = ['$scope','$rootScope', 'busqueda', '$mdDialog', 'mensajes', 'data'];
 
-	function dialogoRecetaCtrl($scope, $rootScope, busqueda, $mdDialog, mensajes){
-		console.log('Cerrar Dialogo Alerta');
-
+	function dialogoRecetaCtrl($scope, $rootScope, busqueda, $mdDialog, mensajes, data){
+		$scope.receta = data;
+		$scope.esAdmin = false;
+		if (parseInt($rootScope.permisos.PER_clave) < 3) {
+			$scope.esAdmin = true;
+		}
+		console.log($scope.esAdmin)
 		$scope.cerrarAlerta = function () {
 			$mdDialog.hide();
 		};
@@ -43,6 +47,9 @@
 		scope.inicio = function(){
 			scope.receta = '';
 			scope.datos = [];
+			if (parseInt($rootScope.permisos.PER_clave) < 3) {
+				$scope.esAdmin = true;
+			}
 		}
 
 		scope.surtirItem = function(valor){
@@ -208,7 +215,7 @@
 		}
 
 		scope.buscaReceta = function(){
-
+			console.log($scope.esAdmin);
 			scope.cargando = true;
 			scope.datosReceta = false;
 			scope.datos = [];
@@ -221,30 +228,36 @@
 				scope.uniNombre=data.uniNombre;
 
 				var unidades = $rootScope.unidadesAdmin.split(",");
-				// console.log(unidades);
 
 				console.log("UniReceta: "+data.unidad);
 				scope.autorizado=false;
 
-				scope.tardio=parseInt(data.tardio);
+				scope.tardio		=	parseInt(data.tardio);
+				scope.vigente		=	parseInt(data.vigente);
+				scope.vigencia 	= data.vigencia;
 
 				for (var i = 0; i < unidades.length; i++) {
-					// console.log(unidades[i]);
-					if (data.unidad == unidades[i]) {
-						// console.log("UnidadReceta: "+data.unidad);
-						// console.log("UnidadUsuario: "+unidades[i]);
+					if ( data.unidad == unidades[i] ) {;
 						scope.autorizado=true;
 						break;
 					} else{
+						// && $rootScope.permisos.PER_clave > 2
 						scope.autorizado=false;
 					};
 				};
 
-				if (scope.autorizado == false) {
-					scope.abreModal();
+				if (scope.autorizado == false || scope.vigente == 0 ) {
+					scope.abreModal(data);
 				};
 
+				// $scope.esAdmin = false;
 				scope.datos = data;
+				console.log(scope.datos.unidad);
+				if (data.unidad === -1 && $scope.esAdmin) {
+					scope.datos.unidad = data.uniAdmin[0].UNI_clave;
+					console.log(scope.datos.unidad)
+				}
+				console.log(scope.datos)
 				scope.cargando = false;
 				scope.datosReceta = true;
 				scope.surtidos();
@@ -253,13 +266,14 @@
 			});
 		}
 
-		scope.abreModal = function () {
+		scope.abreModal = function (datos) {
 			$mdDialog.show({
 				controller: dialogoRecetaCtrl,
 				templateUrl: 'views/errorReceta.html',
 				parent: angular.element(document.body),
 				// targetEvent: ev,
-				clickOutsideToClose: false
+				clickOutsideToClose: false,
+				data: datos
 			})
 		};
 

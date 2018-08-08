@@ -1,4 +1,6 @@
-<div  layout="column" ng-init="receta.inicio()">
+<!-- receta.autorizado se refiere a la unidad en la que está el paciente -->
+
+<div layout="column" ng-init="receta.inicio()">
 
 	<md-toolbar class="md-hue-2">
 		<h2 class="md-toolbar-tools">
@@ -10,7 +12,7 @@
 				<input ng-model="receta.receta" required numero/>
 			</md-input-container>
 			<md-button type="submit" class="md-icon-button paginas" ng-if="receta.receta" aria-label="Buscar">
-		        <ng-md-icon icon="search" style="fill:white"></ng-md-icon> 
+		        <ng-md-icon icon="search" style="fill:white"></ng-md-icon>
 		    </md-button>
 		</form>
 		<div layout-gt-sm="row" layout="column" layout-padding ng-if="receta.datosReceta" layout-align="start start" layout-align-gt-sm="center center">
@@ -23,12 +25,16 @@
     <md-whiteframe ng-if="receta.datosReceta"  class="muestras md-whiteframe-4dp white" layout="column" layout-padding>
 
 		<h3>Detalles de Receta
-			<small style="color: #AF0000;" ng-show="receta.autorizado == false">
-				(No tiene autorización para manejar recetas de {{ receta.uniNombre }})
+			<small style="color: #AF0000;" ng-if="!receta.autorizado">
+				<br><span ng-if="!esAdmin">No puede surtir esta receta debido que el </span><span ng-if="esAdmin">El</span> paciente fue trasladado a {{ receta.uniNombre }}.
 			</small>
 
-			<small style="color: #FF8000;" ng-if="receta.tardio==1 && receta.datos.items.length>0">
-				Se marcará como SURTIDA TARDÍA
+			<small style="color: #FF8000;" ng-if="receta.vigente==1 && receta.tardio==1 && receta.datos.items.length>0">
+				<br>Se marcará como SURTIDA TARDÍA debido a que esta receta fue generada hace más de 30 minutos.
+			</small>
+
+			<small style="color: #AF0000;" ng-if="receta.vigente==0 && receta.datos.items.length>0">
+				<br>Esta receta <span ng-if="!esAdmin">no podrá surtirse debido a que </span> fue generada hace más de 3 horas.
 			</small>
 		</h3>
 
@@ -46,22 +52,23 @@
 			        </md-select>
 				</p>
 				<p class="text-center" flex flex-gt-sm="20">
-					Cantidad:  <strong> X <span ng-if="recetaItem.caja == 0">{{ recetaItem.cantidad }}</span> <span ng-if="recetaItem.caja > 0"> {{ recetaItem.caja }}</span> </strong>	
+					Cantidad:  <strong> X <span ng-if="recetaItem.caja == 0">{{ recetaItem.cantidad }}</span> <span ng-if="recetaItem.caja > 0"> {{ recetaItem.caja }}</span> </strong>
 				</p>
 				<p class="text-center" flex flex-gt-sm="20" ng-if="recetaItem.forzoso == 1 ">
-					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.lotes.length > 0 || receta.autorizado == false" class="md-raised md-warm" ng-click="receta.ingresaLote(recetaItem)">Agregar Lote(s)</md-button>
+					<!-- <md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.lotes.length > 0 || receta.autorizado == false" class="md-raised md-warm" ng-click="receta.ingresaLote(recetaItem)">Agregar Lote(s)</md-button> -->
+					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.lotes.length > 0 || ( receta.autorizado == false && !esAdmin)" class="md-raised md-warm" ng-click="receta.ingresaLote(recetaItem)">Agregar Lote(s)</md-button>
 				</p>
 				<p flex flex-gt-sm="20">
 					<md-progress-circular md-mode='indeterminate' ng-if="receta.surtiendo && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
-					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.surtido || receta.surtiendo || receta.autorizado == false" class="md-raised md-warm" ng-click="receta.surtirItem(recetaItem)">Surtir</md-button>
+					<md-button ng-hide="receta.surtiendo && !$index" ng-disabled="recetaItem.surtido || receta.surtiendo || ( receta.autorizado == false && !esAdmin)" class="md-raised md-warm" ng-click="receta.surtirItem(recetaItem)">Surtir</md-button>
 				</p>
 				<p flex flex-gt-sm="20">
 					<md-progress-circular md-mode='indeterminate' ng-if="receta.cancelando && !$index" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
-					<md-button ng-hide="receta.cancelando && !$index" ng-if="!recetaItem.surtido" ng-disabled="receta.autorizado == false" class="md-raised md-accent" ng-click="receta.cancelarItem(recetaItem)">Cancelar</md-button>
+					<md-button ng-hide="receta.cancelando && !$index" ng-if="!recetaItem.surtido" ng-disabled="receta.autorizado == false && !esAdmin" class="md-raised md-accent" ng-click="receta.cancelarItem(recetaItem)">Cancelar</md-button>
 				</p>
 			</md-list-item>
 		</md-list>
-		
+
 		<section ng-if="receta.itemsSurtidos.length > 0">
 			<md-content layout="row" flex>
 				<div flex flex-gt-sm="35">ITEMS SURTIDOS</div>
@@ -76,7 +83,7 @@
 				        </md-select>
 					</p>
 					<p class="text-center" flex flex-gt-sm="10">
-						Cantidad:  <strong> X {{ item.MOV_cantidad }}</strong>	
+						Cantidad:  <strong> X {{ item.MOV_cantidad }}</strong>
 					</p>
 				</md-list-item>
 			</md-list>
@@ -91,10 +98,11 @@
 </div>
 
 
-<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="receta.ingresaItem($event)" aria-label="Nuevo Item" ng-if="receta.datosReceta" ng-disabled="receta.autorizado == false">
+<!-- <md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="receta.ingresaItem($event)" aria-label="Nuevo Item" ng-if="receta.datosReceta" ng-disabled="receta.autorizado == false"> -->
+<md-button id="nuevo" class="animated bounceInUp md-fab md-fab-bottom-right" ng-click="receta.ingresaItem($event)" aria-label="Nuevo Item" ng-if="receta.datosReceta" ng-disabled="( receta.autorizado == false && !esAdmin)">
     <md-tooltip md-direction="top">
       Agregar Item
     </md-tooltip>
-    <ng-md-icon icon="add" style="fill:white" ng-hide="receta.loading"></ng-md-icon> 
+    <ng-md-icon icon="add" style="fill:white" ng-hide="receta.loading"></ng-md-icon>
     <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" ng-if="receta.loading"></md-progress-circular>
 </md-button>
