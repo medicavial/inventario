@@ -20,11 +20,17 @@
 			<label>Lesionado: {{receta.datos.lesionado}}</label>
 			<label>Registro de Receta: {{ receta.datos.fecha }}</label>
 		</div>
+		<div layout-gt-sm="row" layout="column" layout-padding ng-if="receta.datosReceta && esAdmin" layout-align="start start" layout-align-gt-sm="center center">
+			<label>Médico: {{receta.datos.usuario | uppercase | limitTo:30}}</label>
+			<!-- <label> | </label> -->
+			<label>Límite: {{ receta.datos.limite }}</label>
+			<label>Antig&uuml;edad: {{receta.datos.tiempo}}</label>
+		</div>
     </md-toolbar>
 
     <md-whiteframe ng-if="receta.datosReceta"  class="muestras md-whiteframe-4dp white" layout="column" layout-padding>
 
-		<h3>Detalles de Receta
+		<h3>Detalles de Receta ({{ receta.datos.tipo }})
 			<small style="color: #AF0000;" ng-if="!receta.autorizado">
 				<br><span ng-if="!esAdmin">No puede surtir esta receta debido que el </span><span ng-if="esAdmin">El</span> paciente fue trasladado a {{ receta.uniNombre }}.
 			</small>

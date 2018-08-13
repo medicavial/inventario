@@ -17,6 +17,7 @@
 	function dialogoRecetaCtrl($scope, $rootScope, busqueda, $mdDialog, mensajes, data){
 		$scope.receta = data;
 		$scope.esAdmin = false;
+
 		if (parseInt($rootScope.permisos.PER_clave) < 3) {
 			$scope.esAdmin = true;
 		}
