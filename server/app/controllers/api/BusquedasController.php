@@ -356,13 +356,14 @@ class BusquedasController extends BaseController {
 		// mandamos la diferecia de tiempo entendible
 		$difTiempo=null;
 		if ( strlen($datosReceta[0]->diferenciaTiempo > 1) ) {
-			if ( intval( substr($datosReceta[0]->diferenciaTiempo, 0, 2) ) < 24 ) {
-				$difTiempo = intval( substr($datosReceta[0]->diferenciaTiempo, 3, 2) ). ' minutos';
-			}elseif( intval( substr($datosReceta[0]->diferenciaTiempo, 0, 2) ) > 23 ){
-				$difTiempo = bcdiv(intval(substr($datosReceta[0]->diferenciaTiempo, 0, 2)) / 24, '1', 0).' día(s)';
+			if ( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) < 24 ) {
+				$difTiempo = intval( explode(':',$datosReceta[0]->diferenciaTiempo)[1] ). ' minutos';
+			}elseif( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) > 23 ){
+				$difTiempo = bcdiv(intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) / 24, '1', 0).' día(s)';
 			}
 		}
-
+		// return $difTiempo;
+		// return explode(':',$datosReceta[0]->diferenciaTiempo)[0];
 		$uniReceta[]	= array('nombre' => $datosReceta[0]->uniReceta, 'clave' => $datosReceta[0]->Uni_clave);
 		$uniActual[]	= array('nombre' => $datosReceta[0]->uniPaciente, 'clave' => $datosReceta[0]->Uni_ClaveActual);
 
