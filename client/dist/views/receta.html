@@ -24,7 +24,7 @@
 			<label>Médico: {{receta.datos.usuario | uppercase | limitTo:30}}</label>
 			<!-- <label> | </label> -->
 			<label>Límite: {{ receta.datos.limite }}</label>
-			<label>Antig&uuml;edad: {{receta.datos.tiempo}}</label>
+			<label ng-if="receta.datos.tiempo != ''">Antig&uuml;edad: {{receta.datos.tiempo}}</label>
 		</div>
     </md-toolbar>
 
@@ -51,11 +51,14 @@
 		<md-list>
 			<md-list-item ng-repeat="recetaItem in receta.datos.items" layout="column" layout-gt-sm="row">
 				<p flex flex-gt-sm="35">
-			        <md-select md-on-open="receta.generaFiltro(recetaItem)" md-on-close="receta.verificaExistencia(recetaItem,$event)" placeholder="Selecciona Item" ng-model="recetaItem.item" ng-disabled="recetaItem.editable == 0">
+		      <md-select md-on-open="receta.generaFiltro(recetaItem)"
+										 md-on-close="receta.verificaExistencia(recetaItem,$event)"
+										 placeholder="Selecciona Item"
+										 ng-model="recetaItem.item" ng-disabled="recetaItem.editable == 0">
 						<md-optgroup label="{{ tipoItem.TIT_nombre }}" ng-repeat="tipoItem in receta.tipoItems | filter:{ TIT_clave: recetaItem.familia }">
-				            <md-option ng-value="item.ITE_clave" ng-repeat="item in receta.items | filter:receta.filtro ">{{item.ITE_nombre}}</md-option>
-				        </md-optgroup>
-			        </md-select>
+				   		<md-option ng-value="item.ITE_clave" ng-repeat="item in receta.items | filter:receta.filtro ">{{item.ITE_nombre}}</md-option>
+				    </md-optgroup>
+		      </md-select>
 				</p>
 				<p class="text-center" flex flex-gt-sm="20">
 					Cantidad:  <strong> X <span ng-if="recetaItem.caja == 0">{{ recetaItem.cantidad }}</span> <span ng-if="recetaItem.caja > 0"> {{ recetaItem.caja }}</span> </strong>

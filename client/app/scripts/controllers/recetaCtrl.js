@@ -21,7 +21,7 @@
 		if (parseInt($rootScope.permisos.PER_clave) < 3) {
 			$scope.esAdmin = true;
 		}
-		console.log($scope.esAdmin)
+		// console.log($scope.esAdmin)
 		$scope.cerrarAlerta = function () {
 			$mdDialog.hide();
 		};
@@ -43,7 +43,7 @@
 		scope.itemssurtidos = [];
 		scope.tardio = null;
 
-		console.log(datos);
+		// console.log(datos);
 
 		scope.inicio = function(){
 			scope.receta = '';
@@ -134,7 +134,6 @@
 			}
 		}
 
-
 		scope.ingresaLote = function(item,ev) {
 			console.log(item);
 		    $mdDialog.show({
@@ -216,21 +215,21 @@
 		}
 
 		scope.buscaReceta = function(){
-			console.log($scope.esAdmin);
+			// console.log($scope.esAdmin);
 			scope.cargando = true;
 			scope.datosReceta = false;
 			scope.datos = [];
 
 			busqueda.receta(scope.receta).success(function (data){
-				console.log(data);
+				// console.log(data);
 
 				/* FILTRADO DE RECETAS POR UNIDAD */
-				console.log("UniUsr:  "+ $rootScope.unidadesAdmin);
+				// console.log("UniUsr:  "+ $rootScope.unidadesAdmin);
 				scope.uniNombre=data.uniNombre;
 
 				var unidades = $rootScope.unidadesAdmin.split(",");
 
-				console.log("UniReceta: "+data.unidad);
+				// console.log("UniReceta: "+data.unidad);
 				scope.autorizado=false;
 
 				scope.tardio		=	parseInt(data.tardio);
@@ -253,12 +252,18 @@
 
 				// $scope.esAdmin = false;
 				scope.datos = data;
-				console.log(scope.datos.unidad);
+				// console.log(scope.datos.unidad);
 				if (data.unidad === -1 && $scope.esAdmin) {
 					scope.datos.unidad = data.uniAdmin[0].UNI_clave;
 					console.log(scope.datos.unidad)
 				}
-				console.log(scope.datos)
+
+				if ( parseInt( scope.datos.TIR_clave ) === 5 ) {
+					console.info('ES PARTICULAR');
+				}
+				if ( parseInt( scope.datos.TIR_clave ) === 4 ) {
+					console.info('ES CORTA ESTANCIA');
+				}
 				scope.cargando = false;
 				scope.datosReceta = true;
 				scope.surtidos();
@@ -301,7 +306,7 @@
 
 	function loteRecetaCtrl($scope, $mdDialog, info, mensajes,busqueda,informacion){
 
-		console.log(informacion);
+		console.log(informacion.data);
 
 		$scope.lotesUnidad = informacion.data;
 		$scope.lotes = info.lotes ? info.lotes : [];

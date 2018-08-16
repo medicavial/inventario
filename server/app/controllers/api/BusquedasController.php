@@ -130,6 +130,7 @@ class BusquedasController extends BaseController {
                  			)')
                  // ->groupBy('existencias.ITE_clave') //esto está dando problemas
                  ->orderBy('ITE_nombre')
+								 ->orderBy('TIT_clave', 'desc')
                  ->get();
 
         for ($i=0; $i <sizeof($listado) ; $i++) {
@@ -183,7 +184,8 @@ class BusquedasController extends BaseController {
 	             //          ->where('items.TIT_clave', 2);
 	             // })
                  // ->where('items.TIT_clave', $tipo)
-                 ->orderBy('ITE_nombre', 'asc')
+								 ->orderBy('ITE_nombre', 'asc')
+								 ->orderBy('TIT_clave', 'desc')
                  ->get();
 	}
 
@@ -355,15 +357,23 @@ class BusquedasController extends BaseController {
 
 		// mandamos la diferecia de tiempo entendible
 		$difTiempo=null;
-		if ( strlen($datosReceta[0]->diferenciaTiempo > 1) ) {
-			if ( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) < 24 ) {
-				$difTiempo = intval( explode(':',$datosReceta[0]->diferenciaTiempo)[1] ). ' minutos';
-			}elseif( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) > 23 ){
+		if ( strlen($datosReceta[0]->diferenciaTiempo > 0) ) {
+			if ( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) <= 24 ) {
+				// $difTiempo = ( ( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) * 60 ) + intval( explode(':',$datosReceta[0]->diferenciaTiempo)[1] ) ) . ' minutos';
+				$minutos = ( ( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) * 60 ) + intval( explode(':',$datosReceta[0]->diferenciaTiempo)[1] ) );
+				if ( $minutos <= 180 ) {
+					$difTiempo = $minutos . ' minutos';
+				}
+				if ( $minutos > 180 ) {
+					$difTiempo = intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ).' horas';
+				}
+			}elseif( intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) > 24 ){
 				$difTiempo = bcdiv(intval( explode(':',$datosReceta[0]->diferenciaTiempo)[0] ) / 24, '1', 0).' día(s)';
 			}
+		} else{
+			$difTiempo='';
 		}
-		// return $difTiempo;
-		// return explode(':',$datosReceta[0]->diferenciaTiempo)[0];
+
 		$uniReceta[]	= array('nombre' => $datosReceta[0]->uniReceta, 'clave' => $datosReceta[0]->Uni_clave);
 		$uniActual[]	= array('nombre' => $datosReceta[0]->uniPaciente, 'clave' => $datosReceta[0]->Uni_ClaveActual);
 
@@ -376,6 +386,7 @@ class BusquedasController extends BaseController {
 			'tiempo'		=> $difTiempo,
 			'folio' 		=> $datosReceta[0]->Exp_folio,
 			'tipo' 			=> $datosReceta[0]->TIR_nombre,
+			'TIR_clave'	=> $datosReceta[0]->tipo_receta,
 			'lesionado' => $datosReceta[0]->Exp_completo,
 			'unidad' 		=> $claveUnidad,
 			'uniNombre' => strtoupper($nombreUnidad),
