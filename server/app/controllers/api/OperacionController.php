@@ -914,12 +914,12 @@ class OperacionController extends BaseController {
 							->take(1)
 							->get();
 
-		$pdf = helpers::traspasoPDF($cve[0]['CVE_traspaso']);
-    	// return $pdf->stream();
+		// $pdf = helpers::traspasoPDF($cve[0]['CVE_traspaso']);
 
 		return Response::json(array('respuesta' => 'Traspaso efectuado Correctamente',
-									'cveTraspaso' => $cveTraspaso,
-									'datos' => $pdf));
+																'cveTraspaso' => $cveTraspaso,
+																// 'datos' => $pdf
+																));
 
 	}
 
