@@ -36,8 +36,12 @@
 	// .constant('api', 'http://localhost/inventario/server/public/api/')
 	// .constant('publicfiles','http://localhost/inventario/server/public/exports/');
 
+	// // /* PARA PRODUCCIÓN */
+	// .constant('api', 'http://api.medicavial.mx/api/')
+	// .constant('publicfiles','http://api.medicavial.mx/exports/');
+
 	// /* PARA PRODUCCIÓN */
-	.constant('api', 'http://api.medicavial.mx/api/')
-	.constant('publicfiles','http://api.medicavial.mx/exports/');
+	.constant('api', 'http://inventarioapi.medicavial.net/api/')
+	.constant('publicfiles','http://inventarioapi.medicavial.net/exports/');
 
 })();
