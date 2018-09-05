@@ -26,7 +26,8 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => 'mvinventario',
+	// 'default' => 'mysql',
 	// 'default' => 'local',
 
 	/*
@@ -79,6 +80,17 @@ return array(
 			'driver'    => 'mysql',
 			'host'      => 'www.medicavial.net',
 			'database'  => 'medica_registromv',
+			'username'  => 'medica_webusr',
+			'password'  => 'tosnav50',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
+		'mvinventario' => array(
+			'driver'    => 'mysql',
+			'host'      => 'www.medicavial.net',
+			'database'  => 'medica_inventario',
 			'username'  => 'medica_webusr',
 			'password'  => 'tosnav50',
 			'charset'   => 'utf8',
