@@ -267,7 +267,12 @@ class ReportesController extends BaseController {
 		}else if($tipo == 'traspasos'){
 			$datos = $this->traspasos();
 		}
-
+		// return array(
+		// 	'app_path' 			=> app_path(),
+		// 	'base_path'			=> base_path(),
+		// 	'public_path'		=> public_path(),
+		// 	'storage_path'	=> storage_path()
+		// );
 		return Excel::create($tipo, function($excel) use($datos,$tipo) {
 
 		    $excel->sheet('Datos', function($sheet) use($datos,$tipo) {
@@ -329,7 +334,6 @@ class ReportesController extends BaseController {
 		    });
 
 		})->store('xls', public_path('exports') , true);
-
 
 	}
 
