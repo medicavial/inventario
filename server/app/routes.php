@@ -245,7 +245,8 @@ Route::group(array('prefix' => 'api'), function()
 				Route::post('ajuste-lote', 'OperacionController@ajusteLote');
 				Route::post('alta-lote', 'OperacionController@altaLote');
 				Route::get('reservaSurtida-{id}', 'OperacionController@reservaSurtida');
-        Route::get('correominimo/{almacen}/{item}', 'OperacionController@mailMinimos');
+				Route::get('correominimo/{almacen}/{item}', 'OperacionController@mailMinimos');
+        Route::get('correominimoprueba/{almacen}/{item}', 'OperacionController@mailMinimosPrueba');
     });
 
 

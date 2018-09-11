@@ -1435,4 +1435,52 @@ class OperacionController extends BaseController {
 		}
 	}
 
+	public function mailMinimosPrueba($almacen, $item){
+		$unidad = DB::table('almacenes')
+								->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
+								->where('ALM_clave', $almacen)
+								->get();
+
+		$almacenes = DB::table('almacenes')
+									 ->where('UNI_clave', $unidad[0]->UNI_clave)
+									 ->get();
+
+		$existencias = Existencia::join('almacenes','existencias.ALM_clave','=','almacenes.ALM_clave')
+														 ->join('unidades','almacenes.UNI_clave','=','unidades.UNI_clave')
+														 ->where('ITE_clave', $item)
+														 ->where('almacenes.UNI_clave', $unidad[0]->UNI_clave)
+														 ->select(DB::raw('SUM(EXI_cantidad) as total'))
+														 ->get();
+
+		$datosItem = Item::where('ITE_clave', $item)->first();
+
+		$conf = Configuracion::where(array( 'ITE_clave' => $item,'UNI_clave' => $unidad[0]->UNI_clave ))->first();
+
+		if ($conf != '') {
+			$datos = array('ITE_codigo' 	=> $datosItem->ITE_codigo,
+										 'ITE_nombre' 	=> $datosItem->ITE_nombre,
+										 'existencias'	=> $existencias[0]->total,
+										 'minimo' 			=> $conf->CON_nivelMinimo,
+										 'maximo' 			=> $conf->CON_nivelMaximo,
+										 'uniClave' 		=> $unidad[0]->UNI_clave,
+										 'unidad' 			=> $unidad[0]->UNI_nombrecorto,
+									 	 'mailUni'			=> $unidad[0]->UNI_correo);
+
+			 if ( intval($existencias[0]->total) <= $conf->CON_nivelMinimo && $conf->CON_correos == 1 ) {
+				Mail::send('emails.minimo', $datos, function($message) use($datos)
+				{
+						$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+						$message->subject('Prueba de alerta de item');
+						$message->to($datos['mailUni']);
+						$message->cc(array('mvcompras@medicavial.com.mx', 'alozano@medicavial.com.mx', 'scisneros@medicavial.com.mx', 'jabraham@medicavial.com.mx', 'coordenf@medicavial.com.mx'));
+						// $message->cc('mvcompras@medicavial.com.mx');
+						$message->bcc('sramirez@medicavial.com.mx');
+						// $message->replyTo(array($datos['mailUni'], 'alozano@medicavial.com.mx', 'scisneros@medicavial.com.mx', 'jabraham@medicavial.com.mx', 'coordenf@medicavial.com.mx'));
+				});
+			}
+		}else{
+			return 'no hay configuracion';
+		}
+	}
+
 }
