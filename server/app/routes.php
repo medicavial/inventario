@@ -272,7 +272,11 @@ Route::group(array('prefix' => 'api'), function()
     Route::group(array('prefix' => 'mv'), function()
     {
         Route::get('tabulador/{claveLesion}/{folio}', 'MedicaController@tabulador');
+    });
 
+		Route::group(array('prefix' => 'pruebas'), function()
+    {
+        Route::get('usruni/{usuario}', 'DatosIniciales@usuarioUnidades');
     });
 
 });

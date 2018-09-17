@@ -119,4 +119,37 @@ class DatosIniciales extends \BaseController {
 		return $ordAbiertas;
 	}
 
+	public function usuarioUnidades( $usuario ){
+		$datosUsr =  DB::table('usuarios')
+									 ->select('USU_clave', 'USU_login', 'PER_clave')
+									 ->where('USU_login', $usuario)
+									 ->where('USU_activo', DB::raw('1'))
+									 ->get();
+
+		if ( sizeof( $datosUsr ) ) {
+			$almacenes = DB::table('usuarioAlmacen')
+										 ->select('usuarioAlmacen.ALM_clave', 'UNI_clave')
+										 ->where('USU_clave', $datosUsr[0]->USU_clave)
+										 ->join('almacenes', 'usuarioAlmacen.ALM_clave', '=', 'almacenes.ALM_clave')
+										 ->get();
+
+			$unidades = array();
+			$usrAlmacenes = array();
+
+			for ($i=0; $i < sizeof($almacenes) ; $i++) {
+				$usrAlmacenes[] = $almacenes[$i]->ALM_clave;
+				$unidades[] = $almacenes[$i]->UNI_clave;
+			}
+
+			// $usrUnidades = DB::table('unidades')
+			// 								 ->select('UNI_clave')
+			// 								 ->whereIn('UNI_clave', $unidades)
+			// 								 ->get();
+			// return array($usrAlmacenes, $usrUnidades);
+			return array($usrAlmacenes, $unidades);
+		} else {
+			return 'error';
+		}
+	}
+
 }
