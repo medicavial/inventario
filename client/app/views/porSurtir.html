@@ -4,7 +4,7 @@
       <thead md-order="porSurtir.order" md-trigger="porSurtir.onOrderChange">
         <tr>
           <!-- <th name="Código" order-by="ITE_codigo"></th> -->
-          <th name="Receta" order-by="receta.id_receta"></th>
+          <th name="Receta" order-by="id_receta"></th>
           <th name="Item" order-by="ITE_nombre"></th>
           <th name="Clave" order-by="RES_clave"></th>
           <th name="Almacén" order-by="ALM_nombre"></th>
@@ -15,7 +15,7 @@
       <tbody>
         <tr ng-repeat="item in porSurtir.listado | filter:query | orderBy:porSurtir.order | limitTo:porSurtir.limit: (porSurtir.page -1) * porSurtir.limit">
           <!-- <td>{{ item.ITE_codigo }}</td> -->
-          <td> <b>{{ item.receta.id_receta }}</b> </td>
+          <td> <b>{{ item.id_receta }}</b> </td>
           <td>{{ item.ITE_nombre }}</td>
           <td>{{ item.RES_clave }}</td>
           <td>{{ item.ALM_nombre }}</td>

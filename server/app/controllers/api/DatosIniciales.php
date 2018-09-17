@@ -69,22 +69,40 @@ class DatosIniciales extends \BaseController {
 	}
 
 	public function porSurtirDetalles( $unidades ){
-		set_time_limit(180);// limite de tiempo en tiempo en segundos
+		// set_time_limit(180);// limite de tiempo en tiempo en segundos
 
-		$porSurtir = DatosIniciales::porSurtir($unidades);
+		/*  PRUEBAS */
+		$porSurtir = DB::table('reservas')
+						->select(DB::raw('reservas.RES_clave, items.ITE_codigo, items.ITE_nombre, almacenes.ALM_nombre, unidades.UNI_nombrecorto, reservas.RES_cantidad, RES_fecha'), 'medica_registromv.NotaSuministros.*')
+						->join('items', 'reservas.ITE_clave', '=', 'items.ITE_clave')
+						->join('almacenes', 'reservas.ALM_clave', '=', 'almacenes.ALM_clave')
+						->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+						->join('medica_registromv.NotaSuministros', 'medica_inventario.reservas.RES_clave', '=', 'medica_registromv.NotaSuministros.id_reserva')
+						->whereIn('almacenes.UNI_clave', explode(",",$unidades))
+						->where('reservas.ALM_clave', '<>', 43)
+						->orderBy('reservas.RES_clave', 'asc')
+						->get();
 
-		foreach ($porSurtir as $item) {
-			$respuesta[] = array( 'RES_clave'				=> $item->RES_clave,
-														'ITE_codigo'			=> $item->ITE_codigo,
-														'ITE_nombre'			=> $item->ITE_nombre,
-														'ALM_nombre'			=> $item->ALM_nombre,
-														'UNI_nombrecorto'	=> $item->UNI_nombrecorto,
-														'RES_cantidad'		=> $item->RES_cantidad,
-														'RES_fecha'				=> $item->RES_fecha,
-														'receta'					=> DB::connection('mv')->table('NotaSuministros')->where('id_reserva', $item->RES_clave)->first()
-														);
-		}
-		return $respuesta;
+		return $porSurtir;
+		/*  PRUEBAS */
+		//
+		//
+		//
+		// $porSurtir = DatosIniciales::porSurtir($unidades);
+		//
+		// foreach ($porSurtir as $item) {
+		// 	$respuesta[] = array( 'RES_clave'				=> $item->RES_clave,
+		// 												'ITE_codigo'			=> $item->ITE_codigo,
+		// 												'ITE_nombre'			=> $item->ITE_nombre,
+		// 												'ALM_nombre'			=> $item->ALM_nombre,
+		// 												'UNI_nombrecorto'	=> $item->UNI_nombrecorto,
+		// 												'RES_cantidad'		=> $item->RES_cantidad,
+		// 												'RES_fecha'				=> $item->RES_fecha,
+		// 												'receta'					=> DB::connection('mv')->table('NotaSuministros')->where('id_reserva', $item->RES_clave)->first()
+		// 												);
+		// }
+		// return $respuesta;
+
 	}
 
 	public function ordenesAbiertas($unidades){

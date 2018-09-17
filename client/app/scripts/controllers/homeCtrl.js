@@ -16,7 +16,7 @@
 				console.log('Datos actualizados');
 				mensajes.alerta('Actualizando datos','info','bottom right','refresh');
 			}
-		}, 180000); //se ejecuta cada 3 minutos (3x60x1000)
+		}, 600000); //se ejecuta cada 10 minutos (10x60x1000)
 
 		$scope.datos=datos.data;
 		$scope.informacion={

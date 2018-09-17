@@ -998,25 +998,21 @@ class OperacionController extends BaseController {
 	}
 
 	public function reservasAntiguas(){
-		set_time_limit(180);// limite de tiempo en tiempo en segundos
+		set_time_limit(60);// limite de tiempo en tiempo en segundos
 
 		//obtenemos todas las reservas
-		$url = 'http://api.medicavial.mx/api/busquedas/inicial/porSurtirDetalles/1,2,3,4,5,6,7,8,9,10,11,12';
+		$url = 'http://inventarioapi.medicavial.net/api/busquedas/inicial/porSurtirDetalles/1,2,3,4,5,6,7,8,9,10,11,12';
 		$todoURL = file_get_contents($url);
 		$todo = json_decode($todoURL, true);
 
-		/***
-		Recorremos el array eliminando las reservas en la base de inventarios
-		que ya no estén en la base de mv
-		***/
 		$cantidad = 0;
-
+		/*** Recorremos el array eliminando las reservas en la base de inventarios
+		que ya no estén en la base de mv ***/
 		foreach ($todo as $item) {
 			/* si los detalles de la receta estan vacios
 			o si ya fue surtido el item, o si fue cancelado el item
 			procedemos a eliminar la reserva en la base de inventario*/
-			if ( $item['receta'] == null || $item['receta']['NS_surtida'] != 0 || $item['receta']['NS_cancelado'] == 1) {
-				// return $item;
+			if ( !$item['id_receta'] || $item['NS_surtida'] != 0 || $item['NS_cancelado'] == 1) {
 				//se eliminan todas las reservas de los almacenes en esta unidad
 				$elimina = DB::table('reservas')
 											->where('RES_clave', '=', $item['RES_clave'])
@@ -1027,8 +1023,6 @@ class OperacionController extends BaseController {
 				}
 			}
 		}
-
-
 
 		//traemos el listado de reservas agrupadas por unidad
 		$reservas = DB::table('reservas')
@@ -1066,14 +1060,11 @@ class OperacionController extends BaseController {
 
 				//se eliminan todas las reservas de los almacenes en esta unidad
 				$eliminados = DB::table('reservas')
-												// ->where('ALM_clave', '=', $reserva->ALM_clave)
 												->whereBetween('ALM_clave', array($almacenes[0]->ALM_clave, $almacenes[sizeof($almacenes)-1]->ALM_clave))
 												->delete();
 				$cantidad = $eliminados + $cantidad;
 			}
 		};
-		// return $resumen;
-
 		//eliminamos las reservas que tengan más de 30 días
 		//donde SI hay recetas pendientes
 		$reservas = DB::table('reservas')
@@ -1081,6 +1072,7 @@ class OperacionController extends BaseController {
 						->delete();
 
 		$totalEliminados = $reservas + $cantidad;
+		// return $resumen;
 
 		//generamos el correo informativo solo si se eliminaron reservas
 		if ($totalEliminados > 0) {
