@@ -162,7 +162,8 @@
 				var item = scope.datos.items[0];
 				var datosReceta = {
 					almacen:item.almacen,
-					receta:item.receta
+					receta:item.receta,
+					tipo: scope.datos.tipo
 				}
 
 			    $mdDialog.show({
@@ -174,11 +175,11 @@
 					resolve:{
 						informacion:function(busqueda,$q){
 							scope.loading = true;
-						    var promesa 		= $q.defer(),
-								items 			= busqueda.itemsReceta(),
-								tiposMovimiento = busqueda.tiposMovimiento(),
-			            		almacenes 		= busqueda.almacenes(),
-			            		tiposajuste 	= busqueda.tiposAjuste();
+						    var promesa 					= $q.defer(),
+										items 						= busqueda.itemsReceta(),
+										tiposMovimiento 	= busqueda.tiposMovimiento(),
+			          		almacenes 				= busqueda.almacenesUsuario( $rootScope.id ),
+			          		tiposajuste 			= busqueda.tiposAjuste();
 
 							$q.all([items,tiposMovimiento,almacenes,tiposajuste]).then(function (data){
 								// console.log(data);
@@ -416,6 +417,7 @@
 		$scope.existeLote = false;
 
 		$scope.inicio = function(){
+			$scope.cambiaAlm = false;
 
 			$scope.busqueda = null;
 		    $scope.consultado = consultado;
@@ -425,6 +427,7 @@
 
 			$scope.datos = {
 				almacen:info.almacen,
+				recetaTipo: info.tipo,
 				item:'',
 				cantidad:'',
 				tipomov:3,
@@ -442,7 +445,6 @@
 		}
 
 		$scope.selectedItemChange= function(){
-
 			if ($scope.datos.almacen != '' && $scope.item) {
 				console.log('entro');
 				$scope.datos.lote = '';
@@ -450,8 +452,13 @@
 				$scope.datos.caducidad = '';
 				$scope.verificaExistencia($scope.datos.almacen);
 			};
+    };
 
-        };
+		$scope.cambioAlmacen = function( ALM_clave ){
+			console.log('cambio de almacen' + ALM_clave);
+			$scope.items = busqueda.itemsAlmacen( ALM_clave );
+			console.log($scope.items);
+		}
 
 		$scope.mensajeError = function(){
 			mensajes.alerta('Ocurrio un error intentalo nuevamente','error','top right','error');
@@ -542,6 +549,16 @@
 				});
 
 			};
+		}
+
+		$scope.verificaExistenciaAlmacen = function( almacen ){
+			// cambios
+			$scope.busqueda = '';
+			$scope.cambiaAlm = true;
+			busqueda.itemsAlmacen( almacen ).success(function (data){
+				$scope.cambiaAlm = false;
+				$scope.items=data;
+			})
 		}
 
 		$scope.guardar = function(){

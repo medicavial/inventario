@@ -5,7 +5,7 @@
       <h2>Agrega Item a receta</h2>
       <span flex></span>
       <md-button  class="md-icon-button" ng-click="cancel()">
-        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon> 
+        <ng-md-icon icon="close" style="fill:white" aria-label="Cerrar Ventana"></ng-md-icon>
       </md-button>
     </div>
   </md-toolbar>
@@ -13,9 +13,22 @@
   <form name="movimientoForm" novalidate ng-submit="guardar()">
 
   <md-dialog-content layout-padding>
-      
-      <md-content layout="column">
 
+      <md-content layout="column">
+        <div layout-gt-sm="row" layout="column">
+          <md-input-container flex>
+            <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" md-on-close="verificaExistenciaAlmacen(datos.almacen)"
+                       ng-disabled="datos.recetaTipo != 'Corta Estancia'" required>
+              <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
+            </md-select>
+            <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
+              <div ng-message="required">Campo obligatorio.</div>
+            </div>
+          </md-input-container>
+        </div>
+      </md-content>
+
+      <md-content layout="column">
           <md-autocomplete
               md-selected-item="item"
               md-selected-item-change="selectedItemChange()"
@@ -23,7 +36,8 @@
               md-items="item in consultado(busqueda)"
               md-item-text="item.ITE_nombre"
               md-min-length="0"
-              placeholder="Escribe item a buscar">
+              placeholder="Escribe item a buscar"
+              ng-disabled="cambiaAlm">
             <md-item-template>
               <span md-highlight-text="busqueda" md-highlight-flags="^i">{{item.ITE_nombre}}</span>
             </md-item-template>
@@ -31,13 +45,11 @@
               No se encontro "{{busqueda}}".
             </md-not-found>
           </md-autocomplete>
-          
       </md-content>
 
       <md-content layout="column">
-          
-          <div layout-gt-sm="row" layout="column">
-            
+        <!-- TIPO DE MOVIMIENTO NO NECESARIO -->
+          <!-- <div layout-gt-sm="row" layout="column">
             <md-input-container flex>
               <md-select placeholder="Tipo de Movimiento" ng-model="datos.tipomov" name="tipo" required disabled flex>
                 <md-option ng-repeat="tipomov in tiposmovimiento" value="{{tipomov.TIM_clave}}">{{tipomov.TIM_nombre}}</md-option>
@@ -52,20 +64,10 @@
                 <md-option ng-repeat="tipoajuste in tiposajuste" value="{{tipoajuste.TIA_clave}}">{{tipoajuste.TIA_nombre}}</md-option>
               </md-select>
             </md-input-container>
-
-          </div>
+          </div> -->
 
           <div layout-gt-sm="row" layout="column">
-            
-            <md-input-container flex>
-              <md-select placeholder="Almacen" ng-model="datos.almacen" name="tipo" md-on-close="verificaExistenciaAlmacen(datos.almacen)" required disabled>
-                <md-option ng-repeat="almacen in almacenes" value="{{almacen.ALM_clave}}">{{almacen.ALM_nombre}}</md-option>
-              </md-select>
-              <div ng-messages="movimientoForm.tipo.$dirty && movimientoForm.cantidad.$error">
-                <div ng-message="required">Campo obligatorio.</div>
-              </div>
-            </md-input-container>
-            
+
             <md-input-container flex>
               <label>Cantidad Disponible</label>
               <input type="text" name="cantidad" ng-model="disponible" disabled>
@@ -79,10 +81,10 @@
                 <div ng-message="min">La cantidad no puede ser menor que 1</div>
               </div>
             </md-input-container>
-            
+
           </div>
 
-          <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="item.TIT_forzoso == 1">  
+          <div layout-gt-sm="row" layout="column" class="no-margin" ng-if="item.TIT_forzoso == 1">
 
             <md-input-container flex>
               <md-select placeholder="Lote" ng-model="lote" name="tipo" md-on-close="datosLote(lote)">
@@ -91,10 +93,10 @@
             </md-input-container>
 
             <md-datepicker ng-model="datos.caducidad" md-placeholder="Caducidad" required  disabled flex></md-datepicker>
-            
+
             <span flex></span>
           </div>
-      
+
 
           <md-input-container flex>
             <label>Observaciones</label>
@@ -105,9 +107,9 @@
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
 
-      </md-content>  
+      </md-content>
 
-    
+
   </md-dialog-content>
   <md-dialog-actions layout="row">
 

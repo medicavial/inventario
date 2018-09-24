@@ -1001,7 +1001,7 @@ class OperacionController extends BaseController {
 		set_time_limit(60);// limite de tiempo en tiempo en segundos
 
 		//obtenemos todas las reservas
-		$url = 'http://inventarioapi.medicavial.net/api/busquedas/inicial/porSurtirDetalles/1,2,3,4,5,6,7,8,9,10,11,12';
+		$url = 'http://api.medicavial.mx/api/busquedas/inicial/porSurtirDetalles/1,2,3,4,5,6,7,8,9,10,11,12';
 		$todoURL = file_get_contents($url);
 		$todo = json_decode($todoURL, true);
 
@@ -1012,7 +1012,7 @@ class OperacionController extends BaseController {
 			/* si los detalles de la receta estan vacios
 			o si ya fue surtido el item, o si fue cancelado el item
 			procedemos a eliminar la reserva en la base de inventario*/
-			if ( !$item['id_receta'] || $item['NS_surtida'] != 0 || $item['NS_cancelado'] == 1) {
+			if ( !$item['receta']['id_receta'] || $item['receta']['NS_surtida'] != 0 || $item['receta']['NS_cancelado'] == 1) {
 				//se eliminan todas las reservas de los almacenes en esta unidad
 				$elimina = DB::table('reservas')
 											->where('RES_clave', '=', $item['RES_clave'])
@@ -1416,9 +1416,14 @@ class OperacionController extends BaseController {
 				Mail::send('emails.minimo', $datos, function($message) {
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 	 					$message->subject('Prealerta minimo');
-	 					$message->to('alozano@medicavial.com.mx');
+						/*
+						$message->to('alozano@medicavial.com.mx');
 						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
 						$message->cc('mvcompras@medicavial.com.mx');
+						$message->bcc('sramirez@medicavial.com.mx');
+						*/
+						$message->to($datos['mailUni']);
+						$message->cc(array('mvcompras@medicavial.com.mx', 'alozano@medicavial.com.mx', 'scisneros@medicavial.com.mx', 'coordenf@medicavial.com.mx'));
 						$message->bcc('sramirez@medicavial.com.mx');
 	 			});
 			}
