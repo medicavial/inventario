@@ -1407,23 +1407,23 @@ class OperacionController extends BaseController {
 	 			{
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 	 					$message->subject('Item en nivel minimo');
-	 					$message->to('alozano@medicavial.com.mx');
-						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
-						$message->cc('mvcompras@medicavial.com.mx');
+	 					// $message->to('mvcompras@medicavial.com.mx');
+						// // $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						// $message->cc('alozano@medicavial.com.mx');
+						// $message->bcc('sramirez@medicavial.com.mx');
+
+						$message->to($datos['mailUni']);
+						$message->cc(array('mvcompras@medicavial.com.mx', 'alozano@medicavial.com.mx', 'scisneros@medicavial.com.mx', 'coordenf@medicavial.com.mx'));
 						$message->bcc('sramirez@medicavial.com.mx');
+
 	 			});
 	 		} elseif( intval($existencias[0]->total) == ( $conf->CON_nivelMinimo + 1 ) && $conf->CON_correos == 1 ){
 				Mail::send('emails.minimo', $datos, function($message) {
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 	 					$message->subject('Prealerta minimo');
-						/*
-						$message->to('alozano@medicavial.com.mx');
+						$message->to('mvcompras@medicavial.com.mx');
 						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
-						$message->cc('mvcompras@medicavial.com.mx');
-						$message->bcc('sramirez@medicavial.com.mx');
-						*/
-						$message->to($datos['mailUni']);
-						$message->cc(array('mvcompras@medicavial.com.mx', 'alozano@medicavial.com.mx', 'scisneros@medicavial.com.mx', 'coordenf@medicavial.com.mx'));
+						$message->cc('alozano@medicavial.com.mx');
 						$message->bcc('sramirez@medicavial.com.mx');
 	 			});
 			}
