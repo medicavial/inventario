@@ -1,7 +1,5 @@
 <?php
-
 class Operacion {
-
 	public $tipomovimiento;
 	public $item;
 	public $almacen;
@@ -15,18 +13,15 @@ class Operacion {
 	public $observaciones = '';
 	public $receta = '';
 	public $traspaso = 0;
-
 	private $existencia;
 	private $cantidadActual;
 	private $idExistencia;
 
-
 	//funcion para verificar existencia
 	private function existenciaAlmacen(){
-
 		//verificamos si existe algo registrado como exstencia del item en el almacen
 		$consulta = Existencia::busca($this->item,$this->almacen);
-		//si existe manda true si no false
+		//si existe manda true, si no false
 		$existe = ($consulta->count() > 0) ? true : false;
 
 		if ($existe) {
@@ -45,26 +40,21 @@ class Operacion {
 			$cantidadActual = 0;
 		}
 
-
 		// setea el valor local al valor global
 		$this->existencia = $existencia;
 		$this->cantidadActual = $cantidadActual;
 	}
 
-
 	// en caso de ajuste se resetean los lotes registrados
 	private function reseteaLotes(){
-
 		//consultamos si hay lote el id de existenia y el item
 		$parametros = array(
 			'EXI_clave'=>$this->idExistencia,
 			'ITE_clave'=>$this->item
 		);
 
-
 		//actualizamos los lotes encontrados a cero
 		$lotes = Lote::where( $parametros )->update(array('LOT_cantidad' => 0));
-
 	}
 
 	//funccion para dar de alta lote

@@ -544,22 +544,17 @@ class OperacionController extends BaseController {
 		// $operacion->receta = Input::has('receta') ? Input::get('receta') : '';
 		$operacion->receta = $receta;
 
-
 		// si es un ajuste no importa las cantidades en el item exitentes se resetean
 		if ($operacion->tipomovimiento == 1) {
-
 			$operacion->alta();
 
 		// en este se toma que es una alta de item
 		}else if($operacion->tipomovimiento == 2){
-
 			$operacion->entrada();
 
 		// en este se toma que es una baja de item
 		}else if ($operacion->tipomovimiento == 3) {
-
 			$operacion->salida();
-
 		}
 
 		$operacion->verificaLote();
@@ -611,8 +606,6 @@ class OperacionController extends BaseController {
 		}
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
-
-
 	}
 
 	public function ordencompra(){
