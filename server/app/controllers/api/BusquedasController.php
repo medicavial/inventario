@@ -86,30 +86,66 @@ class BusquedasController extends BaseController {
 
 	public function existenciasUnidad($unidad,$tipo){
 		set_time_limit(30); // limite de tiempo en tiempo en segundos
-		if ($tipo == 1) {
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, CONCAT(ITE_nombre, " ( " ,ITE_sustancia," ",ITE_presentacion," )") as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, CONCAT(1) as tipoItem';
-		}elseif($tipo == 2){
-			$sql = 'existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, CONCAT(2) as tipoItem';
-		}
 
-		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
-	                     ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
-	                     ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-	                     ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
-	                     ->select(DB::raw($sql))
-	                     ->groupBy('existencias.ITE_clave')
-	                     ->where('unidades.UNI_claveMV', $unidad)
-	                     // este condicional solo filtra el botiquin
-	                     ->where('almacenes.TAL_clave', 2)
-	                     ->where('items.TIT_clave', $tipo)
-	                     ->orderBy('Descripcion')
-	                     ->get();
+		// TIPO 1 MEDICAMENTOS Y MATERIAL DE CURACIÓN
+		// TIPO 2 ORTESIS
 
+		// si el tipo es diferente mayor a 2 mandamos error
+		if ($tipo > 2) return Response::json(['message' => 'Error en tipo' ], 400);
+
+		if ($tipo == 1) $tipoItem = array($tipo, 5); // buscamos medicamentos(1) y material de curacion(5)
+		if ($tipo == 2) $tipoItem = array($tipo); // buscamos ortesis(2)
+
+		$sql = 'existencias.ALM_clave as almacen, 
+				EXI_clave as id, 
+				items.ITE_clave as Clave_producto, 
+				IF( LENGTH( ITE_sustancia ) > 0, CONCAT( ITE_nombre, " (" ,ITE_sustancia," ",ITE_presentacion,")" ), ITE_nombre ) as Descripcion, 
+				PRE_nombre as presentacion, 
+				EXI_cantidad - IFNULL( ( select SUM(RES_cantidad) 
+											from reservas 
+											where ALM_clave = existencias.ALM_clave 
+											and ITE_clave = existencias.ITE_clave 
+											GROUP BY ITE_clave ) , 0 ) as Stock,
+				ITE_posologia as posologia, 
+				ITE_cantidadCaja as Caja,
+				ITE_noSegmentableReceta as segmentable, 
+				'.$tipo.' as tipoItem, 
+				TIT_clave';
+
+		$existencias = Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+								 ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+								 ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+								 ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
+								 ->select(DB::raw($sql))
+								 ->groupBy('existencias.ITE_clave')
+								 ->where('unidades.UNI_claveMV', $unidad)
+								 ->where('almacenes.TAL_clave', 2) // este condicional solo filtra el almacen << botiquin >>
+								 ->whereIn('items.TIT_clave', $tipoItem)
+								 ->orderBy('Descripcion')
+								 ->get();
+
+		return $existencias;
 	}
 
 	public function existenciasCortaEstancia($unidad){
 		set_time_limit(30); // limite de tiempo en tiempo en segundos
-		$sql='existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, almacenes.TAL_clave';
+
+		$sql = 'existencias.ALM_clave as almacen,
+				EXI_clave as id,
+				items.ITE_clave as Clave_producto, 
+				IF( LENGTH( ITE_sustancia ) > 0, CONCAT( ITE_nombre, " (" ,ITE_sustancia," ",ITE_presentacion,")" ), ITE_nombre ) as Descripcion, 
+				TIT_clave as tipoItem, 
+				PRE_nombre as presentacion,
+				EXI_cantidad - IFNULL( (select SUM(RES_cantidad) 
+										from reservas 
+										where ALM_clave = existencias.ALM_clave 
+										and ITE_clave = existencias.ITE_clave 
+										GROUP BY ITE_clave ) , 0 ) as Stock,
+				ITE_posologia as posologia, 
+				ITE_cantidadCaja as Caja,
+				ITE_noSegmentableReceta as segmentable, 
+				almacenes.TAL_clave, 
+				TIT_clave';
 
 		$listado = Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
                  ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
@@ -117,78 +153,68 @@ class BusquedasController extends BaseController {
                  ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
                  ->select(DB::raw($sql))
                  ->where('unidades.UNI_claveMV', $unidad)
-                 // ->where('almacenes.TAL_clave', 4)// este condicional solo filtra el botiquin
-                 ->whereRaw('(
-                 				(almacenes.TAL_clave = 4)
-                 				or
-                 				(almacenes.TAL_clave = 2 and items.TIT_clave = 2)
-                 				or
-                 				(almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
-																				  "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
-																				  "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
-																				  "CUR0057", "CUR0059", "CUR0060", "CUR0061", "CUR0062", "CUR0063"
-																				  ))
-                 			)')
+                 ->whereRaw('( (almacenes.TAL_clave = 4)
+                 				or (almacenes.TAL_clave = 2 and items.TIT_clave = 2)
+								or (almacenes.TAL_clave = 2 and items.TIT_clave = 5)
+                 				or (almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
+																					 "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
+																					 "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
+																					 "CUR0057", "CUR0059", "CUR0060", "CUR0061", "CUR0062", "CUR0063"
+																					 )) )')
                  // ->groupBy('existencias.ITE_clave') //esto está dando problemas
                  ->orderBy('ITE_nombre')
-								 ->orderBy('TIT_clave', 'desc')
+				 ->orderBy('TIT_clave', 'desc')
                  ->get();
 
+		// con esto filtramos las existencias
         for ($i=0; $i <sizeof($listado) ; $i++) {
         	if ( $listado[$i]->Stock == 0 ) {
-        		// unset($listado[$i]);
         		$listado[$i]->Descripcion = 'SIN EXISTENCIA '.$listado[$i]->Descripcion;
         		$listado[$i]->Clave_producto = -1;
         	}
         }
 
         return $listado;
-
-		// return DB::select(DB::raw('select existencias.ALM_clave as almacen, EXI_clave as id, items.ITE_clave as Clave_producto, ITE_nombre as Descripcion, TIT_clave as tipoItem, PRE_nombre as presentacion,
-		// 							EXI_cantidad - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,
-		// 							ITE_posologia as posologia, ITE_cantidadCaja as Caja, ITE_noSegmentableReceta as segmentable
-		// 							from existencias
-		// 							inner join almacenes on existencias.ALM_clave = almacenes.ALM_clave
-		// 							inner join unidades on almacenes.UNI_clave = unidades.UNI_clave
-		// 							inner join items on existencias.ITE_clave = items.ITE_clave
-		// 							inner join presentaciones on items.PRE_clave = presentaciones.PRE_clave
-		// 							where unidades.UNI_claveMV = '.$unidad.'
-		// 							and almacenes.TAL_clave=4
-		// 							group by existencias.ITE_clave
-		// 							order by ITE_nombre asc'));
 	}
 
 	public function existenciasParticulares($unidad){
 		set_time_limit(30); // limite de tiempo en tiempo en segundos
-		$sql='existencias.ALM_clave as almacen,EXI_clave as id,items.ITE_clave as Clave_producto, ITE_nombre as Descripcion,PRE_nombre as presentacion,EXI_cantidad  - IFNULL( (select SUM(RES_cantidad) from reservas where ALM_clave = existencias.ALM_clave and ITE_clave = existencias.ITE_clave GROUP BY ITE_clave ) , 0 ) as Stock,ITE_posologia as posologia, ITE_cantidadCaja as Caja,ITE_noSegmentableReceta as segmentable, items.TIT_clave as tipoItem';
+		
+		$sql = 'existencias.ALM_clave as almacen,
+				EXI_clave as id,
+				items.ITE_clave as Clave_producto, 
+				IF( LENGTH( ITE_sustancia ) > 0, CONCAT( ITE_nombre, " (" ,ITE_sustancia," ",ITE_presentacion,")" ), ITE_nombre ) as Descripcion, 
+				PRE_nombre as presentacion,
+				EXI_cantidad - IFNULL( (select SUM(RES_cantidad) 
+										from reservas 
+										where ALM_clave = existencias.ALM_clave 
+										and ITE_clave = existencias.ITE_clave 
+										GROUP BY ITE_clave ) , 0 ) as Stock,
+				ITE_posologia as posologia, 
+				ITE_cantidadCaja as Caja,
+				ITE_noSegmentableReceta as segmentable, 
+				items.TIT_clave as tipoItem, 
+				TIT_clave';
 
-		return Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
-                 ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
-                 ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
-                 ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
-                 ->select(DB::raw($sql))
-                 ->groupBy('existencias.ITE_clave')
-                 ->where('unidades.UNI_claveMV', $unidad)
-                 // traemos del almacen particulares y ortesis del almacen 'botiquin'
-                 ->whereRaw('(
-                 				(almacenes.TAL_clave = 5)
-                 				or
-                 				(almacenes.TAL_clave = 2 and items.TIT_clave = 2)
-                 				or
-                 				(almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
-																				  "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
-																				  "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
-																				  "CUR0057"))
-                 			)')
-	             // ->orWhere(function($query)
-	             // {
-	             //    $query->where('almacenes.TAL_clave', 2)
-	             //          ->where('items.TIT_clave', 2);
-	             // })
-                 // ->where('items.TIT_clave', $tipo)
+		$existencias = Existencia::join('items', 'existencias.ITE_clave', '=', 'items.ITE_clave')
+								 ->join('almacenes', 'existencias.ALM_clave', '=', 'almacenes.ALM_clave')
+								 ->join('unidades', 'almacenes.UNI_clave', '=', 'unidades.UNI_clave')
+								 ->join('presentaciones', 'items.PRE_clave', '=', 'presentaciones.PRE_clave')
+								 ->select(DB::raw($sql))
+								 ->groupBy('existencias.ITE_clave')
+								 ->where('unidades.UNI_claveMV', $unidad)
+								 // traemos del almacen particulares y ortesis del almacen 'botiquin'... agregamos tambien material de curacion
+								 ->whereRaw('( (almacenes.TAL_clave = 5)
+												or (almacenes.TAL_clave = 2 and items.TIT_clave = 2)
+												or (almacenes.TAL_clave = 2 and items.TIT_clave = 5)
+												or (almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
+																									"CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
+																									"CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
+																									"CUR0057")) )')
 								 ->orderBy('ITE_nombre', 'asc')
 								 ->orderBy('TIT_clave', 'desc')
-                 ->get();
+								 ->get();
+		return $existencias;		
 	}
 
 	public function lote($lote){
