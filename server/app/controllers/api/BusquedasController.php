@@ -155,7 +155,6 @@ class BusquedasController extends BaseController {
                  ->where('unidades.UNI_claveMV', $unidad)
                  ->whereRaw('( (almacenes.TAL_clave = 4)
                  				or (almacenes.TAL_clave = 2 and items.TIT_clave = 2)
-								or (almacenes.TAL_clave = 2 and items.TIT_clave = 5)
                  				or (almacenes.TAL_clave = 2 and items.ITE_codigo in ("MED0004", "MED0014", "MED0017", "MED0024", "MED0048", "MED0050", "MED0091","MEDP001",
 																					 "CUR0018", "CUR0019", "CUR0020", "CUR0042", "CUR0043", "CUR0044", "CUR0045", "CUR0046",
 																					 "CUR0047", "CUR0048", "CUR0049", "CUR0052", "CUR0053", "CUR0054", "CUR0055", "CUR0056",
