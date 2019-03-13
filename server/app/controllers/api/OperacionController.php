@@ -708,11 +708,7 @@ class OperacionController extends BaseController {
 		$timeReceta = Receta::where('id_receta',Input::get('receta'))->select( DB::raw('IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))->get();
 		$timeReceta = $timeReceta[0];
 
-		$tardio="";
-
-		if ($timeReceta->tardio=="1") {
-			$tardio=" (Surtido Tardio)";
-		}
+		$tardio = ( $timeReceta->tardio == "1" ) ? " (Surtido Tardio)" : "";
 
 		$operacion = new Operacion;
 
@@ -739,25 +735,21 @@ class OperacionController extends BaseController {
 		$recetaMV->save();
 
 		//eliminamos reserva
-		// $reserva = Reserva::find($claveReserva);
-		// $reserva->delete();
 		$surteReserva = OperacionController::reservaSurtida( $claveReserva );
-
 
 		//damos salida al item surtido
 		$operacion->salida();
 
 		foreach ($lotes as $lote) {
-
 			$operacion->idLote 		= $lote['idLote'];
 			$operacion->lote 		= $lote['lote'];
-			// $operacion->caducidad 	= substr($lote['caducidad'], 0, 8).'01 00:00:00';
 			$operacion->caducidad 	= $lote['caducidad'];
 			$operacion->cantidad 	= $lote['cantidad'];
 			$operacion->verificaLote();
 		}
 
-		return Response::json(array('respuesta' => 'Item Surtido Correctamente'));
+		return Response::json(array('respuesta' => 'Item Surtido Correctamente',
+									'op' 		=> $operacion ));
 
 	}
 
