@@ -73,20 +73,28 @@
 			}
 		}
 
+		// FUNCION PARA CANCELAR ITEMS
+		// recibe la informacion del item a cancelar
 		scope.cancelarItem = function(valor){
-
 			console.log(valor);
 
 			scope.cancelando = true;
 			operacion.cancelarItem(valor).success(function (data){
 
 				scope.cancelando = false;
-				mensajes.alerta(data.respuesta,'success','top right','done_all');
-				valor.surtido = true;
+				// verificamos la respuesta
+				if (!data.ok) {
+					mensajes.alerta(data.respuesta, 'error', 'top right', 'error');
+					scope.buscaReceta();
+				} else {
+					mensajes.alerta(data.respuesta, 'success', 'top right', 'done_all');
+					valor.surtido = true;
+				}
 
 			}).error(function (data){
 				scope.cancelando = false;
-				mensajes.alerta('Ocurrio un error de conexion verifica que el item se haya surtido por favor','error','top right','error');
+				mensajes.alerta('Error de conexion','error','top right','error');
+				scope.buscaReceta();
 			});
 
 		}

@@ -38,6 +38,7 @@
 
 	// /* EN LOCAL */
 	// .constant('api', 'http://localhost/inventario/server/public/api/')
+	// .constant('api', 'http://localhost:8000/api/')
 	// .constant('publicfiles','http://localhost/inventario/server/public/exports/');
 
 	// /* PRODUCCION EN HOST NET */

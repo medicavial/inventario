@@ -29,18 +29,25 @@ class OperacionController extends BaseController {
 		$claveReserva = Input::get('reserva');
 		$recetaItem = Input::get('recetaItem');
 
-		//actualizamos en la tabla mv el item cancelado
+		// ACTUALIZAMOS EN LA TABLA MV EL ITEM CANCELADO
 		$recetaMV = Suministros::find($recetaItem);
-		$recetaMV->NS_cancelado = 1;
-		$recetaMV->NS_fecCancelado = date('Y-m-d H:i');
-		$recetaMV->NS_usuCancel = $usuario;
-		$recetaMV->save();
 
-		//eliminamos reserva
-		$reserva = Reserva::find($claveReserva);
-		$reserva->delete();
+		if (!$recetaMV) {
+			return Response::json(array('respuesta' => 'Item o receta no encontrado',
+										'ok'		=> false));
+		} else{
+			$recetaMV->NS_cancelado = 1;
+			$recetaMV->NS_fecCancelado = date('Y-m-d H:i');
+			$recetaMV->NS_usuCancel = $usuario;
+			$recetaMV->save();
 
-		return Response::json(array('respuesta' => 'Item Cancelado Correctamente'));
+			//eliminamos reserva
+			$reserva = Reserva::find($claveReserva);
+			$reserva->delete();
+
+			return Response::json(array('respuesta' => 'Item Cancelado Correctamente',
+										'ok'		=> true));
+		}
 
 	}
 
