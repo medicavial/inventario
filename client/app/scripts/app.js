@@ -33,8 +33,8 @@
 	])
 
 	/* PRODUCCION EN HOST MX */
-	.constant('api', 'http://api.medicavial.mx/api/')
-	.constant('publicfiles','http://api.medicavial.mx/exports/');
+	.constant('api', 'https://api.medicavial.mx/api/')
+	.constant('publicfiles','https://api.medicavial.mx/exports/');
 
 	// /* EN LOCAL */
 	// .constant('api', 'http://localhost/inventario/server/public/api/')
