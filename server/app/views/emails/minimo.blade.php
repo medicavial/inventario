@@ -29,10 +29,10 @@
 	</head>
 	<body>
         <table align="center" style="font-family: arial" width="90%">
-			<tr style="background-color: #FF8000; color: white;">
+			<tr style="background-color: #b71c1c; color: white;">
 
 				<th colspan="5">
-					<h2>&nbsp;&nbsp;ITEM EN MINIMO&nbsp;&nbsp;</h2>
+					<h2>&nbsp;&nbsp;ITEM EN MÍNIMO&nbsp;&nbsp;</h2>
 				</th>
 				<th style="background-color: white;" width="150">
 					&nbsp;&nbsp;
@@ -41,7 +41,7 @@
 				</th>
 			</tr>
 
-          <tr style="background-color: #FBF8EF;">
+          <tr style="background-color: #ffcdd2;">
             <td colspan="6" style="padding-left: 15px; padding-right: 15px;">
               <br>
               	<h2>{{ $saludo }}</h2>
@@ -54,7 +54,7 @@
 
 								<br><br><br>
 								IMPORTANTE:<br>
-								El nivel mínimo está calculado de acuerdo a los promedios de consumo de cada clínica, 
+								El nivel mínimo está calculado de acuerdo a los promedios de consumo de cada clínica,
 								por lo cual la cantidad mínima debe cubrir al menos 8 días después de haber sido generada esta alerta.
               	<br><br><br>
               	<div class="notas">

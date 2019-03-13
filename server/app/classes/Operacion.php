@@ -1,7 +1,5 @@
 <?php
-
 class Operacion {
-
 	public $tipomovimiento;
 	public $item;
 	public $almacen;
@@ -15,18 +13,15 @@ class Operacion {
 	public $observaciones = '';
 	public $receta = '';
 	public $traspaso = 0;
-
 	private $existencia;
 	private $cantidadActual;
 	private $idExistencia;
 
-
 	//funcion para verificar existencia
 	private function existenciaAlmacen(){
-
 		//verificamos si existe algo registrado como exstencia del item en el almacen
 		$consulta = Existencia::busca($this->item,$this->almacen);
-		//si existe manda true si no false
+		//si existe manda true, si no false
 		$existe = ($consulta->count() > 0) ? true : false;
 
 		if ($existe) {
@@ -45,26 +40,21 @@ class Operacion {
 			$cantidadActual = 0;
 		}
 
-
 		// setea el valor local al valor global
 		$this->existencia = $existencia;
 		$this->cantidadActual = $cantidadActual;
 	}
 
-
 	// en caso de ajuste se resetean los lotes registrados
 	private function reseteaLotes(){
-
 		//consultamos si hay lote el id de existenia y el item
 		$parametros = array(
 			'EXI_clave'=>$this->idExistencia,
 			'ITE_clave'=>$this->item
 		);
 
-
 		//actualizamos los lotes encontrados a cero
 		$lotes = Lote::where( $parametros )->update(array('LOT_cantidad' => 0));
-
 	}
 
 	//funccion para dar de alta lote
@@ -107,6 +97,9 @@ class Operacion {
 				$catidadIngresada = $catidadActualLote  - $this->cantidad;
 			}
 
+			if( $catidadIngresada < 0 ){
+
+			}
 			$datosLote = Lote::find($this->idLote);
 			$datosLote->EXI_clave = $this->idExistencia;
 			$datosLote->ITE_clave = $this->item;
@@ -282,32 +275,46 @@ class Operacion {
 
 	// se da una salida de un item existente
 	public function salida(){
-
-		//guardamos el movimiento realizado
-		$this->altaMovimiento();
 		// verificamos las existencias de almacen
 		$this->existenciaAlmacen();
 
-		$this->existencia->ITE_clave = $this->item;
-		$this->existencia->ALM_clave = $this->almacen;
-		$this->existencia->EXI_cantidad = $this->cantidadActual - $this->cantidad;
-		$this->existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
-		$this->existencia->save();
+		// verificamos que la existencia actual sea mayor a 0
+		if ( $this->cantidadActual <= 0 ) {
+			return 'error en existencias';
+		} 
 
-		//aqui guardamos el id actualizado o modificado
-		$this->idExistencia = $this->existencia->EXI_clave;
+		// si hay existencias positivas procedemos
+		elseif ( $this->cantidadActual > 0 ) {
 
-		$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
-		$itemactualiza = Item::find($this->item);
-		$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidad;
-		$itemactualiza->save();
-		// try {
-		// 	$url = 'http://api.medicavial.mx/api/operacion/correominimo/'.$this->almacen.'/'.$this->item;
-		// 	$todoURL = file_get_contents($url);
-		// } catch (Exception $e) {
-		//
-		// }
-	}
+			// prevenimos que la existencia quede en negativo
+			if ( $this->cantidadActual - $this->cantidad < 0 ) {
+				return 'error - esta operacion no esta permitida';
+			}
+
+			// si la existencia menos la cantidad de la salida >= 0 procedemos
+			elseif ( $this->cantidadActual - $this->cantidad >= 0 ){
+
+				// actualiza la existencia en almacen
+				$this->existencia->ITE_clave = $this->item;
+				$this->existencia->ALM_clave = $this->almacen;
+				$this->existencia->EXI_cantidad = $this->cantidadActual - $this->cantidad;
+				$this->existencia->EXI_ultimoMovimiento = date('Y-m-d H:i:s');
+				$this->existencia->save();
+
+				// guardamos la existencia total del item modificado
+				$this->idExistencia = $this->existencia->EXI_clave;
+				$cantidadTotal = Item::find($this->item)->ITE_cantidadtotal;
+				$itemactualiza = Item::find($this->item);
+				$itemactualiza->ITE_cantidadtotal = $cantidadTotal - $this->cantidad;
+				$itemactualiza->save();
+
+				// guardamos el movimiento realizado
+				$this->altaMovimiento();
+
+				return true;
+			}
+		}
+	} // termina salida()
 
 
 }

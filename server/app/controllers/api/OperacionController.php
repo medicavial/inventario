@@ -544,22 +544,17 @@ class OperacionController extends BaseController {
 		// $operacion->receta = Input::has('receta') ? Input::get('receta') : '';
 		$operacion->receta = $receta;
 
-
 		// si es un ajuste no importa las cantidades en el item exitentes se resetean
 		if ($operacion->tipomovimiento == 1) {
-
 			$operacion->alta();
 
 		// en este se toma que es una alta de item
 		}else if($operacion->tipomovimiento == 2){
-
 			$operacion->entrada();
 
 		// en este se toma que es una baja de item
 		}else if ($operacion->tipomovimiento == 3) {
-
 			$operacion->salida();
-
 		}
 
 		$operacion->verificaLote();
@@ -611,8 +606,6 @@ class OperacionController extends BaseController {
 		}
 
 		return Response::json(array('respuesta' => 'Movimiento guardado Correctamente'));
-
-
 	}
 
 	public function ordencompra(){
@@ -715,11 +708,7 @@ class OperacionController extends BaseController {
 		$timeReceta = Receta::where('id_receta',Input::get('receta'))->select( DB::raw('IF((RM_fecreg + INTERVAL 30 MINUTE<now()) , concat(1), concat(0)) as tardio'))->get();
 		$timeReceta = $timeReceta[0];
 
-		$tardio="";
-
-		if ($timeReceta->tardio=="1") {
-			$tardio=" (Surtido Tardio)";
-		}
+		$tardio = ( $timeReceta->tardio == "1" ) ? " (Surtido Tardio)" : "";
 
 		$operacion = new Operacion;
 
@@ -746,25 +735,21 @@ class OperacionController extends BaseController {
 		$recetaMV->save();
 
 		//eliminamos reserva
-		// $reserva = Reserva::find($claveReserva);
-		// $reserva->delete();
 		$surteReserva = OperacionController::reservaSurtida( $claveReserva );
-
 
 		//damos salida al item surtido
 		$operacion->salida();
 
 		foreach ($lotes as $lote) {
-
 			$operacion->idLote 		= $lote['idLote'];
 			$operacion->lote 		= $lote['lote'];
-			// $operacion->caducidad 	= substr($lote['caducidad'], 0, 8).'01 00:00:00';
 			$operacion->caducidad 	= $lote['caducidad'];
 			$operacion->cantidad 	= $lote['cantidad'];
 			$operacion->verificaLote();
 		}
 
-		return Response::json(array('respuesta' => 'Item Surtido Correctamente'));
+		return Response::json(array('respuesta' => 'Item Surtido Correctamente',
+									'op' 		=> $operacion ));
 
 	}
 
@@ -1407,23 +1392,23 @@ class OperacionController extends BaseController {
 	 			{
 	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
 	 					$message->subject('Item en nivel minimo');
-	 					$message->to('alozano@medicavial.com.mx');
-						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
-						$message->cc('mvcompras@medicavial.com.mx');
-						$message->bcc('sramirez@medicavial.com.mx');
-	 			});
-	 		} elseif( intval($existencias[0]->total) == ( $conf->CON_nivelMinimo + 1 ) && $conf->CON_correos == 1 ){
-				Mail::send('emails.minimo', $datos, function($message) {
-	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
-	 					$message->subject('Prealerta minimo');
-						/*
-						$message->to('alozano@medicavial.com.mx');
-						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
-						$message->cc('mvcompras@medicavial.com.mx');
-						$message->bcc('sramirez@medicavial.com.mx');
-						*/
+	 					// $message->to('mvcompras@medicavial.com.mx');
+						// // $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						// $message->cc('alozano@medicavial.com.mx');
+						// $message->bcc('sramirez@medicavial.com.mx');
+
 						$message->to($datos['mailUni']);
 						$message->cc(array('mvcompras@medicavial.com.mx', 'alozano@medicavial.com.mx', 'scisneros@medicavial.com.mx', 'coordenf@medicavial.com.mx'));
+						$message->bcc('sramirez@medicavial.com.mx');
+
+	 			});
+	 		} elseif( intval($existencias[0]->total) == ( $conf->CON_nivelMinimo + 1 ) && $conf->CON_correos == 1 ){
+				Mail::send('emails.prealerta', $datos, function($message) {
+	 					$message->from('mvcompras@medicavial.com.mx', 'Sistema de Inventario MédicaVial');
+	 					$message->subject('Prealerta de nivel minimo');
+						$message->to('mvcompras@medicavial.com.mx');
+						// $message->cc(array('mvcompras@medicavial.com.mx','auxcompras@medicavial.com.mx'));
+						$message->cc('alozano@medicavial.com.mx');
 						$message->bcc('sramirez@medicavial.com.mx');
 	 			});
 			}

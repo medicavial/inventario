@@ -199,14 +199,14 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('permisos', 'BusquedasController@permisos');
         Route::get('presentaciones', 'BusquedasController@presentaciones');
         Route::get('proveedores', 'BusquedasController@proveedores');
-				Route::get('receta/{id}', 'BusquedasController@receta');
+		Route::get('receta/{id}', 'BusquedasController@receta');
         Route::get('pruebaReceta/{id}', 'SamusController@pruebaSamus');
         Route::get('subtipositem', 'BusquedasController@subtipositem');
         Route::get('unidades', 'BusquedasController@unidades');
         Route::get('unidades/usuario/{id}', 'BusquedasController@unidadesUsuario');
         Route::get('unidadesItem', 'BusquedasController@unidadesItem');
         Route::get('usuarios', 'BusquedasController@usuarios');
-				Route::get('inicial/porSurtirDetalles/{unidades}', 'DatosIniciales@porSurtirDetalles');
+		Route::get('inicial/porSurtirDetalles/{unidades}', 'DatosIniciales@porSurtirDetalles');
     });
 
     Route::group(array('prefix' => 'operacion'), function()
@@ -274,9 +274,15 @@ Route::group(array('prefix' => 'api'), function()
         Route::get('tabulador/{claveLesion}/{folio}', 'MedicaController@tabulador');
     });
 
-		Route::group(array('prefix' => 'pruebas'), function()
+	Route::group(array('prefix' => 'pruebas'), function()
     {
         Route::get('usruni/{usuario}', 'DatosIniciales@usuarioUnidades');
+    });
+
+	Route::group(array('prefix' => 'alertas'), function()
+    {
+        Route::get('caducidades/{unidad?}', 'DatosIniciales@alertaCaducidades');
+        Route::get('recetas-pendientes/{unidad?}', 'DatosIniciales@alertaRecetas');
     });
 
 });
