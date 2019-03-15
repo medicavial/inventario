@@ -33,13 +33,13 @@
 	])
 
 	/* PRODUCCION EN HOST MX */
-	.constant('api', 'https://api.medicavial.mx/api/')
-	.constant('publicfiles','https://api.medicavial.mx/exports/');
+	// .constant('api', 'https://api.medicavial.mx/api/')
+	// .constant('publicfiles','https://api.medicavial.mx/exports/');
 
 	// /* EN LOCAL */
 	// .constant('api', 'http://localhost/inventario/server/public/api/')
-	// .constant('api', 'http://localhost:8000/api/')
-	// .constant('publicfiles','http://localhost/inventario/server/public/exports/');
+	.constant('api', 'http://localhost:8000/api/')
+	.constant('publicfiles','http://localhost/inventario/server/public/exports/');
 
 	// /* PRODUCCION EN HOST NET */
 	// .constant('api', 'http://inventarioapi.medicavial.net/api/')

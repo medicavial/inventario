@@ -49,9 +49,11 @@
 
                     var existenciaItem = data.data;
 
-                    if (existenciaItem.EXI_cantidad == 0 || existenciaItem.length == 0) {
-                        defer.reject('No hay Stock disponible de este item intenta generar traspasos del almacen principal');
+                    if (existenciaItem.EXI_cantidad <= 0 || existenciaItem.length == 0) {
+                        // si no hay existencias se envía el error
+                        defer.reject('No hay cantidad disponible de este item.');
                     }else{
+                        // si hay existencias positivas la promesa devuelve el item
                         defer.resolve(existenciaItem);
                     }
 

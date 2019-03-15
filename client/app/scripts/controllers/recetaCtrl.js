@@ -99,9 +99,12 @@
 
 		}
 
+		// SE VERIFICA LA EXISTENCIA AL HACER UN CAMBIO DE ITEM
 		scope.verificaExistencia = function(item,ev){
-
 			// var item = scope.datos[index];
+			// EVITAR QUE SE SURTA EL ITEM MIENTRAS  
+			// SE ESTÁ BUSCANDO OTRO ITEM
+			// receta.datos.items 
 			scope.filtro =  '';
 
 			console.log(item);
@@ -111,31 +114,40 @@
 				item.surtido = true;
 
 				var confirm = $mdDialog.confirm()
-		            .title('Cambio de Item')
-		            .content('¿Seguro que quieres cambiar de item puede que la existencia cambie?')
-		            .ariaLabel('Confirmación')
-		            .targetEvent(ev)
-		            .ok('SI')
-		            .cancel('NO');
-		        $mdDialog.show(confirm).then(function() {
+										.title('Cambio de Item')
+										.content('¿Seguro que quieres cambiar de item puede que la existencia cambie?')
+										.ariaLabel('Confirmación')
+										.targetEvent(ev)
+										.ok('SI')
+										.cancel('NO');
 
-		            mensajes.alerta('Verificando Existencia','','top right','search');
+		        $mdDialog.show(confirm).then(function() {
+					// cuando el $mdDilog se confirma
+
+					mensajes.alerta('Verificando Existencia','','top right','search');
+					
+					// se verifica la existencia del item
+					// se valida la información en operacionService.js
 		            operacion.cambiaItem(item).then(
-	            	function (data){
-	            		mensajes.alerta('Existencia disponible','success','top right','done_all');
-	            		item.existencia = data.EXI_clave;
-	            		item.surtido = false;
-	            	},function (error){
-	            		mensajes.alerta(error,'error','top right','error');
-	            		item.item = scope.valorAnterior;
-	            		item.surtido = false;
-	            	})
+						function (data){
+							console.log(data);
+							mensajes.alerta('Existencia disponible','success','top right','done_all');
+							item.existencia = data.EXI_clave;
+							item.surtido = false;
+						},function (error){
+							// este error lo devuelve la promesa cuando la existencia es cero
+							mensajes.alerta(error,'error','top right','error');
+							item.item = scope.valorAnterior;
+							item.surtido = false;
+						}
+					)
 
 
 		        }, function() {
+					// cuando el $mdDilog no se confirma
 		            item.item = scope.valorAnterior;
 		            item.surtido = false;
-		        });
+				});
 
 			}else{
 				item.surtido = false;
@@ -300,7 +312,8 @@
 		}
 
 		scope.generaFiltro = function(recetaItem){
-
+			console.log(recetaItem);
+			
 			var item = $filter('filter')(scope.items, { ITE_clave:recetaItem.item });
 			var palabras = item[0].ITE_nombre.split(" ");
 			scope.filtro = palabras[0];
@@ -527,7 +540,6 @@
 		//verificamos la existencia actual del item en el almacen
 		$scope.verificaExistencia = function(almacen){
 
-
 			if (almacen) {
 
 				mensajes.alerta('Verificando Datos de Almacen','info','top right','search');
@@ -543,7 +555,7 @@
 				busqueda.itemAlmacen(almacen,$scope.item.ITE_clave).success(function (data){
 					// console.log(data);
 					if ($scope.datos.tipomov == 3 && data == '') {
-						mensajes.alerta('No hay Cantdad Disponible En Este Almacen Para Salida','error','top right','error');
+						mensajes.alerta('No hay cantidad disponible en este almacen para salida','error','top right','error');
 						$scope.disponible = 0;
 					}else{
 						if (data == '') {
