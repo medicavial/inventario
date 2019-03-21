@@ -221,7 +221,8 @@ class DatosIniciales extends \BaseController {
 
 	public function alertaRecetas( $unidad=null ){
 
-		if( date('G') != 6 ) return 'Not Allowed';
+		// si al ejecutarse son mas de las 8 am no se permitirá el envío
+		if( date('G') > 8 ) return 'Not Allowed';
 
 		if ( !$unidad ) {
 			$unidades = Unidad::select('UNI_nombreCorto', 'UNI_claveMV', 'UNI_clave', 'UNI_correo')
